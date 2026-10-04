@@ -26,6 +26,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const profileScreen =
     document.getElementById("profileScreen");
 
+  const campbellScreen =
+    document.getElementById("campbellScreen");
+
+  const campbellTheoryScreen =
+    document.getElementById("campbellTheoryScreen");
+
 
   /* ========================================
      КНОПКИ
@@ -42,6 +48,53 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const changeGradeButton =
     document.getElementById("changeGradeButton");
+
+
+  /* CAMPBELL */
+
+  const campbellBackButton =
+    document.getElementById("campbellBackButton");
+
+  const campbellTheoryButton =
+    document.getElementById("campbellTheoryButton");
+
+  const campbellExamButton =
+    document.getElementById("campbellExamButton");
+
+  const campbellTheoryBackButton =
+    document.getElementById(
+      "campbellTheoryBackButton"
+    );
+
+  const completeCampbellTheoryButton =
+    document.getElementById(
+      "completeCampbellTheoryButton"
+    );
+
+  const campbellProgressText =
+    document.getElementById(
+      "campbellProgressText"
+    );
+
+  const campbellProgressBar =
+    document.getElementById(
+      "campbellProgressBar"
+    );
+
+  const campbellExamStatus =
+    document.getElementById(
+      "campbellExamStatus"
+    );
+
+  const campbellReadingPercent =
+    document.getElementById(
+      "campbellReadingPercent"
+    );
+
+  const campbellReadingProgress =
+    document.getElementById(
+      "campbellReadingProgress"
+    );
 
 
   /* ========================================
@@ -104,10 +157,14 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("profileXP");
 
   const profileXPProgress =
-    document.getElementById("profileXPProgress");
+    document.getElementById(
+      "profileXPProgress"
+    );
 
   const profileLevelText =
-    document.getElementById("profileLevelText");
+    document.getElementById(
+      "profileLevelText"
+    );
 
   const profileCompletedLessons =
     document.getElementById(
@@ -141,11 +198,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* ========================================
-     ПЕРЕХОД
+     ПЕРЕХОДЫ МЕЖДУ ЭКРАНАМИ
   ======================================== */
 
   let changingScreen = false;
-
 
   function changeScreen(
     oldScreen,
@@ -157,20 +213,14 @@ document.addEventListener("DOMContentLoaded", () => {
       !newScreen ||
       changingScreen
     ) {
-
       return;
-
     }
 
-
-    changingScreen =
-      true;
-
+    changingScreen = true;
 
     oldScreen.classList.add(
       "screen-out"
     );
-
 
     setTimeout(() => {
 
@@ -179,18 +229,15 @@ document.addEventListener("DOMContentLoaded", () => {
         "screen-out"
       );
 
-
       newScreen.classList.add(
         "active",
         "screen-in"
       );
 
-
       window.scrollTo(
         0,
         0
       );
-
 
       setTimeout(() => {
 
@@ -198,9 +245,7 @@ document.addEventListener("DOMContentLoaded", () => {
           "screen-in"
         );
 
-
-        changingScreen =
-          false;
+        changingScreen = false;
 
       }, 280);
 
@@ -267,40 +312,29 @@ document.addEventListener("DOMContentLoaded", () => {
           const path =
             card.dataset.path;
 
-
-          if (
-            path === "school"
-          ) {
+          if (path === "school") {
 
             localStorage.setItem(
               "groundPath",
               "school"
             );
 
-
             changeScreen(
               pathScreen,
               gradeScreen
             );
 
-
             return;
-
           }
 
-
-          if (
-            path === "ent"
-          ) {
+          if (path === "ent") {
 
             alert(
               "🎯 ЕНТ скоро добавим."
             );
 
             return;
-
           }
-
 
           alert(
             "🏆 Олимпиадный раздел скоро добавим."
@@ -329,9 +363,7 @@ document.addEventListener("DOMContentLoaded", () => {
             card.dataset.grade
           );
 
-
           updateUserInterface();
-
 
           changeScreen(
             gradeScreen,
@@ -429,15 +461,9 @@ document.addEventListener("DOMContentLoaded", () => {
     lessonId =
       Number(lessonId);
 
-
-    if (
-      lessonId === 1
-    ) {
-
+    if (lessonId === 1) {
       return true;
-
     }
-
 
     return isLessonCompleted(
       grade,
@@ -456,12 +482,10 @@ document.addEventListener("DOMContentLoaded", () => {
     learningRoad.innerHTML =
       "";
 
-
     const grade =
       localStorage.getItem(
         "groundGrade"
       ) || "9";
-
 
     if (
       typeof window.GroundDB ===
@@ -472,15 +496,12 @@ document.addEventListener("DOMContentLoaded", () => {
         "<p>Ошибка загрузки базы.</p>";
 
       return;
-
     }
-
 
     const course =
       window.GroundDB.getCourse(
         grade
       );
-
 
     if (!course) {
 
@@ -488,13 +509,10 @@ document.addEventListener("DOMContentLoaded", () => {
         "<p>Курс пока не добавлен.</p>";
 
       return;
-
     }
-
 
     courseTitle.textContent =
       course.title;
-
 
     course.lessons.forEach(
       (lesson, index) => {
@@ -505,39 +523,32 @@ document.addEventListener("DOMContentLoaded", () => {
             lesson.id
           );
 
-
         const unlocked =
           isLessonUnlocked(
             grade,
             lesson.id
           );
 
-
         const item =
           document.createElement(
             "div"
           );
-
 
         item.className =
           index % 2 === 0
             ? "road-item road-left"
             : "road-item road-right";
 
-
         const node =
           document.createElement(
             "button"
           );
 
-
         node.type =
           "button";
 
-
         node.className =
           "road-node";
-
 
         if (completed) {
 
@@ -573,16 +584,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         }
 
-
         const info =
           document.createElement(
             "div"
           );
 
-
         info.className =
           "road-info";
-
 
         info.innerHTML = `
 
@@ -604,7 +612,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         `;
 
-
         node.addEventListener(
           "click",
           () => {
@@ -616,9 +623,7 @@ document.addEventListener("DOMContentLoaded", () => {
               );
 
               return;
-
             }
-
 
             window.openGroundLesson(
               lesson.id
@@ -627,21 +632,17 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         );
 
-
         item.appendChild(
           node
         );
-
 
         item.appendChild(
           info
         );
 
-
         learningRoad.appendChild(
           item
         );
-
 
         if (
           index <
@@ -653,14 +654,11 @@ document.addEventListener("DOMContentLoaded", () => {
               "div"
             );
 
-
           connector.className =
             "auto-road-connector";
 
-
           connector.innerHTML =
             "•••••";
-
 
           learningRoad.appendChild(
             connector
@@ -687,32 +685,25 @@ document.addEventListener("DOMContentLoaded", () => {
         "groundGrade"
       ) || "9";
 
-
     libraryGrade.textContent =
       `${grade} класс`;
-
 
     if (
       typeof window.GroundDB ===
       "undefined"
     ) {
-
       return;
-
     }
-
 
     const lessons =
       window.GroundDB.getLessons(
         grade
       );
 
-
     const query =
       searchText
         .trim()
         .toLowerCase();
-
 
     const filtered =
       lessons.filter(lesson => {
@@ -742,19 +733,88 @@ document.addEventListener("DOMContentLoaded", () => {
       "";
 
 
+    /* ========================================
+       CAMPBELL BIOLOGY — ТОЛЬКО 8 КЛАСС
+    ======================================== */
+
+    const campbellMatchesSearch =
+      "campbell biology химический контекст жизни кэмпбелл"
+        .includes(query);
+
     if (
-      filtered.length === 0
+      grade === "8" &&
+      campbellMatchesSearch
     ) {
 
-      libraryLessons.innerHTML = `
+      const campbellCard =
+        document.createElement(
+          "button"
+        );
 
-        <div class="library-empty">
-          🔎 Ничего не найдено
+      campbellCard.type =
+        "button";
+
+      campbellCard.className =
+        "library-card campbell-library-card";
+
+      const theoryCompleted =
+        localStorage.getItem(
+          "campbellChapter2TheoryCompleted"
+        ) === "true";
+
+      campbellCard.innerHTML = `
+
+        <div class="library-card-icon">
+          🧬
+        </div>
+
+        <div class="library-card-content">
+
+          <span class="small-label">
+            УГЛУБЛЁННЫЙ КУРС
+          </span>
+
+          <h3>
+            Campbell Biology
+          </h3>
+
+          <p>
+            Глава 2 — Химический контекст жизни
+          </p>
+
+          <div class="library-card-status">
+            ${
+              theoryCompleted
+                ? "ПРОДОЛЖИТЬ КУРС"
+                : "НАЧАТЬ КУРС"
+            }
+          </div>
+
+        </div>
+
+        <div class="library-card-arrow">
+          →
         </div>
 
       `;
 
-      return;
+      campbellCard.addEventListener(
+        "click",
+        () => {
+
+          updateCampbellProgress();
+
+          changeScreen(
+            libraryScreen,
+            campbellScreen
+          );
+
+        }
+      );
+
+      libraryLessons.appendChild(
+        campbellCard
+      );
 
     }
 
@@ -768,20 +828,16 @@ document.addEventListener("DOMContentLoaded", () => {
             lesson.id
           );
 
-
         const card =
           document.createElement(
             "button"
           );
 
-
         card.type =
           "button";
 
-
         card.className =
           "library-card";
-
 
         card.innerHTML = `
 
@@ -817,7 +873,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         `;
 
-
         card.addEventListener(
           "click",
           () => {
@@ -829,13 +884,38 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         );
 
-
         libraryLessons.appendChild(
           card
         );
 
       }
     );
+
+
+    /*
+      Если поиск ничего не нашёл:
+      учитываем и обычные уроки,
+      и Campbell.
+    */
+
+    const campbellVisible =
+      grade === "8" &&
+      campbellMatchesSearch;
+
+    if (
+      filtered.length === 0 &&
+      !campbellVisible
+    ) {
+
+      libraryLessons.innerHTML = `
+
+        <div class="library-empty">
+          🔎 Ничего не найдено
+        </div>
+
+      `;
+
+    }
 
   }
 
@@ -886,7 +966,6 @@ document.addEventListener("DOMContentLoaded", () => {
           ) || "[]"
         );
 
-
       return Array.isArray(data)
         ? data
         : [];
@@ -908,53 +987,35 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-
     const activity =
       getActivityHistory();
-
 
     const activitySet =
       new Set(activity);
 
-
     const today =
       new Date();
-
 
     const todayString =
       getLocalDateString(
         today
       );
 
-
-    /*
-      JS:
-      воскресенье = 0
-      понедельник = 1
-
-      переводим в:
-      понедельник = 0
-    */
-
     const day =
       today.getDay();
-
 
     const mondayOffset =
       day === 0
         ? -6
         : 1 - day;
 
-
     const monday =
       new Date(today);
-
 
     monday.setDate(
       today.getDate() +
       mondayOffset
     );
-
 
     const names = [
       "Пн",
@@ -966,10 +1027,8 @@ document.addEventListener("DOMContentLoaded", () => {
       "Вс"
     ];
 
-
     activityWeek.innerHTML =
       "";
-
 
     names.forEach(
       (name, index) => {
@@ -977,39 +1036,32 @@ document.addEventListener("DOMContentLoaded", () => {
         const date =
           new Date(monday);
 
-
         date.setDate(
           monday.getDate() +
           index
         );
-
 
         const dateString =
           getLocalDateString(
             date
           );
 
-
         const active =
           activitySet.has(
             dateString
           );
 
-
         const isToday =
           dateString ===
           todayString;
-
 
         const dayElement =
           document.createElement(
             "div"
           );
 
-
         dayElement.className =
           "activity-day";
-
 
         if (active) {
 
@@ -1019,7 +1071,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         }
 
-
         if (isToday) {
 
           dayElement.classList.add(
@@ -1027,7 +1078,6 @@ document.addEventListener("DOMContentLoaded", () => {
           );
 
         }
-
 
         dayElement.innerHTML = `
 
@@ -1047,7 +1097,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         `;
 
-
         activityWeek.appendChild(
           dayElement
         );
@@ -1055,14 +1104,11 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     );
 
-
     const player =
       getPlayerData();
 
-
     activityStreak.textContent =
       player.streak;
-
 
     if (
       activitySet.has(
@@ -1103,7 +1149,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let total =
       0;
 
-
     for (
       let i = 0;
       i < localStorage.length;
@@ -1112,7 +1157,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const key =
         localStorage.key(i);
-
 
       if (
         key &&
@@ -1127,7 +1171,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
     }
-
 
     return total;
 
@@ -1150,7 +1193,8 @@ document.addEventListener("DOMContentLoaded", () => {
         title: "Первый шаг",
         description: "Пройди первый урок",
         unlocked: completed >= 1,
-        progress: `${Math.min(completed,1)} / 1`
+        progress:
+          `${Math.min(completed, 1)} / 1`
       },
 
       {
@@ -1158,7 +1202,8 @@ document.addEventListener("DOMContentLoaded", () => {
         title: "Исследователь",
         description: "Собери 25 генов",
         unlocked: player.genes >= 25,
-        progress: `${Math.min(player.genes,25)} / 25`
+        progress:
+          `${Math.min(player.genes, 25)} / 25`
       },
 
       {
@@ -1166,7 +1211,8 @@ document.addEventListener("DOMContentLoaded", () => {
         title: "Биолог",
         description: "Пройди 5 уроков",
         unlocked: completed >= 5,
-        progress: `${Math.min(completed,5)} / 5`
+        progress:
+          `${Math.min(completed, 5)} / 5`
       },
 
       {
@@ -1174,7 +1220,8 @@ document.addEventListener("DOMContentLoaded", () => {
         title: "В ритме",
         description: "Достигни серии 3 дня",
         unlocked: player.streak >= 3,
-        progress: `${Math.min(player.streak,3)} / 3`
+        progress:
+          `${Math.min(player.streak, 3)} / 3`
       },
 
       {
@@ -1182,7 +1229,8 @@ document.addEventListener("DOMContentLoaded", () => {
         title: "Неделя силы",
         description: "Достигни серии 7 дней",
         unlocked: player.streak >= 7,
-        progress: `${Math.min(player.streak,7)} / 7`
+        progress:
+          `${Math.min(player.streak, 7)} / 7`
       },
 
       {
@@ -1190,7 +1238,8 @@ document.addEventListener("DOMContentLoaded", () => {
         title: "Новый уровень",
         description: "Достигни 2 уровня",
         unlocked: player.level >= 2,
-        progress: `${Math.min(player.level,2)} / 2`
+        progress:
+          `${Math.min(player.level, 2)} / 2`
       }
 
     ];
@@ -1198,7 +1247,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     achievementsContainer.innerHTML =
       "";
-
 
     achievements.forEach(
       achievement => {
@@ -1208,12 +1256,10 @@ document.addEventListener("DOMContentLoaded", () => {
             "div"
           );
 
-
         card.className =
           achievement.unlocked
             ? "achievement-card unlocked"
             : "achievement-card";
-
 
         card.innerHTML = `
 
@@ -1245,7 +1291,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         `;
 
-
         achievementsContainer.appendChild(
           card
         );
@@ -1265,49 +1310,37 @@ document.addEventListener("DOMContentLoaded", () => {
     const player =
       getPlayerData();
 
-
     const completed =
       getCompletedLessonsCount();
-
 
     const xp =
       player.xp % 100;
 
-
     profileGrade.textContent =
       `${player.grade} класс`;
-
 
     profileLevel.textContent =
       player.level;
 
-
     profileGenes.textContent =
       player.genes;
-
 
     profileStreak.textContent =
       player.streak;
 
-
     profileXP.textContent =
       xp;
-
 
     profileXPProgress.style.width =
       `${xp}%`;
 
-
     profileLevelText.textContent =
       `Уровень ${player.level}`;
-
 
     profileCompletedLessons.textContent =
       completed;
 
-
     buildActivityWeek();
-
 
     buildAchievements(
       player,
@@ -1326,10 +1359,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const player =
       getPlayerData();
 
-
     currentGrade.textContent =
       `${player.grade} класс`;
-
 
     document
       .querySelectorAll(
@@ -1342,25 +1373,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
       });
 
-
     xpValue.textContent =
       player.xp % 100;
-
 
     levelValue.textContent =
       player.level;
 
-
     streakValue.textContent =
       player.streak;
-
 
     xpProgress.style.width =
       `${player.xp % 100}%`;
 
-
     buildLearningRoad();
 
+    updateCampbellProgress();
 
     if (
       profileScreen.classList.contains(
@@ -1384,7 +1411,6 @@ document.addEventListener("DOMContentLoaded", () => {
       '#homeScreen [data-nav="library"]'
     );
 
-
   homeLibraryButton.addEventListener(
     "click",
     () => {
@@ -1392,9 +1418,7 @@ document.addEventListener("DOMContentLoaded", () => {
       librarySearchInput.value =
         "";
 
-
       buildLibrary();
-
 
       changeScreen(
         homeScreen,
@@ -1410,13 +1434,11 @@ document.addEventListener("DOMContentLoaded", () => {
       '#homeScreen [data-nav="profile"]'
     );
 
-
   homeProfileButton.addEventListener(
     "click",
     () => {
 
       updateProfile();
-
 
       changeScreen(
         homeScreen,
@@ -1453,7 +1475,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         updateUserInterface();
 
-
         changeScreen(
           libraryScreen,
           homeScreen
@@ -1475,7 +1496,6 @@ document.addEventListener("DOMContentLoaded", () => {
           libraryScreen,
           homeScreen
         );
-
 
         setTimeout(() => {
 
@@ -1499,7 +1519,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         updateProfile();
 
-
         changeScreen(
           libraryScreen,
           profileScreen
@@ -1519,7 +1538,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         updateUserInterface();
 
-
         changeScreen(
           profileScreen,
           homeScreen
@@ -1538,7 +1556,6 @@ document.addEventListener("DOMContentLoaded", () => {
       () => {
 
         buildLibrary();
-
 
         changeScreen(
           profileScreen,
@@ -1561,7 +1578,6 @@ document.addEventListener("DOMContentLoaded", () => {
           profileScreen,
           homeScreen
         );
-
 
         setTimeout(() => {
 
@@ -1592,6 +1608,219 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* ========================================
+     CAMPBELL BIOLOGY
+  ======================================== */
+
+  function updateCampbellProgress() {
+
+    const theoryCompleted =
+      localStorage.getItem(
+        "campbellChapter2TheoryCompleted"
+      ) === "true";
+
+    if (theoryCompleted) {
+
+      campbellProgressText.textContent =
+        "50%";
+
+      campbellProgressBar.style.width =
+        "50%";
+
+      campbellExamButton.classList.remove(
+        "locked"
+      );
+
+      campbellExamStatus.textContent =
+        "Экзамен доступен";
+
+      const examIcon =
+        campbellExamButton.querySelector(
+          ".campbell-action-icon"
+        );
+
+      if (examIcon) {
+
+        examIcon.textContent =
+          "📝";
+
+      }
+
+      if (campbellReadingPercent) {
+
+        campbellReadingPercent.textContent =
+          "100%";
+
+      }
+
+      if (campbellReadingProgress) {
+
+        campbellReadingProgress.style.width =
+          "100%";
+
+      }
+
+    }
+
+    else {
+
+      campbellProgressText.textContent =
+        "0%";
+
+      campbellProgressBar.style.width =
+        "0%";
+
+      campbellExamButton.classList.add(
+        "locked"
+      );
+
+      campbellExamStatus.textContent =
+        "Сначала изучи материал";
+
+      const examIcon =
+        campbellExamButton.querySelector(
+          ".campbell-action-icon"
+        );
+
+      if (examIcon) {
+
+        examIcon.textContent =
+          "🔒";
+
+      }
+
+      if (campbellReadingPercent) {
+
+        campbellReadingPercent.textContent =
+          "0%";
+
+      }
+
+      if (campbellReadingProgress) {
+
+        campbellReadingProgress.style.width =
+          "0%";
+
+      }
+
+    }
+
+  }
+
+
+  /*
+    НАЗАД:
+    CAMPBELL → БИБЛИОТЕКА
+  */
+
+  campbellBackButton.addEventListener(
+    "click",
+    () => {
+
+      buildLibrary();
+
+      changeScreen(
+        campbellScreen,
+        libraryScreen
+      );
+
+    }
+  );
+
+
+  /*
+    ОТКРЫТЬ МАТЕРИАЛ
+  */
+
+  campbellTheoryButton.addEventListener(
+    "click",
+    () => {
+
+      updateCampbellProgress();
+
+      changeScreen(
+        campbellScreen,
+        campbellTheoryScreen
+      );
+
+    }
+  );
+
+
+  /*
+    НАЗАД:
+    МАТЕРИАЛ → CAMPBELL
+  */
+
+  campbellTheoryBackButton.addEventListener(
+    "click",
+    () => {
+
+      updateCampbellProgress();
+
+      changeScreen(
+        campbellTheoryScreen,
+        campbellScreen
+      );
+
+    }
+  );
+
+
+  /*
+    ЗАВЕРШИТЬ ИЗУЧЕНИЕ ГЛАВЫ
+  */
+
+  completeCampbellTheoryButton.addEventListener(
+    "click",
+    () => {
+
+      localStorage.setItem(
+        "campbellChapter2TheoryCompleted",
+        "true"
+      );
+
+      updateCampbellProgress();
+
+      changeScreen(
+        campbellTheoryScreen,
+        campbellScreen
+      );
+
+    }
+  );
+
+
+  /*
+    ЭКЗАМЕН
+  */
+
+  campbellExamButton.addEventListener(
+    "click",
+    () => {
+
+      const theoryCompleted =
+        localStorage.getItem(
+          "campbellChapter2TheoryCompleted"
+        ) === "true";
+
+      if (!theoryCompleted) {
+
+        alert(
+          "🔒 Сначала изучи материал главы 2."
+        );
+
+        return;
+      }
+
+      alert(
+        "📝 Материал пройден! Следующим шагом подключаем настоящий экзамен главы 2."
+      );
+
+    }
+  );
+
+
+  /* ========================================
      PLAYER UPDATE
   ======================================== */
 
@@ -1606,6 +1835,8 @@ document.addEventListener("DOMContentLoaded", () => {
   /* ========================================
      ЗАПУСК
   ======================================== */
+
+  updateCampbellProgress();
 
   updateUserInterface();
 
