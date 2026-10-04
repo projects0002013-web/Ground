@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Ground — Биология</title>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<!-- ======================================
+     1. ПРИВЕТСТВИЕ
+======================================= -->
+
+<main id="welcomeScreen" class="screen active">
+
+  <div class="welcome-bg"></div>
+
+  <div class="welcome-content">
+
+    <div class="logo">
+      <div class="logo-icon">🌱</div>
+      <h1>GROUND</h1>
+    </div>
+
+    <p class="welcome-subtitle">
+      Биология — твоя суперсила
+    </p>
+
+    <div class="dna-decoration">
+      🧬
+    </div>
+
+    <div class="mascot-area">
+
+      <div id="groundMascot" class="ground-mascot">
+
+        <img
+          src="images/mascot.png"
+          class="main-mascot"
+          alt="Маскот Ground"
+          draggable="false"
+        >
+
+        <div class="pet-effects">
+          <span class="pet-heart heart1">💚</span>
+          <span class="pet-heart heart2">💚</span>
+          <span class="pet-heart heart3">✨</span>
+        </div>
+
+      </div>
+
+      <p id="mascotMessage" class="mascot-message">
+        Погладь нашего учёного 🐾
+      </p>
+
+    </div>
+
+    <div class="welcome-bottom">
+
+      <button
+        id="startButton"
+        class="primary-button"
+        type="button"
+      >
+        Начать
+      </button>
+
+      <p class="login-text">
+
+        Уже есть аккаунт?
+
+        <button
+          id="loginButton"
+          class="text-button"
+          type="button"
+        >
+          Войти
+        </button>
+
+      </p>
+
+    </div>
+
+  </div>
+
+</main>
+
+
+<!-- ======================================
+     2. ВЫБОР НАПРАВЛЕНИЯ
+======================================= -->
+
+<main id="pathScreen" class="screen">
+
+  <div class="app-page">
+
+    <header class="topbar">
+
+      <div class="brand">
+        🌱 GROUND
+      </div>
+
+      <div class="genes">
+        🧬 <span class="gene-value">0</span>
+      </div>
+
+    </header>
+
+    <section class="path-content">
+
+      <button
+        id="pathBackButton"
+        class="back-icon"
+        type="button"
+      >
+        ←
+      </button>
+
+      <div class="path-heading">
+
+        <span class="small-label">
+          ТВОЁ ОБУЧЕНИЕ
+        </span>
+
+        <h2>
+          Выбери свой путь
+        </h2>
+
+        <p>
+          С чего начнём изучение биологии?
+        </p>
+
+      </div>
+
+      <div class="path-options">
+
+        <button
+          class="path-card"
+          data-path="school"
+          type="button"
+        >
+
+          <div class="path-card-icon">
+            📚
+          </div>
+
+          <div class="path-card-text">
+            <h3>Школьная биология</h3>
+            <p>Полный курс 7–11 классов</p>
+          </div>
+
+          <div class="path-arrow">
+            →
+          </div>
+
+        </button>
+
+        <button
+          class="path-card"
+          data-path="ent"
+          type="button"
+        >
+
+          <div class="path-card-icon">
+            🎯
+          </div>
+
+          <div class="path-card-text">
+            <h3>Подготовка к ЕНТ</h3>
+            <p>Теория, практика и задания</p>
+          </div>
+
+          <div class="path-arrow">
+            →
+          </div>
+
+        </button>
+
+        <button
+          class="path-card"
+          data-path="olympiad"
+          type="button"
+        >
+
+          <div class="path-card-icon">
+            🏆
+          </div>
+
+          <div class="path-card-text">
+            <h3>Олимпиада</h3>
+            <p>Углублённая биология</p>
+          </div>
+
+          <div class="path-arrow">
+            →
+          </div>
+
+        </button>
+
+      </div>
+
+      <div class="path-mascot-box">
+
+        <img
+          src="images/mascot.png"
+          class="path-mascot"
+          alt="Маскот Ground"
+        >
+
+        <div class="path-mascot-message">
+          Выбирай направление — дальше построим твою дорожку!
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</main>
+
+
+<!-- ======================================
+     3. ВЫБОР КЛАССА
+======================================= -->
+
+<main id="gradeScreen" class="screen">
+
+  <div class="app-page">
+
+    <header class="topbar">
+
+      <div class="brand">
+        🌱 GROUND
+      </div>
+
+      <div class="genes">
+        🧬 <span class="gene-value">0</span>
+      </div>
+
+    </header>
+
+    <section class="grade-content">
+
+      <button
+        id="gradeBackButton"
+        class="back-icon"
+        type="button"
+      >
+        ←
+      </button>
+
+      <div class="path-heading">
+
+        <span class="small-label">
+          ШКОЛЬНАЯ БИОЛОГИЯ
+        </span>
+
+        <h2>
+          Выбери класс
+        </h2>
+
+        <p>
+          Выбранный класс можно будет изменить позже.
+        </p>
+
+      </div>
+
+      <div class="grade-grid">
+
+        <button class="grade-card" data-grade="7" type="button">
+          <strong>7</strong>
+          <span>класс</span>
+        </button>
+
+        <button class="grade-card" data-grade="8" type="button">
+          <strong>8</strong>
+          <span>класс</span>
+        </button>
+
+        <button class="grade-card" data-grade="9" type="button">
+          <strong>9</strong>
+          <span>класс</span>
+        </button>
+
+        <button class="grade-card" data-grade="10" type="button">
+          <strong>10</strong>
+          <span>класс</span>
+        </button>
+
+        <button class="grade-card" data-grade="11" type="button">
+          <strong>11</strong>
+          <span>класс</span>
+        </button>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</main>
+
+
+<!-- ======================================
+     4. ГЛАВНАЯ
+======================================= -->
+
+<main id="homeScreen" class="screen">
+
+  <div class="ground-app">
+
+    <header class="home-topbar">
+
+      <div class="home-brand">
+        🌱 GROUND
+      </div>
+
+      <div class="home-stats">
+
+        <div class="mini-stat">
+          🔥 <span id="streakValue">0</span>
+        </div>
+
+        <div class="mini-stat">
+          🧬 <span class="gene-value">0</span>
+        </div>
+
+      </div>
+
+    </header>
+
+    <section class="ground-home-content">
+
+      <div class="home-welcome">
+
+        <div>
+
+          <span class="small-label">
+            ТВОЁ ОБУЧЕНИЕ
+          </span>
+
+          <h1>
+            Продолжим?
+          </h1>
+
+          <p>
+            Сейчас ты изучаешь
+            <strong id="currentGrade">
+              9 класс
+            </strong>
+          </p>
+
+        </div>
+
+        <img
+          src="images/mascot.png"
+          class="home-mascot"
+          alt="Маскот Ground"
+        >
+
+      </div>
+
+      <div class="level-card">
+
+        <div class="level-card-top">
+
+          <div>
+            <span class="level-label">
+              ⭐ УРОВЕНЬ
+            </span>
+
+            <strong id="levelValue">
+              1
+            </strong>
+          </div>
+
+          <div class="xp-number">
+            <span id="xpValue">0</span>
+            / 100 XP
+          </div>
+
+        </div>
+
+        <div class="xp-bar">
+          <div
+            id="xpProgress"
+            class="xp-progress"
+          ></div>
+        </div>
+
+      </div>
+
+      <div class="road-header">
+
+        <div>
+
+          <span class="small-label">
+            ТВОЯ ДОРОЖКА
+          </span>
+
+          <h2 id="courseTitle">
+            Биология
+          </h2>
+
+        </div>
+
+        <button
+          id="changeGradeButton"
+          class="change-grade-button"
+          type="button"
+        >
+          Сменить класс
+        </button>
+
+      </div>
+
+      <div
+        id="learningRoad"
+        class="learning-road"
+      ></div>
+
+    </section>
+
+    <nav class="bottom-nav">
+
+      <button class="nav-item nav-active" data-nav="home" type="button">
+        <span>🏠</span>
+        <small>Главная</small>
+      </button>
+
+      <button class="nav-item" data-nav="road" type="button">
+        <span>🗺️</span>
+        <small>Дорожка</small>
+      </button>
+
+      <button class="nav-item" data-nav="library" type="button">
+        <span>📚</span>
+        <small>Библиотека</small>
+      </button>
+
+      <button class="nav-item" data-nav="profile" type="button">
+        <span>👤</span>
+        <small>Профиль</small>
+      </button>
+
+    </nav>
+
+  </div>
+
+</main>
+
+
+<!-- ======================================
+     5. БИБЛИОТЕКА
+======================================= -->
+
+<main id="libraryScreen" class="screen">
+
+  <div class="ground-app">
+
+    <header class="home-topbar">
+
+      <div class="home-brand">
+        🌱 GROUND
+      </div>
+
+      <div class="home-stats">
+        <div class="mini-stat">
+          🧬 <span class="gene-value">0</span>
+        </div>
+      </div>
+
+    </header>
+
+    <section class="ground-home-content">
+
+      <div class="library-header">
+
+        <span class="small-label">
+          ТВОИ МАТЕРИАЛЫ
+        </span>
+
+        <h1>
+          📚 Библиотека
+        </h1>
+
+        <p>
+          Все темы выбранного класса в одном месте.
+        </p>
+
+      </div>
+
+      <div class="library-grade">
+        <span>Сейчас:</span>
+        <strong id="libraryGrade">
+          9 класс
+        </strong>
+      </div>
+
+      <div class="library-search">
+
+        <span>🔎</span>
+
+        <input
+          id="librarySearchInput"
+          type="text"
+          placeholder="Найти тему..."
+          autocomplete="off"
+        >
+
+      </div>
+
+      <div
+        id="libraryLessons"
+        class="library-lessons"
+      ></div>
+
+    </section>
+
+    <nav class="bottom-nav">
+
+      <button class="nav-item library-home-button" type="button">
+        <span>🏠</span>
+        <small>Главная</small>
+      </button>
+
+      <button class="nav-item library-road-button" type="button">
+        <span>🗺️</span>
+        <small>Дорожка</small>
+      </button>
+
+      <button class="nav-item nav-active" type="button">
+        <span>📚</span>
+        <small>Библиотека</small>
+      </button>
+
+      <button class="nav-item library-profile-button" type="button">
+        <span>👤</span>
+        <small>Профиль</small>
+      </button>
+
+    </nav>
+
+  </div>
+
+</main>
+
+
+<!-- ======================================
+     6. ПРОФИЛЬ
+======================================= -->
+
+<main id="profileScreen" class="screen">
+
+  <div class="ground-app">
+
+    <header class="home-topbar">
+
+      <div class="home-brand">
+        🌱 GROUND
+      </div>
+
+      <div class="home-stats">
+        <div class="mini-stat">
+          🧬 <span class="gene-value">0</span>
+        </div>
+      </div>
+
+    </header>
+
+    <section class="ground-home-content">
+
+      <div class="profile-hero">
+
+        <div class="profile-avatar">
+
+          <img
+            src="images/mascot.png"
+            alt="Маскот Ground"
+          >
+
+        </div>
+
+        <span class="small-label">
+          УЧЕНИК GROUND
+        </span>
+
+        <h1>
+          Мой профиль
+        </h1>
+
+        <div
+          id="profileGrade"
+          class="profile-grade"
+        >
+          9 класс
+        </div>
+
+      </div>
+
+
+      <!-- СТАТИСТИКА -->
+
+      <div class="profile-stats">
+
+        <div class="profile-stat">
+          <div class="profile-stat-icon">⭐</div>
+          <strong id="profileLevel">1</strong>
+          <span>Уровень</span>
+        </div>
+
+        <div class="profile-stat">
+          <div class="profile-stat-icon">🧬</div>
+          <strong id="profileGenes">0</strong>
+          <span>Гены</span>
+        </div>
+
+        <div class="profile-stat">
+          <div class="profile-stat-icon">🔥</div>
+          <strong id="profileStreak">0</strong>
+          <span>Серия</span>
+        </div>
+
+      </div>
+
+
+      <!-- XP -->
+
+      <div class="profile-xp-card">
+
+        <div class="profile-xp-top">
+
+          <div>
+            <span>Текущий уровень</span>
+            <strong id="profileLevelText">
+              Уровень 1
+            </strong>
+          </div>
+
+          <div class="profile-xp-number">
+            <span id="profileXP">0</span>
+            / 100 XP
+          </div>
+
+        </div>
+
+        <div class="xp-bar">
+          <div
+            id="profileXPProgress"
+            class="xp-progress"
+          ></div>
+        </div>
+
+      </div>
+
+
+      <!-- =================================
+           🔥 КАЛЕНДАРЬ АКТИВНОСТИ
+      ================================== -->
+
+      <div class="activity-section">
+
+        <div class="activity-header">
+
+          <div>
+
+            <span class="small-label">
+              АКТИВНОСТЬ
+            </span>
+
+            <h2>
+              🔥 Твоя неделя
+            </h2>
+
+          </div>
+
+          <div class="activity-streak">
+
+            <strong id="activityStreak">
+              0
+            </strong>
+
+            <span>
+              дней подряд
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="activityWeek"
+          class="activity-week"
+        ></div>
+
+
+        <div class="activity-message">
+
+          <span class="activity-message-icon">
+            🌱
+          </span>
+
+          <p id="activityMessage">
+            Пройди урок сегодня, чтобы продолжить серию.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- ПРОГРЕСС -->
+
+      <div class="profile-section">
+
+        <div class="profile-section-title">
+
+          <div>
+
+            <span class="small-label">
+              ПРОГРЕСС
+            </span>
+
+            <h2>
+              Твоё обучение
+            </h2>
+
+          </div>
+
+        </div>
+
+        <div class="profile-progress-card">
+
+          <div class="profile-progress-icon">
+            📚
+          </div>
+
+          <div class="profile-progress-text">
+            <span>Пройдено уроков</span>
+            <strong id="profileCompletedLessons">
+              0
+            </strong>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ДОСТИЖЕНИЯ -->
+
+      <div class="profile-section">
+
+        <div class="profile-section-title">
+
+          <div>
+
+            <span class="small-label">
+              НАГРАДЫ
+            </span>
+
+            <h2>
+              🏆 Достижения
+            </h2>
+
+          </div>
+
+        </div>
+
+        <div
+          id="achievementsContainer"
+          class="achievements-container"
+        ></div>
+
+      </div>
+
+
+      <button
+        id="settingsButton"
+        class="profile-settings-button"
+        type="button"
+      >
+
+        <span>⚙️</span>
+
+        <div>
+          <strong>Настройки</strong>
+          <small>Аккаунт и приложение</small>
+        </div>
+
+        <span class="settings-arrow">
+          →
+        </span>
+
+      </button>
+
+    </section>
+
+
+    <nav class="bottom-nav">
+
+      <button class="nav-item profile-home-button" type="button">
+        <span>🏠</span>
+        <small>Главная</small>
+      </button>
+
+      <button class="nav-item profile-road-button" type="button">
+        <span>🗺️</span>
+        <small>Дорожка</small>
+      </button>
+
+      <button class="nav-item profile-library-button" type="button">
+        <span>📚</span>
+        <small>Библиотека</small>
+      </button>
+
+      <button class="nav-item nav-active" type="button">
+        <span>👤</span>
+        <small>Профиль</small>
+      </button>
+
+    </nav>
+
+  </div>
+
+</main>
+
+
+<!-- ======================================
+     7. УРОК
+======================================= -->
+
+<main id="lessonScreen" class="screen">
+
+  <div class="lesson-page">
+
+    <header class="lesson-topbar">
+
+      <button
+        id="closeLessonButton"
+        class="lesson-close"
+        type="button"
+      >
+        ✕
+      </button>
+
+      <div class="lesson-progress">
+        <div
+          id="lessonProgressBar"
+          class="lesson-progress-fill"
+        ></div>
+      </div>
+
+      <div class="lesson-gene-counter">
+        🧬 <span id="lessonGenes">0</span>
+      </div>
+
+    </header>
+
+    <section class="lesson-content">
+
+      <div class="lesson-category">
+        УРОК
+      </div>
+
+      <h1 id="questionTitle">
+        Загрузка вопроса...
+      </h1>
+
+      <p
+        id="questionHint"
+        class="question-hint"
+      >
+        Выбери один правильный ответ
+      </p>
+
+      <div
+        id="answerContainer"
+        class="answer-container"
+      ></div>
+
+      <div
+        id="answerExplanation"
+        class="answer-explanation"
+      ></div>
+
+    </section>
+
+    <div class="lesson-bottom">
+
+      <button
+        id="checkAnswerButton"
+        class="lesson-check-button"
+        type="button"
+        disabled
+      >
+        Проверить
+      </button>
+
+    </div>
+
+  </div>
+
+</main>
+
+
+<script src="js/database.js"></script>
+<script src="js/player.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
