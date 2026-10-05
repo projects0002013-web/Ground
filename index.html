@@ -368,6 +368,7 @@
 
         </div>
 
+
         <div class="level-card">
 
           <div class="level-card-top">
@@ -399,6 +400,7 @@
           </div>
 
         </div>
+
 
         <div class="road-header">
 
@@ -587,9 +589,7 @@
     </div>
 
   </main>
-
-
-  <!-- ======================================
+    <!-- ======================================
        6. ПРОФИЛЬ
   ======================================= -->
 
@@ -603,42 +603,42 @@
           🌱 GROUND
         </div>
 
-        <div class="home-stats">
-
-          <div class="mini-stat">
-            🧬 <span class="gene-value">0</span>
-          </div>
-
-        </div>
+        <button
+          id="settingsButton"
+          class="settings-button"
+          type="button"
+        >
+          ⚙️
+        </button>
 
       </header>
 
+
       <section class="ground-home-content">
 
-        <div class="profile-hero">
+        <div class="profile-header">
 
           <div class="profile-avatar">
-
             <img
               src="images/mascot.png"
               alt="Маскот Ground"
             >
-
           </div>
 
-          <span class="small-label">
-            УЧЕНИК GROUND
-          </span>
+          <div>
 
-          <h1>
-            Мой профиль
-          </h1>
+            <span class="small-label">
+              ПРОФИЛЬ
+            </span>
 
-          <div
-            id="profileGrade"
-            class="profile-grade"
-          >
-            9 класс
+            <h1>
+              Биолог
+            </h1>
+
+            <p id="profileGrade">
+              9 класс
+            </p>
+
           </div>
 
         </div>
@@ -646,45 +646,81 @@
 
         <div class="profile-stats">
 
-          <div class="profile-stat">
-            <div class="profile-stat-icon">⭐</div>
-            <strong id="profileLevel">1</strong>
-            <span>Уровень</span>
+          <div class="profile-stat-card">
+
+            <span>
+              🧬
+            </span>
+
+            <strong id="profileGenes">
+              0
+            </strong>
+
+            <small>
+              Генов
+            </small>
+
           </div>
 
-          <div class="profile-stat">
-            <div class="profile-stat-icon">🧬</div>
-            <strong id="profileGenes">0</strong>
-            <span>Гены</span>
+
+          <div class="profile-stat-card">
+
+            <span>
+              ⭐
+            </span>
+
+            <strong id="profileLevel">
+              1
+            </strong>
+
+            <small>
+              Уровень
+            </small>
+
           </div>
 
-          <div class="profile-stat">
-            <div class="profile-stat-icon">🔥</div>
-            <strong id="profileStreak">0</strong>
-            <span>Серия</span>
+
+          <div class="profile-stat-card">
+
+            <span>
+              🔥
+            </span>
+
+            <strong id="profileStreak">
+              0
+            </strong>
+
+            <small>
+              Серия
+            </small>
+
           </div>
 
         </div>
 
 
-        <div class="profile-xp-card">
+        <div class="profile-progress-card">
 
-          <div class="profile-xp-top">
+          <div class="profile-progress-top">
 
             <div>
-              <span>Текущий уровень</span>
 
-              <strong id="profileLevelText">
-                Уровень 1
-              </strong>
+              <span class="small-label">
+                ОПЫТ
+              </span>
+
+              <h3>
+                Твой прогресс
+              </h3>
+
             </div>
 
-            <div class="profile-xp-number">
-              <span id="profileXP">0</span>
-              / 100 XP
-            </div>
+            <strong id="profileXP">
+              0 XP
+            </strong>
 
           </div>
+
 
           <div class="xp-bar">
 
@@ -698,143 +734,26 @@
         </div>
 
 
-        <!-- АКТИВНОСТЬ -->
-
-        <div class="activity-section">
-
-          <div class="activity-header">
-
-            <div>
-
-              <span class="small-label">
-                АКТИВНОСТЬ
-              </span>
-
-              <h2>
-                🔥 Твоя неделя
-              </h2>
-
-            </div>
-
-            <div class="activity-streak">
-
-              <strong id="activityStreak">
-                0
-              </strong>
-
-              <span>
-                дней подряд
-              </span>
-
-            </div>
-
-          </div>
-
-          <div
-            id="activityWeek"
-            class="activity-week"
-          ></div>
-
-          <div class="activity-message">
-
-            <span class="activity-message-icon">
-              🌱
-            </span>
-
-            <p id="activityMessage">
-              Пройди урок сегодня, чтобы продолжить серию.
-            </p>
-
-          </div>
-
-        </div>
-
-
-        <!-- ПРОГРЕСС -->
-
         <div class="profile-section">
 
-          <div class="profile-section-title">
-
-            <div>
-
-              <span class="small-label">
-                ПРОГРЕСС
-              </span>
-
-              <h2>
-                Твоё обучение
-              </h2>
-
-            </div>
-
-          </div>
-
-          <div class="profile-progress-card">
-
-            <div class="profile-progress-icon">
-              📚
-            </div>
-
-            <div class="profile-progress-text">
-              <span>Пройдено уроков</span>
-
-              <strong id="profileCompletedLessons">
-                0
-              </strong>
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <!-- ДОСТИЖЕНИЯ -->
-
-        <div class="profile-section">
-
-          <div class="profile-section-title">
-
-            <div>
-
-              <span class="small-label">
-                НАГРАДЫ
-              </span>
-
-              <h2>
-                🏆 Достижения
-              </h2>
-
-            </div>
-
-          </div>
-
-          <div
-            id="achievementsContainer"
-            class="achievements-container"
-          ></div>
-
-        </div>
-
-
-        <button
-          id="settingsButton"
-          class="profile-settings-button"
-          type="button"
-        >
-
-          <span>⚙️</span>
-
-          <div>
-            <strong>Настройки</strong>
-            <small>Аккаунт и приложение</small>
-          </div>
-
-          <span class="settings-arrow">
-            →
+          <span class="small-label">
+            ОБУЧЕНИЕ
           </span>
 
-        </button>
+          <div class="profile-info-card">
+
+            <div>
+              <span>📚</span>
+
+              <div>
+                <strong>Пройдено уроков</strong>
+                <p id="profileLessons">0</p>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
 
       </section>
 
@@ -881,79 +800,86 @@
 
 
   <!-- ======================================
-       7. УРОК
+       7. ОБЫЧНЫЙ УРОК
   ======================================= -->
 
   <main id="lessonScreen" class="screen">
 
-    <div class="lesson-page">
+    <div class="lesson-app">
 
       <header class="lesson-topbar">
 
         <button
-          id="closeLessonButton"
-          class="lesson-close"
+          id="lessonCloseButton"
+          class="lesson-close-button"
           type="button"
         >
           ✕
         </button>
 
-        <div class="lesson-progress">
 
-          <div
-            id="lessonProgressBar"
-            class="lesson-progress-fill"
-          ></div>
+        <div class="lesson-progress-wrap">
+
+          <div class="lesson-progress-bar">
+
+            <div
+              id="lessonProgress"
+              class="lesson-progress"
+            ></div>
+
+          </div>
 
         </div>
 
+
         <div class="lesson-gene-counter">
-          🧬 <span id="lessonGenes">0</span>
+
+          🧬
+
+          <span id="lessonGenes">
+            0
+          </span>
+
         </div>
 
       </header>
 
-      <section class="lesson-content">
 
-        <div class="lesson-category">
-          УРОК
+      <section
+        id="lessonContent"
+        class="lesson-content"
+      >
+
+        <div class="lesson-placeholder">
+
+          <span>
+            🧬
+          </span>
+
+          <h2>
+            Урок
+          </h2>
+
+          <p>
+            Материал загружается...
+          </p>
+
         </div>
-
-        <h1 id="questionTitle">
-          Загрузка вопроса...
-        </h1>
-
-        <p
-          id="questionHint"
-          class="question-hint"
-        >
-          Выбери один правильный ответ
-        </p>
-
-        <div
-          id="answerContainer"
-          class="answer-container"
-        ></div>
-
-        <div
-          id="answerExplanation"
-          class="answer-explanation"
-        ></div>
 
       </section>
 
-      <div class="lesson-bottom">
+
+      <footer class="lesson-footer">
 
         <button
-          id="checkAnswerButton"
+          id="lessonCheckButton"
           class="lesson-check-button"
           type="button"
-          disabled
         >
           Проверить
         </button>
 
-      </div>
+      </footer>
 
     </div>
 
@@ -961,7 +887,7 @@
 
 
   <!-- ======================================
-       8. CAMPBELL BIOLOGY
+       8. CAMPBELL BIOLOGY — КУРС
   ======================================= -->
 
   <main id="campbellScreen" class="screen">
@@ -978,55 +904,40 @@
           ←
         </button>
 
+
         <div class="home-brand">
-          🧬 CAMPBELL BIOLOGY
+          CAMPBELL BIOLOGY
         </div>
 
-        <div class="home-stats">
 
-          <div class="mini-stat">
-            🧬 <span class="gene-value">0</span>
-          </div>
-
+        <div class="genes">
+          🧬 <span class="gene-value">0</span>
         </div>
 
       </header>
 
+
       <section class="ground-home-content">
 
-        <div class="library-header">
+        <div class="campbell-hero">
 
-          <span class="small-label">
-            УГЛУБЛЁННАЯ БИОЛОГИЯ
-          </span>
-
-          <h1>
-            Campbell Biology
-          </h1>
-
-          <p>
-            Изучай главы Campbell Biology,
-            а затем проверяй знания на экзамене.
-          </p>
-
-        </div>
-
-
-        <div class="campbell-chapter">
-
-          <div class="campbell-chapter-number">
-            ГЛАВА 2
+          <div class="campbell-book-icon">
+            🧬
           </div>
 
-          <div class="campbell-chapter-info">
 
-            <h2>
-              Химический контекст жизни
-            </h2>
+          <div>
+
+            <span class="small-label">
+              8 КЛАСС • УГЛУБЛЁННЫЙ КУРС
+            </span>
+
+            <h1>
+              Campbell Biology
+            </h1>
 
             <p>
-              Атомы, элементы, химические связи
-              и основы химии живых систем.
+              Глава 2 — Химический контекст жизни
             </p>
 
           </div>
@@ -1034,101 +945,179 @@
         </div>
 
 
-        <div class="campbell-actions">
-
-          <!-- МАТЕРИАЛ -->
-
-          <button
-            id="campbellTheoryButton"
-            class="campbell-action-card"
-            type="button"
-          >
-
-            <div class="campbell-action-icon">
-              📖
-            </div>
-
-            <div class="campbell-action-info">
-
-              <span class="small-label">
-                ШАГ 1
-              </span>
-
-              <h3>
-                Изучить материал
-              </h3>
-
-              <p>
-                Глава 2 • Теория
-              </p>
-
-            </div>
-
-            <div class="library-card-arrow">
-              →
-            </div>
-
-          </button>
-
-
-          <!-- ЭКЗАМЕН -->
-
-          <button
-            id="campbellExamButton"
-            class="campbell-action-card locked"
-            type="button"
-          >
-
-            <div class="campbell-action-icon">
-              🔒
-            </div>
-
-            <div class="campbell-action-info">
-
-              <span class="small-label">
-                ШАГ 2
-              </span>
-
-              <h3>
-                Экзамен
-              </h3>
-
-              <p id="campbellExamStatus">
-                Сначала изучи материал
-              </p>
-
-            </div>
-
-            <div class="library-card-arrow">
-              →
-            </div>
-
-          </button>
-
-        </div>
-
-
         <div class="campbell-progress-card">
 
-          <div>
+          <div class="campbell-progress-top">
 
-            <span class="small-label">
-              ПРОГРЕСС ГЛАВЫ
-            </span>
+            <div>
 
-            <strong id="campbellProgressText">
-              0%
-            </strong>
+              <span class="small-label">
+                ПРОГРЕСС ГЛАВЫ
+              </span>
+
+              <strong id="campbellProgressText">
+                0%
+              </strong>
+
+            </div>
 
           </div>
+
 
           <div class="xp-bar">
 
             <div
               id="campbellProgressBar"
               class="xp-progress"
-              style="width:0%"
+              style="width: 0%"
             ></div>
+
+          </div>
+
+        </div>
+
+
+        <!-- ==================================
+             МАТЕРИАЛ
+        =================================== -->
+
+        <button
+          id="campbellTheoryButton"
+          class="campbell-action-card"
+          type="button"
+        >
+
+          <div class="campbell-action-icon">
+            📖
+          </div>
+
+
+          <div class="campbell-action-content">
+
+            <span class="small-label">
+              ШАГ 1
+            </span>
+
+            <h3>
+              Изучить материал
+            </h3>
+
+            <p>
+              Глава 2 • страницы 47–66 PDF
+            </p>
+
+
+            <div class="campbell-mini-progress">
+
+              <div class="campbell-mini-bar">
+
+                <div
+                  id="campbellReadingProgress"
+                  class="campbell-mini-fill"
+                  style="width: 0%"
+                ></div>
+
+              </div>
+
+
+              <span id="campbellReadingPercent">
+                0%
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <div class="campbell-action-arrow">
+            →
+          </div>
+
+        </button>
+
+
+        <!-- ==================================
+             ЭКЗАМЕН
+        =================================== -->
+
+        <button
+          id="campbellExamButton"
+          class="campbell-action-card locked"
+          type="button"
+        >
+
+          <div class="campbell-action-icon">
+            🔒
+          </div>
+
+
+          <div class="campbell-action-content">
+
+            <span class="small-label">
+              ШАГ 2
+            </span>
+
+            <h3>
+              Экзамен по главе 2
+            </h3>
+
+            <p id="campbellExamStatus">
+              Сначала изучи материал
+            </p>
+
+          </div>
+
+
+          <div class="campbell-action-arrow">
+            →
+          </div>
+
+        </button>
+
+
+        <div class="campbell-chapter-info">
+
+          <span class="small-label">
+            В ЭТОЙ ГЛАВЕ
+          </span>
+
+
+          <div class="campbell-topic-list">
+
+            <div class="campbell-topic">
+              <span>2.1</span>
+
+              <p>
+                Вещество, элементы и соединения
+              </p>
+            </div>
+
+
+            <div class="campbell-topic">
+              <span>2.2</span>
+
+              <p>
+                Строение атома и свойства элементов
+              </p>
+            </div>
+
+
+            <div class="campbell-topic">
+              <span>2.3</span>
+
+              <p>
+                Химические связи и молекулы
+              </p>
+            </div>
+
+
+            <div class="campbell-topic">
+              <span>2.4</span>
+
+              <p>
+                Химические реакции
+              </p>
+            </div>
 
           </div>
 
@@ -1142,14 +1131,16 @@
 
 
   <!-- ======================================
-       9. CAMPBELL — МАТЕРИАЛ ГЛАВЫ 2
+       9. CAMPBELL — ЧТЕНИЕ ГЛАВЫ 2
   ======================================= -->
 
   <main id="campbellTheoryScreen" class="screen">
 
-    <div class="ground-app">
+    <div class="campbell-reader-app">
 
-      <header class="home-topbar">
+      <!-- Верхняя панель -->
+
+      <header class="campbell-reader-topbar">
 
         <button
           id="campbellTheoryBackButton"
@@ -1159,146 +1150,331 @@
           ←
         </button>
 
-        <div class="home-brand">
-          🧬 CAMPBELL
-        </div>
 
-        <div class="home-stats">
-
-          <div class="mini-stat">
-            Глава 2
-          </div>
-
-        </div>
-
-      </header>
-
-
-      <section class="ground-home-content">
-
-        <!-- ЗАГОЛОВОК -->
-
-        <div class="campbell-theory-header">
+        <div class="campbell-reader-heading">
 
           <span class="small-label">
             CAMPBELL BIOLOGY
           </span>
 
-          <h1>
-            Химический контекст жизни
-          </h1>
+          <strong>
+            Глава 2
+          </strong>
+
+        </div>
+
+
+        <div
+          id="campbellReaderPageTop"
+          class="campbell-reader-page-top"
+        >
+          1 / 20
+        </div>
+
+      </header>
+
+
+      <!-- Прогресс чтения -->
+
+      <div class="campbell-reader-progress">
+
+        <div
+          id="campbellReaderProgressBar"
+          class="campbell-reader-progress-fill"
+          style="width: 5%"
+        ></div>
+
+      </div>
+
+
+      <!-- Информация -->
+
+      <section class="campbell-reader-intro">
+
+        <span class="small-label">
+          ГЛАВА 2
+        </span>
+
+        <h1>
+          Химический контекст жизни
+        </h1>
+
+        <p>
+          Материал Campbell Biology.
+          Для этой главы используются страницы
+          47–66 PDF.
+        </p>
+
+      </section>
+
+
+      <!-- ==================================
+           ОБЛАСТЬ СТРАНИЦЫ
+      =================================== -->
+
+      <section class="campbell-reader-container">
+
+        <div
+          id="campbellReaderLoading"
+          class="campbell-reader-loading"
+        >
+
+          <span>
+            📖
+          </span>
 
           <p>
-            Глава 2
+            Загрузка страницы...
           </p>
 
         </div>
 
 
-        <!-- ПРОГРЕСС ЧТЕНИЯ -->
+        <div
+          id="campbellReaderPage"
+          class="campbell-reader-page"
+        >
 
-        <div class="campbell-reading-progress">
+          <!--
+            Сюда app.js будет подставлять
+            текущую страницу главы.
+          -->
 
-          <div class="campbell-reading-progress-top">
+          <img
+            id="campbellReaderImage"
+            class="campbell-reader-image"
+            src=""
+            alt="Страница Campbell Biology"
+          >
 
-            <span>
-              📖 Материал
-            </span>
+        </div>
 
-            <strong id="campbellReadingPercent">
-              0%
-            </strong>
+      </section>
 
-          </div>
 
-          <div class="xp-bar">
+      <!-- ==================================
+           НОМЕР СТРАНИЦЫ
+      =================================== -->
 
-            <div
-              id="campbellReadingProgress"
-              class="xp-progress"
-              style="width:0%"
-            ></div>
+      <div class="campbell-reader-page-info">
 
-          </div>
+        <span id="campbellReaderPdfPage">
+          PDF • страница 47
+        </span>
+
+        <strong id="campbellReaderCounter">
+          Страница 1 из 20
+        </strong>
+
+      </div>
+
+
+      <!-- ==================================
+           НАВИГАЦИЯ
+      =================================== -->
+
+      <div class="campbell-reader-navigation">
+
+        <button
+          id="campbellReaderPrevButton"
+          class="campbell-reader-nav-button"
+          type="button"
+          disabled
+        >
+          ← Назад
+        </button>
+
+
+        <button
+          id="campbellReaderNextButton"
+          class="campbell-reader-nav-button primary"
+          type="button"
+        >
+          Далее →
+        </button>
+
+      </div>
+
+
+      <!-- ==================================
+           ЗАВЕРШЕНИЕ
+      =================================== -->
+
+      <div
+        id="campbellReaderFinish"
+        class="campbell-reader-finish"
+        hidden
+      >
+
+        <div class="campbell-reader-finish-icon">
+          🧬
+        </div>
+
+
+        <span class="small-label">
+          МАТЕРИАЛ ИЗУЧЕН
+        </span>
+
+
+        <h2>
+          Глава 2 прочитана!
+        </h2>
+
+
+        <p>
+          Теперь можно перейти к экзамену
+          и проверить свои знания.
+        </p>
+
+
+        <button
+          id="completeCampbellTheoryButton"
+          class="primary-button"
+          type="button"
+        >
+          Завершить изучение
+        </button>
+
+      </div>
+
+    </div>
+
+  </main>
+    <!-- ======================================
+       10. CAMPBELL — ЭКЗАМЕН ГЛАВЫ 2
+  ======================================= -->
+
+  <main id="campbellExamScreen" class="screen">
+
+    <div class="campbell-exam-app">
+
+      <!-- ВЕРХ -->
+
+      <header class="campbell-exam-topbar">
+
+        <button
+          id="campbellExamBackButton"
+          class="back-icon"
+          type="button"
+        >
+          ←
+        </button>
+
+
+        <div class="campbell-exam-heading">
+
+          <span class="small-label">
+            CAMPBELL BIOLOGY
+          </span>
+
+          <strong>
+            Экзамен • Глава 2
+          </strong>
 
         </div>
 
 
-        <!-- МАТЕРИАЛ -->
+        <div
+          id="campbellExamTimer"
+          class="campbell-exam-timer"
+        >
+          ⏱️ 20:00
+        </div>
 
-        <article
-          id="campbellTheoryContent"
-          class="campbell-theory-content"
+      </header>
+
+
+      <!-- ПРОГРЕСС -->
+
+      <div class="campbell-exam-progress-wrap">
+
+        <div
+          id="campbellExamProgress"
+          class="campbell-exam-progress"
+          style="width: 0%"
+        ></div>
+
+      </div>
+
+
+      <!-- ИНФОРМАЦИЯ О ВОПРОСЕ -->
+
+      <section class="campbell-exam-content">
+
+        <div class="campbell-question-meta">
+
+          <span id="campbellQuestionCounter">
+            Вопрос 1 из 10
+          </span>
+
+          <span id="campbellExamScore">
+            0 правильных
+          </span>
+
+        </div>
+
+
+        <!-- ВОПРОС -->
+
+        <div class="campbell-question-card">
+
+          <div class="campbell-question-icon">
+            🧬
+          </div>
+
+
+          <span class="small-label">
+            ВЫБЕРИ ОДИН ОТВЕТ
+          </span>
+
+
+          <h2 id="campbellQuestionText">
+            Загрузка вопроса...
+          </h2>
+
+        </div>
+
+
+        <!-- ==================================
+             ВАРИАНТЫ ОТВЕТОВ
+        =================================== -->
+
+        <div
+          id="campbellExamAnswers"
+          class="campbell-exam-answers"
         >
 
-          <div class="campbell-theory-intro">
+          <!--
+            app.js автоматически создаст:
 
-            <div class="campbell-theory-icon">
-              ⚛️
-            </div>
+            A
+            B
+            C
+            D
 
-            <div>
+            и добавит их сюда.
+          -->
 
-              <span class="small-label">
-                ГЛАВА 2
-              </span>
-
-              <h2>
-                Химический контекст жизни
-              </h2>
-
-            </div>
-
-          </div>
+        </div>
 
 
-          <div class="campbell-theory-block">
+        <!-- ==================================
+             КНОПКА ДАЛЕЕ
+        =================================== -->
 
-            <h2>
-              Материал главы
-            </h2>
-
-            <p>
-              Здесь будет находиться материал второй главы
-              Campbell Biology.
-            </p>
-
-            <p>
-              Мы разделим главу на удобные части:
-              элементы, атомы, электроны, химические связи,
-              реакции и другие основные понятия.
-            </p>
-
-          </div>
+        <button
+          id="campbellExamNextButton"
+          class="campbell-exam-next-button"
+          type="button"
+          disabled
+        >
+          Ответить
+        </button>
 
 
-          <div class="campbell-theory-block">
-
-            <div class="campbell-note">
-
-              <span>
-                🧠
-              </span>
-
-              <p>
-                Изучи материал главы. После завершения
-                станет доступен экзамен.
-              </p>
-
-            </div>
-
-          </div>
-
-
-          <button
-            id="completeCampbellTheoryButton"
-            class="primary-button"
-            type="button"
-          >
-            Завершить изучение
-          </button>
-
-        </article>
+        <p class="campbell-exam-hint">
+          Выбери один вариант ответа
+        </p>
 
       </section>
 
@@ -1308,13 +1484,1286 @@
 
 
   <!-- ======================================
-       JAVASCRIPT
+       11. CAMPBELL — РЕЗУЛЬТАТ ЭКЗАМЕНА
+  ======================================= -->
+
+  <main id="campbellResultScreen" class="screen">
+
+    <div class="campbell-result-app">
+
+      <section class="campbell-result-content">
+
+
+        <!-- ИКОНКА -->
+
+        <div
+          id="campbellResultIcon"
+          class="campbell-result-icon"
+        >
+          🧬
+        </div>
+
+
+        <!-- ЗАГОЛОВОК -->
+
+        <span class="small-label">
+          ЭКЗАМЕН ЗАВЕРШЁН
+        </span>
+
+
+        <h1 id="campbellResultTitle">
+          Результат готов!
+        </h1>
+
+
+        <p id="campbellResultMessage">
+          Посмотрим, как ты справился с главой 2.
+        </p>
+
+
+        <!-- ==================================
+             БОЛЬШОЙ РЕЗУЛЬТАТ
+        =================================== -->
+
+        <div class="campbell-score-card">
+
+          <span class="small-label">
+            ТВОЙ РЕЗУЛЬТАТ
+          </span>
+
+
+          <div class="campbell-score-main">
+
+            <strong id="campbellResultPercent">
+              0%
+            </strong>
+
+          </div>
+
+
+          <div class="campbell-score-progress">
+
+            <div
+              id="campbellResultProgress"
+              class="campbell-score-progress-fill"
+              style="width: 0%"
+            ></div>
+
+          </div>
+
+
+          <div class="campbell-score-details">
+
+
+            <div class="campbell-score-detail">
+
+              <span>
+                ✅
+              </span>
+
+              <strong id="campbellCorrectCount">
+                0
+              </strong>
+
+              <small>
+                Правильно
+              </small>
+
+            </div>
+
+
+            <div class="campbell-score-detail">
+
+              <span>
+                ❌
+              </span>
+
+              <strong id="campbellWrongCount">
+                0
+              </strong>
+
+              <small>
+                Ошибок
+              </small>
+
+            </div>
+
+
+            <div class="campbell-score-detail">
+
+              <span>
+                📝
+              </span>
+
+              <strong id="campbellTotalCount">
+                10
+              </strong>
+
+              <small>
+                Всего
+              </small>
+
+            </div>
+
+
+          </div>
+
+        </div>
+
+
+        <!-- ==================================
+             НАГРАДА
+        =================================== -->
+
+        <div
+          id="campbellRewardCard"
+          class="campbell-reward-card"
+        >
+
+          <div class="campbell-reward-icon">
+            🧬
+          </div>
+
+
+          <div>
+
+            <span class="small-label">
+              НАГРАДА
+            </span>
+
+            <strong id="campbellRewardText">
+              +0 генов
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <!-- ==================================
+             КНОПКИ
+        =================================== -->
+
+        <div class="campbell-result-actions">
+
+
+          <button
+            id="campbellContinueButton"
+            class="primary-button"
+            type="button"
+          >
+            Продолжить
+          </button>
+
+
+          <button
+            id="campbellReviewButton"
+            class="campbell-secondary-button"
+            type="button"
+          >
+            🔍 Сделать разбор
+          </button>
+
+
+          <button
+            id="campbellRetryButton"
+            class="campbell-text-action"
+            type="button"
+          >
+            ↻ Пройти экзамен ещё раз
+          </button>
+
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+
+  <!-- ======================================
+       12. CAMPBELL — РАЗБОР ЭКЗАМЕНА
+  ======================================= -->
+
+  <main id="campbellReviewScreen" class="screen">
+
+    <div class="campbell-review-app">
+
+
+      <!-- ВЕРХ -->
+
+      <header class="campbell-review-topbar">
+
+
+        <button
+          id="campbellReviewBackButton"
+          class="back-icon"
+          type="button"
+        >
+          ←
+        </button>
+
+
+        <div>
+
+          <span class="small-label">
+            CAMPBELL BIOLOGY
+          </span>
+
+          <strong>
+            Разбор экзамена
+          </strong>
+
+        </div>
+
+
+        <div class="campbell-review-mini-score">
+
+          🧠
+
+          <span id="campbellReviewScore">
+            0/10
+          </span>
+
+        </div>
+
+
+      </header>
+
+
+      <!-- ПРОГРЕСС РЕЗУЛЬТАТА -->
+
+      <div class="campbell-review-progress-wrap">
+
+        <div
+          id="campbellReviewProgress"
+          class="campbell-review-progress"
+          style="width: 0%"
+        ></div>
+
+      </div>
+
+
+      <!-- ЗАГОЛОВОК -->
+
+      <section class="campbell-review-header">
+
+
+        <span class="small-label">
+          РАЗБОР
+        </span>
+
+
+        <h1>
+          Разберём каждый вопрос
+        </h1>
+
+
+        <p>
+          Здесь ты увидишь свой ответ,
+          правильный вариант и объяснение.
+        </p>
+
+
+      </section>
+
+
+      <!-- ==================================
+           ВСЕ ВОПРОСЫ
+      =================================== -->
+
+      <section
+        id="campbellReviewQuestions"
+        class="campbell-review-questions"
+      >
+
+        <!--
+
+          app.js создаст сюда карточки:
+
+          Вопрос 1
+
+          ❌ Твой ответ:
+          ...
+
+          ✅ Правильный ответ:
+          ...
+
+          🧠 Объяснение:
+          ...
+
+        -->
+
+      </section>
+
+
+      <!-- ==================================
+           КОНЕЦ РАЗБОРА
+      =================================== -->
+
+      <section class="campbell-review-finish">
+
+
+        <div class="campbell-review-finish-icon">
+          🧠
+        </div>
+
+
+        <span class="small-label">
+          РАЗБОР ЗАВЕРШЁН
+        </span>
+
+
+        <h2>
+          Теперь ошибки понятны
+        </h2>
+
+
+        <p>
+          Можно вернуться к главе,
+          повторить материал или снова
+          пройти экзамен.
+        </p>
+
+
+        <button
+          id="campbellReviewFinishButton"
+          class="primary-button"
+          type="button"
+        >
+          Завершить разбор
+        </button>
+
+
+      </section>
+
+
+    </div>
+
+  </main>
+
+
+  <!-- ======================================
+       13. ПОДТВЕРЖДЕНИЕ ВЫХОДА ИЗ ЭКЗАМЕНА
+  ======================================= -->
+
+  <div
+    id="campbellExitModal"
+    class="ground-modal"
+    hidden
+  >
+
+    <div class="ground-modal-overlay"></div>
+
+
+    <div class="ground-modal-card">
+
+
+      <div class="ground-modal-icon">
+        ⚠️
+      </div>
+
+
+      <h2>
+        Выйти из экзамена?
+      </h2>
+
+
+      <p>
+        Текущие ответы этого прохождения
+        будут потеряны.
+      </p>
+
+
+      <div class="ground-modal-actions">
+
+
+        <button
+          id="campbellExitCancelButton"
+          class="campbell-secondary-button"
+          type="button"
+        >
+          Остаться
+        </button>
+
+
+        <button
+          id="campbellExitConfirmButton"
+          class="danger-button"
+          type="button"
+        >
+          Выйти
+        </button>
+
+
+      </div>
+
+
+    </div>
+
+  </div>
+
+
+  <!-- ======================================
+       14. ВРЕМЯ ВЫШЛО
+  ======================================= -->
+
+  <div
+    id="campbellTimeModal"
+    class="ground-modal"
+    hidden
+  >
+
+    <div class="ground-modal-overlay"></div>
+
+
+    <div class="ground-modal-card">
+
+
+      <div class="ground-modal-icon">
+        ⏱️
+      </div>
+
+
+      <span class="small-label">
+        ЭКЗАМЕН
+      </span>
+
+
+      <h2>
+        Время вышло
+      </h2>
+
+
+      <p>
+        Экзамен автоматически завершён.
+        Все уже выбранные ответы будут
+        учтены в результате.
+      </p>
+
+
+      <button
+        id="campbellTimeResultButton"
+        class="primary-button"
+        type="button"
+      >
+        Посмотреть результат
+      </button>
+
+
+    </div>
+
+  </div>
+    <!-- ======================================
+       10. CAMPBELL — ЭКЗАМЕН ГЛАВЫ 2
+  ======================================= -->
+
+  <main id="campbellExamScreen" class="screen">
+
+    <div class="campbell-exam-app">
+
+      <!-- ВЕРХ -->
+
+      <header class="campbell-exam-topbar">
+
+        <button
+          id="campbellExamBackButton"
+          class="back-icon"
+          type="button"
+        >
+          ←
+        </button>
+
+
+        <div class="campbell-exam-heading">
+
+          <span class="small-label">
+            CAMPBELL BIOLOGY
+          </span>
+
+          <strong>
+            Экзамен • Глава 2
+          </strong>
+
+        </div>
+
+
+        <div
+          id="campbellExamTimer"
+          class="campbell-exam-timer"
+        >
+          ⏱️ 20:00
+        </div>
+
+      </header>
+
+
+      <!-- ПРОГРЕСС -->
+
+      <div class="campbell-exam-progress-wrap">
+
+        <div
+          id="campbellExamProgress"
+          class="campbell-exam-progress"
+          style="width: 0%"
+        ></div>
+
+      </div>
+
+
+      <!-- ИНФОРМАЦИЯ О ВОПРОСЕ -->
+
+      <section class="campbell-exam-content">
+
+        <div class="campbell-question-meta">
+
+          <span id="campbellQuestionCounter">
+            Вопрос 1 из 10
+          </span>
+
+          <span id="campbellExamScore">
+            0 правильных
+          </span>
+
+        </div>
+
+
+        <!-- ВОПРОС -->
+
+        <div class="campbell-question-card">
+
+          <div class="campbell-question-icon">
+            🧬
+          </div>
+
+
+          <span class="small-label">
+            ВЫБЕРИ ОДИН ОТВЕТ
+          </span>
+
+
+          <h2 id="campbellQuestionText">
+            Загрузка вопроса...
+          </h2>
+
+        </div>
+
+
+        <!-- ==================================
+             ВАРИАНТЫ ОТВЕТОВ
+        =================================== -->
+
+        <div
+          id="campbellExamAnswers"
+          class="campbell-exam-answers"
+        >
+
+          <!--
+            app.js автоматически создаст:
+
+            A
+            B
+            C
+            D
+
+            и добавит их сюда.
+          -->
+
+        </div>
+
+
+        <!-- ==================================
+             КНОПКА ДАЛЕЕ
+        =================================== -->
+
+        <button
+          id="campbellExamNextButton"
+          class="campbell-exam-next-button"
+          type="button"
+          disabled
+        >
+          Ответить
+        </button>
+
+
+        <p class="campbell-exam-hint">
+          Выбери один вариант ответа
+        </p>
+
+      </section>
+
+    </div>
+
+  </main>
+
+
+  <!-- ======================================
+       11. CAMPBELL — РЕЗУЛЬТАТ ЭКЗАМЕНА
+  ======================================= -->
+
+  <main id="campbellResultScreen" class="screen">
+
+    <div class="campbell-result-app">
+
+      <section class="campbell-result-content">
+
+
+        <!-- ИКОНКА -->
+
+        <div
+          id="campbellResultIcon"
+          class="campbell-result-icon"
+        >
+          🧬
+        </div>
+
+
+        <!-- ЗАГОЛОВОК -->
+
+        <span class="small-label">
+          ЭКЗАМЕН ЗАВЕРШЁН
+        </span>
+
+
+        <h1 id="campbellResultTitle">
+          Результат готов!
+        </h1>
+
+
+        <p id="campbellResultMessage">
+          Посмотрим, как ты справился с главой 2.
+        </p>
+
+
+        <!-- ==================================
+             БОЛЬШОЙ РЕЗУЛЬТАТ
+        =================================== -->
+
+        <div class="campbell-score-card">
+
+          <span class="small-label">
+            ТВОЙ РЕЗУЛЬТАТ
+          </span>
+
+
+          <div class="campbell-score-main">
+
+            <strong id="campbellResultPercent">
+              0%
+            </strong>
+
+          </div>
+
+
+          <div class="campbell-score-progress">
+
+            <div
+              id="campbellResultProgress"
+              class="campbell-score-progress-fill"
+              style="width: 0%"
+            ></div>
+
+          </div>
+
+
+          <div class="campbell-score-details">
+
+
+            <div class="campbell-score-detail">
+
+              <span>
+                ✅
+              </span>
+
+              <strong id="campbellCorrectCount">
+                0
+              </strong>
+
+              <small>
+                Правильно
+              </small>
+
+            </div>
+
+
+            <div class="campbell-score-detail">
+
+              <span>
+                ❌
+              </span>
+
+              <strong id="campbellWrongCount">
+                0
+              </strong>
+
+              <small>
+                Ошибок
+              </small>
+
+            </div>
+
+
+            <div class="campbell-score-detail">
+
+              <span>
+                📝
+              </span>
+
+              <strong id="campbellTotalCount">
+                10
+              </strong>
+
+              <small>
+                Всего
+              </small>
+
+            </div>
+
+
+          </div>
+
+        </div>
+
+
+        <!-- ==================================
+             НАГРАДА
+        =================================== -->
+
+        <div
+          id="campbellRewardCard"
+          class="campbell-reward-card"
+        >
+
+          <div class="campbell-reward-icon">
+            🧬
+          </div>
+
+
+          <div>
+
+            <span class="small-label">
+              НАГРАДА
+            </span>
+
+            <strong id="campbellRewardText">
+              +0 генов
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <!-- ==================================
+             КНОПКИ
+        =================================== -->
+
+        <div class="campbell-result-actions">
+
+
+          <button
+            id="campbellContinueButton"
+            class="primary-button"
+            type="button"
+          >
+            Продолжить
+          </button>
+
+
+          <button
+            id="campbellReviewButton"
+            class="campbell-secondary-button"
+            type="button"
+          >
+            🔍 Сделать разбор
+          </button>
+
+
+          <button
+            id="campbellRetryButton"
+            class="campbell-text-action"
+            type="button"
+          >
+            ↻ Пройти экзамен ещё раз
+          </button>
+
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+
+  <!-- ======================================
+       12. CAMPBELL — РАЗБОР ЭКЗАМЕНА
+  ======================================= -->
+
+  <main id="campbellReviewScreen" class="screen">
+
+    <div class="campbell-review-app">
+
+
+      <!-- ВЕРХ -->
+
+      <header class="campbell-review-topbar">
+
+
+        <button
+          id="campbellReviewBackButton"
+          class="back-icon"
+          type="button"
+        >
+          ←
+        </button>
+
+
+        <div>
+
+          <span class="small-label">
+            CAMPBELL BIOLOGY
+          </span>
+
+          <strong>
+            Разбор экзамена
+          </strong>
+
+        </div>
+
+
+        <div class="campbell-review-mini-score">
+
+          🧠
+
+          <span id="campbellReviewScore">
+            0/10
+          </span>
+
+        </div>
+
+
+      </header>
+
+
+      <!-- ПРОГРЕСС РЕЗУЛЬТАТА -->
+
+      <div class="campbell-review-progress-wrap">
+
+        <div
+          id="campbellReviewProgress"
+          class="campbell-review-progress"
+          style="width: 0%"
+        ></div>
+
+      </div>
+
+
+      <!-- ЗАГОЛОВОК -->
+
+      <section class="campbell-review-header">
+
+
+        <span class="small-label">
+          РАЗБОР
+        </span>
+
+
+        <h1>
+          Разберём каждый вопрос
+        </h1>
+
+
+        <p>
+          Здесь ты увидишь свой ответ,
+          правильный вариант и объяснение.
+        </p>
+
+
+      </section>
+
+
+      <!-- ==================================
+           ВСЕ ВОПРОСЫ
+      =================================== -->
+
+      <section
+        id="campbellReviewQuestions"
+        class="campbell-review-questions"
+      >
+
+        <!--
+
+          app.js создаст сюда карточки:
+
+          Вопрос 1
+
+          ❌ Твой ответ:
+          ...
+
+          ✅ Правильный ответ:
+          ...
+
+          🧠 Объяснение:
+          ...
+
+        -->
+
+      </section>
+
+
+      <!-- ==================================
+           КОНЕЦ РАЗБОРА
+      =================================== -->
+
+      <section class="campbell-review-finish">
+
+
+        <div class="campbell-review-finish-icon">
+          🧠
+        </div>
+
+
+        <span class="small-label">
+          РАЗБОР ЗАВЕРШЁН
+        </span>
+
+
+        <h2>
+          Теперь ошибки понятны
+        </h2>
+
+
+        <p>
+          Можно вернуться к главе,
+          повторить материал или снова
+          пройти экзамен.
+        </p>
+
+
+        <button
+          id="campbellReviewFinishButton"
+          class="primary-button"
+          type="button"
+        >
+          Завершить разбор
+        </button>
+
+
+      </section>
+
+
+    </div>
+
+  </main>
+
+
+  <!-- ======================================
+       13. ПОДТВЕРЖДЕНИЕ ВЫХОДА ИЗ ЭКЗАМЕНА
+  ======================================= -->
+
+  <div
+    id="campbellExitModal"
+    class="ground-modal"
+    hidden
+  >
+
+    <div class="ground-modal-overlay"></div>
+
+
+    <div class="ground-modal-card">
+
+
+      <div class="ground-modal-icon">
+        ⚠️
+      </div>
+
+
+      <h2>
+        Выйти из экзамена?
+      </h2>
+
+
+      <p>
+        Текущие ответы этого прохождения
+        будут потеряны.
+      </p>
+
+
+      <div class="ground-modal-actions">
+
+
+        <button
+          id="campbellExitCancelButton"
+          class="campbell-secondary-button"
+          type="button"
+        >
+          Остаться
+        </button>
+
+
+        <button
+          id="campbellExitConfirmButton"
+          class="danger-button"
+          type="button"
+        >
+          Выйти
+        </button>
+
+
+      </div>
+
+
+    </div>
+
+  </div>
+
+
+  <!-- ======================================
+       14. ВРЕМЯ ВЫШЛО
+  ======================================= -->
+
+  <div
+    id="campbellTimeModal"
+    class="ground-modal"
+    hidden
+  >
+
+    <div class="ground-modal-overlay"></div>
+
+
+    <div class="ground-modal-card">
+
+
+      <div class="ground-modal-icon">
+        ⏱️
+      </div>
+
+
+      <span class="small-label">
+        ЭКЗАМЕН
+      </span>
+
+
+      <h2>
+        Время вышло
+      </h2>
+
+
+      <p>
+        Экзамен автоматически завершён.
+        Все уже выбранные ответы будут
+        учтены в результате.
+      </p>
+
+
+      <button
+        id="campbellTimeResultButton"
+        class="primary-button"
+        type="button"
+      >
+        Посмотреть результат
+      </button>
+
+
+    </div>
+
+  </div>
+    <!-- ======================================
+       15. ЭКРАН ЗАВЕРШЕНИЯ УРОКА
+  ======================================= -->
+
+  <main id="lessonCompleteScreen" class="screen">
+
+    <div class="lesson-complete-app">
+
+      <section class="lesson-complete-content">
+
+        <div class="lesson-complete-icon">
+          🎉
+        </div>
+
+        <span class="small-label">
+          УРОК ЗАВЕРШЁН
+        </span>
+
+        <h1>
+          Отличная работа!
+        </h1>
+
+        <p>
+          Ты сделал ещё один шаг
+          в изучении биологии.
+        </p>
+
+        <div class="lesson-complete-rewards">
+
+          <div class="lesson-reward-card">
+
+            <span>
+              ⚡
+            </span>
+
+            <strong id="lessonRewardXP">
+              +0 XP
+            </strong>
+
+            <small>
+              Опыт
+            </small>
+
+          </div>
+
+
+          <div class="lesson-reward-card">
+
+            <span>
+              🧬
+            </span>
+
+            <strong id="lessonRewardGenes">
+              +0
+            </strong>
+
+            <small>
+              Гены
+            </small>
+
+          </div>
+
+        </div>
+
+
+        <button
+          id="lessonCompleteButton"
+          class="primary-button"
+          type="button"
+        >
+          Продолжить
+        </button>
+
+      </section>
+
+    </div>
+
+  </main>
+
+
+  <!-- ======================================
+       16. УВЕДОМЛЕНИЕ GROUND
+  ======================================= -->
+
+  <div
+    id="groundToast"
+    class="ground-toast"
+    hidden
+  >
+
+    <span id="groundToastIcon">
+      🌱
+    </span>
+
+    <div>
+
+      <strong id="groundToastTitle">
+        Ground
+      </strong>
+
+      <p id="groundToastText">
+        Готово
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- ======================================
+       17. CAMPBELL — ДАННЫЕ ГЛАВЫ
+
+       PDF: страницы 47–66
+       Всего: 20 страниц
+
+       Изображения страниц позже положим:
+       images/campbell/chapter2/
+
+       Имена:
+       page-47.webp
+       page-48.webp
+       ...
+       page-66.webp
+  ======================================= -->
+
+  <script>
+
+    window.CAMPBELL_CHAPTER_2 = {
+
+      title:
+        "Химический контекст жизни",
+
+      pdfStartPage:
+        47,
+
+      pdfEndPage:
+        66,
+
+      totalPages:
+        20,
+
+      sections: [
+
+        {
+          id: "2.1",
+          title:
+            "Вещество, элементы и соединения"
+        },
+
+        {
+          id: "2.2",
+          title:
+            "Строение атома и свойства элементов"
+        },
+
+        {
+          id: "2.3",
+          title:
+            "Химические связи и молекулы"
+        },
+
+        {
+          id: "2.4",
+          title:
+            "Химические реакции"
+        }
+
+      ]
+
+    };
+
+  </script>
+
+
+  <!-- ======================================
+       18. JAVASCRIPT
+
+       ВАЖНО:
+       database.js идёт первым,
+       player.js вторым,
+       app.js последним.
+
+       Так app.js получает доступ
+       к базе и проигрывателю уроков.
   ======================================= -->
 
   <script src="js/database.js"></script>
+
   <script src="js/player.js"></script>
+
   <script src="js/app.js"></script>
 
-</body>
 
+</body>
 </html>

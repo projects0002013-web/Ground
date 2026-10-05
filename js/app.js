@@ -32,9 +32,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const campbellTheoryScreen =
     document.getElementById("campbellTheoryScreen");
 
+  const campbellExamScreen =
+    document.getElementById("campbellExamScreen");
+
+  const campbellResultScreen =
+    document.getElementById("campbellResultScreen");
+
+  const campbellReviewScreen =
+    document.getElementById("campbellReviewScreen");
+
 
   /* ========================================
-     КНОПКИ
+     ОСНОВНЫЕ КНОПКИ
   ======================================== */
 
   const startButton =
@@ -50,7 +59,9 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("changeGradeButton");
 
 
-  /* CAMPBELL */
+  /* ========================================
+     CAMPBELL — КНОПКИ
+  ======================================== */
 
   const campbellBackButton =
     document.getElementById("campbellBackButton");
@@ -70,6 +81,86 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById(
       "completeCampbellTheoryButton"
     );
+
+  const campbellExamBackButton =
+    document.getElementById(
+      "campbellExamBackButton"
+    );
+
+  const campbellExamNextButton =
+    document.getElementById(
+      "campbellExamNextButton"
+    );
+
+  const campbellContinueButton =
+    document.getElementById(
+      "campbellContinueButton"
+    );
+
+  const campbellReviewButton =
+    document.getElementById(
+      "campbellReviewButton"
+    );
+
+  const campbellRetryButton =
+    document.getElementById(
+      "campbellRetryButton"
+    );
+
+  const campbellReviewBackButton =
+    document.getElementById(
+      "campbellReviewBackButton"
+    );
+
+  const campbellReviewFinishButton =
+    document.getElementById(
+      "campbellReviewFinishButton"
+    );
+
+
+  /* ========================================
+     CAMPBELL READER — НОВЫЕ ЭЛЕМЕНТЫ
+  ======================================== */
+
+  const campbellReaderImage =
+    document.getElementById(
+      "campbellReaderImage"
+    );
+
+  const campbellReaderLoading =
+    document.getElementById(
+      "campbellReaderLoading"
+    );
+
+  const campbellReaderPrevButton =
+    document.getElementById(
+      "campbellReaderPrevButton"
+    );
+
+  const campbellReaderNextButton =
+    document.getElementById(
+      "campbellReaderNextButton"
+    );
+
+  const campbellReaderPageNumber =
+    document.getElementById(
+      "campbellReaderPageNumber"
+    );
+
+  const campbellReaderPageTop =
+    document.getElementById(
+      "campbellReaderPageTop"
+    );
+
+  const campbellReaderProgressFill =
+    document.getElementById(
+      "campbellReaderProgressFill"
+    );
+
+
+  /* ========================================
+     CAMPBELL — ОСНОВНЫЕ ЭЛЕМЕНТЫ
+  ======================================== */
 
   const campbellProgressText =
     document.getElementById(
@@ -94,6 +185,106 @@ document.addEventListener("DOMContentLoaded", () => {
   const campbellReadingProgress =
     document.getElementById(
       "campbellReadingProgress"
+    );
+
+  const campbellExamTimer =
+    document.getElementById(
+      "campbellExamTimer"
+    );
+
+  const campbellExamQuestionCounter =
+    document.getElementById(
+      "campbellExamQuestionCounter"
+    );
+
+  const campbellExamProgressPercent =
+    document.getElementById(
+      "campbellExamProgressPercent"
+    );
+
+  const campbellExamProgressBar =
+    document.getElementById(
+      "campbellExamProgressBar"
+    );
+
+  const campbellExamQuestion =
+    document.getElementById(
+      "campbellExamQuestion"
+    );
+
+  const campbellExamQuestionHint =
+    document.getElementById(
+      "campbellExamQuestionHint"
+    );
+
+  const campbellExamAnswers =
+    document.getElementById(
+      "campbellExamAnswers"
+    );
+
+
+  /* ========================================
+     CAMPBELL — РЕЗУЛЬТАТ
+  ======================================== */
+
+  const campbellResultTitle =
+    document.getElementById(
+      "campbellResultTitle"
+    );
+
+  const campbellResultMessage =
+    document.getElementById(
+      "campbellResultMessage"
+    );
+
+  const campbellResultScore =
+    document.getElementById(
+      "campbellResultScore"
+    );
+
+  const campbellResultPercent =
+    document.getElementById(
+      "campbellResultPercent"
+    );
+
+  const campbellResultTime =
+    document.getElementById(
+      "campbellResultTime"
+    );
+
+  const campbellResultStatus =
+    document.getElementById(
+      "campbellResultStatus"
+    );
+
+  const campbellResultDescription =
+    document.getElementById(
+      "campbellResultDescription"
+    );
+
+  const campbellRewardText =
+    document.getElementById(
+      "campbellRewardText"
+    );
+
+
+  /* ========================================
+     CAMPBELL — РАЗБОР
+  ======================================== */
+
+  const campbellReviewScore =
+    document.getElementById(
+      "campbellReviewScore"
+    );
+
+  const campbellReviewProgress =
+    document.getElementById(
+      "campbellReviewProgress"
+    );
+
+  const campbellReviewQuestions =
+    document.getElementById(
+      "campbellReviewQuestions"
     );
 
 
@@ -134,7 +325,9 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("libraryGrade");
 
   const librarySearchInput =
-    document.getElementById("librarySearchInput");
+    document.getElementById(
+      "librarySearchInput"
+    );
 
 
   /* ========================================
@@ -178,7 +371,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* ========================================
-     КАЛЕНДАРЬ
+     АКТИВНОСТЬ
   ======================================== */
 
   const activityWeek =
@@ -195,6 +388,15 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById(
       "activityMessage"
     );
+
+
+  /* ========================================
+     БЕЗОПАСНАЯ ПРОВЕРКА
+  ======================================== */
+
+  function elementExists(element) {
+    return element !== null;
+  }
 
 
   /* ========================================
@@ -258,47 +460,63 @@ document.addEventListener("DOMContentLoaded", () => {
      START
   ======================================== */
 
-  startButton.addEventListener(
-    "click",
-    () => {
+  if (elementExists(startButton)) {
 
-      changeScreen(
-        welcomeScreen,
-        pathScreen
-      );
+    startButton.addEventListener(
+      "click",
+      () => {
 
-    }
-  );
+        changeScreen(
+          welcomeScreen,
+          pathScreen
+        );
 
+      }
+    );
 
-  pathBackButton.addEventListener(
-    "click",
-    () => {
-
-      changeScreen(
-        pathScreen,
-        welcomeScreen
-      );
-
-    }
-  );
-
-
-  gradeBackButton.addEventListener(
-    "click",
-    () => {
-
-      changeScreen(
-        gradeScreen,
-        pathScreen
-      );
-
-    }
-  );
+  }
 
 
   /* ========================================
-     НАПРАВЛЕНИЯ
+     НАЗАД
+  ======================================== */
+
+  if (elementExists(pathBackButton)) {
+
+    pathBackButton.addEventListener(
+      "click",
+      () => {
+
+        changeScreen(
+          pathScreen,
+          welcomeScreen
+        );
+
+      }
+    );
+
+  }
+
+
+  if (elementExists(gradeBackButton)) {
+
+    gradeBackButton.addEventListener(
+      "click",
+      () => {
+
+        changeScreen(
+          gradeScreen,
+          pathScreen
+        );
+
+      }
+    );
+
+  }
+
+
+  /* ========================================
+     ВЫБОР НАПРАВЛЕНИЯ
   ======================================== */
 
   document
@@ -327,18 +545,24 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
           }
 
+
           if (path === "ent") {
 
             alert(
-              "🎯 ЕНТ скоро добавим."
+              "🎯 Раздел ЕНТ скоро будет добавлен."
             );
 
             return;
           }
 
-          alert(
-            "🏆 Олимпиадный раздел скоро добавим."
-          );
+
+          if (path === "olympiad") {
+
+            alert(
+              "🏆 Олимпиадный раздел скоро будет добавлен."
+            );
+
+          }
 
         }
       );
@@ -347,7 +571,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* ========================================
-     КЛАСС
+     ВЫБОР КЛАССА
   ======================================== */
 
   document
@@ -358,9 +582,12 @@ document.addEventListener("DOMContentLoaded", () => {
         "click",
         () => {
 
+          const grade =
+            card.dataset.grade;
+
           localStorage.setItem(
             "groundGrade",
-            card.dataset.grade
+            grade
           );
 
           updateUserInterface();
@@ -376,17 +603,21 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-  changeGradeButton.addEventListener(
-    "click",
-    () => {
+  if (elementExists(changeGradeButton)) {
 
-      changeScreen(
-        homeScreen,
-        gradeScreen
-      );
+    changeGradeButton.addEventListener(
+      "click",
+      () => {
 
-    }
-  );
+        changeScreen(
+          homeScreen,
+          gradeScreen
+        );
+
+      }
+    );
+
+  }
 
 
   /* ========================================
@@ -436,7 +667,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* ========================================
-     УРОК ПРОЙДЕН?
+     ПРОВЕРКА УРОКОВ
   ======================================== */
 
   function isLessonCompleted(
@@ -474,18 +705,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* ========================================
-     ДОРОЖКА
+     ДОРОЖКА ОБУЧЕНИЯ
   ======================================== */
 
   function buildLearningRoad() {
 
-    learningRoad.innerHTML =
-      "";
+    if (!learningRoad) {
+      return;
+    }
+
+    learningRoad.innerHTML = "";
 
     const grade =
       localStorage.getItem(
         "groundGrade"
       ) || "9";
+
 
     if (
       typeof window.GroundDB ===
@@ -496,12 +731,15 @@ document.addEventListener("DOMContentLoaded", () => {
         "<p>Ошибка загрузки базы.</p>";
 
       return;
+
     }
+
 
     const course =
       window.GroundDB.getCourse(
         grade
       );
+
 
     if (!course) {
 
@@ -509,10 +747,17 @@ document.addEventListener("DOMContentLoaded", () => {
         "<p>Курс пока не добавлен.</p>";
 
       return;
+
     }
 
-    courseTitle.textContent =
-      course.title;
+
+    if (courseTitle) {
+
+      courseTitle.textContent =
+        course.title;
+
+    }
+
 
     course.lessons.forEach(
       (lesson, index) => {
@@ -523,32 +768,39 @@ document.addEventListener("DOMContentLoaded", () => {
             lesson.id
           );
 
+
         const unlocked =
           isLessonUnlocked(
             grade,
             lesson.id
           );
 
+
         const item =
           document.createElement(
             "div"
           );
+
 
         item.className =
           index % 2 === 0
             ? "road-item road-left"
             : "road-item road-right";
 
+
         const node =
           document.createElement(
             "button"
           );
 
+
         node.type =
           "button";
 
+
         node.className =
           "road-node";
+
 
         if (completed) {
 
@@ -584,13 +836,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
         }
 
+
         const info =
           document.createElement(
             "div"
           );
 
+
         info.className =
           "road-info";
+
 
         info.innerHTML = `
 
@@ -604,13 +859,14 @@ document.addEventListener("DOMContentLoaded", () => {
               completed
                 ? "Пройдено ✓"
                 : unlocked
-                ? `+${lesson.rewardXP} XP • +${lesson.rewardGenes} 🧬`
+                ? `+${lesson.rewardXP || 0} XP • +${lesson.rewardGenes || 0} 🧬`
                 : "Заблокировано"
             }
 
           </small>
 
         `;
+
 
         node.addEventListener(
           "click",
@@ -623,26 +879,47 @@ document.addEventListener("DOMContentLoaded", () => {
               );
 
               return;
+
             }
 
-            window.openGroundLesson(
-              lesson.id
-            );
+
+            if (
+              typeof window.openGroundLesson ===
+              "function"
+            ) {
+
+              window.openGroundLesson(
+                lesson.id
+              );
+
+            }
+
+            else {
+
+              alert(
+                "Урок пока не удалось открыть."
+              );
+
+            }
 
           }
         );
+
 
         item.appendChild(
           node
         );
 
+
         item.appendChild(
           info
         );
 
+
         learningRoad.appendChild(
           item
         );
+
 
         if (
           index <
@@ -654,11 +931,14 @@ document.addEventListener("DOMContentLoaded", () => {
               "div"
             );
 
+
           connector.className =
             "auto-road-connector";
 
+
           connector.innerHTML =
             "•••••";
+
 
           learningRoad.appendChild(
             connector
@@ -680,53 +960,72 @@ document.addEventListener("DOMContentLoaded", () => {
     searchText = ""
   ) {
 
+    if (
+      !libraryLessons ||
+      !libraryGrade
+    ) {
+      return;
+    }
+
+
     const grade =
       localStorage.getItem(
         "groundGrade"
       ) || "9";
 
+
     libraryGrade.textContent =
       `${grade} класс`;
+
 
     if (
       typeof window.GroundDB ===
       "undefined"
     ) {
+
+      libraryLessons.innerHTML =
+        "<p>Ошибка загрузки базы.</p>";
+
       return;
+
     }
+
 
     const lessons =
       window.GroundDB.getLessons(
         grade
-      );
+      ) || [];
+
 
     const query =
-      searchText
+      String(searchText)
         .trim()
         .toLowerCase();
 
+
     const filtered =
-      lessons.filter(lesson => {
+      lessons.filter(
+        lesson => {
 
-        return (
+          const title =
+            String(
+              lesson.title || ""
+            ).toLowerCase();
 
-          (
-            lesson.title || ""
-          )
-            .toLowerCase()
-            .includes(query)
 
-          ||
+          const description =
+            String(
+              lesson.description || ""
+            ).toLowerCase();
 
-          (
-            lesson.description || ""
-          )
-            .toLowerCase()
-            .includes(query)
 
-        );
+          return (
+            title.includes(query) ||
+            description.includes(query)
+          );
 
-      });
+        }
+      );
 
 
     libraryLessons.innerHTML =
@@ -734,12 +1033,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* ========================================
-       CAMPBELL BIOLOGY — ТОЛЬКО 8 КЛАСС
+       CAMPBELL BIOLOGY — 8 КЛАСС
     ======================================== */
 
+    const campbellSearchText =
+      "campbell biology кэмпбелл химический контекст жизни глава 2 углубленная биология";
+
+
     const campbellMatchesSearch =
-      "campbell biology химический контекст жизни кэмпбелл"
-        .includes(query);
+      query === "" ||
+      campbellSearchText.includes(
+        query
+      );
+
 
     if (
       grade === "8" &&
@@ -751,16 +1057,46 @@ document.addEventListener("DOMContentLoaded", () => {
           "button"
         );
 
+
       campbellCard.type =
         "button";
 
+
       campbellCard.className =
         "library-card campbell-library-card";
+
 
       const theoryCompleted =
         localStorage.getItem(
           "campbellChapter2TheoryCompleted"
         ) === "true";
+
+
+      const examCompleted =
+        localStorage.getItem(
+          "campbellChapter2ExamCompleted"
+        ) === "true";
+
+
+      let campbellStatus =
+        "НАЧАТЬ КУРС";
+
+
+      if (theoryCompleted) {
+
+        campbellStatus =
+          "ПРОДОЛЖИТЬ КУРС";
+
+      }
+
+
+      if (examCompleted) {
+
+        campbellStatus =
+          "ГЛАВА ПРОЙДЕНА ✓";
+
+      }
+
 
       campbellCard.innerHTML = `
 
@@ -783,11 +1119,7 @@ document.addEventListener("DOMContentLoaded", () => {
           </p>
 
           <div class="library-card-status">
-            ${
-              theoryCompleted
-                ? "ПРОДОЛЖИТЬ КУРС"
-                : "НАЧАТЬ КУРС"
-            }
+            ${campbellStatus}
           </div>
 
         </div>
@@ -797,6 +1129,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
 
       `;
+
 
       campbellCard.addEventListener(
         "click",
@@ -812,12 +1145,17 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       );
 
+
       libraryLessons.appendChild(
         campbellCard
       );
 
     }
 
+
+    /* ========================================
+       ОБЫЧНЫЕ УРОКИ
+    ======================================== */
 
     filtered.forEach(
       lesson => {
@@ -828,16 +1166,20 @@ document.addEventListener("DOMContentLoaded", () => {
             lesson.id
           );
 
+
         const card =
           document.createElement(
             "button"
           );
 
+
         card.type =
           "button";
 
+
         card.className =
           "library-card";
+
 
         card.innerHTML = `
 
@@ -873,16 +1215,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
         `;
 
+
         card.addEventListener(
           "click",
           () => {
 
-            window.openGroundLesson(
-              lesson.id
-            );
+            if (
+              typeof window.openGroundLesson ===
+              "function"
+            ) {
+
+              window.openGroundLesson(
+                lesson.id
+              );
+
+            }
 
           }
         );
+
 
         libraryLessons.appendChild(
           card
@@ -892,15 +1243,10 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
 
-    /*
-      Если поиск ничего не нашёл:
-      учитываем и обычные уроки,
-      и Campbell.
-    */
-
     const campbellVisible =
       grade === "8" &&
       campbellMatchesSearch;
+
 
     if (
       filtered.length === 0 &&
@@ -920,25 +1266,29 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  librarySearchInput.addEventListener(
-    "input",
-    () => {
-
-      buildLibrary(
-        librarySearchInput.value
-      );
-
-    }
-  );
-
-
   /* ========================================
-     АКТИВНОСТЬ
+     ПОИСК ПО БИБЛИОТЕКЕ
   ======================================== */
 
-  function getLocalDateString(
-    date
-  ) {
+  if (librarySearchInput) {
+
+    librarySearchInput.addEventListener(
+      "input",
+      () => {
+
+        buildLibrary(
+          librarySearchInput.value
+        );
+
+      }
+    );
+
+  }
+    /* ========================================
+     ДАТА
+  ======================================== */
+
+  function getLocalDateString(date) {
 
     return (
       date.getFullYear() +
@@ -954,6 +1304,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   }
 
+
+  /* ========================================
+     ИСТОРИЯ АКТИВНОСТИ
+  ======================================== */
 
   function getActivityHistory() {
 
@@ -972,7 +1326,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-    catch {
+    catch (error) {
+
+      console.error(
+        "Ошибка groundActivity:",
+        error
+      );
 
       return [];
 
@@ -980,6 +1339,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   }
 
+
+  /* ========================================
+     КАЛЕНДАРЬ АКТИВНОСТИ
+  ======================================== */
 
   function buildActivityWeek() {
 
@@ -1104,36 +1467,45 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     );
 
+
     const player =
       getPlayerData();
 
-    activityStreak.textContent =
-      player.streak;
+    if (activityStreak) {
 
-    if (
-      activitySet.has(
-        todayString
-      )
-    ) {
-
-      activityMessage.textContent =
-        "Отлично! Сегодняшний день уже засчитан 🔥";
+      activityStreak.textContent =
+        player.streak;
 
     }
 
-    else if (
-      player.streak > 0
-    ) {
+    if (activityMessage) {
 
-      activityMessage.textContent =
-        `Пройди урок сегодня, чтобы сохранить серию ${player.streak} 🔥`;
+      if (
+        activitySet.has(
+          todayString
+        )
+      ) {
 
-    }
+        activityMessage.textContent =
+          "Отлично! Сегодняшний день уже засчитан 🔥";
 
-    else {
+      }
 
-      activityMessage.textContent =
-        "Пройди урок сегодня и начни новую серию 🔥";
+      else if (
+        player.streak > 0
+      ) {
+
+        activityMessage.textContent =
+          `Пройди урок сегодня, чтобы сохранить серию ${player.streak} 🔥`;
+
+      }
+
+      else {
+
+        activityMessage.textContent =
+          "Пройди урок сегодня и начни новую серию 🔥";
+
+      }
 
     }
 
@@ -1141,13 +1513,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* ========================================
-     ПРОЙДЕННЫЕ УРОКИ
+     КОЛИЧЕСТВО ПРОЙДЕННЫХ УРОКОВ
   ======================================== */
 
   function getCompletedLessonsCount() {
 
-    let total =
-      0;
+    let total = 0;
 
     for (
       let i = 0;
@@ -1163,7 +1534,8 @@ document.addEventListener("DOMContentLoaded", () => {
         key.startsWith("ground_") &&
         key.includes("_lesson_") &&
         key.endsWith("_complete") &&
-        localStorage.getItem(key) === "true"
+        localStorage.getItem(key) ===
+          "true"
       ) {
 
         total++;
@@ -1186,13 +1558,19 @@ document.addEventListener("DOMContentLoaded", () => {
     completed
   ) {
 
+    if (!achievementsContainer) {
+      return;
+    }
+
     const achievements = [
 
       {
         icon: "🌱",
         title: "Первый шаг",
-        description: "Пройди первый урок",
-        unlocked: completed >= 1,
+        description:
+          "Пройди первый урок",
+        unlocked:
+          completed >= 1,
         progress:
           `${Math.min(completed, 1)} / 1`
       },
@@ -1200,8 +1578,10 @@ document.addEventListener("DOMContentLoaded", () => {
       {
         icon: "🧬",
         title: "Исследователь",
-        description: "Собери 25 генов",
-        unlocked: player.genes >= 25,
+        description:
+          "Собери 25 генов",
+        unlocked:
+          player.genes >= 25,
         progress:
           `${Math.min(player.genes, 25)} / 25`
       },
@@ -1209,8 +1589,10 @@ document.addEventListener("DOMContentLoaded", () => {
       {
         icon: "🧠",
         title: "Биолог",
-        description: "Пройди 5 уроков",
-        unlocked: completed >= 5,
+        description:
+          "Пройди 5 уроков",
+        unlocked:
+          completed >= 5,
         progress:
           `${Math.min(completed, 5)} / 5`
       },
@@ -1218,8 +1600,10 @@ document.addEventListener("DOMContentLoaded", () => {
       {
         icon: "🔥",
         title: "В ритме",
-        description: "Достигни серии 3 дня",
-        unlocked: player.streak >= 3,
+        description:
+          "Достигни серии 3 дня",
+        unlocked:
+          player.streak >= 3,
         progress:
           `${Math.min(player.streak, 3)} / 3`
       },
@@ -1227,8 +1611,10 @@ document.addEventListener("DOMContentLoaded", () => {
       {
         icon: "⚡",
         title: "Неделя силы",
-        description: "Достигни серии 7 дней",
-        unlocked: player.streak >= 7,
+        description:
+          "Достигни серии 7 дней",
+        unlocked:
+          player.streak >= 7,
         progress:
           `${Math.min(player.streak, 7)} / 7`
       },
@@ -1236,14 +1622,15 @@ document.addEventListener("DOMContentLoaded", () => {
       {
         icon: "⭐",
         title: "Новый уровень",
-        description: "Достигни 2 уровня",
-        unlocked: player.level >= 2,
+        description:
+          "Достигни 2 уровня",
+        unlocked:
+          player.level >= 2,
         progress:
           `${Math.min(player.level, 2)} / 2`
       }
 
     ];
-
 
     achievementsContainer.innerHTML =
       "";
@@ -1302,7 +1689,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* ========================================
-     ПРОФИЛЬ
+     ОБНОВЛЕНИЕ ПРОФИЛЯ
   ======================================== */
 
   function updateProfile() {
@@ -1316,29 +1703,70 @@ document.addEventListener("DOMContentLoaded", () => {
     const xp =
       player.xp % 100;
 
-    profileGrade.textContent =
-      `${player.grade} класс`;
 
-    profileLevel.textContent =
-      player.level;
+    if (profileGrade) {
 
-    profileGenes.textContent =
-      player.genes;
+      profileGrade.textContent =
+        `${player.grade} класс`;
 
-    profileStreak.textContent =
-      player.streak;
+    }
 
-    profileXP.textContent =
-      xp;
 
-    profileXPProgress.style.width =
-      `${xp}%`;
+    if (profileLevel) {
 
-    profileLevelText.textContent =
-      `Уровень ${player.level}`;
+      profileLevel.textContent =
+        player.level;
 
-    profileCompletedLessons.textContent =
-      completed;
+    }
+
+
+    if (profileGenes) {
+
+      profileGenes.textContent =
+        player.genes;
+
+    }
+
+
+    if (profileStreak) {
+
+      profileStreak.textContent =
+        player.streak;
+
+    }
+
+
+    if (profileXP) {
+
+      profileXP.textContent =
+        xp;
+
+    }
+
+
+    if (profileXPProgress) {
+
+      profileXPProgress.style.width =
+        `${xp}%`;
+
+    }
+
+
+    if (profileLevelText) {
+
+      profileLevelText.textContent =
+        `Уровень ${player.level}`;
+
+    }
+
+
+    if (profileCompletedLessons) {
+
+      profileCompletedLessons.textContent =
+        completed;
+
+    }
+
 
     buildActivityWeek();
 
@@ -1351,7 +1779,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* ========================================
-     ОБНОВЛЕНИЕ UI
+     ОБНОВЛЕНИЕ ВСЕГО ИНТЕРФЕЙСА
   ======================================== */
 
   function updateUserInterface() {
@@ -1359,8 +1787,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const player =
       getPlayerData();
 
-    currentGrade.textContent =
-      `${player.grade} класс`;
+
+    if (currentGrade) {
+
+      currentGrade.textContent =
+        `${player.grade} класс`;
+
+    }
+
 
     document
       .querySelectorAll(
@@ -1373,23 +1807,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
       });
 
-    xpValue.textContent =
-      player.xp % 100;
 
-    levelValue.textContent =
-      player.level;
+    if (xpValue) {
 
-    streakValue.textContent =
-      player.streak;
+      xpValue.textContent =
+        player.xp % 100;
 
-    xpProgress.style.width =
-      `${player.xp % 100}%`;
+    }
+
+
+    if (levelValue) {
+
+      levelValue.textContent =
+        player.level;
+
+    }
+
+
+    if (streakValue) {
+
+      streakValue.textContent =
+        player.streak;
+
+    }
+
+
+    if (xpProgress) {
+
+      xpProgress.style.width =
+        `${player.xp % 100}%`;
+
+    }
+
 
     buildLearningRoad();
 
     updateCampbellProgress();
 
+
     if (
+      profileScreen &&
       profileScreen.classList.contains(
         "active"
       )
@@ -1403,7 +1860,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* ========================================
-     НАВИГАЦИЯ
+     HOME → БИБЛИОТЕКА
   ======================================== */
 
   const homeLibraryButton =
@@ -1411,65 +1868,105 @@ document.addEventListener("DOMContentLoaded", () => {
       '#homeScreen [data-nav="library"]'
     );
 
-  homeLibraryButton.addEventListener(
-    "click",
-    () => {
 
-      librarySearchInput.value =
-        "";
+  if (homeLibraryButton) {
 
-      buildLibrary();
+    homeLibraryButton.addEventListener(
+      "click",
+      () => {
 
-      changeScreen(
-        homeScreen,
-        libraryScreen
-      );
+        if (librarySearchInput) {
 
-    }
-  );
+          librarySearchInput.value =
+            "";
 
+        }
+
+        buildLibrary();
+
+        changeScreen(
+          homeScreen,
+          libraryScreen
+        );
+
+      }
+    );
+
+  }
+
+
+  /* ========================================
+     HOME → ПРОФИЛЬ
+  ======================================== */
 
   const homeProfileButton =
     document.querySelector(
       '#homeScreen [data-nav="profile"]'
     );
 
-  homeProfileButton.addEventListener(
-    "click",
-    () => {
 
-      updateProfile();
+  if (homeProfileButton) {
 
-      changeScreen(
-        homeScreen,
-        profileScreen
-      );
-
-    }
-  );
-
-
-  document
-    .querySelector(
-      '#homeScreen [data-nav="road"]'
-    )
-    .addEventListener(
+    homeProfileButton.addEventListener(
       "click",
       () => {
 
-        learningRoad.scrollIntoView({
-          behavior: "smooth"
-        });
+        updateProfile();
+
+        changeScreen(
+          homeScreen,
+          profileScreen
+        );
 
       }
     );
 
+  }
 
-  document
-    .querySelector(
+
+  /* ========================================
+     HOME → ДОРОЖКА
+  ======================================== */
+
+  const homeRoadButton =
+    document.querySelector(
+      '#homeScreen [data-nav="road"]'
+    );
+
+
+  if (homeRoadButton) {
+
+    homeRoadButton.addEventListener(
+      "click",
+      () => {
+
+        if (learningRoad) {
+
+          learningRoad.scrollIntoView({
+            behavior: "smooth"
+          });
+
+        }
+
+      }
+    );
+
+  }
+
+
+  /* ========================================
+     БИБЛИОТЕКА → HOME
+  ======================================== */
+
+  const libraryHomeButton =
+    document.querySelector(
       ".library-home-button"
-    )
-    .addEventListener(
+    );
+
+
+  if (libraryHomeButton) {
+
+    libraryHomeButton.addEventListener(
       "click",
       () => {
 
@@ -1483,12 +1980,22 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     );
 
+  }
 
-  document
-    .querySelector(
+
+  /* ========================================
+     БИБЛИОТЕКА → ДОРОЖКА
+  ======================================== */
+
+  const libraryRoadButton =
+    document.querySelector(
       ".library-road-button"
-    )
-    .addEventListener(
+    );
+
+
+  if (libraryRoadButton) {
+
+    libraryRoadButton.addEventListener(
       "click",
       () => {
 
@@ -1497,23 +2004,40 @@ document.addEventListener("DOMContentLoaded", () => {
           homeScreen
         );
 
-        setTimeout(() => {
+        setTimeout(
+          () => {
 
-          learningRoad.scrollIntoView({
-            behavior: "smooth"
-          });
+            if (learningRoad) {
 
-        }, 400);
+              learningRoad.scrollIntoView({
+                behavior: "smooth"
+              });
+
+            }
+
+          },
+          400
+        );
 
       }
     );
 
+  }
 
-  document
-    .querySelector(
+
+  /* ========================================
+     БИБЛИОТЕКА → ПРОФИЛЬ
+  ======================================== */
+
+  const libraryProfileButton =
+    document.querySelector(
       ".library-profile-button"
-    )
-    .addEventListener(
+    );
+
+
+  if (libraryProfileButton) {
+
+    libraryProfileButton.addEventListener(
       "click",
       () => {
 
@@ -1527,12 +2051,22 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     );
 
+  }
 
-  document
-    .querySelector(
+
+  /* ========================================
+     ПРОФИЛЬ → HOME
+  ======================================== */
+
+  const profileHomeButton =
+    document.querySelector(
       ".profile-home-button"
-    )
-    .addEventListener(
+    );
+
+
+  if (profileHomeButton) {
+
+    profileHomeButton.addEventListener(
       "click",
       () => {
 
@@ -1546,14 +2080,31 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     );
 
+  }
 
-  document
-    .querySelector(
+
+  /* ========================================
+     ПРОФИЛЬ → БИБЛИОТЕКА
+  ======================================== */
+
+  const profileLibraryButton =
+    document.querySelector(
       ".profile-library-button"
-    )
-    .addEventListener(
+    );
+
+
+  if (profileLibraryButton) {
+
+    profileLibraryButton.addEventListener(
       "click",
       () => {
+
+        if (librarySearchInput) {
+
+          librarySearchInput.value =
+            "";
+
+        }
 
         buildLibrary();
 
@@ -1565,12 +2116,22 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     );
 
+  }
 
-  document
-    .querySelector(
+
+  /* ========================================
+     ПРОФИЛЬ → ДОРОЖКА
+  ======================================== */
+
+  const profileRoadButton =
+    document.querySelector(
       ".profile-road-button"
-    )
-    .addEventListener(
+    );
+
+
+  if (profileRoadButton) {
+
+    profileRoadButton.addEventListener(
       "click",
       () => {
 
@@ -1579,36 +2140,467 @@ document.addEventListener("DOMContentLoaded", () => {
           homeScreen
         );
 
-        setTimeout(() => {
+        setTimeout(
+          () => {
 
-          learningRoad.scrollIntoView({
-            behavior: "smooth"
-          });
+            if (learningRoad) {
 
-        }, 400);
+              learningRoad.scrollIntoView({
+                behavior: "smooth"
+              });
 
-      }
-    );
+            }
 
-
-  document
-    .getElementById(
-      "settingsButton"
-    )
-    .addEventListener(
-      "click",
-      () => {
-
-        alert(
-          "⚙️ Настройки сделаем позже."
+          },
+          400
         );
 
       }
     );
 
+  }
+
 
   /* ========================================
-     CAMPBELL BIOLOGY
+     НАСТРОЙКИ
+  ======================================== */
+
+  const settingsButton =
+    document.getElementById(
+      "settingsButton"
+    );
+
+
+  if (settingsButton) {
+
+    settingsButton.addEventListener(
+      "click",
+      () => {
+
+        alert(
+          "⚙️ Настройки добавим позже."
+        );
+
+      }
+    );
+
+  }
+
+
+  /* ========================================
+     CAMPBELL READER
+     ГЛАВА 2 — СТРАНИЦЫ ФАЙЛА 47–66
+  ======================================== */
+
+  const CAMPBELL_FIRST_PAGE = 47;
+  const CAMPBELL_LAST_PAGE = 66;
+
+  const CAMPBELL_TOTAL_PAGES =
+    CAMPBELL_LAST_PAGE -
+    CAMPBELL_FIRST_PAGE +
+    1;
+
+
+  /*
+    Текущая страница сохраняется.
+
+    Если ученик закрыл сайт на странице 54,
+    при возвращении он продолжит с 54.
+  */
+
+  let campbellCurrentPage =
+    Number(
+      localStorage.getItem(
+        "campbellChapter2CurrentPage"
+      ) || CAMPBELL_FIRST_PAGE
+    );
+
+
+  /*
+    Защита на случай повреждённого
+    значения localStorage.
+  */
+
+  if (
+    campbellCurrentPage <
+    CAMPBELL_FIRST_PAGE ||
+    campbellCurrentPage >
+    CAMPBELL_LAST_PAGE
+  ) {
+
+    campbellCurrentPage =
+      CAMPBELL_FIRST_PAGE;
+
+  }
+
+
+  /* ========================================
+     МАКСИМАЛЬНО ПРОЧИТАННАЯ СТРАНИЦА
+  ======================================== */
+
+  let campbellMaxReadPage =
+    Number(
+      localStorage.getItem(
+        "campbellChapter2MaxReadPage"
+      ) || CAMPBELL_FIRST_PAGE
+    );
+
+
+  if (
+    campbellMaxReadPage <
+    CAMPBELL_FIRST_PAGE
+  ) {
+
+    campbellMaxReadPage =
+      CAMPBELL_FIRST_PAGE;
+
+  }
+
+
+  if (
+    campbellMaxReadPage >
+    CAMPBELL_LAST_PAGE
+  ) {
+
+    campbellMaxReadPage =
+      CAMPBELL_LAST_PAGE;
+
+  }
+
+
+  /* ========================================
+     ПУТЬ К СТРАНИЦАМ КНИГИ
+
+     Файлы должны лежать:
+
+     assets/campbell/chapter2/page-47.jpg
+     assets/campbell/chapter2/page-48.jpg
+     ...
+     assets/campbell/chapter2/page-66.jpg
+  ======================================== */
+
+  function getCampbellPagePath(
+    page
+  ) {
+
+    return (
+      `assets/campbell/chapter2/page-${page}.jpg`
+    );
+
+  }
+
+
+  /* ========================================
+     ПРОЦЕНТ ПРОЧТЕНИЯ
+  ======================================== */
+
+  function getCampbellReadingPercent() {
+
+    const readPages =
+      campbellMaxReadPage -
+      CAMPBELL_FIRST_PAGE +
+      1;
+
+    const percent =
+      Math.round(
+        (
+          readPages /
+          CAMPBELL_TOTAL_PAGES
+        ) * 100
+      );
+
+    return Math.min(
+      100,
+      Math.max(
+        0,
+        percent
+      )
+    );
+
+  }
+
+
+  /* ========================================
+     СОХРАНИТЬ ПРОГРЕСС ЧТЕНИЯ
+  ======================================== */
+
+  function saveCampbellReadingProgress() {
+
+    localStorage.setItem(
+      "campbellChapter2CurrentPage",
+      String(
+        campbellCurrentPage
+      )
+    );
+
+
+    if (
+      campbellCurrentPage >
+      campbellMaxReadPage
+    ) {
+
+      campbellMaxReadPage =
+        campbellCurrentPage;
+
+      localStorage.setItem(
+        "campbellChapter2MaxReadPage",
+        String(
+          campbellMaxReadPage
+        )
+      );
+
+    }
+
+
+    /*
+      Только достижение последней страницы
+      разблокирует экзамен.
+    */
+
+    if (
+      campbellMaxReadPage >=
+      CAMPBELL_LAST_PAGE
+    ) {
+
+      localStorage.setItem(
+        "campbellChapter2TheoryCompleted",
+        "true"
+      );
+
+    }
+
+  }
+
+
+  /* ========================================
+     ОБНОВИТЬ READER
+  ======================================== */
+
+  function renderCampbellReader() {
+
+    saveCampbellReadingProgress();
+
+
+    const percent =
+      getCampbellReadingPercent();
+
+
+    if (campbellReaderPageNumber) {
+
+      campbellReaderPageNumber.textContent =
+        `Страница ${campbellCurrentPage} из ${CAMPBELL_LAST_PAGE}`;
+
+    }
+
+
+    if (campbellReaderPageTop) {
+
+      campbellReaderPageTop.textContent =
+        `${campbellCurrentPage}`;
+
+    }
+
+
+    if (campbellReaderProgressFill) {
+
+      campbellReaderProgressFill.style.width =
+        `${percent}%`;
+
+    }
+
+
+    if (campbellReadingPercent) {
+
+      campbellReadingPercent.textContent =
+        `${percent}%`;
+
+    }
+
+
+    if (campbellReadingProgress) {
+
+      campbellReadingProgress.style.width =
+        `${percent}%`;
+
+    }
+
+
+    if (campbellReaderPrevButton) {
+
+      campbellReaderPrevButton.disabled =
+        campbellCurrentPage <=
+        CAMPBELL_FIRST_PAGE;
+
+    }
+
+
+    if (campbellReaderNextButton) {
+
+      if (
+        campbellCurrentPage >=
+        CAMPBELL_LAST_PAGE
+      ) {
+
+        campbellReaderNextButton.textContent =
+          "Материал изучен ✓";
+
+      }
+
+      else {
+
+        campbellReaderNextButton.textContent =
+          "Следующая →";
+
+      }
+
+    }
+
+
+    if (campbellReaderImage) {
+
+      if (campbellReaderLoading) {
+
+        campbellReaderLoading.style.display =
+          "flex";
+
+      }
+
+
+      campbellReaderImage.style.opacity =
+        "0";
+
+
+      campbellReaderImage.onload =
+        () => {
+
+          if (campbellReaderLoading) {
+
+            campbellReaderLoading.style.display =
+              "none";
+
+          }
+
+          campbellReaderImage.style.opacity =
+            "1";
+
+      };
+
+
+      campbellReaderImage.onerror =
+        () => {
+
+          if (campbellReaderLoading) {
+
+            campbellReaderLoading.style.display =
+              "none";
+
+          }
+
+          console.error(
+            `Не удалось загрузить страницу ${campbellCurrentPage}`
+          );
+
+      };
+
+
+      campbellReaderImage.src =
+        getCampbellPagePath(
+          campbellCurrentPage
+        );
+
+    }
+
+
+    updateCampbellProgress();
+
+  }
+
+
+  /* ========================================
+     ПРЕДЫДУЩАЯ СТРАНИЦА
+  ======================================== */
+
+  if (campbellReaderPrevButton) {
+
+    campbellReaderPrevButton.addEventListener(
+      "click",
+      () => {
+
+        if (
+          campbellCurrentPage <=
+          CAMPBELL_FIRST_PAGE
+        ) {
+          return;
+        }
+
+        campbellCurrentPage--;
+
+        renderCampbellReader();
+
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth"
+        });
+
+      }
+    );
+
+  }
+
+
+  /* ========================================
+     СЛЕДУЮЩАЯ СТРАНИЦА
+  ======================================== */
+
+  if (campbellReaderNextButton) {
+
+    campbellReaderNextButton.addEventListener(
+      "click",
+      () => {
+
+        if (
+          campbellCurrentPage <
+          CAMPBELL_LAST_PAGE
+        ) {
+
+          campbellCurrentPage++;
+
+          renderCampbellReader();
+
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+          });
+
+          return;
+
+        }
+
+
+        /*
+          Последняя страница уже достигнута.
+        */
+
+        localStorage.setItem(
+          "campbellChapter2TheoryCompleted",
+          "true"
+        );
+
+        updateCampbellProgress();
+
+        changeScreen(
+          campbellTheoryScreen,
+          campbellScreen
+        );
+
+      }
+    );
+
+  }
+
+
+  /* ========================================
+     CAMPBELL — ПРОГРЕСС КУРСА
   ======================================== */
 
   function updateCampbellProgress() {
@@ -1618,87 +2610,146 @@ document.addEventListener("DOMContentLoaded", () => {
         "campbellChapter2TheoryCompleted"
       ) === "true";
 
-    if (theoryCompleted) {
 
-      campbellProgressText.textContent =
-        "50%";
+    const examCompleted =
+      localStorage.getItem(
+        "campbellChapter2ExamCompleted"
+      ) === "true";
 
-      campbellProgressBar.style.width =
-        "50%";
 
-      campbellExamButton.classList.remove(
-        "locked"
+    const readingPercent =
+      theoryCompleted
+        ? 100
+        : getCampbellReadingPercent();
+
+
+    /*
+      Чтение = половина главы.
+      Экзамен = вторая половина.
+    */
+
+    let progress =
+      Math.round(
+        readingPercent * 0.5
       );
 
-      campbellExamStatus.textContent =
-        "Экзамен доступен";
 
-      const examIcon =
-        campbellExamButton.querySelector(
-          ".campbell-action-icon"
+    if (examCompleted) {
+
+      progress =
+        100;
+
+    }
+
+
+    if (campbellProgressText) {
+
+      campbellProgressText.textContent =
+        `${progress}%`;
+
+    }
+
+
+    if (campbellProgressBar) {
+
+      campbellProgressBar.style.width =
+        `${progress}%`;
+
+    }
+
+
+    if (campbellReadingPercent) {
+
+      campbellReadingPercent.textContent =
+        `${readingPercent}%`;
+
+    }
+
+
+    if (campbellReadingProgress) {
+
+      campbellReadingProgress.style.width =
+        `${readingPercent}%`;
+
+    }
+
+
+    /* ======================================
+       ТЕОРИЯ ПРОЙДЕНА
+    ====================================== */
+
+    if (theoryCompleted) {
+
+      if (campbellExamButton) {
+
+        campbellExamButton.classList.remove(
+          "locked"
         );
 
-      if (examIcon) {
 
-        examIcon.textContent =
-          "📝";
+        const examIcon =
+          campbellExamButton.querySelector(
+            ".campbell-action-icon"
+          );
+
+
+        if (examIcon) {
+
+          examIcon.textContent =
+            examCompleted
+              ? "✅"
+              : "📝";
+
+        }
 
       }
 
-      if (campbellReadingPercent) {
 
-        campbellReadingPercent.textContent =
-          "100%";
+      if (campbellExamStatus) {
 
-      }
-
-      if (campbellReadingProgress) {
-
-        campbellReadingProgress.style.width =
-          "100%";
+        campbellExamStatus.textContent =
+          examCompleted
+            ? "Экзамен пройден ✓"
+            : "Экзамен доступен";
 
       }
 
     }
 
+
+    /* ======================================
+       ТЕОРИЯ ЕЩЁ НЕ ПРОЙДЕНА
+    ====================================== */
+
     else {
 
-      campbellProgressText.textContent =
-        "0%";
+      if (campbellExamButton) {
 
-      campbellProgressBar.style.width =
-        "0%";
-
-      campbellExamButton.classList.add(
-        "locked"
-      );
-
-      campbellExamStatus.textContent =
-        "Сначала изучи материал";
-
-      const examIcon =
-        campbellExamButton.querySelector(
-          ".campbell-action-icon"
+        campbellExamButton.classList.add(
+          "locked"
         );
 
-      if (examIcon) {
 
-        examIcon.textContent =
-          "🔒";
+        const examIcon =
+          campbellExamButton.querySelector(
+            ".campbell-action-icon"
+          );
+
+
+        if (examIcon) {
+
+          examIcon.textContent =
+            "🔒";
+
+        }
 
       }
 
-      if (campbellReadingPercent) {
 
-        campbellReadingPercent.textContent =
-          "0%";
+      if (campbellExamStatus) {
 
-      }
-
-      if (campbellReadingProgress) {
-
-        campbellReadingProgress.style.width =
-          "0%";
+        campbellExamStatus.textContent =
+          `Прочитано ${readingPercent}%`;
 
       }
 
@@ -1707,113 +2758,2229 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  /*
-    НАЗАД:
-    CAMPBELL → БИБЛИОТЕКА
-  */
+  /* ========================================
+     CAMPBELL → БИБЛИОТЕКА
+  ======================================== */
 
-  campbellBackButton.addEventListener(
-    "click",
-    () => {
+  if (campbellBackButton) {
 
-      buildLibrary();
+    campbellBackButton.addEventListener(
+      "click",
+      () => {
 
-      changeScreen(
-        campbellScreen,
-        libraryScreen
+        if (librarySearchInput) {
+
+          librarySearchInput.value =
+            "";
+
+        }
+
+        buildLibrary();
+
+        changeScreen(
+          campbellScreen,
+          libraryScreen
+        );
+
+      }
+    );
+
+  }
+
+
+  /* ========================================
+     CAMPBELL → ЧТЕНИЕ
+  ======================================== */
+
+  if (campbellTheoryButton) {
+
+    campbellTheoryButton.addEventListener(
+      "click",
+      () => {
+
+        renderCampbellReader();
+
+        changeScreen(
+          campbellScreen,
+          campbellTheoryScreen
+        );
+
+      }
+    );
+
+  }
+
+
+  /* ========================================
+     ЧТЕНИЕ → CAMPBELL
+  ======================================== */
+
+  if (campbellTheoryBackButton) {
+
+    campbellTheoryBackButton.addEventListener(
+      "click",
+      () => {
+
+        saveCampbellReadingProgress();
+
+        updateCampbellProgress();
+
+        changeScreen(
+          campbellTheoryScreen,
+          campbellScreen
+        );
+
+      }
+    );
+
+  }
+
+
+  /* ========================================
+     СТАРАЯ КНОПКА "ЗАВЕРШИТЬ"
+
+     Теперь нельзя нажать её раньше
+     последней страницы.
+  ======================================== */
+
+  if (completeCampbellTheoryButton) {
+
+    completeCampbellTheoryButton.addEventListener(
+      "click",
+      () => {
+
+        if (
+          campbellMaxReadPage <
+          CAMPBELL_LAST_PAGE
+        ) {
+
+          alert(
+            `📖 Сначала дочитай материал до страницы ${CAMPBELL_LAST_PAGE}.`
+          );
+
+          return;
+
+        }
+
+
+        localStorage.setItem(
+          "campbellChapter2TheoryCompleted",
+          "true"
+        );
+
+
+        updateCampbellProgress();
+
+
+        changeScreen(
+          campbellTheoryScreen,
+          campbellScreen
+        );
+
+      }
+    );
+
+  }
+    /* ========================================
+     CAMPBELL — ВОПРОСЫ ЭКЗАМЕНА
+
+     Пока здесь 10 рабочих вопросов.
+     Потом заменим их вопросами
+     из твоего файла экзамена.
+  ======================================== */
+
+  const campbellQuestions = [
+
+    {
+      question:
+        "Какой элемент составляет основу органических молекул?",
+
+      answers: [
+        "Кислород",
+        "Углерод",
+        "Натрий",
+        "Кальций"
+      ],
+
+      correct: 1,
+
+      explanation:
+        "Углерод способен образовывать четыре ковалентные связи, благодаря чему может создавать разнообразные молекулярные структуры."
+    },
+
+    {
+      question:
+        "Что определяет принадлежность атома к определённому химическому элементу?",
+
+      answers: [
+        "Количество нейтронов",
+        "Количество электронных оболочек",
+        "Количество протонов",
+        "Масса атома"
+      ],
+
+      correct: 2,
+
+      explanation:
+        "Атомный номер элемента определяется числом протонов в ядре. Именно количество протонов определяет химический элемент."
+    },
+
+    {
+      question:
+        "Какая частица атома имеет отрицательный электрический заряд?",
+
+      answers: [
+        "Протон",
+        "Нейтрон",
+        "Электрон",
+        "Ядро"
+      ],
+
+      correct: 2,
+
+      explanation:
+        "Электроны имеют отрицательный заряд. Протоны заряжены положительно, а нейтроны электрически нейтральны."
+    },
+
+    {
+      question:
+        "Где находится почти вся масса атома?",
+
+      answers: [
+        "В электронных оболочках",
+        "В ядре",
+        "В валентной оболочке",
+        "Между электронами"
+      ],
+
+      correct: 1,
+
+      explanation:
+        "Протоны и нейтроны находятся в ядре и обладают значительно большей массой, чем электроны, поэтому почти вся масса атома сосредоточена в ядре."
+    },
+
+    {
+      question:
+        "Что такое изотопы одного химического элемента?",
+
+      answers: [
+        "Атомы с разным числом протонов",
+        "Атомы с одинаковым числом нейтронов",
+        "Атомы с одинаковым числом протонов, но разным числом нейтронов",
+        "Молекулы с одинаковой массой"
+      ],
+
+      correct: 2,
+
+      explanation:
+        "Изотопы принадлежат одному элементу, поэтому имеют одинаковое количество протонов, но отличаются количеством нейтронов."
+    },
+
+    {
+      question:
+        "Какие электроны в основном определяют химические свойства атома?",
+
+      answers: [
+        "Электроны первой оболочки",
+        "Валентные электроны",
+        "Все электроны одинаково",
+        "Только спаренные электроны"
+      ],
+
+      correct: 1,
+
+      explanation:
+        "В химических взаимодействиях особенно важны электроны внешней электронной оболочки — валентные электроны."
+    },
+
+    {
+      question:
+        "Что происходит при образовании ковалентной связи?",
+
+      answers: [
+        "Атомы совместно используют пару валентных электронов",
+        "Один атом полностью теряет ядро",
+        "Протоны переходят между атомами",
+        "Нейтроны объединяются"
+      ],
+
+      correct: 0,
+
+      explanation:
+        "Ковалентная связь возникает, когда два атома совместно используют одну или несколько пар валентных электронов."
+    },
+
+    {
+      question:
+        "Что образуется, если атом теряет или приобретает электрон?",
+
+      answers: [
+        "Изотоп",
+        "Ион",
+        "Нейтрон",
+        "Новая молекула обязательно"
+      ],
+
+      correct: 1,
+
+      explanation:
+        "Потеря или приобретение электронов изменяет электрический заряд атома. Такой заряженный атом или молекула называется ионом."
+    },
+
+    {
+      question:
+        "Какая связь возникает благодаря притяжению противоположно заряженных ионов?",
+
+      answers: [
+        "Ковалентная",
+        "Водородная",
+        "Ионная",
+        "Пептидная"
+      ],
+
+      correct: 2,
+
+      explanation:
+        "Положительно и отрицательно заряженные ионы притягиваются друг к другу. Это электростатическое притяжение называют ионной связью."
+    },
+
+    {
+      question:
+        "Что происходит с веществом во время химической реакции?",
+
+      answers: [
+        "Атомы исчезают",
+        "Создаются новые химические элементы",
+        "Атомы реагентов перегруппировываются и образуют продукты",
+        "Протоны превращаются в электроны"
+      ],
+
+      correct: 2,
+
+      explanation:
+        "Во время химической реакции атомы не исчезают. Связи между ними изменяются, и атомы реагентов перегруппировываются, образуя продукты реакции."
+    }
+
+  ];
+
+
+  /* ========================================
+     СОСТОЯНИЕ ЭКЗАМЕНА
+  ======================================== */
+
+  let campbellExamIndex = 0;
+
+  let campbellSelectedAnswer =
+    null;
+
+  let campbellExamAnswersData =
+    [];
+
+  let campbellCorrectAnswers =
+    0;
+
+  let campbellExamSeconds =
+    20 * 60;
+
+  let campbellExamTimerId =
+    null;
+
+  let campbellExamStartedAt =
+    null;
+
+  let campbellLastResult =
+    null;
+
+
+  /* ========================================
+     ЭЛЕМЕНТЫ НОВОГО HTML
+  ======================================== */
+
+  const campbellQuestionCounter =
+    document.getElementById(
+      "campbellQuestionCounter"
+    );
+
+  const campbellExamScore =
+    document.getElementById(
+      "campbellExamScore"
+    );
+
+  const campbellQuestionText =
+    document.getElementById(
+      "campbellQuestionText"
+    );
+
+  const campbellExamProgress =
+    document.getElementById(
+      "campbellExamProgress"
+    );
+
+  const campbellResultProgress =
+    document.getElementById(
+      "campbellResultProgress"
+    );
+
+  const campbellCorrectCount =
+    document.getElementById(
+      "campbellCorrectCount"
+    );
+
+  const campbellWrongCount =
+    document.getElementById(
+      "campbellWrongCount"
+    );
+
+  const campbellTotalCount =
+    document.getElementById(
+      "campbellTotalCount"
+    );
+
+  const campbellResultIcon =
+    document.getElementById(
+      "campbellResultIcon"
+    );
+
+
+  /* ========================================
+     ФОРМАТ ВРЕМЕНИ
+  ======================================== */
+
+  function formatCampbellTime(
+    seconds
+  ) {
+
+    const minutes =
+      Math.floor(
+        seconds / 60
+      );
+
+    const remainingSeconds =
+      seconds % 60;
+
+    return (
+      String(minutes)
+        .padStart(2, "0") +
+      ":" +
+      String(remainingSeconds)
+        .padStart(2, "0")
+    );
+
+  }
+
+
+  /* ========================================
+     ОБНОВИТЬ ТАЙМЕР
+  ======================================== */
+
+  function updateCampbellTimer() {
+
+    if (!campbellExamTimer) {
+      return;
+    }
+
+
+    campbellExamTimer.textContent =
+      `⏱️ ${formatCampbellTime(
+        campbellExamSeconds
+      )}`;
+
+
+    campbellExamTimer.classList.remove(
+      "warning",
+      "danger"
+    );
+
+
+    if (
+      campbellExamSeconds <= 60
+    ) {
+
+      campbellExamTimer.classList.add(
+        "danger"
       );
 
     }
-  );
 
+    else if (
+      campbellExamSeconds <= 300
+    ) {
 
-  /*
-    ОТКРЫТЬ МАТЕРИАЛ
-  */
-
-  campbellTheoryButton.addEventListener(
-    "click",
-    () => {
-
-      updateCampbellProgress();
-
-      changeScreen(
-        campbellScreen,
-        campbellTheoryScreen
+      campbellExamTimer.classList.add(
+        "warning"
       );
 
     }
-  );
+
+  }
 
 
-  /*
-    НАЗАД:
-    МАТЕРИАЛ → CAMPBELL
-  */
+  /* ========================================
+     ОСТАНОВИТЬ ТАЙМЕР
+  ======================================== */
 
-  campbellTheoryBackButton.addEventListener(
-    "click",
-    () => {
+  function stopCampbellTimer() {
 
-      updateCampbellProgress();
+    if (
+      campbellExamTimerId !==
+      null
+    ) {
 
-      changeScreen(
-        campbellTheoryScreen,
-        campbellScreen
+      clearInterval(
+        campbellExamTimerId
+      );
+
+      campbellExamTimerId =
+        null;
+
+    }
+
+  }
+
+
+  /* ========================================
+     ЗАПУСТИТЬ ТАЙМЕР
+  ======================================== */
+
+  function startCampbellTimer() {
+
+    stopCampbellTimer();
+
+    updateCampbellTimer();
+
+
+    campbellExamTimerId =
+      setInterval(
+        () => {
+
+          campbellExamSeconds--;
+
+
+          if (
+            campbellExamSeconds <= 0
+          ) {
+
+            campbellExamSeconds =
+              0;
+
+            updateCampbellTimer();
+
+            stopCampbellTimer();
+
+            finishCampbellExam(
+              true
+            );
+
+            return;
+
+          }
+
+
+          updateCampbellTimer();
+
+        },
+        1000
+      );
+
+  }
+
+
+  /* ========================================
+     ЗАПУСТИТЬ ЭКЗАМЕН
+  ======================================== */
+
+  function startCampbellExam() {
+
+    const theoryCompleted =
+      localStorage.getItem(
+        "campbellChapter2TheoryCompleted"
+      ) === "true";
+
+
+    if (!theoryCompleted) {
+
+      alert(
+        "🔒 Сначала изучи весь материал главы 2."
+      );
+
+      return false;
+
+    }
+
+
+    stopCampbellTimer();
+
+
+    campbellExamIndex =
+      0;
+
+    campbellSelectedAnswer =
+      null;
+
+    campbellExamAnswersData =
+      [];
+
+    campbellCorrectAnswers =
+      0;
+
+    campbellExamSeconds =
+      20 * 60;
+
+    campbellExamStartedAt =
+      Date.now();
+
+
+    renderCampbellQuestion();
+
+    startCampbellTimer();
+
+
+    return true;
+
+  }
+
+
+  /* ========================================
+     ОТКРЫТЬ ЭКЗАМЕН
+  ======================================== */
+
+  if (campbellExamButton) {
+
+    campbellExamButton.addEventListener(
+      "click",
+      () => {
+
+        const theoryCompleted =
+          localStorage.getItem(
+            "campbellChapter2TheoryCompleted"
+          ) === "true";
+
+
+        if (!theoryCompleted) {
+
+          alert(
+            "🔒 Сначала изучи материал главы 2."
+          );
+
+          return;
+
+        }
+
+
+        const started =
+          startCampbellExam();
+
+
+        if (!started) {
+          return;
+        }
+
+
+        changeScreen(
+          campbellScreen,
+          campbellExamScreen
+        );
+
+      }
+    );
+
+  }
+
+
+  /* ========================================
+     ПОКАЗАТЬ ВОПРОС
+  ======================================== */
+
+  function renderCampbellQuestion() {
+
+    const question =
+      campbellQuestions[
+        campbellExamIndex
+      ];
+
+
+    if (!question) {
+
+      finishCampbellExam(
+        false
+      );
+
+      return;
+
+    }
+
+
+    campbellSelectedAnswer =
+      null;
+
+
+    if (campbellExamNextButton) {
+
+      campbellExamNextButton.disabled =
+        true;
+
+      campbellExamNextButton.textContent =
+        campbellExamIndex ===
+        campbellQuestions.length - 1
+          ? "Завершить экзамен"
+          : "Ответить";
+
+    }
+
+
+    /* ======================================
+       СЧЁТЧИК
+    ====================================== */
+
+    if (campbellQuestionCounter) {
+
+      campbellQuestionCounter.textContent =
+        `Вопрос ${
+          campbellExamIndex + 1
+        } из ${
+          campbellQuestions.length
+        }`;
+
+    }
+
+
+    /*
+      Поддержка старого HTML.
+    */
+
+    if (campbellExamQuestionCounter) {
+
+      campbellExamQuestionCounter.textContent =
+        `Вопрос ${
+          campbellExamIndex + 1
+        } из ${
+          campbellQuestions.length
+        }`;
+
+    }
+
+
+    /* ======================================
+       ТЕКУЩИЙ СЧЁТ
+    ====================================== */
+
+    if (campbellExamScore) {
+
+      campbellExamScore.textContent =
+        `${campbellCorrectAnswers} правильных`;
+
+    }
+
+
+    /* ======================================
+       ПРОГРЕСС
+    ====================================== */
+
+    const progress =
+      Math.round(
+        (
+          campbellExamIndex /
+          campbellQuestions.length
+        ) * 100
+      );
+
+
+    if (campbellExamProgress) {
+
+      campbellExamProgress.style.width =
+        `${progress}%`;
+
+    }
+
+
+    if (campbellExamProgressBar) {
+
+      campbellExamProgressBar.style.width =
+        `${progress}%`;
+
+    }
+
+
+    if (campbellExamProgressPercent) {
+
+      campbellExamProgressPercent.textContent =
+        `${progress}%`;
+
+    }
+
+
+    /* ======================================
+       ТЕКСТ ВОПРОСА
+    ====================================== */
+
+    if (campbellQuestionText) {
+
+      campbellQuestionText.textContent =
+        question.question;
+
+    }
+
+
+    if (campbellExamQuestion) {
+
+      campbellExamQuestion.textContent =
+        question.question;
+
+    }
+
+
+    if (campbellExamQuestionHint) {
+
+      campbellExamQuestionHint.textContent =
+        "Выбери один правильный ответ.";
+
+    }
+
+
+    /* ======================================
+       ОТВЕТЫ
+    ====================================== */
+
+    if (!campbellExamAnswers) {
+      return;
+    }
+
+
+    campbellExamAnswers.innerHTML =
+      "";
+
+
+    const letters = [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F"
+    ];
+
+
+    question.answers.forEach(
+      (answer, index) => {
+
+        const button =
+          document.createElement(
+            "button"
+          );
+
+
+        button.type =
+          "button";
+
+
+        button.className =
+          "answer-option";
+
+
+        button.innerHTML = `
+
+          <span class="answer-letter">
+            ${letters[index] || index + 1}
+          </span>
+
+          <span class="answer-text">
+            ${answer}
+          </span>
+
+        `;
+
+
+        button.addEventListener(
+          "click",
+          () => {
+
+            selectCampbellAnswer(
+              index,
+              button
+            );
+
+          }
+        );
+
+
+        campbellExamAnswers.appendChild(
+          button
+        );
+
+      }
+    );
+
+  }
+
+
+  /* ========================================
+     ВЫБРАТЬ ОТВЕТ
+  ======================================== */
+
+  function selectCampbellAnswer(
+    answerIndex,
+    button
+  ) {
+
+    campbellSelectedAnswer =
+      answerIndex;
+
+
+    if (campbellExamAnswers) {
+
+      campbellExamAnswers
+        .querySelectorAll(
+          ".answer-option"
+        )
+        .forEach(
+          option => {
+
+            option.classList.remove(
+              "selected"
+            );
+
+          }
+        );
+
+    }
+
+
+    button.classList.add(
+      "selected"
+    );
+
+
+    if (campbellExamNextButton) {
+
+      campbellExamNextButton.disabled =
+        false;
+
+    }
+
+  }
+
+
+  /* ========================================
+     ПОДТВЕРДИТЬ ОТВЕТ
+  ======================================== */
+
+  function submitCampbellAnswer() {
+
+    if (
+      campbellSelectedAnswer ===
+      null
+    ) {
+      return;
+    }
+
+
+    const question =
+      campbellQuestions[
+        campbellExamIndex
+      ];
+
+
+    if (!question) {
+      return;
+    }
+
+
+    const isCorrect =
+      campbellSelectedAnswer ===
+      question.correct;
+
+
+    if (isCorrect) {
+
+      campbellCorrectAnswers++;
+
+    }
+
+
+    campbellExamAnswersData.push({
+
+      question:
+        question.question,
+
+      answers:
+        [...question.answers],
+
+      selected:
+        campbellSelectedAnswer,
+
+      correct:
+        question.correct,
+
+      isCorrect:
+        isCorrect,
+
+      explanation:
+        question.explanation
+
+    });
+
+
+    campbellExamIndex++;
+
+
+    if (
+      campbellExamIndex >=
+      campbellQuestions.length
+    ) {
+
+      finishCampbellExam(
+        false
+      );
+
+      return;
+
+    }
+
+
+    renderCampbellQuestion();
+
+  }
+
+
+  /* ========================================
+     КНОПКА ОТВЕТИТЬ
+  ======================================== */
+
+  if (campbellExamNextButton) {
+
+    campbellExamNextButton.addEventListener(
+      "click",
+      () => {
+
+        submitCampbellAnswer();
+
+      }
+    );
+
+  }
+
+
+  /* ========================================
+     ВЫХОД ИЗ ЭКЗАМЕНА
+  ======================================== */
+
+  if (campbellExamBackButton) {
+
+    campbellExamBackButton.addEventListener(
+      "click",
+      () => {
+
+        const exit =
+          confirm(
+            "Выйти из экзамена? Текущий результат не сохранится."
+          );
+
+
+        if (!exit) {
+          return;
+        }
+
+
+        stopCampbellTimer();
+
+
+        changeScreen(
+          campbellExamScreen,
+          campbellScreen
+        );
+
+      }
+    );
+
+  }
+
+
+  /* ========================================
+     ЗАВЕРШИТЬ ЭКЗАМЕН
+  ======================================== */
+
+  function finishCampbellExam(
+    timeExpired = false
+  ) {
+
+    stopCampbellTimer();
+
+
+    /*
+      Если время закончилось,
+      текущий выбранный ответ
+      тоже сохраняем.
+    */
+
+    if (
+      timeExpired &&
+      campbellSelectedAnswer !==
+        null &&
+      campbellExamIndex <
+        campbellQuestions.length
+    ) {
+
+      const question =
+        campbellQuestions[
+          campbellExamIndex
+        ];
+
+
+      const isCorrect =
+        campbellSelectedAnswer ===
+        question.correct;
+
+
+      if (isCorrect) {
+
+        campbellCorrectAnswers++;
+
+      }
+
+
+      campbellExamAnswersData.push({
+
+        question:
+          question.question,
+
+        answers:
+          [...question.answers],
+
+        selected:
+          campbellSelectedAnswer,
+
+        correct:
+          question.correct,
+
+        isCorrect:
+          isCorrect,
+
+        explanation:
+          question.explanation
+
+      });
+
+    }
+
+
+    /*
+      Если пользователь не успел
+      ответить на оставшиеся вопросы,
+      добавляем их как "Нет ответа".
+    */
+
+    const answeredIndexes =
+      campbellExamAnswersData.length;
+
+
+    for (
+      let index =
+        answeredIndexes;
+      index <
+        campbellQuestions.length;
+      index++
+    ) {
+
+      const question =
+        campbellQuestions[index];
+
+
+      campbellExamAnswersData.push({
+
+        question:
+          question.question,
+
+        answers:
+          [...question.answers],
+
+        selected:
+          null,
+
+        correct:
+          question.correct,
+
+        isCorrect:
+          false,
+
+        explanation:
+          question.explanation
+
+      });
+
+    }
+
+
+    const total =
+      campbellQuestions.length;
+
+
+    const correct =
+      campbellCorrectAnswers;
+
+
+    const wrong =
+      total - correct;
+
+
+    const percent =
+      Math.round(
+        (
+          correct /
+          total
+        ) * 100
+      );
+
+
+    const usedSeconds =
+      campbellExamStartedAt
+        ? Math.min(
+            20 * 60,
+            Math.floor(
+              (
+                Date.now() -
+                campbellExamStartedAt
+              ) / 1000
+            )
+          )
+        : 0;
+
+
+    campbellLastResult = {
+
+      correct:
+        correct,
+
+      wrong:
+        wrong,
+
+      total:
+        total,
+
+      percent:
+        percent,
+
+      time:
+        usedSeconds,
+
+      timeExpired:
+        timeExpired,
+
+      answers:
+        campbellExamAnswersData
+
+    };
+
+
+    /* ======================================
+       СОХРАНЕНИЕ РЕЗУЛЬТАТА
+    ====================================== */
+
+    localStorage.setItem(
+      "campbellChapter2LastResult",
+      JSON.stringify(
+        campbellLastResult
+      )
+    );
+
+
+    localStorage.setItem(
+      "campbellChapter2ExamCompleted",
+      "true"
+    );
+
+
+    localStorage.setItem(
+      "campbellChapter2BestScore",
+      String(
+        Math.max(
+          percent,
+          Number(
+            localStorage.getItem(
+              "campbellChapter2BestScore"
+            ) || 0
+          )
+        )
+      )
+    );
+
+
+    /* ======================================
+       НАГРАДА
+
+       Даём один раз за первое
+       завершение экзамена.
+    ====================================== */
+
+    const rewardAlreadyGiven =
+      localStorage.getItem(
+        "campbellChapter2RewardGiven"
+      ) === "true";
+
+
+    let rewardGenes =
+      0;
+
+
+    if (!rewardAlreadyGiven) {
+
+      if (percent >= 90) {
+
+        rewardGenes =
+          25;
+
+      }
+
+      else if (percent >= 70) {
+
+        rewardGenes =
+          20;
+
+      }
+
+      else if (percent >= 50) {
+
+        rewardGenes =
+          15;
+
+      }
+
+      else {
+
+        rewardGenes =
+          10;
+
+      }
+
+
+      const oldGenes =
+        Number(
+          localStorage.getItem(
+            "groundGenes"
+          ) || 0
+        );
+
+
+      localStorage.setItem(
+        "groundGenes",
+        String(
+          oldGenes +
+          rewardGenes
+        )
+      );
+
+
+      localStorage.setItem(
+        "campbellChapter2RewardGiven",
+        "true"
       );
 
     }
-  );
 
 
-  /*
-    ЗАВЕРШИТЬ ИЗУЧЕНИЕ ГЛАВЫ
-  */
+    campbellLastResult.rewardGenes =
+      rewardGenes;
 
-  completeCampbellTheoryButton.addEventListener(
-    "click",
-    () => {
+
+    /*
+      Сохраняем ещё раз,
+      уже вместе с наградой.
+    */
+
+    localStorage.setItem(
+      "campbellChapter2LastResult",
+      JSON.stringify(
+        campbellLastResult
+      )
+    );
+
+
+    showCampbellResult();
+
+
+    updateCampbellProgress();
+
+    updateUserInterface();
+
+
+    changeScreen(
+      campbellExamScreen,
+      campbellResultScreen
+    );
+
+  }
+
+
+  /* ========================================
+     ПОКАЗАТЬ РЕЗУЛЬТАТ
+  ======================================== */
+
+  function showCampbellResult() {
+
+    if (!campbellLastResult) {
+
+      const savedResult =
+        localStorage.getItem(
+          "campbellChapter2LastResult"
+        );
+
+
+      if (savedResult) {
+
+        try {
+
+          campbellLastResult =
+            JSON.parse(
+              savedResult
+            );
+
+        }
+
+        catch (error) {
+
+          console.error(
+            "Ошибка результата Campbell:",
+            error
+          );
+
+          return;
+
+        }
+
+      }
+
+    }
+
+
+    if (!campbellLastResult) {
+      return;
+    }
+
+
+    const result =
+      campbellLastResult;
+
+
+    /* ======================================
+       ЗАГОЛОВОК
+    ====================================== */
+
+    let title =
+      "Продолжай!";
+
+    let message =
+      "Разбор поможет понять ошибки.";
+
+    let icon =
+      "🧬";
+
+
+    if (
+      result.percent >= 90
+    ) {
+
+      title =
+        "Отличный результат!";
+
+      message =
+        "Ты очень хорошо разобрался в главе 2.";
+
+      icon =
+        "🏆";
+
+    }
+
+    else if (
+      result.percent >= 70
+    ) {
+
+      title =
+        "Хорошая работа!";
+
+      message =
+        "Основные идеи главы уже усвоены.";
+
+      icon =
+        "🔥";
+
+    }
+
+    else if (
+      result.percent >= 50
+    ) {
+
+      title =
+        "Неплохо!";
+
+      message =
+        "Есть несколько тем, которые стоит повторить.";
+
+      icon =
+        "🧠";
+
+    }
+
+
+    if (
+      result.timeExpired
+    ) {
+
+      message =
+        "Время закончилось. Посмотри разбор и попробуй ещё раз.";
+
+    }
+
+
+    if (campbellResultTitle) {
+
+      campbellResultTitle.textContent =
+        title;
+
+    }
+
+
+    if (campbellResultMessage) {
+
+      campbellResultMessage.textContent =
+        message;
+
+    }
+
+
+    if (campbellResultIcon) {
+
+      campbellResultIcon.textContent =
+        icon;
+
+    }
+
+
+    /* ======================================
+       ПРОЦЕНТ
+    ====================================== */
+
+    if (campbellResultPercent) {
+
+      campbellResultPercent.textContent =
+        `${result.percent}%`;
+
+    }
+
+
+    if (campbellResultProgress) {
+
+      campbellResultProgress.style.width =
+        `${result.percent}%`;
+
+    }
+
+
+    /* ======================================
+       СЧЁТ
+    ====================================== */
+
+    if (campbellCorrectCount) {
+
+      campbellCorrectCount.textContent =
+        result.correct;
+
+    }
+
+
+    if (campbellWrongCount) {
+
+      campbellWrongCount.textContent =
+        result.wrong;
+
+    }
+
+
+    if (campbellTotalCount) {
+
+      campbellTotalCount.textContent =
+        result.total;
+
+    }
+
+
+    /*
+      Поддержка старого HTML.
+    */
+
+    if (campbellResultScore) {
+
+      campbellResultScore.textContent =
+        `${result.correct}/${result.total}`;
+
+    }
+
+
+    if (campbellResultTime) {
+
+      campbellResultTime.textContent =
+        formatCampbellTime(
+          result.time
+        );
+
+    }
+
+
+    if (campbellResultStatus) {
+
+      campbellResultStatus.textContent =
+        `${result.percent}%`;
+
+    }
+
+
+    if (campbellResultDescription) {
+
+      campbellResultDescription.textContent =
+        message;
+
+    }
+
+
+    /* ======================================
+       НАГРАДА
+    ====================================== */
+
+    if (campbellRewardText) {
+
+      if (
+        result.rewardGenes > 0
+      ) {
+
+        campbellRewardText.textContent =
+          `+${result.rewardGenes} генов`;
+
+      }
+
+      else {
+
+        campbellRewardText.textContent =
+          "Награда уже получена ✓";
+
+      }
+
+    }
+
+  }
+    /* ========================================
+     CAMPBELL — ПРОДОЛЖИТЬ ПОСЛЕ РЕЗУЛЬТАТА
+  ======================================== */
+
+  if (campbellContinueButton) {
+
+    campbellContinueButton.addEventListener(
+      "click",
+      () => {
+
+        updateCampbellProgress();
+
+        buildLibrary();
+
+        changeScreen(
+          campbellResultScreen,
+          campbellScreen
+        );
+
+      }
+    );
+
+  }
+
+
+  /* ========================================
+     CAMPBELL — ПОВТОРИТЬ ЭКЗАМЕН
+  ======================================== */
+
+  if (campbellRetryButton) {
+
+    campbellRetryButton.addEventListener(
+      "click",
+      () => {
+
+        const started =
+          startCampbellExam();
+
+        if (!started) {
+          return;
+        }
+
+        changeScreen(
+          campbellResultScreen,
+          campbellExamScreen
+        );
+
+      }
+    );
+
+  }
+
+
+  /* ========================================
+     CAMPBELL — ОТКРЫТЬ РАЗБОР
+  ======================================== */
+
+  if (campbellReviewButton) {
+
+    campbellReviewButton.addEventListener(
+      "click",
+      () => {
+
+        loadCampbellLastResult();
+
+        if (!campbellLastResult) {
+
+          alert(
+            "Сначала пройди экзамен."
+          );
+
+          return;
+
+        }
+
+        renderCampbellReview();
+
+        changeScreen(
+          campbellResultScreen,
+          campbellReviewScreen
+        );
+
+      }
+    );
+
+  }
+
+
+  /* ========================================
+     ЗАГРУЗИТЬ ПОСЛЕДНИЙ РЕЗУЛЬТАТ
+  ======================================== */
+
+  function loadCampbellLastResult() {
+
+    const saved =
+      localStorage.getItem(
+        "campbellChapter2LastResult"
+      );
+
+    if (!saved) {
+
+      campbellLastResult =
+        null;
+
+      return null;
+
+    }
+
+    try {
+
+      campbellLastResult =
+        JSON.parse(saved);
+
+      return campbellLastResult;
+
+    }
+
+    catch (error) {
+
+      console.error(
+        "Не удалось загрузить результат Campbell:",
+        error
+      );
+
+      campbellLastResult =
+        null;
+
+      return null;
+
+    }
+
+  }
+
+
+  /* ========================================
+     CAMPBELL — РАЗБОР ЭКЗАМЕНА
+  ======================================== */
+
+  function renderCampbellReview() {
+
+    if (!campbellLastResult) {
+
+      loadCampbellLastResult();
+
+    }
+
+    if (
+      !campbellLastResult ||
+      !Array.isArray(
+        campbellLastResult.answers
+      )
+    ) {
+
+      if (campbellReviewQuestions) {
+
+        campbellReviewQuestions.innerHTML = `
+
+          <div class="campbell-theory-block">
+
+            <h2>
+              Результат не найден
+            </h2>
+
+            <div class="campbell-note">
+
+              <span>ℹ️</span>
+
+              <p>
+                Сначала пройди экзамен,
+                после этого здесь появится
+                полный разбор вопросов.
+              </p>
+
+            </div>
+
+          </div>
+
+        `;
+
+      }
+
+      return;
+
+    }
+
+
+    const result =
+      campbellLastResult;
+
+
+    /* ======================================
+       МИНИ-СЧЁТ
+    ====================================== */
+
+    if (campbellReviewScore) {
+
+      campbellReviewScore.textContent =
+        `${result.correct}/${result.total}`;
+
+    }
+
+
+    /* ======================================
+       ПРОГРЕСС
+    ====================================== */
+
+    if (campbellReviewProgress) {
+
+      campbellReviewProgress.style.width =
+        "100%";
+
+    }
+
+
+    if (!campbellReviewQuestions) {
+      return;
+    }
+
+
+    campbellReviewQuestions.innerHTML =
+      "";
+
+
+    const letters = [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F"
+    ];
+
+
+    /* ======================================
+       КАЖДЫЙ ВОПРОС
+    ====================================== */
+
+    result.answers.forEach(
+      (answerData, index) => {
+
+        const block =
+          document.createElement(
+            "div"
+          );
+
+
+        block.className =
+          "campbell-theory-block";
+
+
+        const userAnswer =
+          answerData.selected !== null &&
+          answerData.selected !== undefined
+            ? answerData.answers[
+                answerData.selected
+              ]
+            : "Нет ответа";
+
+
+        const correctAnswer =
+          answerData.answers[
+            answerData.correct
+          ];
+
+
+        const userLetter =
+          answerData.selected !== null &&
+          answerData.selected !== undefined
+            ? letters[
+                answerData.selected
+              ] || ""
+            : "";
+
+
+        const correctLetter =
+          letters[
+            answerData.correct
+          ] || "";
+
+
+        const statusIcon =
+          answerData.isCorrect
+            ? "✅"
+            : "❌";
+
+
+        const statusText =
+          answerData.isCorrect
+            ? "Правильно"
+            : "Ошибка";
+
+
+        block.innerHTML = `
+
+          <span class="small-label">
+            ВОПРОС ${index + 1}
+            • ${statusIcon}
+            ${statusText}
+          </span>
+
+          <h2>
+            ${answerData.question}
+          </h2>
+
+
+          <div
+            class="
+              campbell-review-answer
+              ${
+                answerData.isCorrect
+                  ? "correct"
+                  : "wrong"
+              }
+            "
+          >
+
+            <strong>
+              ТВОЙ ОТВЕТ
+            </strong>
+
+            <p>
+
+              ${
+                userLetter
+                  ? `${userLetter}. `
+                  : ""
+              }
+
+              ${userAnswer}
+
+            </p>
+
+          </div>
+
+
+          ${
+            !answerData.isCorrect
+              ? `
+
+                <div
+                  class="campbell-review-correct"
+                >
+
+                  <strong>
+                    ПРАВИЛЬНЫЙ ОТВЕТ
+                  </strong>
+
+                  <p>
+                    ${correctLetter}.
+                    ${correctAnswer}
+                  </p>
+
+                </div>
+
+              `
+              : ""
+          }
+
+
+          <div class="campbell-note">
+
+            <span>💡</span>
+
+            <p>
+              ${answerData.explanation}
+            </p>
+
+          </div>
+
+        `;
+
+
+        campbellReviewQuestions.appendChild(
+          block
+        );
+
+      }
+    );
+
+  }
+
+
+  /* ========================================
+     РАЗБОР → РЕЗУЛЬТАТ
+  ======================================== */
+
+  if (campbellReviewBackButton) {
+
+    campbellReviewBackButton.addEventListener(
+      "click",
+      () => {
+
+        showCampbellResult();
+
+        changeScreen(
+          campbellReviewScreen,
+          campbellResultScreen
+        );
+
+      }
+    );
+
+  }
+
+
+  /* ========================================
+     ЗАВЕРШИТЬ РАЗБОР
+  ======================================== */
+
+  if (campbellReviewFinishButton) {
+
+    campbellReviewFinishButton.addEventListener(
+      "click",
+      () => {
+
+        updateCampbellProgress();
+
+        changeScreen(
+          campbellReviewScreen,
+          campbellScreen
+        );
+
+      }
+    );
+
+  }
+
+
+  /* ========================================
+     ВОССТАНОВИТЬ CAMPBELL
+     ПОСЛЕ ПЕРЕЗАГРУЗКИ
+  ======================================== */
+
+  function restoreCampbellState() {
+
+    /*
+      Загружаем последний результат,
+      если экзамен уже проходили.
+    */
+
+    loadCampbellLastResult();
+
+
+    /*
+      Если пользователь уже дошёл
+      до последней страницы,
+      теория считается завершённой.
+    */
+
+    if (
+      campbellMaxReadPage >=
+      CAMPBELL_LAST_PAGE
+    ) {
 
       localStorage.setItem(
         "campbellChapter2TheoryCompleted",
         "true"
       );
 
-      updateCampbellProgress();
+    }
 
-      changeScreen(
-        campbellTheoryScreen,
-        campbellScreen
+
+    /*
+      Проверяем сохранённую страницу.
+    */
+
+    const savedPage =
+      Number(
+        localStorage.getItem(
+          "campbellChapter2CurrentPage"
+        )
       );
 
+
+    if (
+      Number.isFinite(savedPage) &&
+      savedPage >=
+        CAMPBELL_FIRST_PAGE &&
+      savedPage <=
+        CAMPBELL_LAST_PAGE
+    ) {
+
+      campbellCurrentPage =
+        savedPage;
+
     }
-  );
 
 
-  /*
-    ЭКЗАМЕН
-  */
+    updateCampbellProgress();
 
-  campbellExamButton.addEventListener(
-    "click",
+  }
+
+
+  /* ========================================
+     ВОССТАНОВИТЬ РЕЗУЛЬТАТ
+  ======================================== */
+
+  function restoreCampbellResult() {
+
+    const result =
+      loadCampbellLastResult();
+
+
+    if (!result) {
+      return;
+    }
+
+
+    /*
+      Если сохранён старый результат,
+      где каких-то полей ещё не было,
+      аккуратно добавляем значения.
+    */
+
+    if (
+      typeof result.correct !==
+      "number"
+    ) {
+
+      result.correct =
+        0;
+
+    }
+
+
+    if (
+      typeof result.total !==
+      "number"
+    ) {
+
+      result.total =
+        campbellQuestions.length;
+
+    }
+
+
+    if (
+      typeof result.wrong !==
+      "number"
+    ) {
+
+      result.wrong =
+        result.total -
+        result.correct;
+
+    }
+
+
+    if (
+      typeof result.percent !==
+      "number"
+    ) {
+
+      result.percent =
+        result.total > 0
+          ? Math.round(
+              (
+                result.correct /
+                result.total
+              ) * 100
+            )
+          : 0;
+
+    }
+
+
+    if (
+      typeof result.time !==
+      "number"
+    ) {
+
+      result.time =
+        0;
+
+    }
+
+
+    if (
+      typeof result.rewardGenes !==
+      "number"
+    ) {
+
+      result.rewardGenes =
+        0;
+
+    }
+
+
+    campbellLastResult =
+      result;
+
+  }
+
+
+  /* ========================================
+     БЕЗОПАСНОЕ СОХРАНЕНИЕ CAMPBELL
+     ПРИ ЗАКРЫТИИ СТРАНИЦЫ
+  ======================================== */
+
+  window.addEventListener(
+    "beforeunload",
     () => {
 
-      const theoryCompleted =
-        localStorage.getItem(
-          "campbellChapter2TheoryCompleted"
-        ) === "true";
+      localStorage.setItem(
+        "campbellChapter2CurrentPage",
+        String(
+          campbellCurrentPage
+        )
+      );
 
-      if (!theoryCompleted) {
 
-        alert(
-          "🔒 Сначала изучи материал главы 2."
-        );
-
-        return;
-      }
-
-      alert(
-        "📝 Материал пройден! Следующим шагом подключаем настоящий экзамен главы 2."
+      localStorage.setItem(
+        "campbellChapter2MaxReadPage",
+        String(
+          campbellMaxReadPage
+        )
       );
 
     }
@@ -1821,23 +4988,384 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* ========================================
-     PLAYER UPDATE
+     ВИДИМОСТЬ СТРАНИЦЫ
   ======================================== */
 
-  window.updateGroundUI =
+  document.addEventListener(
+    "visibilitychange",
+    () => {
+
+      /*
+        Если пользователь свернул вкладку
+        во время чтения — прогресс сохраняем.
+      */
+
+      if (document.hidden) {
+
+        localStorage.setItem(
+          "campbellChapter2CurrentPage",
+          String(
+            campbellCurrentPage
+          )
+        );
+
+
+        localStorage.setItem(
+          "campbellChapter2MaxReadPage",
+          String(
+            campbellMaxReadPage
+          )
+        );
+
+      }
+
+    }
+  );
+
+
+  /* ========================================
+     КЛАВИАТУРА CAMPBELL READER
+
+     ← предыдущая
+     → следующая
+  ======================================== */
+
+  document.addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        !campbellTheoryScreen ||
+        !campbellTheoryScreen.classList.contains(
+          "active"
+        )
+      ) {
+
+        return;
+
+      }
+
+
+      if (
+        event.key ===
+        "ArrowLeft"
+      ) {
+
+        if (
+          campbellCurrentPage >
+          CAMPBELL_FIRST_PAGE
+        ) {
+
+          campbellCurrentPage--;
+
+          renderCampbellReader();
+
+        }
+
+      }
+
+
+      if (
+        event.key ===
+        "ArrowRight"
+      ) {
+
+        if (
+          campbellCurrentPage <
+          CAMPBELL_LAST_PAGE
+        ) {
+
+          campbellCurrentPage++;
+
+          renderCampbellReader();
+
+        }
+
+      }
+
+    }
+  );
+
+
+  /* ========================================
+     СВАЙП НА ТЕЛЕФОНЕ
+  ======================================== */
+
+  let campbellTouchStartX =
+    null;
+
+  let campbellTouchEndX =
+    null;
+
+
+  if (campbellTheoryScreen) {
+
+    campbellTheoryScreen.addEventListener(
+      "touchstart",
+      event => {
+
+        if (
+          !event.changedTouches ||
+          !event.changedTouches[0]
+        ) {
+          return;
+        }
+
+
+        campbellTouchStartX =
+          event.changedTouches[0]
+            .screenX;
+
+      },
+      {
+        passive: true
+      }
+    );
+
+
+    campbellTheoryScreen.addEventListener(
+      "touchend",
+      event => {
+
+        if (
+          campbellTouchStartX ===
+          null
+        ) {
+          return;
+        }
+
+
+        if (
+          !event.changedTouches ||
+          !event.changedTouches[0]
+        ) {
+          return;
+        }
+
+
+        campbellTouchEndX =
+          event.changedTouches[0]
+            .screenX;
+
+
+        handleCampbellSwipe();
+
+
+        campbellTouchStartX =
+          null;
+
+        campbellTouchEndX =
+          null;
+
+      },
+      {
+        passive: true
+      }
+    );
+
+  }
+
+
+  /* ========================================
+     ОБРАБОТКА СВАЙПА
+  ======================================== */
+
+  function handleCampbellSwipe() {
+
+    if (
+      campbellTouchStartX ===
+        null ||
+      campbellTouchEndX ===
+        null
+    ) {
+      return;
+    }
+
+
+    const distance =
+      campbellTouchEndX -
+      campbellTouchStartX;
+
+
+    /*
+      Маленькие движения игнорируем.
+    */
+
+    if (
+      Math.abs(distance) <
+      70
+    ) {
+
+      return;
+
+    }
+
+
+    /*
+      Свайп вправо:
+      предыдущая страница.
+    */
+
+    if (
+      distance > 0 &&
+      campbellCurrentPage >
+        CAMPBELL_FIRST_PAGE
+    ) {
+
+      campbellCurrentPage--;
+
+      renderCampbellReader();
+
+      return;
+
+    }
+
+
+    /*
+      Свайп влево:
+      следующая страница.
+    */
+
+    if (
+      distance < 0 &&
+      campbellCurrentPage <
+        CAMPBELL_LAST_PAGE
+    ) {
+
+      campbellCurrentPage++;
+
+      renderCampbellReader();
+
+    }
+
+  }
+
+
+  /* ========================================
+     ОБНОВИТЬ КНОПКУ ЗАВЕРШЕНИЯ ЧТЕНИЯ
+  ======================================== */
+
+  function updateCampbellCompleteButton() {
+
+    if (
+      !completeCampbellTheoryButton
+    ) {
+      return;
+    }
+
+
+    const completed =
+      campbellMaxReadPage >=
+      CAMPBELL_LAST_PAGE;
+
+
+    completeCampbellTheoryButton.disabled =
+      !completed;
+
+
+    completeCampbellTheoryButton.textContent =
+      completed
+        ? "Завершить изучение ✓"
+        : `Дочитай до страницы ${CAMPBELL_LAST_PAGE}`;
+
+  }
+
+
+  /* ========================================
+     ДОПОЛНЯЕМ ОБНОВЛЕНИЕ READER
+  ======================================== */
+
+  const originalRenderCampbellReader =
+    renderCampbellReader;
+
+
+  renderCampbellReader =
     function () {
 
-      updateUserInterface();
+      originalRenderCampbellReader();
+
+      updateCampbellCompleteButton();
 
     };
 
 
   /* ========================================
-     ЗАПУСК
+     ПРОВЕРКА CAMPBELL ПРИ СТАРТЕ
+  ======================================== */
+
+  restoreCampbellState();
+
+  restoreCampbellResult();
+
+  updateCampbellCompleteButton();
+
+
+  /* ========================================
+     ПЕРВИЧНЫЙ ЗАПУСК GROUND
+  ======================================== */
+
+  const savedGrade =
+    localStorage.getItem(
+      "groundGrade"
+    );
+
+
+  if (savedGrade) {
+
+    /*
+      Пользователь уже выбирал класс.
+      Данные просто подготавливаем.
+    */
+
+    updateUserInterface();
+
+  }
+
+  else {
+
+    /*
+      Первый запуск.
+    */
+
+    if (currentGrade) {
+
+      currentGrade.textContent =
+        "Класс не выбран";
+
+    }
+
+  }
+
+
+  /* ========================================
+     ПЕРВИЧНАЯ БИБЛИОТЕКА
+  ======================================== */
+
+  buildLibrary();
+
+
+  /* ========================================
+     CAMPBELL — ФИНАЛЬНОЕ ОБНОВЛЕНИЕ
   ======================================== */
 
   updateCampbellProgress();
 
-  updateUserInterface();
+
+  /* ========================================
+     GROUND READY
+  ======================================== */
+
+  console.log(
+    "🧬 Ground loaded"
+  );
+
+  console.log(
+    `📖 Campbell Chapter 2: pages ${CAMPBELL_FIRST_PAGE}-${CAMPBELL_LAST_PAGE}`
+  );
+
+  console.log(
+    `📚 Current Campbell page: ${campbellCurrentPage}`
+  );
+
 
 });
