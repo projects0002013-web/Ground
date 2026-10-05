@@ -1,3274 +1,1288 @@
-/* ==========================================
+/* =========================================================
    GROUND — APP.JS
-========================================== */
+   PART 1
+   CORE + SCREENS + NAVIGATION + PROFILE FIX
+========================================================= */
 
-document.addEventListener("DOMContentLoaded", () => {
-
-  /* ========================================
-     ЭКРАНЫ
-  ======================================== */
-
-  const welcomeScreen =
-    document.getElementById("welcomeScreen");
-
-  const pathScreen =
-    document.getElementById("pathScreen");
-
-  const gradeScreen =
-    document.getElementById("gradeScreen");
-
-  const homeScreen =
-    document.getElementById("homeScreen");
-
-  const libraryScreen =
-    document.getElementById("libraryScreen");
-
-  const profileScreen =
-    document.getElementById("profileScreen");
-
-  const campbellScreen =
-    document.getElementById("campbellScreen");
-
-  const campbellTheoryScreen =
-    document.getElementById("campbellTheoryScreen");
-
-  const campbellExamScreen =
-    document.getElementById("campbellExamScreen");
-
-  const campbellResultScreen =
-    document.getElementById("campbellResultScreen");
-
-  const campbellReviewScreen =
-    document.getElementById("campbellReviewScreen");
+"use strict";
 
 
-  /* ========================================
-     ОСНОВНЫЕ КНОПКИ
-  ======================================== */
+/* =========================================================
+   1. HELPERS
+========================================================= */
 
-  const startButton =
-    document.getElementById("startButton");
+const $ = (selector) => document.querySelector(selector);
 
-  const pathBackButton =
-    document.getElementById("pathBackButton");
-
-  const gradeBackButton =
-    document.getElementById("gradeBackButton");
-
-  const changeGradeButton =
-    document.getElementById("changeGradeButton");
+const $$ = (selector) =>
+  Array.from(document.querySelectorAll(selector));
 
 
-  /* ========================================
-     CAMPBELL — КНОПКИ
-  ======================================== */
+function getById(id) {
+  return document.getElementById(id);
+}
 
-  const campbellBackButton =
-    document.getElementById("campbellBackButton");
 
-  const campbellTheoryButton =
-    document.getElementById("campbellTheoryButton");
+/* =========================================================
+   2. SCREENS
+========================================================= */
 
-  const campbellExamButton =
-    document.getElementById("campbellExamButton");
+const welcomeScreen =
+  getById("welcomeScreen");
 
-  const campbellTheoryBackButton =
-    document.getElementById(
-      "campbellTheoryBackButton"
+const pathScreen =
+  getById("pathScreen");
+
+const gradeScreen =
+  getById("gradeScreen");
+
+const homeScreen =
+  getById("homeScreen");
+
+const libraryScreen =
+  getById("libraryScreen");
+
+const profileScreen =
+  getById("profileScreen");
+
+const lessonScreen =
+  getById("lessonScreen");
+
+const lessonCompleteScreen =
+  getById("lessonCompleteScreen");
+
+const campbellScreen =
+  getById("campbellScreen");
+
+const campbellTheoryScreen =
+  getById("campbellTheoryScreen");
+
+const campbellTheoryCompleteScreen =
+  getById("campbellTheoryCompleteScreen");
+
+const campbellExamScreen =
+  getById("campbellExamScreen");
+
+const campbellResultScreen =
+  getById("campbellResultScreen");
+
+const campbellReviewScreen =
+  getById("campbellReviewScreen");
+
+
+const allScreens = $$(".screen");
+
+
+/* =========================================================
+   3. SCREEN SWITCHER
+
+   Именно эта функция включает анимацию CSS:
+   .screen.active
+========================================================= */
+
+function changeScreen(fromScreen, toScreen) {
+
+  if (!toScreen) {
+    console.error(
+      "GROUND: экран для перехода не найден."
     );
 
-  const completeCampbellTheoryButton =
-    document.getElementById(
-      "completeCampbellTheoryButton"
-    );
-
-  const campbellExamBackButton =
-    document.getElementById(
-      "campbellExamBackButton"
-    );
-
-  const campbellExamNextButton =
-    document.getElementById(
-      "campbellExamNextButton"
-    );
-
-  const campbellContinueButton =
-    document.getElementById(
-      "campbellContinueButton"
-    );
-
-  const campbellReviewButton =
-    document.getElementById(
-      "campbellReviewButton"
-    );
-
-  const campbellRetryButton =
-    document.getElementById(
-      "campbellRetryButton"
-    );
-
-  const campbellReviewBackButton =
-    document.getElementById(
-      "campbellReviewBackButton"
-    );
-
-  const campbellReviewFinishButton =
-    document.getElementById(
-      "campbellReviewFinishButton"
-    );
-
-
-  /* ========================================
-     CAMPBELL READER — НОВЫЕ ЭЛЕМЕНТЫ
-  ======================================== */
-
-  const campbellReaderImage =
-    document.getElementById(
-      "campbellReaderImage"
-    );
-
-  const campbellReaderLoading =
-    document.getElementById(
-      "campbellReaderLoading"
-    );
-
-  const campbellReaderPrevButton =
-    document.getElementById(
-      "campbellReaderPrevButton"
-    );
-
-  const campbellReaderNextButton =
-    document.getElementById(
-      "campbellReaderNextButton"
-    );
-
-  const campbellReaderPageNumber =
-    document.getElementById(
-      "campbellReaderPageNumber"
-    );
-
-  const campbellReaderPageTop =
-    document.getElementById(
-      "campbellReaderPageTop"
-    );
-
-  const campbellReaderProgressFill =
-    document.getElementById(
-      "campbellReaderProgressFill"
-    );
-
-
-  /* ========================================
-     CAMPBELL — ОСНОВНЫЕ ЭЛЕМЕНТЫ
-  ======================================== */
-
-  const campbellProgressText =
-    document.getElementById(
-      "campbellProgressText"
-    );
-
-  const campbellProgressBar =
-    document.getElementById(
-      "campbellProgressBar"
-    );
-
-  const campbellExamStatus =
-    document.getElementById(
-      "campbellExamStatus"
-    );
-
-  const campbellReadingPercent =
-    document.getElementById(
-      "campbellReadingPercent"
-    );
-
-  const campbellReadingProgress =
-    document.getElementById(
-      "campbellReadingProgress"
-    );
-
-  const campbellExamTimer =
-    document.getElementById(
-      "campbellExamTimer"
-    );
-
-  const campbellExamQuestionCounter =
-    document.getElementById(
-      "campbellExamQuestionCounter"
-    );
-
-  const campbellExamProgressPercent =
-    document.getElementById(
-      "campbellExamProgressPercent"
-    );
-
-  const campbellExamProgressBar =
-    document.getElementById(
-      "campbellExamProgressBar"
-    );
-
-  const campbellExamQuestion =
-    document.getElementById(
-      "campbellExamQuestion"
-    );
-
-  const campbellExamQuestionHint =
-    document.getElementById(
-      "campbellExamQuestionHint"
-    );
-
-  const campbellExamAnswers =
-    document.getElementById(
-      "campbellExamAnswers"
-    );
-
-
-  /* ========================================
-     CAMPBELL — РЕЗУЛЬТАТ
-  ======================================== */
-
-  const campbellResultTitle =
-    document.getElementById(
-      "campbellResultTitle"
-    );
-
-  const campbellResultMessage =
-    document.getElementById(
-      "campbellResultMessage"
-    );
-
-  const campbellResultScore =
-    document.getElementById(
-      "campbellResultScore"
-    );
-
-  const campbellResultPercent =
-    document.getElementById(
-      "campbellResultPercent"
-    );
-
-  const campbellResultTime =
-    document.getElementById(
-      "campbellResultTime"
-    );
-
-  const campbellResultStatus =
-    document.getElementById(
-      "campbellResultStatus"
-    );
-
-  const campbellResultDescription =
-    document.getElementById(
-      "campbellResultDescription"
-    );
-
-  const campbellRewardText =
-    document.getElementById(
-      "campbellRewardText"
-    );
-
-
-  /* ========================================
-     CAMPBELL — РАЗБОР
-  ======================================== */
-
-  const campbellReviewScore =
-    document.getElementById(
-      "campbellReviewScore"
-    );
-
-  const campbellReviewProgress =
-    document.getElementById(
-      "campbellReviewProgress"
-    );
-
-  const campbellReviewQuestions =
-    document.getElementById(
-      "campbellReviewQuestions"
-    );
-
-
-  /* ========================================
-     ГЛАВНАЯ
-  ======================================== */
-
-  const learningRoad =
-    document.getElementById("learningRoad");
-
-  const currentGrade =
-    document.getElementById("currentGrade");
-
-  const courseTitle =
-    document.getElementById("courseTitle");
-
-  const xpValue =
-    document.getElementById("xpValue");
-
-  const xpProgress =
-    document.getElementById("xpProgress");
-
-  const levelValue =
-    document.getElementById("levelValue");
-
-  const streakValue =
-    document.getElementById("streakValue");
-
-
-  /* ========================================
-     БИБЛИОТЕКА
-  ======================================== */
-
-  const libraryLessons =
-    document.getElementById("libraryLessons");
-
-  const libraryGrade =
-    document.getElementById("libraryGrade");
-
-  const librarySearchInput =
-    document.getElementById(
-      "librarySearchInput"
-    );
-
-
-  /* ========================================
-     ПРОФИЛЬ
-  ======================================== */
-
-  const profileGrade =
-    document.getElementById("profileGrade");
-
-  const profileLevel =
-    document.getElementById("profileLevel");
-
-  const profileGenes =
-    document.getElementById("profileGenes");
-
-  const profileStreak =
-    document.getElementById("profileStreak");
-
-  const profileXP =
-    document.getElementById("profileXP");
-
-  const profileXPProgress =
-    document.getElementById(
-      "profileXPProgress"
-    );
-
-  const profileLevelText =
-    document.getElementById(
-      "profileLevelText"
-    );
-
-  const profileCompletedLessons =
-    document.getElementById(
-      "profileCompletedLessons"
-    );
-
-  const achievementsContainer =
-    document.getElementById(
-      "achievementsContainer"
-    );
-
-
-  /* ========================================
-     АКТИВНОСТЬ
-  ======================================== */
-
-  const activityWeek =
-    document.getElementById(
-      "activityWeek"
-    );
-
-  const activityStreak =
-    document.getElementById(
-      "activityStreak"
-    );
-
-  const activityMessage =
-    document.getElementById(
-      "activityMessage"
-    );
-
-
-  /* ========================================
-     БЕЗОПАСНАЯ ПРОВЕРКА
-  ======================================== */
-
-  function elementExists(element) {
-    return element !== null;
+    return;
   }
 
 
-  /* ========================================
-     ПЕРЕХОДЫ МЕЖДУ ЭКРАНАМИ
-  ======================================== */
+  allScreens.forEach((screen) => {
 
-  let changingScreen = false;
+    screen.classList.remove("active");
 
-  function changeScreen(
-    oldScreen,
-    newScreen
-  ) {
+  });
 
-    if (
-      !oldScreen ||
-      !newScreen ||
-      changingScreen
-    ) {
-      return;
-    }
 
-    changingScreen = true;
+  /*
+     Перезапускаем CSS-анимацию
+     при каждом открытии экрана.
+  */
 
-    oldScreen.classList.add(
-      "screen-out"
+  void toScreen.offsetWidth;
+
+
+  toScreen.classList.add("active");
+
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+
+  updateBottomNavigation(toScreen);
+
+}
+
+
+/* =========================================================
+   4. SAFE CLICK
+
+   Если какой-то элемент пока отсутствует,
+   весь app.js из-за этого НЕ ломается.
+========================================================= */
+
+function onClick(element, callback) {
+
+  if (!element) {
+    return;
+  }
+
+  element.addEventListener(
+    "click",
+    callback
+  );
+
+}
+
+
+/* =========================================================
+   5. LOCAL STORAGE
+========================================================= */
+
+function getNumber(key, fallback = 0) {
+
+  const value =
+    Number(localStorage.getItem(key));
+
+  return Number.isFinite(value)
+    ? value
+    : fallback;
+
+}
+
+
+function getText(key, fallback = "") {
+
+  const value =
+    localStorage.getItem(key);
+
+  return value ?? fallback;
+
+}
+
+
+/* =========================================================
+   6. PLAYER STATE
+========================================================= */
+
+const groundState = {
+
+  grade:
+    getText(
+      "groundSelectedGrade",
+      "9"
+    ),
+
+  genes:
+    getNumber(
+      "groundGenes",
+      0
+    ),
+
+  xp:
+    getNumber(
+      "groundXP",
+      0
+    ),
+
+  level:
+    getNumber(
+      "groundLevel",
+      1
+    ),
+
+  streak:
+    getNumber(
+      "groundStreak",
+      0
+    ),
+
+  completedLessons:
+    getNumber(
+      "groundCompletedLessons",
+      0
+    )
+
+};
+
+
+/* =========================================================
+   7. SAVE STATE
+========================================================= */
+
+function saveGroundState() {
+
+  localStorage.setItem(
+    "groundSelectedGrade",
+    groundState.grade
+  );
+
+  localStorage.setItem(
+    "groundGenes",
+    String(groundState.genes)
+  );
+
+  localStorage.setItem(
+    "groundXP",
+    String(groundState.xp)
+  );
+
+  localStorage.setItem(
+    "groundLevel",
+    String(groundState.level)
+  );
+
+  localStorage.setItem(
+    "groundStreak",
+    String(groundState.streak)
+  );
+
+  localStorage.setItem(
+    "groundCompletedLessons",
+    String(
+      groundState.completedLessons
+    )
+  );
+
+}
+
+
+/* =========================================================
+   8. SET TEXT SAFELY
+========================================================= */
+
+function setText(id, value) {
+
+  const element =
+    getById(id);
+
+  if (!element) {
+    return;
+  }
+
+  element.textContent = value;
+
+}
+
+
+/* =========================================================
+   9. SET WIDTH SAFELY
+========================================================= */
+
+function setProgress(id, percent) {
+
+  const element =
+    getById(id);
+
+  if (!element) {
+    return;
+  }
+
+
+  const safePercent =
+    Math.max(
+      0,
+      Math.min(100, percent)
     );
 
+
+  element.style.width =
+    `${safePercent}%`;
+
+}
+
+
+/* =========================================================
+   10. UPDATE GLOBAL STATS
+========================================================= */
+
+function updateGlobalStats() {
+
+  /*
+     ГЕНЫ
+  */
+
+  $$(
+    ".gene-value"
+  ).forEach((element) => {
+
+    element.textContent =
+      groundState.genes;
+
+  });
+
+
+  /*
+     Элементы с конкретными ID,
+     если они есть в HTML.
+  */
+
+  setText(
+    "homeGenes",
+    groundState.genes
+  );
+
+  setText(
+    "profileGenes",
+    groundState.genes
+  );
+
+
+  /*
+     LEVEL
+  */
+
+  setText(
+    "levelValue",
+    groundState.level
+  );
+
+  setText(
+    "profileLevel",
+    groundState.level
+  );
+
+
+  /*
+     STREAK
+  */
+
+  setText(
+    "homeStreak",
+    groundState.streak
+  );
+
+  setText(
+    "profileStreak",
+    groundState.streak
+  );
+
+
+  /*
+     COMPLETED LESSONS
+  */
+
+  setText(
+    "profileCompletedLessons",
+    groundState.completedLessons
+  );
+
+
+  /*
+     XP
+
+     Сейчас:
+     каждый уровень = 100 XP.
+  */
+
+  const xpInLevel =
+    groundState.xp % 100;
+
+  setText(
+    "xpValue",
+    xpInLevel
+  );
+
+  setText(
+    "profileXPText",
+    `${xpInLevel} / 100 XP`
+  );
+
+
+  setProgress(
+    "xpProgress",
+    xpInLevel
+  );
+
+  setProgress(
+    "profileXPProgress",
+    xpInLevel
+  );
+
+
+  /*
+     КЛАСС
+  */
+
+  setText(
+    "currentGrade",
+    `${groundState.grade} класс`
+  );
+
+  setText(
+    "profileGrade",
+    `${groundState.grade} класс`
+  );
+
+}
+
+
+/* =========================================================
+   11. LEVEL CALCULATION
+========================================================= */
+
+function recalculateLevel() {
+
+  groundState.level =
+    Math.floor(
+      groundState.xp / 100
+    ) + 1;
+
+}
+
+
+/* =========================================================
+   12. ADD XP
+========================================================= */
+
+function addXP(amount) {
+
+  groundState.xp += amount;
+
+  recalculateLevel();
+
+  saveGroundState();
+
+  updateGlobalStats();
+
+}
+
+
+/* =========================================================
+   13. ADD GENES
+========================================================= */
+
+function addGenes(amount) {
+
+  groundState.genes += amount;
+
+  saveGroundState();
+
+  updateGlobalStats();
+
+}
+
+
+/* =========================================================
+   14. TOAST
+========================================================= */
+
+let groundToastTimer = null;
+
+
+function showGroundToast(
+  title,
+  text,
+  icon = "🌱"
+) {
+
+  const toast =
+    getById("groundToast");
+
+  if (!toast) {
+    return;
+  }
+
+
+  setText(
+    "groundToastTitle",
+    title
+  );
+
+  setText(
+    "groundToastText",
+    text
+  );
+
+  setText(
+    "groundToastIcon",
+    icon
+  );
+
+
+  toast.hidden = false;
+
+
+  clearTimeout(
+    groundToastTimer
+  );
+
+
+  groundToastTimer =
     setTimeout(() => {
 
-      oldScreen.classList.remove(
-        "active",
-        "screen-out"
-      );
+      toast.hidden = true;
 
-      newScreen.classList.add(
-        "active",
-        "screen-in"
-      );
+    }, 2600);
 
-      window.scrollTo(
-        0,
-        0
-      );
+}
 
-      setTimeout(() => {
 
-        newScreen.classList.remove(
-          "screen-in"
-        );
+/* =========================================================
+   15. BOTTOM NAVIGATION
+========================================================= */
 
-        changingScreen = false;
+const navItems =
+  $$(".nav-item");
 
-      }, 280);
 
-    }, 250);
+function updateBottomNavigation(
+  activeScreen
+) {
+
+  let activeNav = "";
+
+
+  if (
+    activeScreen === homeScreen
+  ) {
+
+    activeNav = "home";
 
   }
 
 
-  /* ========================================
-     START
-  ======================================== */
+  else if (
+    activeScreen === libraryScreen ||
+    activeScreen === campbellScreen
+  ) {
 
-  if (elementExists(startButton)) {
+    activeNav = "library";
 
-    startButton.addEventListener(
-      "click",
-      () => {
+  }
+
+
+  else if (
+    activeScreen === profileScreen
+  ) {
+
+    activeNav = "profile";
+
+  }
+
+
+  else if (
+    activeScreen === lessonScreen
+  ) {
+
+    activeNav = "road";
+
+  }
+
+
+  navItems.forEach((button) => {
+
+    const nav =
+      button.dataset.nav;
+
+
+    button.classList.toggle(
+      "active",
+      nav === activeNav
+    );
+
+    button.classList.toggle(
+      "nav-active",
+      nav === activeNav
+    );
+
+  });
+
+}
+
+
+/* =========================================================
+   16. NAVIGATION CLICK
+
+   ИСПРАВЛЯЕТ ПРОФИЛЬ
+========================================================= */
+
+navItems.forEach((button) => {
+
+  button.addEventListener(
+    "click",
+    () => {
+
+      const nav =
+        button.dataset.nav;
+
+
+      /* -------------------------
+         HOME
+      ------------------------- */
+
+      if (nav === "home") {
 
         changeScreen(
-          welcomeScreen,
-          pathScreen
+          null,
+          homeScreen
         );
 
+        return;
+
       }
+
+
+      /* -------------------------
+         ROAD
+      ------------------------- */
+
+      if (nav === "road") {
+
+        changeScreen(
+          null,
+          homeScreen
+        );
+
+
+        /*
+           После открытия главной
+           прокручиваем к дорожке.
+        */
+
+        setTimeout(() => {
+
+          const road =
+            $(".learning-road");
+
+
+          if (road) {
+
+            road.scrollIntoView({
+              behavior: "smooth",
+              block: "start"
+            });
+
+          }
+
+        }, 170);
+
+
+        return;
+
+      }
+
+
+      /* -------------------------
+         LIBRARY
+      ------------------------- */
+
+      if (nav === "library") {
+
+        if (
+          typeof buildLibrary ===
+          "function"
+        ) {
+
+          buildLibrary();
+
+        }
+
+
+        changeScreen(
+          null,
+          libraryScreen
+        );
+
+        return;
+
+      }
+
+
+      /* -------------------------
+         PROFILE
+
+         ВОТ ЭТО ИСПРАВЛЯЕТ
+         НЕРАБОТАЮЩИЙ ПРОФИЛЬ.
+      ------------------------- */
+
+      if (nav === "profile") {
+
+        updateProfile();
+
+        changeScreen(
+          null,
+          profileScreen
+        );
+
+        return;
+
+      }
+
+    }
+  );
+
+});
+
+
+/* =========================================================
+   17. PROFILE
+========================================================= */
+
+function updateProfile() {
+
+  updateGlobalStats();
+
+
+  /*
+     В будущем сюда добавим:
+     - достижения
+     - активность
+     - серию дней
+     - историю уроков
+  */
+
+}
+
+
+/* =========================================================
+   18. SETTINGS BUTTON
+========================================================= */
+
+const settingsButton =
+  getById("settingsButton");
+
+
+onClick(
+  settingsButton,
+  () => {
+
+    showGroundToast(
+      "Настройки",
+      "Настройки профиля добавим позже.",
+      "⚙️"
     );
 
   }
+);
 
 
-  /* ========================================
-     НАЗАД
-  ======================================== */
+/* =========================================================
+   19. WELCOME BUTTON
+========================================================= */
 
-  if (elementExists(pathBackButton)) {
+const startButton =
+  getById("startButton");
 
-    pathBackButton.addEventListener(
-      "click",
-      () => {
+
+onClick(
+  startButton,
+  () => {
+
+    changeScreen(
+      welcomeScreen,
+      pathScreen
+    );
+
+  }
+);
+
+
+/* =========================================================
+   20. PATH BACK
+========================================================= */
+
+const pathBackButton =
+  getById("pathBackButton");
+
+
+onClick(
+  pathBackButton,
+  () => {
+
+    changeScreen(
+      pathScreen,
+      welcomeScreen
+    );
+
+  }
+);
+
+
+/* =========================================================
+   21. PATH CARDS
+========================================================= */
+
+$$(
+  ".path-card"
+).forEach((card) => {
+
+  card.addEventListener(
+    "click",
+    () => {
+
+      const path =
+        card.dataset.path;
+
+
+      /*
+         SCHOOL
+      */
+
+      if (
+        path === "school"
+      ) {
 
         changeScreen(
           pathScreen,
-          welcomeScreen
-        );
-
-      }
-    );
-
-  }
-
-
-  if (elementExists(gradeBackButton)) {
-
-    gradeBackButton.addEventListener(
-      "click",
-      () => {
-
-        changeScreen(
-          gradeScreen,
-          pathScreen
-        );
-
-      }
-    );
-
-  }
-
-
-  /* ========================================
-     ВЫБОР НАПРАВЛЕНИЯ
-  ======================================== */
-
-  document
-    .querySelectorAll(".path-card")
-    .forEach(card => {
-
-      card.addEventListener(
-        "click",
-        () => {
-
-          const path =
-            card.dataset.path;
-
-          if (path === "school") {
-
-            localStorage.setItem(
-              "groundPath",
-              "school"
-            );
-
-            changeScreen(
-              pathScreen,
-              gradeScreen
-            );
-
-            return;
-          }
-
-
-          if (path === "ent") {
-
-            alert(
-              "🎯 Раздел ЕНТ скоро будет добавлен."
-            );
-
-            return;
-          }
-
-
-          if (path === "olympiad") {
-
-            alert(
-              "🏆 Олимпиадный раздел скоро будет добавлен."
-            );
-
-          }
-
-        }
-      );
-
-    });
-
-
-  /* ========================================
-     ВЫБОР КЛАССА
-  ======================================== */
-
-  document
-    .querySelectorAll(".grade-card")
-    .forEach(card => {
-
-      card.addEventListener(
-        "click",
-        () => {
-
-          const grade =
-            card.dataset.grade;
-
-          localStorage.setItem(
-            "groundGrade",
-            grade
-          );
-
-          updateUserInterface();
-
-          changeScreen(
-            gradeScreen,
-            homeScreen
-          );
-
-        }
-      );
-
-    });
-
-
-  if (elementExists(changeGradeButton)) {
-
-    changeGradeButton.addEventListener(
-      "click",
-      () => {
-
-        changeScreen(
-          homeScreen,
           gradeScreen
         );
 
-      }
-    );
-
-  }
-
-
-  /* ========================================
-     PLAYER DATA
-  ======================================== */
-
-  function getPlayerData() {
-
-    return {
-
-      grade:
-        localStorage.getItem(
-          "groundGrade"
-        ) || "9",
-
-      genes:
-        Number(
-          localStorage.getItem(
-            "groundGenes"
-          ) || 0
-        ),
-
-      xp:
-        Number(
-          localStorage.getItem(
-            "groundXP"
-          ) || 0
-        ),
-
-      level:
-        Number(
-          localStorage.getItem(
-            "groundLevel"
-          ) || 1
-        ),
-
-      streak:
-        Number(
-          localStorage.getItem(
-            "groundStreak"
-          ) || 0
-        )
-
-    };
-
-  }
-
-
-  /* ========================================
-     ПРОВЕРКА УРОКОВ
-  ======================================== */
-
-  function isLessonCompleted(
-    grade,
-    lessonId
-  ) {
-
-    return (
-      localStorage.getItem(
-        `ground_${grade}_lesson_${lessonId}_complete`
-      ) === "true"
-    );
-
-  }
-
-
-  function isLessonUnlocked(
-    grade,
-    lessonId
-  ) {
-
-    lessonId =
-      Number(lessonId);
-
-    if (lessonId === 1) {
-      return true;
-    }
-
-    return isLessonCompleted(
-      grade,
-      lessonId - 1
-    );
-
-  }
-
-
-  /* ========================================
-     ДОРОЖКА ОБУЧЕНИЯ
-  ======================================== */
-
-  function buildLearningRoad() {
-
-    if (!learningRoad) {
-      return;
-    }
-
-    learningRoad.innerHTML = "";
-
-    const grade =
-      localStorage.getItem(
-        "groundGrade"
-      ) || "9";
-
-
-    if (
-      typeof window.GroundDB ===
-      "undefined"
-    ) {
-
-      learningRoad.innerHTML =
-        "<p>Ошибка загрузки базы.</p>";
-
-      return;
-
-    }
-
-
-    const course =
-      window.GroundDB.getCourse(
-        grade
-      );
-
-
-    if (!course) {
-
-      learningRoad.innerHTML =
-        "<p>Курс пока не добавлен.</p>";
-
-      return;
-
-    }
-
-
-    if (courseTitle) {
-
-      courseTitle.textContent =
-        course.title;
-
-    }
-
-
-    course.lessons.forEach(
-      (lesson, index) => {
-
-        const completed =
-          isLessonCompleted(
-            grade,
-            lesson.id
-          );
-
-
-        const unlocked =
-          isLessonUnlocked(
-            grade,
-            lesson.id
-          );
-
-
-        const item =
-          document.createElement(
-            "div"
-          );
-
-
-        item.className =
-          index % 2 === 0
-            ? "road-item road-left"
-            : "road-item road-right";
-
-
-        const node =
-          document.createElement(
-            "button"
-          );
-
-
-        node.type =
-          "button";
-
-
-        node.className =
-          "road-node";
-
-
-        if (completed) {
-
-          node.classList.add(
-            "active-node"
-          );
-
-          node.innerHTML =
-            "✓";
-
-        }
-
-        else if (unlocked) {
-
-          node.classList.add(
-            "active-node"
-          );
-
-          node.innerHTML =
-            lesson.icon ||
-            lesson.id;
-
-        }
-
-        else {
-
-          node.classList.add(
-            "locked-node"
-          );
-
-          node.innerHTML =
-            "🔒";
-
-        }
-
-
-        const info =
-          document.createElement(
-            "div"
-          );
-
-
-        info.className =
-          "road-info";
-
-
-        info.innerHTML = `
-
-          <strong>
-            ${lesson.title}
-          </strong>
-
-          <small>
-
-            ${
-              completed
-                ? "Пройдено ✓"
-                : unlocked
-                ? `+${lesson.rewardXP || 0} XP • +${lesson.rewardGenes || 0} 🧬`
-                : "Заблокировано"
-            }
-
-          </small>
-
-        `;
-
-
-        node.addEventListener(
-          "click",
-          () => {
-
-            if (!unlocked) {
-
-              alert(
-                "🔒 Сначала пройди предыдущий урок."
-              );
-
-              return;
-
-            }
-
-
-            if (
-              typeof window.openGroundLesson ===
-              "function"
-            ) {
-
-              window.openGroundLesson(
-                lesson.id
-              );
-
-            }
-
-            else {
-
-              alert(
-                "Урок пока не удалось открыть."
-              );
-
-            }
-
-          }
-        );
-
-
-        item.appendChild(
-          node
-        );
-
-
-        item.appendChild(
-          info
-        );
-
-
-        learningRoad.appendChild(
-          item
-        );
-
-
-        if (
-          index <
-          course.lessons.length - 1
-        ) {
-
-          const connector =
-            document.createElement(
-              "div"
-            );
-
-
-          connector.className =
-            "auto-road-connector";
-
-
-          connector.innerHTML =
-            "•••••";
-
-
-          learningRoad.appendChild(
-            connector
-          );
-
-        }
-
-      }
-    );
-
-  }
-
-
-  /* ========================================
-     БИБЛИОТЕКА
-  ======================================== */
-
-  function buildLibrary(
-    searchText = ""
-  ) {
-
-    if (
-      !libraryLessons ||
-      !libraryGrade
-    ) {
-      return;
-    }
-
-
-    const grade =
-      localStorage.getItem(
-        "groundGrade"
-      ) || "9";
-
-
-    libraryGrade.textContent =
-      `${grade} класс`;
-
-
-    if (
-      typeof window.GroundDB ===
-      "undefined"
-    ) {
-
-      libraryLessons.innerHTML =
-        "<p>Ошибка загрузки базы.</p>";
-
-      return;
-
-    }
-
-
-    const lessons =
-      window.GroundDB.getLessons(
-        grade
-      ) || [];
-
-
-    const query =
-      String(searchText)
-        .trim()
-        .toLowerCase();
-
-
-    const filtered =
-      lessons.filter(
-        lesson => {
-
-          const title =
-            String(
-              lesson.title || ""
-            ).toLowerCase();
-
-
-          const description =
-            String(
-              lesson.description || ""
-            ).toLowerCase();
-
-
-          return (
-            title.includes(query) ||
-            description.includes(query)
-          );
-
-        }
-      );
-
-
-    libraryLessons.innerHTML =
-      "";
-
-
-    /* ========================================
-       CAMPBELL BIOLOGY — 8 КЛАСС
-    ======================================== */
-
-    const campbellSearchText =
-      "campbell biology кэмпбелл химический контекст жизни глава 2 углубленная биология";
-
-
-    const campbellMatchesSearch =
-      query === "" ||
-      campbellSearchText.includes(
-        query
-      );
-
-
-    if (
-      grade === "8" &&
-      campbellMatchesSearch
-    ) {
-
-      const campbellCard =
-        document.createElement(
-          "button"
-        );
-
-
-      campbellCard.type =
-        "button";
-
-
-      campbellCard.className =
-        "library-card campbell-library-card";
-
-
-      const theoryCompleted =
-        localStorage.getItem(
-          "campbellChapter2TheoryCompleted"
-        ) === "true";
-
-
-      const examCompleted =
-        localStorage.getItem(
-          "campbellChapter2ExamCompleted"
-        ) === "true";
-
-
-      let campbellStatus =
-        "НАЧАТЬ КУРС";
-
-
-      if (theoryCompleted) {
-
-        campbellStatus =
-          "ПРОДОЛЖИТЬ КУРС";
+        return;
 
       }
 
 
-      if (examCompleted) {
-
-        campbellStatus =
-          "ГЛАВА ПРОЙДЕНА ✓";
-
-      }
-
-
-      campbellCard.innerHTML = `
-
-        <div class="library-card-icon">
-          🧬
-        </div>
-
-        <div class="library-card-content">
-
-          <span class="small-label">
-            УГЛУБЛЁННЫЙ КУРС
-          </span>
-
-          <h3>
-            Campbell Biology
-          </h3>
-
-          <p>
-            Глава 2 — Химический контекст жизни
-          </p>
-
-          <div class="library-card-status">
-            ${campbellStatus}
-          </div>
-
-        </div>
-
-        <div class="library-card-arrow">
-          →
-        </div>
-
-      `;
-
-
-      campbellCard.addEventListener(
-        "click",
-        () => {
-
-          updateCampbellProgress();
-
-          changeScreen(
-            libraryScreen,
-            campbellScreen
-          );
-
-        }
-      );
-
-
-      libraryLessons.appendChild(
-        campbellCard
-      );
-
-    }
-
-
-    /* ========================================
-       ОБЫЧНЫЕ УРОКИ
-    ======================================== */
-
-    filtered.forEach(
-      lesson => {
-
-        const completed =
-          isLessonCompleted(
-            grade,
-            lesson.id
-          );
-
-
-        const card =
-          document.createElement(
-            "button"
-          );
-
-
-        card.type =
-          "button";
-
-
-        card.className =
-          "library-card";
-
-
-        card.innerHTML = `
-
-          <div class="library-card-icon">
-            ${lesson.icon || "📖"}
-          </div>
-
-          <div class="library-card-content">
-
-            <h3>
-              ${lesson.title}
-            </h3>
-
-            <p>
-              ${lesson.description || ""}
-            </p>
-
-            <div class="library-card-status">
-
-              ${
-                completed
-                  ? "✓ ПРОЙДЕНО"
-                  : `УРОК ${lesson.id}`
-              }
-
-            </div>
-
-          </div>
-
-          <div class="library-card-arrow">
-            →
-          </div>
-
-        `;
-
-
-        card.addEventListener(
-          "click",
-          () => {
-
-            if (
-              typeof window.openGroundLesson ===
-              "function"
-            ) {
-
-              window.openGroundLesson(
-                lesson.id
-              );
-
-            }
-
-          }
-        );
-
-
-        libraryLessons.appendChild(
-          card
-        );
-
-      }
-    );
-
-
-    const campbellVisible =
-      grade === "8" &&
-      campbellMatchesSearch;
-
-
-    if (
-      filtered.length === 0 &&
-      !campbellVisible
-    ) {
-
-      libraryLessons.innerHTML = `
-
-        <div class="library-empty">
-          🔎 Ничего не найдено
-        </div>
-
-      `;
-
-    }
-
-  }
-
-
-  /* ========================================
-     ПОИСК ПО БИБЛИОТЕКЕ
-  ======================================== */
-
-  if (librarySearchInput) {
-
-    librarySearchInput.addEventListener(
-      "input",
-      () => {
-
-        buildLibrary(
-          librarySearchInput.value
-        );
-
-      }
-    );
-
-  }
-    /* ========================================
-     ДАТА
-  ======================================== */
-
-  function getLocalDateString(date) {
-
-    return (
-      date.getFullYear() +
-      "-" +
-      String(
-        date.getMonth() + 1
-      ).padStart(2, "0") +
-      "-" +
-      String(
-        date.getDate()
-      ).padStart(2, "0")
-    );
-
-  }
-
-
-  /* ========================================
-     ИСТОРИЯ АКТИВНОСТИ
-  ======================================== */
-
-  function getActivityHistory() {
-
-    try {
-
-      const data =
-        JSON.parse(
-          localStorage.getItem(
-            "groundActivity"
-          ) || "[]"
-        );
-
-      return Array.isArray(data)
-        ? data
-        : [];
-
-    }
-
-    catch (error) {
-
-      console.error(
-        "Ошибка groundActivity:",
-        error
-      );
-
-      return [];
-
-    }
-
-  }
-
-
-  /* ========================================
-     КАЛЕНДАРЬ АКТИВНОСТИ
-  ======================================== */
-
-  function buildActivityWeek() {
-
-    if (!activityWeek) {
-      return;
-    }
-
-    const activity =
-      getActivityHistory();
-
-    const activitySet =
-      new Set(activity);
-
-    const today =
-      new Date();
-
-    const todayString =
-      getLocalDateString(
-        today
-      );
-
-    const day =
-      today.getDay();
-
-    const mondayOffset =
-      day === 0
-        ? -6
-        : 1 - day;
-
-    const monday =
-      new Date(today);
-
-    monday.setDate(
-      today.getDate() +
-      mondayOffset
-    );
-
-    const names = [
-      "Пн",
-      "Вт",
-      "Ср",
-      "Чт",
-      "Пт",
-      "Сб",
-      "Вс"
-    ];
-
-    activityWeek.innerHTML =
-      "";
-
-    names.forEach(
-      (name, index) => {
-
-        const date =
-          new Date(monday);
-
-        date.setDate(
-          monday.getDate() +
-          index
-        );
-
-        const dateString =
-          getLocalDateString(
-            date
-          );
-
-        const active =
-          activitySet.has(
-            dateString
-          );
-
-        const isToday =
-          dateString ===
-          todayString;
-
-        const dayElement =
-          document.createElement(
-            "div"
-          );
-
-        dayElement.className =
-          "activity-day";
-
-        if (active) {
-
-          dayElement.classList.add(
-            "activity-done"
-          );
-
-        }
-
-        if (isToday) {
-
-          dayElement.classList.add(
-            "activity-today"
-          );
-
-        }
-
-        dayElement.innerHTML = `
-
-          <span class="activity-day-name">
-            ${name}
-          </span>
-
-          <div class="activity-circle">
-
-            ${
-              active
-                ? "✓"
-                : date.getDate()
-            }
-
-          </div>
-
-        `;
-
-        activityWeek.appendChild(
-          dayElement
-        );
-
-      }
-    );
-
-
-    const player =
-      getPlayerData();
-
-    if (activityStreak) {
-
-      activityStreak.textContent =
-        player.streak;
-
-    }
-
-    if (activityMessage) {
+      /*
+         ENT / OLYMPIAD
+
+         Пока интерфейс подготовлен,
+         контент добавим позже.
+      */
 
       if (
-        activitySet.has(
-          todayString
-        )
+        path === "ent"
       ) {
 
-        activityMessage.textContent =
-          "Отлично! Сегодняшний день уже засчитан 🔥";
+        showGroundToast(
+          "ЕНТ",
+          "Курс подготовки к ЕНТ скоро появится.",
+          "🎯"
+        );
+
+        return;
+
+      }
+
+
+      if (
+        path === "olympiad"
+      ) {
+
+        showGroundToast(
+          "Олимпиада",
+          "Олимпиадный курс скоро появится.",
+          "🏆"
+        );
+
+      }
+
+    }
+  );
+
+});
+
+
+/* =========================================================
+   22. GRADE BACK
+========================================================= */
+
+const gradeBackButton =
+  getById("gradeBackButton");
+
+
+onClick(
+  gradeBackButton,
+  () => {
+
+    changeScreen(
+      gradeScreen,
+      pathScreen
+    );
+
+  }
+);
+
+
+/* =========================================================
+   23. GRADE CARDS
+========================================================= */
+
+$$(
+  ".grade-card"
+).forEach((card) => {
+
+  card.addEventListener(
+    "click",
+    () => {
+
+      const grade =
+        card.dataset.grade;
+
+
+      if (!grade) {
+        return;
+      }
+
+
+      groundState.grade =
+        grade;
+
+
+      saveGroundState();
+
+      updateGlobalStats();
+
+
+      if (
+        typeof buildRoad ===
+        "function"
+      ) {
+
+        buildRoad();
+
+      }
+
+
+      changeScreen(
+        gradeScreen,
+        homeScreen
+      );
+
+
+      showGroundToast(
+        `${grade} класс`,
+        "Курс выбран. Начинаем!",
+        "🧬"
+      );
+
+    }
+  );
+
+});
+
+
+/* =========================================================
+   24. CHANGE GRADE
+========================================================= */
+
+const changeGradeButton =
+  getById("changeGradeButton");
+
+
+onClick(
+  changeGradeButton,
+  () => {
+
+    changeScreen(
+      homeScreen,
+      gradeScreen
+    );
+
+  }
+);
+
+
+/* =========================================================
+   25. MASCOT INTERACTION
+========================================================= */
+
+const groundMascot =
+  $(".ground-mascot");
+
+
+if (groundMascot) {
+
+  groundMascot.addEventListener(
+    "click",
+    () => {
+
+      groundMascot.classList.remove(
+        "pet"
+      );
+
+
+      /*
+         Перезапуск анимации сердечек
+      */
+
+      void groundMascot.offsetWidth;
+
+
+      groundMascot.classList.add(
+        "pet"
+      );
+
+
+      setTimeout(() => {
+
+        groundMascot.classList.remove(
+          "pet"
+        );
+
+      }, 1000);
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   26. INITIAL APP UPDATE
+========================================================= */
+
+updateGlobalStats();
+
+
+/* =========================================================
+   END PART 1
+========================================================= */
+/* =========================================================
+   GROUND — APP.JS
+   PART 2
+   ROAD + LIBRARY + CAMPBELL OPENING
+========================================================= */
+
+
+/* =========================================================
+   27. ROAD DATA
+
+   Пока базовая дорожка.
+   Позже данные уроков будем брать из database.js.
+========================================================= */
+
+const defaultRoadLessons = [
+
+  {
+    id: "lesson-1",
+    number: 1,
+    title: "Основы биологии",
+    description: "Первый шаг",
+    icon: "🧬"
+  },
+
+  {
+    id: "lesson-2",
+    number: 2,
+    title: "Клетка",
+    description: "Строение клетки",
+    icon: "🔬"
+  },
+
+  {
+    id: "lesson-3",
+    number: 3,
+    title: "Химия жизни",
+    description: "Молекулы живых систем",
+    icon: "⚗️"
+  },
+
+  {
+    id: "lesson-4",
+    number: 4,
+    title: "Контрольный уровень",
+    description: "Проверь свои знания",
+    icon: "🏆",
+    boss: true
+  }
+
+];
+
+
+/* =========================================================
+   28. GET ROAD CONTAINER
+========================================================= */
+
+function getRoadContainer() {
+
+  return (
+    getById("learningRoad") ||
+    $(".learning-road")
+  );
+
+}
+
+
+/* =========================================================
+   29. BUILD ROAD
+========================================================= */
+
+function buildRoad() {
+
+  const road =
+    getRoadContainer();
+
+
+  if (!road) {
+    return;
+  }
+
+
+  road.innerHTML = "";
+
+
+  const completed =
+    groundState.completedLessons;
+
+
+  defaultRoadLessons.forEach(
+    (lesson, index) => {
+
+      /* -------------------------
+         ITEM
+      ------------------------- */
+
+      const item =
+        document.createElement("div");
+
+
+      item.className =
+        index % 2 === 0
+          ? "road-item road-left"
+          : "road-item road-right";
+
+
+      /* -------------------------
+         NODE
+      ------------------------- */
+
+      const node =
+        document.createElement("button");
+
+
+      node.type = "button";
+
+      node.className =
+        "road-node";
+
+
+      /*
+         Состояние уровня:
+
+         completed
+         active
+         locked
+      */
+
+      if (
+        index < completed
+      ) {
+
+        node.classList.add(
+          "completed"
+        );
+
+        node.textContent =
+          "✓";
 
       }
 
       else if (
-        player.streak > 0
+        index === completed
       ) {
 
-        activityMessage.textContent =
-          `Пройди урок сегодня, чтобы сохранить серию ${player.streak} 🔥`;
+        node.classList.add(
+          "active"
+        );
+
+        node.textContent =
+          lesson.icon;
 
       }
 
       else {
 
-        activityMessage.textContent =
-          "Пройди урок сегодня и начни новую серию 🔥";
+        node.classList.add(
+          "locked"
+        );
+
+        node.textContent =
+          "🔒";
 
       }
 
-    }
 
-  }
+      /*
+         Boss
+      */
+
+      if (lesson.boss) {
+
+        node.classList.add(
+          "boss"
+        );
+
+      }
 
 
-  /* ========================================
-     КОЛИЧЕСТВО ПРОЙДЕННЫХ УРОКОВ
-  ======================================== */
+      /* -------------------------
+         INFO
+      ------------------------- */
 
-  function getCompletedLessonsCount() {
+      const info =
+        document.createElement("div");
 
-    let total = 0;
 
-    for (
-      let i = 0;
-      i < localStorage.length;
-      i++
-    ) {
+      info.className =
+        "road-info";
 
-      const key =
-        localStorage.key(i);
+
+      const title =
+        document.createElement("strong");
+
+
+      title.textContent =
+        lesson.title;
+
+
+      const description =
+        document.createElement("small");
+
 
       if (
-        key &&
-        key.startsWith("ground_") &&
-        key.includes("_lesson_") &&
-        key.endsWith("_complete") &&
-        localStorage.getItem(key) ===
-          "true"
+        index < completed
       ) {
 
-        total++;
+        description.textContent =
+          "Пройдено ✓";
 
       }
 
-    }
-
-    return total;
-
-  }
-
-
-  /* ========================================
-     ДОСТИЖЕНИЯ
-  ======================================== */
-
-  function buildAchievements(
-    player,
-    completed
-  ) {
-
-    if (!achievementsContainer) {
-      return;
-    }
-
-    const achievements = [
-
-      {
-        icon: "🌱",
-        title: "Первый шаг",
-        description:
-          "Пройди первый урок",
-        unlocked:
-          completed >= 1,
-        progress:
-          `${Math.min(completed, 1)} / 1`
-      },
-
-      {
-        icon: "🧬",
-        title: "Исследователь",
-        description:
-          "Собери 25 генов",
-        unlocked:
-          player.genes >= 25,
-        progress:
-          `${Math.min(player.genes, 25)} / 25`
-      },
-
-      {
-        icon: "🧠",
-        title: "Биолог",
-        description:
-          "Пройди 5 уроков",
-        unlocked:
-          completed >= 5,
-        progress:
-          `${Math.min(completed, 5)} / 5`
-      },
-
-      {
-        icon: "🔥",
-        title: "В ритме",
-        description:
-          "Достигни серии 3 дня",
-        unlocked:
-          player.streak >= 3,
-        progress:
-          `${Math.min(player.streak, 3)} / 3`
-      },
-
-      {
-        icon: "⚡",
-        title: "Неделя силы",
-        description:
-          "Достигни серии 7 дней",
-        unlocked:
-          player.streak >= 7,
-        progress:
-          `${Math.min(player.streak, 7)} / 7`
-      },
-
-      {
-        icon: "⭐",
-        title: "Новый уровень",
-        description:
-          "Достигни 2 уровня",
-        unlocked:
-          player.level >= 2,
-        progress:
-          `${Math.min(player.level, 2)} / 2`
-      }
-
-    ];
-
-    achievementsContainer.innerHTML =
-      "";
-
-    achievements.forEach(
-      achievement => {
-
-        const card =
-          document.createElement(
-            "div"
-          );
-
-        card.className =
-          achievement.unlocked
-            ? "achievement-card unlocked"
-            : "achievement-card";
-
-        card.innerHTML = `
-
-          <div class="achievement-icon">
-            ${achievement.icon}
-          </div>
-
-          <div class="achievement-info">
-
-            <strong>
-              ${achievement.title}
-            </strong>
-
-            <p>
-              ${achievement.description}
-            </p>
-
-          </div>
-
-          <div class="achievement-status">
-
-            ${
-              achievement.unlocked
-                ? "✓"
-                : achievement.progress
-            }
-
-          </div>
-
-        `;
-
-        achievementsContainer.appendChild(
-          card
-        );
-
-      }
-    );
-
-  }
-
-
-  /* ========================================
-     ОБНОВЛЕНИЕ ПРОФИЛЯ
-  ======================================== */
-
-  function updateProfile() {
-
-    const player =
-      getPlayerData();
-
-    const completed =
-      getCompletedLessonsCount();
-
-    const xp =
-      player.xp % 100;
-
-
-    if (profileGrade) {
-
-      profileGrade.textContent =
-        `${player.grade} класс`;
-
-    }
-
-
-    if (profileLevel) {
-
-      profileLevel.textContent =
-        player.level;
-
-    }
-
-
-    if (profileGenes) {
-
-      profileGenes.textContent =
-        player.genes;
-
-    }
-
-
-    if (profileStreak) {
-
-      profileStreak.textContent =
-        player.streak;
-
-    }
-
-
-    if (profileXP) {
-
-      profileXP.textContent =
-        xp;
-
-    }
-
-
-    if (profileXPProgress) {
-
-      profileXPProgress.style.width =
-        `${xp}%`;
-
-    }
-
-
-    if (profileLevelText) {
-
-      profileLevelText.textContent =
-        `Уровень ${player.level}`;
-
-    }
-
-
-    if (profileCompletedLessons) {
-
-      profileCompletedLessons.textContent =
-        completed;
-
-    }
-
-
-    buildActivityWeek();
-
-    buildAchievements(
-      player,
-      completed
-    );
-
-  }
-
-
-  /* ========================================
-     ОБНОВЛЕНИЕ ВСЕГО ИНТЕРФЕЙСА
-  ======================================== */
-
-  function updateUserInterface() {
-
-    const player =
-      getPlayerData();
-
-
-    if (currentGrade) {
-
-      currentGrade.textContent =
-        `${player.grade} класс`;
-
-    }
-
-
-    document
-      .querySelectorAll(
-        ".gene-value"
-      )
-      .forEach(element => {
-
-        element.textContent =
-          player.genes;
-
-      });
-
-
-    if (xpValue) {
-
-      xpValue.textContent =
-        player.xp % 100;
-
-    }
-
-
-    if (levelValue) {
-
-      levelValue.textContent =
-        player.level;
-
-    }
-
-
-    if (streakValue) {
-
-      streakValue.textContent =
-        player.streak;
-
-    }
-
-
-    if (xpProgress) {
-
-      xpProgress.style.width =
-        `${player.xp % 100}%`;
-
-    }
-
-
-    buildLearningRoad();
-
-    updateCampbellProgress();
-
-
-    if (
-      profileScreen &&
-      profileScreen.classList.contains(
-        "active"
-      )
-    ) {
-
-      updateProfile();
-
-    }
-
-  }
-
-
-  /* ========================================
-     HOME → БИБЛИОТЕКА
-  ======================================== */
-
-  const homeLibraryButton =
-    document.querySelector(
-      '#homeScreen [data-nav="library"]'
-    );
-
-
-  if (homeLibraryButton) {
-
-    homeLibraryButton.addEventListener(
-      "click",
-      () => {
-
-        if (librarySearchInput) {
-
-          librarySearchInput.value =
-            "";
-
-        }
-
-        buildLibrary();
-
-        changeScreen(
-          homeScreen,
-          libraryScreen
-        );
-
-      }
-    );
-
-  }
-
-
-  /* ========================================
-     HOME → ПРОФИЛЬ
-  ======================================== */
-
-  const homeProfileButton =
-    document.querySelector(
-      '#homeScreen [data-nav="profile"]'
-    );
-
-
-  if (homeProfileButton) {
-
-    homeProfileButton.addEventListener(
-      "click",
-      () => {
-
-        updateProfile();
-
-        changeScreen(
-          homeScreen,
-          profileScreen
-        );
-
-      }
-    );
-
-  }
-
-
-  /* ========================================
-     HOME → ДОРОЖКА
-  ======================================== */
-
-  const homeRoadButton =
-    document.querySelector(
-      '#homeScreen [data-nav="road"]'
-    );
-
-
-  if (homeRoadButton) {
-
-    homeRoadButton.addEventListener(
-      "click",
-      () => {
-
-        if (learningRoad) {
-
-          learningRoad.scrollIntoView({
-            behavior: "smooth"
-          });
-
-        }
-
-      }
-    );
-
-  }
-
-
-  /* ========================================
-     БИБЛИОТЕКА → HOME
-  ======================================== */
-
-  const libraryHomeButton =
-    document.querySelector(
-      ".library-home-button"
-    );
-
-
-  if (libraryHomeButton) {
-
-    libraryHomeButton.addEventListener(
-      "click",
-      () => {
-
-        updateUserInterface();
-
-        changeScreen(
-          libraryScreen,
-          homeScreen
-        );
-
-      }
-    );
-
-  }
-
-
-  /* ========================================
-     БИБЛИОТЕКА → ДОРОЖКА
-  ======================================== */
-
-  const libraryRoadButton =
-    document.querySelector(
-      ".library-road-button"
-    );
-
-
-  if (libraryRoadButton) {
-
-    libraryRoadButton.addEventListener(
-      "click",
-      () => {
-
-        changeScreen(
-          libraryScreen,
-          homeScreen
-        );
-
-        setTimeout(
-          () => {
-
-            if (learningRoad) {
-
-              learningRoad.scrollIntoView({
-                behavior: "smooth"
-              });
-
-            }
-
-          },
-          400
-        );
-
-      }
-    );
-
-  }
-
-
-  /* ========================================
-     БИБЛИОТЕКА → ПРОФИЛЬ
-  ======================================== */
-
-  const libraryProfileButton =
-    document.querySelector(
-      ".library-profile-button"
-    );
-
-
-  if (libraryProfileButton) {
-
-    libraryProfileButton.addEventListener(
-      "click",
-      () => {
-
-        updateProfile();
-
-        changeScreen(
-          libraryScreen,
-          profileScreen
-        );
-
-      }
-    );
-
-  }
-
-
-  /* ========================================
-     ПРОФИЛЬ → HOME
-  ======================================== */
-
-  const profileHomeButton =
-    document.querySelector(
-      ".profile-home-button"
-    );
-
-
-  if (profileHomeButton) {
-
-    profileHomeButton.addEventListener(
-      "click",
-      () => {
-
-        updateUserInterface();
-
-        changeScreen(
-          profileScreen,
-          homeScreen
-        );
-
-      }
-    );
-
-  }
-
-
-  /* ========================================
-     ПРОФИЛЬ → БИБЛИОТЕКА
-  ======================================== */
-
-  const profileLibraryButton =
-    document.querySelector(
-      ".profile-library-button"
-    );
-
-
-  if (profileLibraryButton) {
-
-    profileLibraryButton.addEventListener(
-      "click",
-      () => {
-
-        if (librarySearchInput) {
-
-          librarySearchInput.value =
-            "";
-
-        }
-
-        buildLibrary();
-
-        changeScreen(
-          profileScreen,
-          libraryScreen
-        );
-
-      }
-    );
-
-  }
-
-
-  /* ========================================
-     ПРОФИЛЬ → ДОРОЖКА
-  ======================================== */
-
-  const profileRoadButton =
-    document.querySelector(
-      ".profile-road-button"
-    );
-
-
-  if (profileRoadButton) {
-
-    profileRoadButton.addEventListener(
-      "click",
-      () => {
-
-        changeScreen(
-          profileScreen,
-          homeScreen
-        );
-
-        setTimeout(
-          () => {
-
-            if (learningRoad) {
-
-              learningRoad.scrollIntoView({
-                behavior: "smooth"
-              });
-
-            }
-
-          },
-          400
-        );
-
-      }
-    );
-
-  }
-
-
-  /* ========================================
-     НАСТРОЙКИ
-  ======================================== */
-
-  const settingsButton =
-    document.getElementById(
-      "settingsButton"
-    );
-
-
-  if (settingsButton) {
-
-    settingsButton.addEventListener(
-      "click",
-      () => {
-
-        alert(
-          "⚙️ Настройки добавим позже."
-        );
-
-      }
-    );
-
-  }
-
-
-  /* ========================================
-     CAMPBELL READER
-     ГЛАВА 2 — СТРАНИЦЫ ФАЙЛА 47–66
-  ======================================== */
-
-  const CAMPBELL_FIRST_PAGE = 47;
-  const CAMPBELL_LAST_PAGE = 66;
-
-  const CAMPBELL_TOTAL_PAGES =
-    CAMPBELL_LAST_PAGE -
-    CAMPBELL_FIRST_PAGE +
-    1;
-
-
-  /*
-    Текущая страница сохраняется.
-
-    Если ученик закрыл сайт на странице 54,
-    при возвращении он продолжит с 54.
-  */
-
-  let campbellCurrentPage =
-    Number(
-      localStorage.getItem(
-        "campbellChapter2CurrentPage"
-      ) || CAMPBELL_FIRST_PAGE
-    );
-
-
-  /*
-    Защита на случай повреждённого
-    значения localStorage.
-  */
-
-  if (
-    campbellCurrentPage <
-    CAMPBELL_FIRST_PAGE ||
-    campbellCurrentPage >
-    CAMPBELL_LAST_PAGE
-  ) {
-
-    campbellCurrentPage =
-      CAMPBELL_FIRST_PAGE;
-
-  }
-
-
-  /* ========================================
-     МАКСИМАЛЬНО ПРОЧИТАННАЯ СТРАНИЦА
-  ======================================== */
-
-  let campbellMaxReadPage =
-    Number(
-      localStorage.getItem(
-        "campbellChapter2MaxReadPage"
-      ) || CAMPBELL_FIRST_PAGE
-    );
-
-
-  if (
-    campbellMaxReadPage <
-    CAMPBELL_FIRST_PAGE
-  ) {
-
-    campbellMaxReadPage =
-      CAMPBELL_FIRST_PAGE;
-
-  }
-
-
-  if (
-    campbellMaxReadPage >
-    CAMPBELL_LAST_PAGE
-  ) {
-
-    campbellMaxReadPage =
-      CAMPBELL_LAST_PAGE;
-
-  }
-
-
-  /* ========================================
-     ПУТЬ К СТРАНИЦАМ КНИГИ
-
-     Файлы должны лежать:
-
-     assets/campbell/chapter2/page-47.jpg
-     assets/campbell/chapter2/page-48.jpg
-     ...
-     assets/campbell/chapter2/page-66.jpg
-  ======================================== */
-
-  function getCampbellPagePath(
-    page
-  ) {
-
-    return (
-      `assets/campbell/chapter2/page-${page}.jpg`
-    );
-
-  }
-
-
-  /* ========================================
-     ПРОЦЕНТ ПРОЧТЕНИЯ
-  ======================================== */
-
-  function getCampbellReadingPercent() {
-
-    const readPages =
-      campbellMaxReadPage -
-      CAMPBELL_FIRST_PAGE +
-      1;
-
-    const percent =
-      Math.round(
-        (
-          readPages /
-          CAMPBELL_TOTAL_PAGES
-        ) * 100
-      );
-
-    return Math.min(
-      100,
-      Math.max(
-        0,
-        percent
-      )
-    );
-
-  }
-
-
-  /* ========================================
-     СОХРАНИТЬ ПРОГРЕСС ЧТЕНИЯ
-  ======================================== */
-
-  function saveCampbellReadingProgress() {
-
-    localStorage.setItem(
-      "campbellChapter2CurrentPage",
-      String(
-        campbellCurrentPage
-      )
-    );
-
-
-    if (
-      campbellCurrentPage >
-      campbellMaxReadPage
-    ) {
-
-      campbellMaxReadPage =
-        campbellCurrentPage;
-
-      localStorage.setItem(
-        "campbellChapter2MaxReadPage",
-        String(
-          campbellMaxReadPage
-        )
-      );
-
-    }
-
-
-    /*
-      Только достижение последней страницы
-      разблокирует экзамен.
-    */
-
-    if (
-      campbellMaxReadPage >=
-      CAMPBELL_LAST_PAGE
-    ) {
-
-      localStorage.setItem(
-        "campbellChapter2TheoryCompleted",
-        "true"
-      );
-
-    }
-
-  }
-
-
-  /* ========================================
-     ОБНОВИТЬ READER
-  ======================================== */
-
-  function renderCampbellReader() {
-
-    saveCampbellReadingProgress();
-
-
-    const percent =
-      getCampbellReadingPercent();
-
-
-    if (campbellReaderPageNumber) {
-
-      campbellReaderPageNumber.textContent =
-        `Страница ${campbellCurrentPage} из ${CAMPBELL_LAST_PAGE}`;
-
-    }
-
-
-    if (campbellReaderPageTop) {
-
-      campbellReaderPageTop.textContent =
-        `${campbellCurrentPage}`;
-
-    }
-
-
-    if (campbellReaderProgressFill) {
-
-      campbellReaderProgressFill.style.width =
-        `${percent}%`;
-
-    }
-
-
-    if (campbellReadingPercent) {
-
-      campbellReadingPercent.textContent =
-        `${percent}%`;
-
-    }
-
-
-    if (campbellReadingProgress) {
-
-      campbellReadingProgress.style.width =
-        `${percent}%`;
-
-    }
-
-
-    if (campbellReaderPrevButton) {
-
-      campbellReaderPrevButton.disabled =
-        campbellCurrentPage <=
-        CAMPBELL_FIRST_PAGE;
-
-    }
-
-
-    if (campbellReaderNextButton) {
-
-      if (
-        campbellCurrentPage >=
-        CAMPBELL_LAST_PAGE
+      else if (
+        index === completed
       ) {
 
-        campbellReaderNextButton.textContent =
-          "Материал изучен ✓";
+        description.textContent =
+          lesson.description;
 
       }
 
       else {
 
-        campbellReaderNextButton.textContent =
-          "Следующая →";
-
-      }
-
-    }
-
-
-    if (campbellReaderImage) {
-
-      if (campbellReaderLoading) {
-
-        campbellReaderLoading.style.display =
-          "flex";
+        description.textContent =
+          "Сначала пройди предыдущий уровень";
 
       }
 
 
-      campbellReaderImage.style.opacity =
-        "0";
+      info.append(
+        title,
+        description
+      );
 
 
-      campbellReaderImage.onload =
+      /* -------------------------
+         CLICK
+      ------------------------- */
+
+      node.addEventListener(
+        "click",
         () => {
-
-          if (campbellReaderLoading) {
-
-            campbellReaderLoading.style.display =
-              "none";
-
-          }
-
-          campbellReaderImage.style.opacity =
-            "1";
-
-      };
-
-
-      campbellReaderImage.onerror =
-        () => {
-
-          if (campbellReaderLoading) {
-
-            campbellReaderLoading.style.display =
-              "none";
-
-          }
-
-          console.error(
-            `Не удалось загрузить страницу ${campbellCurrentPage}`
-          );
-
-      };
-
-
-      campbellReaderImage.src =
-        getCampbellPagePath(
-          campbellCurrentPage
-        );
-
-    }
-
-
-    updateCampbellProgress();
-
-  }
-
-
-  /* ========================================
-     ПРЕДЫДУЩАЯ СТРАНИЦА
-  ======================================== */
-
-  if (campbellReaderPrevButton) {
-
-    campbellReaderPrevButton.addEventListener(
-      "click",
-      () => {
-
-        if (
-          campbellCurrentPage <=
-          CAMPBELL_FIRST_PAGE
-        ) {
-          return;
-        }
-
-        campbellCurrentPage--;
-
-        renderCampbellReader();
-
-        window.scrollTo({
-          top: 0,
-          behavior: "smooth"
-        });
-
-      }
-    );
-
-  }
-
-
-  /* ========================================
-     СЛЕДУЮЩАЯ СТРАНИЦА
-  ======================================== */
-
-  if (campbellReaderNextButton) {
-
-    campbellReaderNextButton.addEventListener(
-      "click",
-      () => {
-
-        if (
-          campbellCurrentPage <
-          CAMPBELL_LAST_PAGE
-        ) {
-
-          campbellCurrentPage++;
-
-          renderCampbellReader();
-
-          window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-          });
-
-          return;
-
-        }
-
-
-        /*
-          Последняя страница уже достигнута.
-        */
-
-        localStorage.setItem(
-          "campbellChapter2TheoryCompleted",
-          "true"
-        );
-
-        updateCampbellProgress();
-
-        changeScreen(
-          campbellTheoryScreen,
-          campbellScreen
-        );
-
-      }
-    );
-
-  }
-
-
-  /* ========================================
-     CAMPBELL — ПРОГРЕСС КУРСА
-  ======================================== */
-
-  function updateCampbellProgress() {
-
-    const theoryCompleted =
-      localStorage.getItem(
-        "campbellChapter2TheoryCompleted"
-      ) === "true";
-
-
-    const examCompleted =
-      localStorage.getItem(
-        "campbellChapter2ExamCompleted"
-      ) === "true";
-
-
-    const readingPercent =
-      theoryCompleted
-        ? 100
-        : getCampbellReadingPercent();
-
-
-    /*
-      Чтение = половина главы.
-      Экзамен = вторая половина.
-    */
-
-    let progress =
-      Math.round(
-        readingPercent * 0.5
-      );
-
-
-    if (examCompleted) {
-
-      progress =
-        100;
-
-    }
-
-
-    if (campbellProgressText) {
-
-      campbellProgressText.textContent =
-        `${progress}%`;
-
-    }
-
-
-    if (campbellProgressBar) {
-
-      campbellProgressBar.style.width =
-        `${progress}%`;
-
-    }
-
-
-    if (campbellReadingPercent) {
-
-      campbellReadingPercent.textContent =
-        `${readingPercent}%`;
-
-    }
-
-
-    if (campbellReadingProgress) {
-
-      campbellReadingProgress.style.width =
-        `${readingPercent}%`;
-
-    }
-
-
-    /* ======================================
-       ТЕОРИЯ ПРОЙДЕНА
-    ====================================== */
-
-    if (theoryCompleted) {
-
-      if (campbellExamButton) {
-
-        campbellExamButton.classList.remove(
-          "locked"
-        );
-
-
-        const examIcon =
-          campbellExamButton.querySelector(
-            ".campbell-action-icon"
-          );
-
-
-        if (examIcon) {
-
-          examIcon.textContent =
-            examCompleted
-              ? "✅"
-              : "📝";
-
-        }
-
-      }
-
-
-      if (campbellExamStatus) {
-
-        campbellExamStatus.textContent =
-          examCompleted
-            ? "Экзамен пройден ✓"
-            : "Экзамен доступен";
-
-      }
-
-    }
-
-
-    /* ======================================
-       ТЕОРИЯ ЕЩЁ НЕ ПРОЙДЕНА
-    ====================================== */
-
-    else {
-
-      if (campbellExamButton) {
-
-        campbellExamButton.classList.add(
-          "locked"
-        );
-
-
-        const examIcon =
-          campbellExamButton.querySelector(
-            ".campbell-action-icon"
-          );
-
-
-        if (examIcon) {
-
-          examIcon.textContent =
-            "🔒";
-
-        }
-
-      }
-
-
-      if (campbellExamStatus) {
-
-        campbellExamStatus.textContent =
-          `Прочитано ${readingPercent}%`;
-
-      }
-
-    }
-
-  }
-
-
-  /* ========================================
-     CAMPBELL → БИБЛИОТЕКА
-  ======================================== */
-
-  if (campbellBackButton) {
-
-    campbellBackButton.addEventListener(
-      "click",
-      () => {
-
-        if (librarySearchInput) {
-
-          librarySearchInput.value =
-            "";
-
-        }
-
-        buildLibrary();
-
-        changeScreen(
-          campbellScreen,
-          libraryScreen
-        );
-
-      }
-    );
-
-  }
-
-
-  /* ========================================
-     CAMPBELL → ЧТЕНИЕ
-  ======================================== */
-
-  if (campbellTheoryButton) {
-
-    campbellTheoryButton.addEventListener(
-      "click",
-      () => {
-
-        renderCampbellReader();
-
-        changeScreen(
-          campbellScreen,
-          campbellTheoryScreen
-        );
-
-      }
-    );
-
-  }
-
-
-  /* ========================================
-     ЧТЕНИЕ → CAMPBELL
-  ======================================== */
-
-  if (campbellTheoryBackButton) {
-
-    campbellTheoryBackButton.addEventListener(
-      "click",
-      () => {
-
-        saveCampbellReadingProgress();
-
-        updateCampbellProgress();
-
-        changeScreen(
-          campbellTheoryScreen,
-          campbellScreen
-        );
-
-      }
-    );
-
-  }
-
-
-  /* ========================================
-     СТАРАЯ КНОПКА "ЗАВЕРШИТЬ"
-
-     Теперь нельзя нажать её раньше
-     последней страницы.
-  ======================================== */
-
-  if (completeCampbellTheoryButton) {
-
-    completeCampbellTheoryButton.addEventListener(
-      "click",
-      () => {
-
-        if (
-          campbellMaxReadPage <
-          CAMPBELL_LAST_PAGE
-        ) {
-
-          alert(
-            `📖 Сначала дочитай материал до страницы ${CAMPBELL_LAST_PAGE}.`
-          );
-
-          return;
-
-        }
-
-
-        localStorage.setItem(
-          "campbellChapter2TheoryCompleted",
-          "true"
-        );
-
-
-        updateCampbellProgress();
-
-
-        changeScreen(
-          campbellTheoryScreen,
-          campbellScreen
-        );
-
-      }
-    );
-
-  }
-    /* ========================================
-     CAMPBELL — ВОПРОСЫ ЭКЗАМЕНА
-
-     Пока здесь 10 рабочих вопросов.
-     Потом заменим их вопросами
-     из твоего файла экзамена.
-  ======================================== */
-
-  const campbellQuestions = [
-
-    {
-      question:
-        "Какой элемент составляет основу органических молекул?",
-
-      answers: [
-        "Кислород",
-        "Углерод",
-        "Натрий",
-        "Кальций"
-      ],
-
-      correct: 1,
-
-      explanation:
-        "Углерод способен образовывать четыре ковалентные связи, благодаря чему может создавать разнообразные молекулярные структуры."
-    },
-
-    {
-      question:
-        "Что определяет принадлежность атома к определённому химическому элементу?",
-
-      answers: [
-        "Количество нейтронов",
-        "Количество электронных оболочек",
-        "Количество протонов",
-        "Масса атома"
-      ],
-
-      correct: 2,
-
-      explanation:
-        "Атомный номер элемента определяется числом протонов в ядре. Именно количество протонов определяет химический элемент."
-    },
-
-    {
-      question:
-        "Какая частица атома имеет отрицательный электрический заряд?",
-
-      answers: [
-        "Протон",
-        "Нейтрон",
-        "Электрон",
-        "Ядро"
-      ],
-
-      correct: 2,
-
-      explanation:
-        "Электроны имеют отрицательный заряд. Протоны заряжены положительно, а нейтроны электрически нейтральны."
-    },
-
-    {
-      question:
-        "Где находится почти вся масса атома?",
-
-      answers: [
-        "В электронных оболочках",
-        "В ядре",
-        "В валентной оболочке",
-        "Между электронами"
-      ],
-
-      correct: 1,
-
-      explanation:
-        "Протоны и нейтроны находятся в ядре и обладают значительно большей массой, чем электроны, поэтому почти вся масса атома сосредоточена в ядре."
-    },
-
-    {
-      question:
-        "Что такое изотопы одного химического элемента?",
-
-      answers: [
-        "Атомы с разным числом протонов",
-        "Атомы с одинаковым числом нейтронов",
-        "Атомы с одинаковым числом протонов, но разным числом нейтронов",
-        "Молекулы с одинаковой массой"
-      ],
-
-      correct: 2,
-
-      explanation:
-        "Изотопы принадлежат одному элементу, поэтому имеют одинаковое количество протонов, но отличаются количеством нейтронов."
-    },
-
-    {
-      question:
-        "Какие электроны в основном определяют химические свойства атома?",
-
-      answers: [
-        "Электроны первой оболочки",
-        "Валентные электроны",
-        "Все электроны одинаково",
-        "Только спаренные электроны"
-      ],
-
-      correct: 1,
-
-      explanation:
-        "В химических взаимодействиях особенно важны электроны внешней электронной оболочки — валентные электроны."
-    },
-
-    {
-      question:
-        "Что происходит при образовании ковалентной связи?",
-
-      answers: [
-        "Атомы совместно используют пару валентных электронов",
-        "Один атом полностью теряет ядро",
-        "Протоны переходят между атомами",
-        "Нейтроны объединяются"
-      ],
-
-      correct: 0,
-
-      explanation:
-        "Ковалентная связь возникает, когда два атома совместно используют одну или несколько пар валентных электронов."
-    },
-
-    {
-      question:
-        "Что образуется, если атом теряет или приобретает электрон?",
-
-      answers: [
-        "Изотоп",
-        "Ион",
-        "Нейтрон",
-        "Новая молекула обязательно"
-      ],
-
-      correct: 1,
-
-      explanation:
-        "Потеря или приобретение электронов изменяет электрический заряд атома. Такой заряженный атом или молекула называется ионом."
-    },
-
-    {
-      question:
-        "Какая связь возникает благодаря притяжению противоположно заряженных ионов?",
-
-      answers: [
-        "Ковалентная",
-        "Водородная",
-        "Ионная",
-        "Пептидная"
-      ],
-
-      correct: 2,
-
-      explanation:
-        "Положительно и отрицательно заряженные ионы притягиваются друг к другу. Это электростатическое притяжение называют ионной связью."
-    },
-
-    {
-      question:
-        "Что происходит с веществом во время химической реакции?",
-
-      answers: [
-        "Атомы исчезают",
-        "Создаются новые химические элементы",
-        "Атомы реагентов перегруппировываются и образуют продукты",
-        "Протоны превращаются в электроны"
-      ],
-
-      correct: 2,
-
-      explanation:
-        "Во время химической реакции атомы не исчезают. Связи между ними изменяются, и атомы реагентов перегруппировываются, образуя продукты реакции."
-    }
-
-  ];
-
-
-  /* ========================================
-     СОСТОЯНИЕ ЭКЗАМЕНА
-  ======================================== */
-
-  let campbellExamIndex = 0;
-
-  let campbellSelectedAnswer =
-    null;
-
-  let campbellExamAnswersData =
-    [];
-
-  let campbellCorrectAnswers =
-    0;
-
-  let campbellExamSeconds =
-    20 * 60;
-
-  let campbellExamTimerId =
-    null;
-
-  let campbellExamStartedAt =
-    null;
-
-  let campbellLastResult =
-    null;
-
-
-  /* ========================================
-     ЭЛЕМЕНТЫ НОВОГО HTML
-  ======================================== */
-
-  const campbellQuestionCounter =
-    document.getElementById(
-      "campbellQuestionCounter"
-    );
-
-  const campbellExamScore =
-    document.getElementById(
-      "campbellExamScore"
-    );
-
-  const campbellQuestionText =
-    document.getElementById(
-      "campbellQuestionText"
-    );
-
-  const campbellExamProgress =
-    document.getElementById(
-      "campbellExamProgress"
-    );
-
-  const campbellResultProgress =
-    document.getElementById(
-      "campbellResultProgress"
-    );
-
-  const campbellCorrectCount =
-    document.getElementById(
-      "campbellCorrectCount"
-    );
-
-  const campbellWrongCount =
-    document.getElementById(
-      "campbellWrongCount"
-    );
-
-  const campbellTotalCount =
-    document.getElementById(
-      "campbellTotalCount"
-    );
-
-  const campbellResultIcon =
-    document.getElementById(
-      "campbellResultIcon"
-    );
-
-
-  /* ========================================
-     ФОРМАТ ВРЕМЕНИ
-  ======================================== */
-
-  function formatCampbellTime(
-    seconds
-  ) {
-
-    const minutes =
-      Math.floor(
-        seconds / 60
-      );
-
-    const remainingSeconds =
-      seconds % 60;
-
-    return (
-      String(minutes)
-        .padStart(2, "0") +
-      ":" +
-      String(remainingSeconds)
-        .padStart(2, "0")
-    );
-
-  }
-
-
-  /* ========================================
-     ОБНОВИТЬ ТАЙМЕР
-  ======================================== */
-
-  function updateCampbellTimer() {
-
-    if (!campbellExamTimer) {
-      return;
-    }
-
-
-    campbellExamTimer.textContent =
-      `⏱️ ${formatCampbellTime(
-        campbellExamSeconds
-      )}`;
-
-
-    campbellExamTimer.classList.remove(
-      "warning",
-      "danger"
-    );
-
-
-    if (
-      campbellExamSeconds <= 60
-    ) {
-
-      campbellExamTimer.classList.add(
-        "danger"
-      );
-
-    }
-
-    else if (
-      campbellExamSeconds <= 300
-    ) {
-
-      campbellExamTimer.classList.add(
-        "warning"
-      );
-
-    }
-
-  }
-
-
-  /* ========================================
-     ОСТАНОВИТЬ ТАЙМЕР
-  ======================================== */
-
-  function stopCampbellTimer() {
-
-    if (
-      campbellExamTimerId !==
-      null
-    ) {
-
-      clearInterval(
-        campbellExamTimerId
-      );
-
-      campbellExamTimerId =
-        null;
-
-    }
-
-  }
-
-
-  /* ========================================
-     ЗАПУСТИТЬ ТАЙМЕР
-  ======================================== */
-
-  function startCampbellTimer() {
-
-    stopCampbellTimer();
-
-    updateCampbellTimer();
-
-
-    campbellExamTimerId =
-      setInterval(
-        () => {
-
-          campbellExamSeconds--;
-
 
           if (
-            campbellExamSeconds <= 0
+            index > groundState.completedLessons
           ) {
 
-            campbellExamSeconds =
-              0;
-
-            updateCampbellTimer();
-
-            stopCampbellTimer();
-
-            finishCampbellExam(
-              true
+            showGroundToast(
+              "Уровень закрыт",
+              "Сначала пройди предыдущий урок.",
+              "🔒"
             );
 
             return;
@@ -3276,1769 +1290,1639 @@ document.addEventListener("DOMContentLoaded", () => {
           }
 
 
-          updateCampbellTimer();
+          /*
+             Пока открытие обычного урока
+             передадим player.js.
 
-        },
-        1000
+             Если функция существует —
+             запускаем её.
+          */
+
+          if (
+            typeof window.startLesson ===
+            "function"
+          ) {
+
+            window.startLesson(
+              lesson.id
+            );
+
+            return;
+
+          }
+
+
+          showGroundToast(
+            lesson.title,
+            "Урок подключим через player.js.",
+            "📚"
+          );
+
+        }
       );
+
+
+      item.append(
+        node,
+        info
+      );
+
+
+      road.appendChild(
+        item
+      );
+
+
+      /* -------------------------
+         CONNECTOR
+      ------------------------- */
+
+      if (
+        index <
+        defaultRoadLessons.length - 1
+      ) {
+
+        const connector =
+          document.createElement("div");
+
+
+        connector.className =
+          "auto-road-connector";
+
+
+        connector.textContent =
+          "•••";
+
+
+        road.appendChild(
+          connector
+        );
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   30. LIBRARY DATA
+========================================================= */
+
+const defaultLibraryLessons = [
+
+  {
+    id: "school-cell",
+    icon: "🔬",
+    title: "Клетка",
+    description:
+      "Строение и основные функции клетки"
+  },
+
+  {
+    id: "school-dna",
+    icon: "🧬",
+    title: "ДНК и наследственность",
+    description:
+      "Основы генетической информации"
+  },
+
+  {
+    id: "school-metabolism",
+    icon: "⚡",
+    title: "Обмен веществ",
+    description:
+      "Энергия и процессы в организме"
+  }
+
+];
+
+
+/* =========================================================
+   31. FIND LIBRARY LIST
+========================================================= */
+
+function getLibraryList() {
+
+  return (
+    getById("libraryList") ||
+    $(".library-list")
+  );
+
+}
+
+
+/* =========================================================
+   32. BUILD LIBRARY
+========================================================= */
+
+function buildLibrary() {
+
+  /*
+     Сначала обновляем класс.
+  */
+
+  setText(
+    "libraryGrade",
+    `${groundState.grade} класс`
+  );
+
+
+  const list =
+    getLibraryList();
+
+
+  if (!list) {
+
+    /*
+       Если список уроков в HTML
+       называется иначе — приложение
+       всё равно продолжит работать.
+    */
+
+    return;
 
   }
 
 
-  /* ========================================
-     ЗАПУСТИТЬ ЭКЗАМЕН
-  ======================================== */
+  list.innerHTML = "";
 
-  function startCampbellExam() {
 
-    const theoryCompleted =
+  defaultLibraryLessons.forEach(
+    (lesson) => {
+
+      const button =
+        document.createElement("button");
+
+
+      button.type =
+        "button";
+
+
+      button.className =
+        "library-lesson-card";
+
+
+      /* -------------------------
+         ICON
+      ------------------------- */
+
+      const icon =
+        document.createElement("div");
+
+
+      icon.className =
+        "library-lesson-icon";
+
+
+      icon.textContent =
+        lesson.icon;
+
+
+      /* -------------------------
+         INFO
+      ------------------------- */
+
+      const info =
+        document.createElement("div");
+
+
+      info.className =
+        "library-lesson-info";
+
+
+      const title =
+        document.createElement("strong");
+
+
+      title.textContent =
+        lesson.title;
+
+
+      const description =
+        document.createElement("p");
+
+
+      description.textContent =
+        lesson.description;
+
+
+      info.append(
+        title,
+        description
+      );
+
+
+      /* -------------------------
+         ARROW
+      ------------------------- */
+
+      const arrow =
+        document.createElement("span");
+
+
+      arrow.textContent =
+        "→";
+
+
+      arrow.style.color =
+        "var(--green)";
+
+
+      arrow.style.fontWeight =
+        "900";
+
+
+      /* -------------------------
+         CLICK
+      ------------------------- */
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          if (
+            typeof window.startLesson ===
+            "function"
+          ) {
+
+            window.startLesson(
+              lesson.id
+            );
+
+            return;
+
+          }
+
+
+          showGroundToast(
+            lesson.title,
+            "Этот урок подключим через database.js.",
+            lesson.icon
+          );
+
+        }
+      );
+
+
+      button.append(
+        icon,
+        info,
+        arrow
+      );
+
+
+      list.appendChild(
+        button
+      );
+
+    }
+  );
+
+
+  /*
+     После построения библиотеки
+     применяем поиск.
+  */
+
+  applyLibrarySearch();
+
+}
+
+
+/* =========================================================
+   33. LIBRARY SEARCH
+========================================================= */
+
+const librarySearchInput =
+  getById("librarySearchInput");
+
+
+function applyLibrarySearch() {
+
+  if (!librarySearchInput) {
+    return;
+  }
+
+
+  const query =
+    librarySearchInput.value
+      .trim()
+      .toLowerCase();
+
+
+  $$(
+    ".library-lesson-card"
+  ).forEach((card) => {
+
+    const text =
+      card.textContent
+        .toLowerCase();
+
+
+    card.hidden =
+      query.length > 0 &&
+      !text.includes(query);
+
+  });
+
+}
+
+
+if (librarySearchInput) {
+
+  librarySearchInput.addEventListener(
+    "input",
+    applyLibrarySearch
+  );
+
+}
+
+
+/* =========================================================
+   34. CAMPBELL LIBRARY CARD
+========================================================= */
+
+const campbellLibraryCard =
+  getById("campbellLibraryCard") ||
+  $(".campbell-library-card");
+
+
+onClick(
+  campbellLibraryCard,
+  () => {
+
+    updateCampbellChapterScreen();
+
+
+    changeScreen(
+      libraryScreen,
+      campbellScreen
+    );
+
+  }
+);
+
+
+/* =========================================================
+   35. CAMPBELL BACK
+========================================================= */
+
+const campbellBackButton =
+  getById("campbellBackButton");
+
+
+onClick(
+  campbellBackButton,
+  () => {
+
+    buildLibrary();
+
+
+    changeScreen(
+      campbellScreen,
+      libraryScreen
+    );
+
+  }
+);
+
+
+/* =========================================================
+   36. CAMPBELL THEORY BACK
+========================================================= */
+
+const campbellTheoryBackButton =
+  getById(
+    "campbellTheoryBackButton"
+  );
+
+
+onClick(
+  campbellTheoryBackButton,
+  () => {
+
+    updateCampbellChapterScreen();
+
+
+    changeScreen(
+      campbellTheoryScreen,
+      campbellScreen
+    );
+
+  }
+);
+
+
+/* =========================================================
+   37. CAMPBELL EXAM BACK
+========================================================= */
+
+const campbellExamBackButton =
+  getById(
+    "campbellExamBackButton"
+  );
+
+
+onClick(
+  campbellExamBackButton,
+  () => {
+
+    /*
+       Сам таймер экзамена
+       остановим в части экзамена.
+    */
+
+    if (
+      typeof stopCampbellExamTimer ===
+      "function"
+    ) {
+
+      stopCampbellExamTimer();
+
+    }
+
+
+    updateCampbellChapterScreen();
+
+
+    changeScreen(
+      campbellExamScreen,
+      campbellScreen
+    );
+
+  }
+);
+
+
+/* =========================================================
+   38. CAMPBELL REVIEW BACK
+========================================================= */
+
+const campbellReviewBackButton =
+  getById(
+    "campbellReviewBackButton"
+  );
+
+
+onClick(
+  campbellReviewBackButton,
+  () => {
+
+    changeScreen(
+      campbellReviewScreen,
+      campbellResultScreen
+    );
+
+  }
+);
+
+
+/* =========================================================
+   39. CAMPBELL STATE
+========================================================= */
+
+const campbellState = {
+
+  startPage:
+    47,
+
+  endPage:
+    66,
+
+  currentPage:
+    getNumber(
+      "campbellChapter2CurrentPage",
+      47
+    ),
+
+  theoryCompleted:
+    localStorage.getItem(
+      "campbellChapter2TheoryCompleted"
+    ) === "true"
+
+};
+
+
+/* =========================================================
+   40. FIX CAMPBELL PAGE RANGE
+========================================================= */
+
+if (
+  campbellState.currentPage <
+  campbellState.startPage
+) {
+
+  campbellState.currentPage =
+    campbellState.startPage;
+
+}
+
+
+if (
+  campbellState.currentPage >
+  campbellState.endPage
+) {
+
+  campbellState.currentPage =
+    campbellState.endPage;
+
+}
+
+
+/* =========================================================
+   41. CAMPBELL READING PERCENT
+========================================================= */
+
+function getCampbellReadingPercent() {
+
+  if (
+    campbellState.theoryCompleted
+  ) {
+
+    return 100;
+
+  }
+
+
+  const total =
+    campbellState.endPage -
+    campbellState.startPage +
+    1;
+
+
+  const read =
+    campbellState.currentPage -
+    campbellState.startPage +
+    1;
+
+
+  return Math.round(
+    (read / total) * 100
+  );
+
+}
+
+
+/* =========================================================
+   42. UPDATE CAMPBELL CHAPTER SCREEN
+========================================================= */
+
+function updateCampbellChapterScreen() {
+
+  const readingPercent =
+    getCampbellReadingPercent();
+
+
+  setText(
+    "campbellReadingPercent",
+    `${readingPercent}%`
+  );
+
+
+  setProgress(
+    "campbellReadingProgress",
+    readingPercent
+  );
+
+
+  /*
+     Общий прогресс главы:
+
+     Теория = первые 50%.
+     Экзамен позже даст вторые 50%.
+  */
+
+  let chapterProgress =
+    Math.round(
+      readingPercent * 0.5
+    );
+
+
+  const examCompleted =
+    localStorage.getItem(
+      "campbellChapter2ExamCompleted"
+    ) === "true";
+
+
+  if (examCompleted) {
+
+    chapterProgress =
+      100;
+
+  }
+
+
+  setText(
+    "campbellProgressText",
+    `${chapterProgress}%`
+  );
+
+
+  setProgress(
+    "campbellProgressBar",
+    chapterProgress
+  );
+
+
+  /*
+     ЭКЗАМЕН
+  */
+
+  const examButton =
+    getById(
+      "campbellExamButton"
+    );
+
+
+  const examStatus =
+    getById(
+      "campbellExamStatus"
+    );
+
+
+  if (
+    campbellState.theoryCompleted
+  ) {
+
+    if (examButton) {
+
+      examButton.classList.remove(
+        "locked"
+      );
+
+    }
+
+
+    if (examStatus) {
+
+      examStatus.textContent =
+        examCompleted
+          ? "✓ Экзамен пройден"
+          : "Экзамен разблокирован";
+
+    }
+
+  }
+
+  else {
+
+    if (examButton) {
+
+      examButton.classList.add(
+        "locked"
+      );
+
+    }
+
+
+    if (examStatus) {
+
+      examStatus.textContent =
+        "🔒 Сначала изучи материал главы";
+
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   43. CAMPBELL THEORY BUTTON
+========================================================= */
+
+const campbellTheoryButton =
+  getById(
+    "campbellTheoryButton"
+  );
+
+
+onClick(
+  campbellTheoryButton,
+  () => {
+
+    /*
+       В части 3 функция покажет
+       реальную страницу 47–66.
+    */
+
+    if (
+      typeof renderCampbellPage ===
+      "function"
+    ) {
+
+      renderCampbellPage();
+
+    }
+
+
+    changeScreen(
+      campbellScreen,
+      campbellTheoryScreen
+    );
+
+  }
+);
+
+
+/* =========================================================
+   44. CAMPBELL EXAM BUTTON
+========================================================= */
+
+const campbellExamButton =
+  getById(
+    "campbellExamButton"
+  );
+
+
+onClick(
+  campbellExamButton,
+  () => {
+
+    if (
+      !campbellState.theoryCompleted
+    ) {
+
+      showGroundToast(
+        "Экзамен закрыт",
+        "Сначала дочитай материал главы 2.",
+        "🔒"
+      );
+
+      return;
+
+    }
+
+
+    /*
+       Реальный экзамен подключим
+       в следующей части.
+    */
+
+    if (
+      typeof startCampbellExam ===
+      "function"
+    ) {
+
+      startCampbellExam();
+
+      return;
+
+    }
+
+
+    showGroundToast(
+      "Экзамен",
+      "Экзамен сейчас подключаем.",
+      "📝"
+    );
+
+  }
+);
+
+
+/* =========================================================
+   45. THEORY COMPLETE → EXAM
+========================================================= */
+
+const campbellTheoryCompleteButton =
+  getById(
+    "campbellTheoryCompleteButton"
+  );
+
+
+onClick(
+  campbellTheoryCompleteButton,
+  () => {
+
+    updateCampbellChapterScreen();
+
+
+    changeScreen(
+      campbellTheoryCompleteScreen,
+      campbellScreen
+    );
+
+
+    showGroundToast(
+      "Экзамен открыт",
+      "Теперь можно проверить знания по главе 2.",
+      "🔓"
+    );
+
+  }
+);
+
+
+/* =========================================================
+   46. INITIAL BUILD
+========================================================= */
+
+buildRoad();
+
+buildLibrary();
+
+updateCampbellChapterScreen();
+
+
+/* =========================================================
+   END PART 2
+========================================================= */
+/* =========================================================
+   GROUND — APP.JS
+   PART 3
+   CAMPBELL READER — PAGES 47–66
+========================================================= */
+
+
+/* =========================================================
+   47. CAMPBELL ELEMENTS
+========================================================= */
+
+const campbellReaderImage =
+  getById("campbellReaderImage");
+
+const campbellReaderLoading =
+  getById("campbellReaderLoading");
+
+const campbellReaderError =
+  getById("campbellReaderError");
+
+const campbellPrevButton =
+  getById("campbellPrevButton");
+
+const campbellNextButton =
+  getById("campbellNextButton");
+
+const completeCampbellTheoryButton =
+  getById("completeCampbellTheoryButton");
+
+
+/* =========================================================
+   48. IMAGE PATH
+========================================================= */
+
+function getCampbellPagePath(page) {
+
+  return (
+    `images/campbell/chapter2/page-${page}.webp`
+  );
+
+}
+
+
+/* =========================================================
+   49. SAVE CURRENT PAGE
+========================================================= */
+
+function saveCampbellPage() {
+
+  localStorage.setItem(
+    "campbellChapter2CurrentPage",
+    String(campbellState.currentPage)
+  );
+
+}
+
+
+/* =========================================================
+   50. READER PROGRESS
+========================================================= */
+
+function getCampbellReaderPercent() {
+
+  const total =
+    campbellState.endPage -
+    campbellState.startPage +
+    1;
+
+
+  const current =
+    campbellState.currentPage -
+    campbellState.startPage +
+    1;
+
+
+  return Math.round(
+    (current / total) * 100
+  );
+
+}
+
+
+/* =========================================================
+   51. UPDATE READER INFO
+========================================================= */
+
+function updateCampbellReaderInfo() {
+
+  const page =
+    campbellState.currentPage;
+
+  const percent =
+    getCampbellReaderPercent();
+
+
+  /*
+     PAGE TEXT
+  */
+
+  setText(
+    "campbellReaderPageNumber",
+    `Страница ${page} из ${campbellState.endPage}`
+  );
+
+
+  setText(
+    "campbellReaderPageTop",
+    String(page)
+  );
+
+
+  /*
+     PROGRESS
+  */
+
+  setProgress(
+    "campbellReaderProgressFill",
+    percent
+  );
+
+
+  /*
+     Иногда HTML может использовать
+     другой ID — поддерживаем и его.
+  */
+
+  setProgress(
+    "campbellReaderProgress",
+    percent
+  );
+
+
+  /*
+     PREVIOUS
+  */
+
+  if (campbellPrevButton) {
+
+    campbellPrevButton.disabled =
+      page <= campbellState.startPage;
+
+  }
+
+
+  /*
+     NEXT
+  */
+
+  if (campbellNextButton) {
+
+    campbellNextButton.disabled =
+      page >= campbellState.endPage;
+
+  }
+
+
+  /*
+     КНОПКА ЗАВЕРШЕНИЯ
+
+     Показываем только на странице 66.
+  */
+
+  if (completeCampbellTheoryButton) {
+
+    completeCampbellTheoryButton.hidden =
+      page !== campbellState.endPage;
+
+  }
+
+}
+
+
+/* =========================================================
+   52. LOADING STATE
+========================================================= */
+
+function showCampbellLoading() {
+
+  if (campbellReaderLoading) {
+
+    campbellReaderLoading.hidden =
+      false;
+
+  }
+
+
+  if (campbellReaderError) {
+
+    campbellReaderError.hidden =
+      true;
+
+  }
+
+}
+
+
+/* =========================================================
+   53. HIDE LOADING
+========================================================= */
+
+function hideCampbellLoading() {
+
+  if (campbellReaderLoading) {
+
+    campbellReaderLoading.hidden =
+      true;
+
+  }
+
+}
+
+
+/* =========================================================
+   54. ERROR STATE
+========================================================= */
+
+function showCampbellImageError(page) {
+
+  hideCampbellLoading();
+
+
+  if (campbellReaderImage) {
+
+    campbellReaderImage.hidden =
+      true;
+
+  }
+
+
+  if (campbellReaderError) {
+
+    campbellReaderError.hidden =
+      false;
+
+
+    const errorText =
+      campbellReaderError.querySelector(
+        "p"
+      );
+
+
+    if (errorText) {
+
+      errorText.textContent =
+        `Не удалось загрузить page-${page}.webp. Проверь папку images/campbell/chapter2/.`;
+
+    }
+
+  }
+
+
+  console.error(
+    `GROUND: Campbell page ${page} not found.`
+  );
+
+}
+
+
+/* =========================================================
+   55. PAGE ANIMATION
+========================================================= */
+
+function animateCampbellPage() {
+
+  if (!campbellReaderImage) {
+    return;
+  }
+
+
+  campbellReaderImage.classList.remove(
+    "page-enter"
+  );
+
+
+  /*
+     Перезапуск CSS-анимации.
+  */
+
+  void campbellReaderImage.offsetWidth;
+
+
+  campbellReaderImage.classList.add(
+    "page-enter"
+  );
+
+}
+
+
+/* =========================================================
+   56. RENDER CAMPBELL PAGE
+========================================================= */
+
+function renderCampbellPage() {
+
+  if (!campbellReaderImage) {
+
+    console.error(
+      "GROUND: #campbellReaderImage не найден."
+    );
+
+    return;
+  }
+
+
+  /*
+     Защита диапазона 47–66.
+  */
+
+  campbellState.currentPage =
+    Math.max(
+      campbellState.startPage,
+      Math.min(
+        campbellState.endPage,
+        campbellState.currentPage
+      )
+    );
+
+
+  const page =
+    campbellState.currentPage;
+
+
+  const src =
+    getCampbellPagePath(page);
+
+
+  /*
+     Обновляем интерфейс сразу.
+  */
+
+  updateCampbellReaderInfo();
+
+  showCampbellLoading();
+
+
+  campbellReaderImage.hidden =
+    true;
+
+
+  if (campbellReaderError) {
+
+    campbellReaderError.hidden =
+      true;
+
+  }
+
+
+  /*
+     Создаём временное изображение.
+
+     Так старая страница не мигает,
+     пока новая ещё загружается.
+  */
+
+  const preloadImage =
+    new Image();
+
+
+  preloadImage.decoding =
+    "async";
+
+
+  preloadImage.alt =
+    `Campbell Biology — страница ${page}`;
+
+
+  /*
+     SUCCESS
+  */
+
+  preloadImage.addEventListener(
+    "load",
+    () => {
+
+      /*
+         Если пользователь очень быстро
+         перелистнул дальше, не показываем
+         уже устаревшую картинку.
+      */
+
+      if (
+        page !==
+        campbellState.currentPage
+      ) {
+
+        return;
+
+      }
+
+
+      campbellReaderImage.src =
+        src;
+
+
+      campbellReaderImage.alt =
+        `Campbell Biology — страница ${page}`;
+
+
+      campbellReaderImage.hidden =
+        false;
+
+
+      hideCampbellLoading();
+
+
+      animateCampbellPage();
+
+
+      saveCampbellPage();
+
+
+      updateCampbellChapterScreen();
+
+    },
+    {
+      once: true
+    }
+  );
+
+
+  /*
+     ERROR
+  */
+
+  preloadImage.addEventListener(
+    "error",
+    () => {
+
+      if (
+        page !==
+        campbellState.currentPage
+      ) {
+
+        return;
+
+      }
+
+
+      showCampbellImageError(
+        page
+      );
+
+    },
+    {
+      once: true
+    }
+  );
+
+
+  /*
+     Начинаем загрузку.
+  */
+
+  preloadImage.src =
+    src;
+
+}
+
+
+/* =========================================================
+   57. PRELOAD NEIGHBOUR PAGE
+
+   Подгружаем следующую страницу заранее,
+   чтобы листалось быстрее.
+========================================================= */
+
+function preloadCampbellPage(page) {
+
+  if (
+    page <
+      campbellState.startPage ||
+    page >
+      campbellState.endPage
+  ) {
+
+    return;
+
+  }
+
+
+  const image =
+    new Image();
+
+
+  image.decoding =
+    "async";
+
+
+  image.src =
+    getCampbellPagePath(page);
+
+}
+
+
+/* =========================================================
+   58. NEXT PAGE
+========================================================= */
+
+function nextCampbellPage() {
+
+  if (
+    campbellState.currentPage >=
+    campbellState.endPage
+  ) {
+
+    return;
+
+  }
+
+
+  campbellState.currentPage +=
+    1;
+
+
+  saveCampbellPage();
+
+  renderCampbellPage();
+
+
+  /*
+     Следующую после неё
+     грузим заранее.
+  */
+
+  preloadCampbellPage(
+    campbellState.currentPage + 1
+  );
+
+}
+
+
+/* =========================================================
+   59. PREVIOUS PAGE
+========================================================= */
+
+function previousCampbellPage() {
+
+  if (
+    campbellState.currentPage <=
+    campbellState.startPage
+  ) {
+
+    return;
+
+  }
+
+
+  campbellState.currentPage -=
+    1;
+
+
+  saveCampbellPage();
+
+  renderCampbellPage();
+
+
+  preloadCampbellPage(
+    campbellState.currentPage - 1
+  );
+
+}
+
+
+/* =========================================================
+   60. BUTTON EVENTS
+========================================================= */
+
+onClick(
+  campbellNextButton,
+  nextCampbellPage
+);
+
+
+onClick(
+  campbellPrevButton,
+  previousCampbellPage
+);
+
+
+/* =========================================================
+   61. COMPLETE THEORY
+========================================================= */
+
+onClick(
+  completeCampbellTheoryButton,
+  () => {
+
+    /*
+       Нельзя завершить раньше
+       последней страницы.
+    */
+
+    if (
+      campbellState.currentPage !==
+      campbellState.endPage
+    ) {
+
+      showGroundToast(
+        "Ещё не всё",
+        "Сначала дойди до последней страницы главы.",
+        "📖"
+      );
+
+      return;
+
+    }
+
+
+    /*
+       Если уже проходили раньше —
+       повторно награду не выдаём.
+    */
+
+    const alreadyCompleted =
       localStorage.getItem(
         "campbellChapter2TheoryCompleted"
       ) === "true";
 
 
-    if (!theoryCompleted) {
-
-      alert(
-        "🔒 Сначала изучи весь материал главы 2."
-      );
-
-      return false;
-
-    }
-
-
-    stopCampbellTimer();
-
-
-    campbellExamIndex =
-      0;
-
-    campbellSelectedAnswer =
-      null;
-
-    campbellExamAnswersData =
-      [];
-
-    campbellCorrectAnswers =
-      0;
-
-    campbellExamSeconds =
-      20 * 60;
-
-    campbellExamStartedAt =
-      Date.now();
-
-
-    renderCampbellQuestion();
-
-    startCampbellTimer();
-
-
-    return true;
-
-  }
-
-
-  /* ========================================
-     ОТКРЫТЬ ЭКЗАМЕН
-  ======================================== */
-
-  if (campbellExamButton) {
-
-    campbellExamButton.addEventListener(
-      "click",
-      () => {
-
-        const theoryCompleted =
-          localStorage.getItem(
-            "campbellChapter2TheoryCompleted"
-          ) === "true";
-
-
-        if (!theoryCompleted) {
-
-          alert(
-            "🔒 Сначала изучи материал главы 2."
-          );
-
-          return;
-
-        }
-
-
-        const started =
-          startCampbellExam();
-
-
-        if (!started) {
-          return;
-        }
-
-
-        changeScreen(
-          campbellScreen,
-          campbellExamScreen
-        );
-
-      }
-    );
-
-  }
-
-
-  /* ========================================
-     ПОКАЗАТЬ ВОПРОС
-  ======================================== */
-
-  function renderCampbellQuestion() {
-
-    const question =
-      campbellQuestions[
-        campbellExamIndex
-      ];
-
-
-    if (!question) {
-
-      finishCampbellExam(
-        false
-      );
-
-      return;
-
-    }
-
-
-    campbellSelectedAnswer =
-      null;
-
-
-    if (campbellExamNextButton) {
-
-      campbellExamNextButton.disabled =
-        true;
-
-      campbellExamNextButton.textContent =
-        campbellExamIndex ===
-        campbellQuestions.length - 1
-          ? "Завершить экзамен"
-          : "Ответить";
-
-    }
-
-
-    /* ======================================
-       СЧЁТЧИК
-    ====================================== */
-
-    if (campbellQuestionCounter) {
-
-      campbellQuestionCounter.textContent =
-        `Вопрос ${
-          campbellExamIndex + 1
-        } из ${
-          campbellQuestions.length
-        }`;
-
-    }
-
-
-    /*
-      Поддержка старого HTML.
-    */
-
-    if (campbellExamQuestionCounter) {
-
-      campbellExamQuestionCounter.textContent =
-        `Вопрос ${
-          campbellExamIndex + 1
-        } из ${
-          campbellQuestions.length
-        }`;
-
-    }
-
-
-    /* ======================================
-       ТЕКУЩИЙ СЧЁТ
-    ====================================== */
-
-    if (campbellExamScore) {
-
-      campbellExamScore.textContent =
-        `${campbellCorrectAnswers} правильных`;
-
-    }
-
-
-    /* ======================================
-       ПРОГРЕСС
-    ====================================== */
-
-    const progress =
-      Math.round(
-        (
-          campbellExamIndex /
-          campbellQuestions.length
-        ) * 100
-      );
-
-
-    if (campbellExamProgress) {
-
-      campbellExamProgress.style.width =
-        `${progress}%`;
-
-    }
-
-
-    if (campbellExamProgressBar) {
-
-      campbellExamProgressBar.style.width =
-        `${progress}%`;
-
-    }
-
-
-    if (campbellExamProgressPercent) {
-
-      campbellExamProgressPercent.textContent =
-        `${progress}%`;
-
-    }
-
-
-    /* ======================================
-       ТЕКСТ ВОПРОСА
-    ====================================== */
-
-    if (campbellQuestionText) {
-
-      campbellQuestionText.textContent =
-        question.question;
-
-    }
-
-
-    if (campbellExamQuestion) {
-
-      campbellExamQuestion.textContent =
-        question.question;
-
-    }
-
-
-    if (campbellExamQuestionHint) {
-
-      campbellExamQuestionHint.textContent =
-        "Выбери один правильный ответ.";
-
-    }
-
-
-    /* ======================================
-       ОТВЕТЫ
-    ====================================== */
-
-    if (!campbellExamAnswers) {
-      return;
-    }
-
-
-    campbellExamAnswers.innerHTML =
-      "";
-
-
-    const letters = [
-      "A",
-      "B",
-      "C",
-      "D",
-      "E",
-      "F"
-    ];
-
-
-    question.answers.forEach(
-      (answer, index) => {
-
-        const button =
-          document.createElement(
-            "button"
-          );
-
-
-        button.type =
-          "button";
-
-
-        button.className =
-          "answer-option";
-
-
-        button.innerHTML = `
-
-          <span class="answer-letter">
-            ${letters[index] || index + 1}
-          </span>
-
-          <span class="answer-text">
-            ${answer}
-          </span>
-
-        `;
-
-
-        button.addEventListener(
-          "click",
-          () => {
-
-            selectCampbellAnswer(
-              index,
-              button
-            );
-
-          }
-        );
-
-
-        campbellExamAnswers.appendChild(
-          button
-        );
-
-      }
-    );
-
-  }
-
-
-  /* ========================================
-     ВЫБРАТЬ ОТВЕТ
-  ======================================== */
-
-  function selectCampbellAnswer(
-    answerIndex,
-    button
-  ) {
-
-    campbellSelectedAnswer =
-      answerIndex;
-
-
-    if (campbellExamAnswers) {
-
-      campbellExamAnswers
-        .querySelectorAll(
-          ".answer-option"
-        )
-        .forEach(
-          option => {
-
-            option.classList.remove(
-              "selected"
-            );
-
-          }
-        );
-
-    }
-
-
-    button.classList.add(
-      "selected"
-    );
-
-
-    if (campbellExamNextButton) {
-
-      campbellExamNextButton.disabled =
-        false;
-
-    }
-
-  }
-
-
-  /* ========================================
-     ПОДТВЕРДИТЬ ОТВЕТ
-  ======================================== */
-
-  function submitCampbellAnswer() {
-
-    if (
-      campbellSelectedAnswer ===
-      null
-    ) {
-      return;
-    }
-
-
-    const question =
-      campbellQuestions[
-        campbellExamIndex
-      ];
-
-
-    if (!question) {
-      return;
-    }
-
-
-    const isCorrect =
-      campbellSelectedAnswer ===
-      question.correct;
-
-
-    if (isCorrect) {
-
-      campbellCorrectAnswers++;
-
-    }
-
-
-    campbellExamAnswersData.push({
-
-      question:
-        question.question,
-
-      answers:
-        [...question.answers],
-
-      selected:
-        campbellSelectedAnswer,
-
-      correct:
-        question.correct,
-
-      isCorrect:
-        isCorrect,
-
-      explanation:
-        question.explanation
-
-    });
-
-
-    campbellExamIndex++;
-
-
-    if (
-      campbellExamIndex >=
-      campbellQuestions.length
-    ) {
-
-      finishCampbellExam(
-        false
-      );
-
-      return;
-
-    }
-
-
-    renderCampbellQuestion();
-
-  }
-
-
-  /* ========================================
-     КНОПКА ОТВЕТИТЬ
-  ======================================== */
-
-  if (campbellExamNextButton) {
-
-    campbellExamNextButton.addEventListener(
-      "click",
-      () => {
-
-        submitCampbellAnswer();
-
-      }
-    );
-
-  }
-
-
-  /* ========================================
-     ВЫХОД ИЗ ЭКЗАМЕНА
-  ======================================== */
-
-  if (campbellExamBackButton) {
-
-    campbellExamBackButton.addEventListener(
-      "click",
-      () => {
-
-        const exit =
-          confirm(
-            "Выйти из экзамена? Текущий результат не сохранится."
-          );
-
-
-        if (!exit) {
-          return;
-        }
-
-
-        stopCampbellTimer();
-
-
-        changeScreen(
-          campbellExamScreen,
-          campbellScreen
-        );
-
-      }
-    );
-
-  }
-
-
-  /* ========================================
-     ЗАВЕРШИТЬ ЭКЗАМЕН
-  ======================================== */
-
-  function finishCampbellExam(
-    timeExpired = false
-  ) {
-
-    stopCampbellTimer();
-
-
-    /*
-      Если время закончилось,
-      текущий выбранный ответ
-      тоже сохраняем.
-    */
-
-    if (
-      timeExpired &&
-      campbellSelectedAnswer !==
-        null &&
-      campbellExamIndex <
-        campbellQuestions.length
-    ) {
-
-      const question =
-        campbellQuestions[
-          campbellExamIndex
-        ];
-
-
-      const isCorrect =
-        campbellSelectedAnswer ===
-        question.correct;
-
-
-      if (isCorrect) {
-
-        campbellCorrectAnswers++;
-
-      }
-
-
-      campbellExamAnswersData.push({
-
-        question:
-          question.question,
-
-        answers:
-          [...question.answers],
-
-        selected:
-          campbellSelectedAnswer,
-
-        correct:
-          question.correct,
-
-        isCorrect:
-          isCorrect,
-
-        explanation:
-          question.explanation
-
-      });
-
-    }
-
-
-    /*
-      Если пользователь не успел
-      ответить на оставшиеся вопросы,
-      добавляем их как "Нет ответа".
-    */
-
-    const answeredIndexes =
-      campbellExamAnswersData.length;
-
-
-    for (
-      let index =
-        answeredIndexes;
-      index <
-        campbellQuestions.length;
-      index++
-    ) {
-
-      const question =
-        campbellQuestions[index];
-
-
-      campbellExamAnswersData.push({
-
-        question:
-          question.question,
-
-        answers:
-          [...question.answers],
-
-        selected:
-          null,
-
-        correct:
-          question.correct,
-
-        isCorrect:
-          false,
-
-        explanation:
-          question.explanation
-
-      });
-
-    }
-
-
-    const total =
-      campbellQuestions.length;
-
-
-    const correct =
-      campbellCorrectAnswers;
-
-
-    const wrong =
-      total - correct;
-
-
-    const percent =
-      Math.round(
-        (
-          correct /
-          total
-        ) * 100
-      );
-
-
-    const usedSeconds =
-      campbellExamStartedAt
-        ? Math.min(
-            20 * 60,
-            Math.floor(
-              (
-                Date.now() -
-                campbellExamStartedAt
-              ) / 1000
-            )
-          )
-        : 0;
-
-
-    campbellLastResult = {
-
-      correct:
-        correct,
-
-      wrong:
-        wrong,
-
-      total:
-        total,
-
-      percent:
-        percent,
-
-      time:
-        usedSeconds,
-
-      timeExpired:
-        timeExpired,
-
-      answers:
-        campbellExamAnswersData
-
-    };
-
-
-    /* ======================================
-       СОХРАНЕНИЕ РЕЗУЛЬТАТА
-    ====================================== */
-
-    localStorage.setItem(
-      "campbellChapter2LastResult",
-      JSON.stringify(
-        campbellLastResult
-      )
-    );
+    campbellState.theoryCompleted =
+      true;
 
 
     localStorage.setItem(
-      "campbellChapter2ExamCompleted",
+      "campbellChapter2TheoryCompleted",
       "true"
     );
 
 
-    localStorage.setItem(
-      "campbellChapter2BestScore",
-      String(
-        Math.max(
-          percent,
-          Number(
-            localStorage.getItem(
-              "campbellChapter2BestScore"
-            ) || 0
-          )
-        )
-      )
-    );
+    /*
+       Награда только первый раз.
+    */
 
+    if (!alreadyCompleted) {
 
-    /* ======================================
-       НАГРАДА
+      addXP(50);
 
-       Даём один раз за первое
-       завершение экзамена.
-    ====================================== */
-
-    const rewardAlreadyGiven =
-      localStorage.getItem(
-        "campbellChapter2RewardGiven"
-      ) === "true";
-
-
-    let rewardGenes =
-      0;
-
-
-    if (!rewardAlreadyGiven) {
-
-      if (percent >= 90) {
-
-        rewardGenes =
-          25;
-
-      }
-
-      else if (percent >= 70) {
-
-        rewardGenes =
-          20;
-
-      }
-
-      else if (percent >= 50) {
-
-        rewardGenes =
-          15;
-
-      }
-
-      else {
-
-        rewardGenes =
-          10;
-
-      }
-
-
-      const oldGenes =
-        Number(
-          localStorage.getItem(
-            "groundGenes"
-          ) || 0
-        );
-
-
-      localStorage.setItem(
-        "groundGenes",
-        String(
-          oldGenes +
-          rewardGenes
-        )
-      );
-
-
-      localStorage.setItem(
-        "campbellChapter2RewardGiven",
-        "true"
-      );
+      addGenes(10);
 
     }
 
 
-    campbellLastResult.rewardGenes =
-      rewardGenes;
+    updateCampbellChapterScreen();
 
 
     /*
-      Сохраняем ещё раз,
-      уже вместе с наградой.
+       Награда на экране завершения.
     */
 
-    localStorage.setItem(
-      "campbellChapter2LastResult",
-      JSON.stringify(
-        campbellLastResult
-      )
+    setText(
+      "campbellTheoryRewardXP",
+      alreadyCompleted
+        ? "+0 XP"
+        : "+50 XP"
     );
 
 
-    showCampbellResult();
+    setText(
+      "campbellTheoryRewardGenes",
+      alreadyCompleted
+        ? "+0"
+        : "+10"
+    );
 
 
-    updateCampbellProgress();
+    /*
+       Если специальных Campbell ID
+       нет — используем общие.
+    */
 
-    updateUserInterface();
+    setText(
+      "lessonRewardXP",
+      alreadyCompleted
+        ? "+0 XP"
+        : "+50 XP"
+    );
+
+
+    setText(
+      "lessonRewardGenes",
+      alreadyCompleted
+        ? "+0"
+        : "+10"
+    );
 
 
     changeScreen(
-      campbellExamScreen,
-      campbellResultScreen
+      campbellTheoryScreen,
+      campbellTheoryCompleteScreen
+    );
+
+
+    showGroundToast(
+      "Теория завершена",
+      "Экзамен по главе 2 разблокирован!",
+      "🎉"
     );
 
   }
+);
 
 
-  /* ========================================
-     ПОКАЗАТЬ РЕЗУЛЬТАТ
-  ======================================== */
+/* =========================================================
+   62. KEYBOARD CONTROL
 
-  function showCampbellResult() {
+   На ноутбуке можно листать:
+   ← предыдущая
+   → следующая
+========================================================= */
 
-    if (!campbellLastResult) {
-
-      const savedResult =
-        localStorage.getItem(
-          "campbellChapter2LastResult"
-        );
-
-
-      if (savedResult) {
-
-        try {
-
-          campbellLastResult =
-            JSON.parse(
-              savedResult
-            );
-
-        }
-
-        catch (error) {
-
-          console.error(
-            "Ошибка результата Campbell:",
-            error
-          );
-
-          return;
-
-        }
-
-      }
-
-    }
-
-
-    if (!campbellLastResult) {
-      return;
-    }
-
-
-    const result =
-      campbellLastResult;
-
-
-    /* ======================================
-       ЗАГОЛОВОК
-    ====================================== */
-
-    let title =
-      "Продолжай!";
-
-    let message =
-      "Разбор поможет понять ошибки.";
-
-    let icon =
-      "🧬";
-
+document.addEventListener(
+  "keydown",
+  (event) => {
 
     if (
-      result.percent >= 90
-    ) {
-
-      title =
-        "Отличный результат!";
-
-      message =
-        "Ты очень хорошо разобрался в главе 2.";
-
-      icon =
-        "🏆";
-
-    }
-
-    else if (
-      result.percent >= 70
-    ) {
-
-      title =
-        "Хорошая работа!";
-
-      message =
-        "Основные идеи главы уже усвоены.";
-
-      icon =
-        "🔥";
-
-    }
-
-    else if (
-      result.percent >= 50
-    ) {
-
-      title =
-        "Неплохо!";
-
-      message =
-        "Есть несколько тем, которые стоит повторить.";
-
-      icon =
-        "🧠";
-
-    }
-
-
-    if (
-      result.timeExpired
-    ) {
-
-      message =
-        "Время закончилось. Посмотри разбор и попробуй ещё раз.";
-
-    }
-
-
-    if (campbellResultTitle) {
-
-      campbellResultTitle.textContent =
-        title;
-
-    }
-
-
-    if (campbellResultMessage) {
-
-      campbellResultMessage.textContent =
-        message;
-
-    }
-
-
-    if (campbellResultIcon) {
-
-      campbellResultIcon.textContent =
-        icon;
-
-    }
-
-
-    /* ======================================
-       ПРОЦЕНТ
-    ====================================== */
-
-    if (campbellResultPercent) {
-
-      campbellResultPercent.textContent =
-        `${result.percent}%`;
-
-    }
-
-
-    if (campbellResultProgress) {
-
-      campbellResultProgress.style.width =
-        `${result.percent}%`;
-
-    }
-
-
-    /* ======================================
-       СЧЁТ
-    ====================================== */
-
-    if (campbellCorrectCount) {
-
-      campbellCorrectCount.textContent =
-        result.correct;
-
-    }
-
-
-    if (campbellWrongCount) {
-
-      campbellWrongCount.textContent =
-        result.wrong;
-
-    }
-
-
-    if (campbellTotalCount) {
-
-      campbellTotalCount.textContent =
-        result.total;
-
-    }
-
-
-    /*
-      Поддержка старого HTML.
-    */
-
-    if (campbellResultScore) {
-
-      campbellResultScore.textContent =
-        `${result.correct}/${result.total}`;
-
-    }
-
-
-    if (campbellResultTime) {
-
-      campbellResultTime.textContent =
-        formatCampbellTime(
-          result.time
-        );
-
-    }
-
-
-    if (campbellResultStatus) {
-
-      campbellResultStatus.textContent =
-        `${result.percent}%`;
-
-    }
-
-
-    if (campbellResultDescription) {
-
-      campbellResultDescription.textContent =
-        message;
-
-    }
-
-
-    /* ======================================
-       НАГРАДА
-    ====================================== */
-
-    if (campbellRewardText) {
-
-      if (
-        result.rewardGenes > 0
-      ) {
-
-        campbellRewardText.textContent =
-          `+${result.rewardGenes} генов`;
-
-      }
-
-      else {
-
-        campbellRewardText.textContent =
-          "Награда уже получена ✓";
-
-      }
-
-    }
-
-  }
-    /* ========================================
-     CAMPBELL — ПРОДОЛЖИТЬ ПОСЛЕ РЕЗУЛЬТАТА
-  ======================================== */
-
-  if (campbellContinueButton) {
-
-    campbellContinueButton.addEventListener(
-      "click",
-      () => {
-
-        updateCampbellProgress();
-
-        buildLibrary();
-
-        changeScreen(
-          campbellResultScreen,
-          campbellScreen
-        );
-
-      }
-    );
-
-  }
-
-
-  /* ========================================
-     CAMPBELL — ПОВТОРИТЬ ЭКЗАМЕН
-  ======================================== */
-
-  if (campbellRetryButton) {
-
-    campbellRetryButton.addEventListener(
-      "click",
-      () => {
-
-        const started =
-          startCampbellExam();
-
-        if (!started) {
-          return;
-        }
-
-        changeScreen(
-          campbellResultScreen,
-          campbellExamScreen
-        );
-
-      }
-    );
-
-  }
-
-
-  /* ========================================
-     CAMPBELL — ОТКРЫТЬ РАЗБОР
-  ======================================== */
-
-  if (campbellReviewButton) {
-
-    campbellReviewButton.addEventListener(
-      "click",
-      () => {
-
-        loadCampbellLastResult();
-
-        if (!campbellLastResult) {
-
-          alert(
-            "Сначала пройди экзамен."
-          );
-
-          return;
-
-        }
-
-        renderCampbellReview();
-
-        changeScreen(
-          campbellResultScreen,
-          campbellReviewScreen
-        );
-
-      }
-    );
-
-  }
-
-
-  /* ========================================
-     ЗАГРУЗИТЬ ПОСЛЕДНИЙ РЕЗУЛЬТАТ
-  ======================================== */
-
-  function loadCampbellLastResult() {
-
-    const saved =
-      localStorage.getItem(
-        "campbellChapter2LastResult"
-      );
-
-    if (!saved) {
-
-      campbellLastResult =
-        null;
-
-      return null;
-
-    }
-
-    try {
-
-      campbellLastResult =
-        JSON.parse(saved);
-
-      return campbellLastResult;
-
-    }
-
-    catch (error) {
-
-      console.error(
-        "Не удалось загрузить результат Campbell:",
-        error
-      );
-
-      campbellLastResult =
-        null;
-
-      return null;
-
-    }
-
-  }
-
-
-  /* ========================================
-     CAMPBELL — РАЗБОР ЭКЗАМЕНА
-  ======================================== */
-
-  function renderCampbellReview() {
-
-    if (!campbellLastResult) {
-
-      loadCampbellLastResult();
-
-    }
-
-    if (
-      !campbellLastResult ||
-      !Array.isArray(
-        campbellLastResult.answers
+      !campbellTheoryScreen ||
+      !campbellTheoryScreen.classList.contains(
+        "active"
       )
     ) {
 
-      if (campbellReviewQuestions) {
-
-        campbellReviewQuestions.innerHTML = `
-
-          <div class="campbell-theory-block">
-
-            <h2>
-              Результат не найден
-            </h2>
-
-            <div class="campbell-note">
-
-              <span>ℹ️</span>
-
-              <p>
-                Сначала пройди экзамен,
-                после этого здесь появится
-                полный разбор вопросов.
-              </p>
-
-            </div>
-
-          </div>
-
-        `;
-
-      }
-
       return;
 
     }
 
 
-    const result =
-      campbellLastResult;
+    if (
+      event.key ===
+      "ArrowRight"
+    ) {
 
-
-    /* ======================================
-       МИНИ-СЧЁТ
-    ====================================== */
-
-    if (campbellReviewScore) {
-
-      campbellReviewScore.textContent =
-        `${result.correct}/${result.total}`;
+      nextCampbellPage();
 
     }
 
 
-    /* ======================================
-       ПРОГРЕСС
-    ====================================== */
+    if (
+      event.key ===
+      "ArrowLeft"
+    ) {
 
-    if (campbellReviewProgress) {
-
-      campbellReviewProgress.style.width =
-        "100%";
+      previousCampbellPage();
 
     }
-
-
-    if (!campbellReviewQuestions) {
-      return;
-    }
-
-
-    campbellReviewQuestions.innerHTML =
-      "";
-
-
-    const letters = [
-      "A",
-      "B",
-      "C",
-      "D",
-      "E",
-      "F"
-    ];
-
-
-    /* ======================================
-       КАЖДЫЙ ВОПРОС
-    ====================================== */
-
-    result.answers.forEach(
-      (answerData, index) => {
-
-        const block =
-          document.createElement(
-            "div"
-          );
-
-
-        block.className =
-          "campbell-theory-block";
-
-
-        const userAnswer =
-          answerData.selected !== null &&
-          answerData.selected !== undefined
-            ? answerData.answers[
-                answerData.selected
-              ]
-            : "Нет ответа";
-
-
-        const correctAnswer =
-          answerData.answers[
-            answerData.correct
-          ];
-
-
-        const userLetter =
-          answerData.selected !== null &&
-          answerData.selected !== undefined
-            ? letters[
-                answerData.selected
-              ] || ""
-            : "";
-
-
-        const correctLetter =
-          letters[
-            answerData.correct
-          ] || "";
-
-
-        const statusIcon =
-          answerData.isCorrect
-            ? "✅"
-            : "❌";
-
-
-        const statusText =
-          answerData.isCorrect
-            ? "Правильно"
-            : "Ошибка";
-
-
-        block.innerHTML = `
-
-          <span class="small-label">
-            ВОПРОС ${index + 1}
-            • ${statusIcon}
-            ${statusText}
-          </span>
-
-          <h2>
-            ${answerData.question}
-          </h2>
-
-
-          <div
-            class="
-              campbell-review-answer
-              ${
-                answerData.isCorrect
-                  ? "correct"
-                  : "wrong"
-              }
-            "
-          >
-
-            <strong>
-              ТВОЙ ОТВЕТ
-            </strong>
-
-            <p>
-
-              ${
-                userLetter
-                  ? `${userLetter}. `
-                  : ""
-              }
-
-              ${userAnswer}
-
-            </p>
-
-          </div>
-
-
-          ${
-            !answerData.isCorrect
-              ? `
-
-                <div
-                  class="campbell-review-correct"
-                >
-
-                  <strong>
-                    ПРАВИЛЬНЫЙ ОТВЕТ
-                  </strong>
-
-                  <p>
-                    ${correctLetter}.
-                    ${correctAnswer}
-                  </p>
-
-                </div>
-
-              `
-              : ""
-          }
-
-
-          <div class="campbell-note">
-
-            <span>💡</span>
-
-            <p>
-              ${answerData.explanation}
-            </p>
-
-          </div>
-
-        `;
-
-
-        campbellReviewQuestions.appendChild(
-          block
-        );
-
-      }
-    );
 
   }
+);
 
 
-  /* ========================================
-     РАЗБОР → РЕЗУЛЬТАТ
-  ======================================== */
+/* =========================================================
+   63. TOUCH SWIPE
 
-  if (campbellReviewBackButton) {
+   На телефоне:
+   свайп влево  → следующая
+   свайп вправо → предыдущая
+========================================================= */
 
-    campbellReviewBackButton.addEventListener(
-      "click",
-      () => {
+let campbellTouchStartX =
+  null;
 
-        showCampbellResult();
 
-        changeScreen(
-          campbellReviewScreen,
-          campbellResultScreen
-        );
+if (campbellTheoryScreen) {
 
-      }
-    );
-
-  }
-
-
-  /* ========================================
-     ЗАВЕРШИТЬ РАЗБОР
-  ======================================== */
-
-  if (campbellReviewFinishButton) {
-
-    campbellReviewFinishButton.addEventListener(
-      "click",
-      () => {
-
-        updateCampbellProgress();
-
-        changeScreen(
-          campbellReviewScreen,
-          campbellScreen
-        );
-
-      }
-    );
-
-  }
-
-
-  /* ========================================
-     ВОССТАНОВИТЬ CAMPBELL
-     ПОСЛЕ ПЕРЕЗАГРУЗКИ
-  ======================================== */
-
-  function restoreCampbellState() {
-
-    /*
-      Загружаем последний результат,
-      если экзамен уже проходили.
-    */
-
-    loadCampbellLastResult();
-
-
-    /*
-      Если пользователь уже дошёл
-      до последней страницы,
-      теория считается завершённой.
-    */
-
-    if (
-      campbellMaxReadPage >=
-      CAMPBELL_LAST_PAGE
-    ) {
-
-      localStorage.setItem(
-        "campbellChapter2TheoryCompleted",
-        "true"
-      );
-
-    }
-
-
-    /*
-      Проверяем сохранённую страницу.
-    */
-
-    const savedPage =
-      Number(
-        localStorage.getItem(
-          "campbellChapter2CurrentPage"
-        )
-      );
-
-
-    if (
-      Number.isFinite(savedPage) &&
-      savedPage >=
-        CAMPBELL_FIRST_PAGE &&
-      savedPage <=
-        CAMPBELL_LAST_PAGE
-    ) {
-
-      campbellCurrentPage =
-        savedPage;
-
-    }
-
-
-    updateCampbellProgress();
-
-  }
-
-
-  /* ========================================
-     ВОССТАНОВИТЬ РЕЗУЛЬТАТ
-  ======================================== */
-
-  function restoreCampbellResult() {
-
-    const result =
-      loadCampbellLastResult();
-
-
-    if (!result) {
-      return;
-    }
-
-
-    /*
-      Если сохранён старый результат,
-      где каких-то полей ещё не было,
-      аккуратно добавляем значения.
-    */
-
-    if (
-      typeof result.correct !==
-      "number"
-    ) {
-
-      result.correct =
-        0;
-
-    }
-
-
-    if (
-      typeof result.total !==
-      "number"
-    ) {
-
-      result.total =
-        campbellQuestions.length;
-
-    }
-
-
-    if (
-      typeof result.wrong !==
-      "number"
-    ) {
-
-      result.wrong =
-        result.total -
-        result.correct;
-
-    }
-
-
-    if (
-      typeof result.percent !==
-      "number"
-    ) {
-
-      result.percent =
-        result.total > 0
-          ? Math.round(
-              (
-                result.correct /
-                result.total
-              ) * 100
-            )
-          : 0;
-
-    }
-
-
-    if (
-      typeof result.time !==
-      "number"
-    ) {
-
-      result.time =
-        0;
-
-    }
-
-
-    if (
-      typeof result.rewardGenes !==
-      "number"
-    ) {
-
-      result.rewardGenes =
-        0;
-
-    }
-
-
-    campbellLastResult =
-      result;
-
-  }
-
-
-  /* ========================================
-     БЕЗОПАСНОЕ СОХРАНЕНИЕ CAMPBELL
-     ПРИ ЗАКРЫТИИ СТРАНИЦЫ
-  ======================================== */
-
-  window.addEventListener(
-    "beforeunload",
-    () => {
-
-      localStorage.setItem(
-        "campbellChapter2CurrentPage",
-        String(
-          campbellCurrentPage
-        )
-      );
-
-
-      localStorage.setItem(
-        "campbellChapter2MaxReadPage",
-        String(
-          campbellMaxReadPage
-        )
-      );
-
-    }
-  );
-
-
-  /* ========================================
-     ВИДИМОСТЬ СТРАНИЦЫ
-  ======================================== */
-
-  document.addEventListener(
-    "visibilitychange",
-    () => {
-
-      /*
-        Если пользователь свернул вкладку
-        во время чтения — прогресс сохраняем.
-      */
-
-      if (document.hidden) {
-
-        localStorage.setItem(
-          "campbellChapter2CurrentPage",
-          String(
-            campbellCurrentPage
-          )
-        );
-
-
-        localStorage.setItem(
-          "campbellChapter2MaxReadPage",
-          String(
-            campbellMaxReadPage
-          )
-        );
-
-      }
-
-    }
-  );
-
-
-  /* ========================================
-     КЛАВИАТУРА CAMPBELL READER
-
-     ← предыдущая
-     → следующая
-  ======================================== */
-
-  document.addEventListener(
-    "keydown",
-    event => {
+  campbellTheoryScreen.addEventListener(
+    "touchstart",
+    (event) => {
 
       if (
-        !campbellTheoryScreen ||
-        !campbellTheoryScreen.classList.contains(
-          "active"
-        )
+        !event.touches.length
+      ) {
+
+        return;
+
+      }
+
+
+      campbellTouchStartX =
+        event.touches[0].clientX;
+
+    },
+    {
+      passive: true
+    }
+  );
+
+
+  campbellTheoryScreen.addEventListener(
+    "touchend",
+    (event) => {
+
+      if (
+        campbellTouchStartX ===
+        null
       ) {
 
         return;
@@ -5047,39 +2931,618 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
       if (
-        event.key ===
-        "ArrowLeft"
+        !event.changedTouches.length
+      ) {
+
+        campbellTouchStartX =
+          null;
+
+        return;
+
+      }
+
+
+      const endX =
+        event.changedTouches[0]
+          .clientX;
+
+
+      const difference =
+        endX -
+        campbellTouchStartX;
+
+
+      /*
+         Минимум 60px,
+         чтобы случайное касание
+         не листало страницу.
+      */
+
+      if (
+        Math.abs(difference) >=
+        60
       ) {
 
         if (
-          campbellCurrentPage >
-          CAMPBELL_FIRST_PAGE
+          difference < 0
         ) {
 
-          campbellCurrentPage--;
-
-          renderCampbellReader();
+          nextCampbellPage();
 
         }
+
+        else {
+
+          previousCampbellPage();
+
+        }
+
+      }
+
+
+      campbellTouchStartX =
+        null;
+
+    },
+    {
+      passive: true
+    }
+  );
+
+}
+
+
+/* =========================================================
+   64. INITIAL READER UPDATE
+========================================================= */
+
+updateCampbellReaderInfo();
+
+
+/* =========================================================
+   END PART 3
+========================================================= */
+/* =========================================================
+   GROUND — APP.JS
+   PART 4
+   CAMPBELL EXAM
+========================================================= */
+
+
+/* =========================================================
+   65. EXAM QUESTIONS
+
+   ВАЖНО:
+   Сейчас это тестовый набор для проверки механики.
+   Позже просто заменим вопросы на ваши настоящие.
+========================================================= */
+
+const campbellExamQuestions = [
+
+  {
+    question:
+      "Какой элемент является основой органических молекул?",
+
+    answers: [
+      "Кислород",
+      "Углерод",
+      "Натрий",
+      "Кальций"
+    ],
+
+    correct: 1,
+
+    explanation:
+      "Углерод способен образовывать четыре ковалентные связи и служит основой огромного количества органических молекул."
+  },
+
+
+  {
+    question:
+      "Какая частица атома имеет отрицательный заряд?",
+
+    answers: [
+      "Протон",
+      "Нейтрон",
+      "Электрон",
+      "Ядро"
+    ],
+
+    correct: 2,
+
+    explanation:
+      "Электрон имеет отрицательный электрический заряд."
+  },
+
+
+  {
+    question:
+      "Где находятся протоны и нейтроны?",
+
+    answers: [
+      "В ядре атома",
+      "В электронной оболочке",
+      "Между атомами",
+      "Только в молекулах"
+    ],
+
+    correct: 0,
+
+    explanation:
+      "Протоны и нейтроны находятся в ядре атома."
+  },
+
+
+  {
+    question:
+      "Что определяет атомный номер элемента?",
+
+    answers: [
+      "Количество нейтронов",
+      "Количество молекул",
+      "Количество протонов",
+      "Количество связей"
+    ],
+
+    correct: 2,
+
+    explanation:
+      "Атомный номер элемента соответствует количеству протонов в ядре."
+  },
+
+
+  {
+    question:
+      "Что такое изотопы?",
+
+    answers: [
+      "Атомы разных элементов с одинаковой массой",
+
+      "Атомы одного элемента с разным количеством нейтронов",
+
+      "Молекулы с одинаковым числом атомов",
+
+      "Ионы с одинаковым зарядом"
+    ],
+
+    correct: 1,
+
+    explanation:
+      "Изотопы одного элемента имеют одинаковое число протонов, но различаются числом нейтронов."
+  },
+
+
+  {
+    question:
+      "Какая связь образуется при совместном использовании электронных пар?",
+
+    answers: [
+      "Ковалентная",
+      "Ионная",
+      "Водородная",
+      "Механическая"
+    ],
+
+    correct: 0,
+
+    explanation:
+      "При ковалентной связи атомы совместно используют одну или несколько пар валентных электронов."
+  },
+
+
+  {
+    question:
+      "Что происходит при образовании ионной связи?",
+
+    answers: [
+      "Атомы обязательно становятся изотопами",
+
+      "Электроны передаются между атомами, образуя противоположно заряженные ионы",
+
+      "Протоны переходят между ядрами",
+
+      "Нейтроны образуют общую пару"
+    ],
+
+    correct: 1,
+
+    explanation:
+      "Передача электронов может создать катион и анион, которые притягиваются благодаря противоположным зарядам."
+  },
+
+
+  {
+    question:
+      "Что называют химической реакцией?",
+
+    answers: [
+      "Изменение только температуры вещества",
+
+      "Процесс образования и разрушения химических связей с преобразованием веществ",
+
+      "Движение электронов вокруг ядра",
+
+      "Изменение количества протонов элемента"
+    ],
+
+    correct: 1,
+
+    explanation:
+      "Во время химической реакции исходные вещества преобразуются в продукты за счёт изменения химических связей."
+  }
+
+];
+
+
+/* =========================================================
+   66. EXAM STATE
+========================================================= */
+
+const campbellExamState = {
+
+  currentQuestion: 0,
+
+  selectedAnswer: null,
+
+  answers: [],
+
+  correctAnswers: 0,
+
+  secondsLeft: 600,
+
+  timer: null,
+
+  finished: false
+
+};
+
+
+/* =========================================================
+   67. EXAM ELEMENTS
+========================================================= */
+
+const campbellExamQuestion =
+  getById("campbellExamQuestion");
+
+const campbellExamAnswers =
+  getById("campbellExamAnswers");
+
+const campbellExamNextButton =
+  getById("campbellExamNextButton");
+
+const campbellExamTimer =
+  getById("campbellExamTimer");
+
+
+/* =========================================================
+   68. START EXAM
+========================================================= */
+
+function startCampbellExam() {
+
+  if (
+    !campbellState.theoryCompleted
+  ) {
+
+    showGroundToast(
+      "Экзамен закрыт",
+      "Сначала заверши теорию.",
+      "🔒"
+    );
+
+    return;
+
+  }
+
+
+  stopCampbellExamTimer();
+
+
+  campbellExamState.currentQuestion =
+    0;
+
+  campbellExamState.selectedAnswer =
+    null;
+
+  campbellExamState.answers =
+    [];
+
+  campbellExamState.correctAnswers =
+    0;
+
+  campbellExamState.secondsLeft =
+    600;
+
+  campbellExamState.finished =
+    false;
+
+
+  changeScreen(
+    campbellScreen,
+    campbellExamScreen
+  );
+
+
+  renderCampbellExamQuestion();
+
+  updateCampbellExamTimer();
+
+  startCampbellExamTimer();
+
+}
+
+
+/* =========================================================
+   69. RENDER QUESTION
+========================================================= */
+
+function renderCampbellExamQuestion() {
+
+  const index =
+    campbellExamState.currentQuestion;
+
+
+  const question =
+    campbellExamQuestions[index];
+
+
+  if (!question) {
+
+    finishCampbellExam();
+
+    return;
+
+  }
+
+
+  campbellExamState.selectedAnswer =
+    null;
+
+
+  /* QUESTION COUNTER */
+
+  setText(
+    "campbellExamQuestionCounter",
+    `Вопрос ${index + 1} из ${campbellExamQuestions.length}`
+  );
+
+
+  /* PROGRESS */
+
+  const progress =
+    (
+      index /
+      campbellExamQuestions.length
+    ) * 100;
+
+
+  setProgress(
+    "campbellExamProgressBar",
+    progress
+  );
+
+
+  /* QUESTION */
+
+  if (campbellExamQuestion) {
+
+    campbellExamQuestion.textContent =
+      question.question;
+
+  }
+
+
+  /* HINT */
+
+  setText(
+    "campbellExamQuestionHint",
+    "Выбери один правильный ответ."
+  );
+
+
+  /* ANSWERS */
+
+  if (!campbellExamAnswers) {
+    return;
+  }
+
+
+  campbellExamAnswers.innerHTML =
+    "";
+
+
+  const letters =
+    ["A", "B", "C", "D", "E", "F"];
+
+
+  question.answers.forEach(
+    (answer, answerIndex) => {
+
+      const button =
+        document.createElement("button");
+
+
+      button.type =
+        "button";
+
+
+      button.className =
+        "answer-option";
+
+
+      const letter =
+        document.createElement("span");
+
+
+      letter.className =
+        "answer-letter";
+
+
+      letter.textContent =
+        letters[answerIndex] || "?";
+
+
+      const text =
+        document.createElement("span");
+
+
+      text.className =
+        "answer-text";
+
+
+      text.textContent =
+        answer;
+
+
+      button.append(
+        letter,
+        text
+      );
+
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          selectCampbellAnswer(
+            answerIndex,
+            button
+          );
+
+        }
+      );
+
+
+      campbellExamAnswers.appendChild(
+        button
+      );
+
+    }
+  );
+
+
+  /* NEXT BUTTON */
+
+  if (campbellExamNextButton) {
+
+    campbellExamNextButton.disabled =
+      true;
+
+
+    campbellExamNextButton.textContent =
+      index ===
+      campbellExamQuestions.length - 1
+        ? "Завершить экзамен"
+        : "Продолжить";
+
+  }
+
+}
+
+
+/* =========================================================
+   70. SELECT ANSWER
+========================================================= */
+
+function selectCampbellAnswer(
+  answerIndex,
+  button
+) {
+
+  if (
+    campbellExamState.selectedAnswer !==
+    null
+  ) {
+
+    return;
+
+  }
+
+
+  const question =
+    campbellExamQuestions[
+      campbellExamState.currentQuestion
+    ];
+
+
+  if (!question) {
+    return;
+  }
+
+
+  campbellExamState.selectedAnswer =
+    answerIndex;
+
+
+  const isCorrect =
+    answerIndex ===
+    question.correct;
+
+
+  /* SAVE ANSWER */
+
+  campbellExamState.answers.push({
+
+    questionIndex:
+      campbellExamState.currentQuestion,
+
+    selected:
+      answerIndex,
+
+    correct:
+      question.correct,
+
+    isCorrect:
+      isCorrect
+
+  });
+
+
+  if (isCorrect) {
+
+    campbellExamState.correctAnswers +=
+      1;
+
+  }
+
+
+  /* LOCK ALL ANSWERS */
+
+  const answerButtons =
+    Array.from(
+      campbellExamAnswers.querySelectorAll(
+        ".answer-option"
+      )
+    );
+
+
+  answerButtons.forEach(
+    (answerButton, index) => {
+
+      answerButton.disabled =
+        true;
+
+
+      if (
+        index ===
+        question.correct
+      ) {
+
+        answerButton.classList.add(
+          "correct"
+        );
 
       }
 
 
       if (
-        event.key ===
-        "ArrowRight"
+        index === answerIndex &&
+        !isCorrect
       ) {
 
-        if (
-          campbellCurrentPage <
-          CAMPBELL_LAST_PAGE
-        ) {
-
-          campbellCurrentPage++;
-
-          renderCampbellReader();
-
-        }
+        answerButton.classList.add(
+          "wrong"
+        );
 
       }
 
@@ -5087,285 +3550,1863 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
 
-  /* ========================================
-     СВАЙП НА ТЕЛЕФОНЕ
-  ======================================== */
+  /* FEEDBACK */
 
-  let campbellTouchStartX =
-    null;
+  setText(
+    "campbellExamQuestionHint",
 
-  let campbellTouchEndX =
-    null;
+    isCorrect
+      ? `✓ Правильно. ${question.explanation}`
+      : `✕ Неправильно. ${question.explanation}`
+  );
 
 
-  if (campbellTheoryScreen) {
+  if (campbellExamNextButton) {
 
-    campbellTheoryScreen.addEventListener(
-      "touchstart",
-      event => {
+    campbellExamNextButton.disabled =
+      false;
+
+  }
+
+}
+
+
+/* =========================================================
+   71. NEXT QUESTION
+========================================================= */
+
+function nextCampbellExamQuestion() {
+
+  if (
+    campbellExamState.selectedAnswer ===
+    null
+  ) {
+
+    return;
+
+  }
+
+
+  const lastQuestion =
+    campbellExamState.currentQuestion >=
+    campbellExamQuestions.length - 1;
+
+
+  if (lastQuestion) {
+
+    finishCampbellExam();
+
+    return;
+
+  }
+
+
+  campbellExamState.currentQuestion +=
+    1;
+
+
+  renderCampbellExamQuestion();
+
+}
+
+
+/* =========================================================
+   72. NEXT BUTTON
+========================================================= */
+
+onClick(
+  campbellExamNextButton,
+  nextCampbellExamQuestion
+);
+
+
+/* =========================================================
+   73. TIMER
+========================================================= */
+
+function startCampbellExamTimer() {
+
+  stopCampbellExamTimer();
+
+
+  campbellExamState.timer =
+    setInterval(
+      () => {
+
+        campbellExamState.secondsLeft -=
+          1;
+
+
+        updateCampbellExamTimer();
+
 
         if (
-          !event.changedTouches ||
-          !event.changedTouches[0]
+          campbellExamState.secondsLeft <=
+          0
         ) {
-          return;
+
+          finishCampbellExam();
+
         }
 
-
-        campbellTouchStartX =
-          event.changedTouches[0]
-            .screenX;
-
       },
-      {
-        passive: true
-      }
+      1000
+    );
+
+}
+
+
+/* =========================================================
+   74. STOP TIMER
+========================================================= */
+
+function stopCampbellExamTimer() {
+
+  if (
+    campbellExamState.timer
+  ) {
+
+    clearInterval(
+      campbellExamState.timer
     );
 
 
-    campbellTheoryScreen.addEventListener(
-      "touchend",
-      event => {
+    campbellExamState.timer =
+      null;
 
-        if (
-          campbellTouchStartX ===
-          null
-        ) {
-          return;
-        }
+  }
+
+}
 
 
-        if (
-          !event.changedTouches ||
-          !event.changedTouches[0]
-        ) {
-          return;
-        }
+/* =========================================================
+   75. UPDATE TIMER
+========================================================= */
+
+function updateCampbellExamTimer() {
+
+  if (!campbellExamTimer) {
+    return;
+  }
 
 
-        campbellTouchEndX =
-          event.changedTouches[0]
-            .screenX;
+  const seconds =
+    Math.max(
+      0,
+      campbellExamState.secondsLeft
+    );
 
 
-        handleCampbellSwipe();
+  const minutes =
+    Math.floor(
+      seconds / 60
+    );
 
 
-        campbellTouchStartX =
-          null;
+  const remainingSeconds =
+    seconds % 60;
 
-        campbellTouchEndX =
-          null;
 
-      },
-      {
-        passive: true
-      }
+  campbellExamTimer.textContent =
+    `${String(minutes).padStart(2, "0")}:${String(remainingSeconds).padStart(2, "0")}`;
+
+
+  campbellExamTimer.classList.remove(
+    "warning",
+    "danger"
+  );
+
+
+  if (
+    seconds <= 60
+  ) {
+
+    campbellExamTimer.classList.add(
+      "danger"
     );
 
   }
 
+  else if (
+    seconds <= 180
+  ) {
 
-  /* ========================================
-     ОБРАБОТКА СВАЙПА
-  ======================================== */
+    campbellExamTimer.classList.add(
+      "warning"
+    );
 
-  function handleCampbellSwipe() {
+  }
 
-    if (
-      campbellTouchStartX ===
-        null ||
-      campbellTouchEndX ===
-        null
-    ) {
-      return;
-    }
+}
 
 
-    const distance =
-      campbellTouchEndX -
-      campbellTouchStartX;
+/* =========================================================
+   76. FINISH EXAM
+========================================================= */
 
+function finishCampbellExam() {
 
-    /*
-      Маленькие движения игнорируем.
-    */
+  if (
+    campbellExamState.finished
+  ) {
 
-    if (
-      Math.abs(distance) <
-      70
-    ) {
-
-      return;
-
-    }
-
-
-    /*
-      Свайп вправо:
-      предыдущая страница.
-    */
-
-    if (
-      distance > 0 &&
-      campbellCurrentPage >
-        CAMPBELL_FIRST_PAGE
-    ) {
-
-      campbellCurrentPage--;
-
-      renderCampbellReader();
-
-      return;
-
-    }
-
-
-    /*
-      Свайп влево:
-      следующая страница.
-    */
-
-    if (
-      distance < 0 &&
-      campbellCurrentPage <
-        CAMPBELL_LAST_PAGE
-    ) {
-
-      campbellCurrentPage++;
-
-      renderCampbellReader();
-
-    }
+    return;
 
   }
 
 
-  /* ========================================
-     ОБНОВИТЬ КНОПКУ ЗАВЕРШЕНИЯ ЧТЕНИЯ
-  ======================================== */
-
-  function updateCampbellCompleteButton() {
-
-    if (
-      !completeCampbellTheoryButton
-    ) {
-      return;
-    }
+  campbellExamState.finished =
+    true;
 
 
-    const completed =
-      campbellMaxReadPage >=
-      CAMPBELL_LAST_PAGE;
+  stopCampbellExamTimer();
 
 
-    completeCampbellTheoryButton.disabled =
-      !completed;
+  const total =
+    campbellExamQuestions.length;
 
 
-    completeCampbellTheoryButton.textContent =
-      completed
-        ? "Завершить изучение ✓"
-        : `Дочитай до страницы ${CAMPBELL_LAST_PAGE}`;
-
-  }
+  const correct =
+    campbellExamState.correctAnswers;
 
 
-  /* ========================================
-     ДОПОЛНЯЕМ ОБНОВЛЕНИЕ READER
-  ======================================== */
-
-  const originalRenderCampbellReader =
-    renderCampbellReader;
+  const wrong =
+    total - correct;
 
 
-  renderCampbellReader =
-    function () {
-
-      originalRenderCampbellReader();
-
-      updateCampbellCompleteButton();
-
-    };
+  const percent =
+    Math.round(
+      (correct / total) * 100
+    );
 
 
-  /* ========================================
-     ПРОВЕРКА CAMPBELL ПРИ СТАРТЕ
-  ======================================== */
+  /*
+     PASS = 70%
+  */
 
-  restoreCampbellState();
-
-  restoreCampbellResult();
-
-  updateCampbellCompleteButton();
+  const passed =
+    percent >= 70;
 
 
-  /* ========================================
-     ПЕРВИЧНЫЙ ЗАПУСК GROUND
-  ======================================== */
+  /*
+     Был ли экзамен уже успешно
+     пройден раньше?
+  */
 
-  const savedGrade =
+  const previouslyCompleted =
     localStorage.getItem(
-      "groundGrade"
+      "campbellChapter2ExamCompleted"
+    ) === "true";
+
+
+  /*
+     Если прошёл сейчас —
+     сохраняем.
+  */
+
+  if (passed) {
+
+    localStorage.setItem(
+      "campbellChapter2ExamCompleted",
+      "true"
+    );
+
+  }
+
+
+  /*
+     Награда выдаётся только
+     за ПЕРВОЕ успешное прохождение.
+  */
+
+  let rewardXP =
+    0;
+
+
+  let rewardGenes =
+    0;
+
+
+  if (
+    passed &&
+    !previouslyCompleted
+  ) {
+
+    rewardXP =
+      100;
+
+
+    rewardGenes =
+      20;
+
+
+    addXP(
+      rewardXP
     );
 
 
-  if (savedGrade) {
+    addGenes(
+      rewardGenes
+    );
 
-    /*
-      Пользователь уже выбирал класс.
-      Данные просто подготавливаем.
-    */
+  }
 
-    updateUserInterface();
+
+  /*
+     SAVE RESULT
+  */
+
+  localStorage.setItem(
+    "campbellChapter2LastScore",
+    String(percent)
+  );
+
+
+  localStorage.setItem(
+    "campbellChapter2CorrectAnswers",
+    String(correct)
+  );
+
+
+  /*
+     UPDATE RESULT SCREEN
+  */
+
+  renderCampbellResult({
+
+    total,
+    correct,
+    wrong,
+    percent,
+    passed,
+    rewardXP,
+    rewardGenes
+
+  });
+
+
+  updateCampbellChapterScreen();
+
+
+  changeScreen(
+    campbellExamScreen,
+    campbellResultScreen
+  );
+
+}
+
+
+/* =========================================================
+   77. RENDER RESULT
+========================================================= */
+
+function renderCampbellResult(
+  result
+) {
+
+  /* ICON */
+
+  setText(
+    "campbellResultIcon",
+
+    result.passed
+      ? "🏆"
+      : "📚"
+  );
+
+
+  /* TITLE */
+
+  setText(
+    "campbellResultTitle",
+
+    result.passed
+      ? "Экзамен пройден!"
+      : "Попробуй ещё раз"
+  );
+
+
+  /* MESSAGE */
+
+  setText(
+    "campbellResultMessage",
+
+    result.passed
+      ? "Отличная работа! Глава 2 завершена."
+      : "Для прохождения нужно набрать минимум 70%. Повтори материал и попробуй снова."
+  );
+
+
+  /* PERCENT */
+
+  setText(
+    "campbellResultPercent",
+    `${result.percent}%`
+  );
+
+
+  /*
+     Если процент находится
+     внутри отдельного элемента.
+  */
+
+  const percentElement =
+    $(".campbell-result-percent");
+
+
+  if (
+    percentElement &&
+    !getById("campbellResultPercent")
+  ) {
+
+    percentElement.textContent =
+      `${result.percent}%`;
+
+  }
+
+
+  /* PROGRESS */
+
+  setProgress(
+    "campbellResultProgress",
+    result.percent
+  );
+
+
+  /* STATS */
+
+  setText(
+    "campbellResultCorrect",
+    result.correct
+  );
+
+
+  setText(
+    "campbellResultWrong",
+    result.wrong
+  );
+
+
+  setText(
+    "campbellResultTotal",
+    result.total
+  );
+
+
+  /* REWARD */
+
+  let rewardText;
+
+
+  if (
+    result.rewardXP > 0 ||
+    result.rewardGenes > 0
+  ) {
+
+    rewardText =
+      `+${result.rewardXP} XP • +${result.rewardGenes} 🧬`;
+
+  }
+
+  else if (
+    result.passed
+  ) {
+
+    rewardText =
+      "Экзамен уже был пройден ✓";
 
   }
 
   else {
 
-    /*
-      Первый запуск.
-    */
-
-    if (currentGrade) {
-
-      currentGrade.textContent =
-        "Класс не выбран";
-
-    }
+    rewardText =
+      "Пройди экзамен, чтобы получить награду";
 
   }
 
 
-  /* ========================================
-     ПЕРВИЧНАЯ БИБЛИОТЕКА
-  ======================================== */
-
-  buildLibrary();
-
-
-  /* ========================================
-     CAMPBELL — ФИНАЛЬНОЕ ОБНОВЛЕНИЕ
-  ======================================== */
-
-  updateCampbellProgress();
-
-
-  /* ========================================
-     GROUND READY
-  ======================================== */
-
-  console.log(
-    "🧬 Ground loaded"
+  setText(
+    "campbellRewardText",
+    rewardText
   );
 
-  console.log(
-    `📖 Campbell Chapter 2: pages ${CAMPBELL_FIRST_PAGE}-${CAMPBELL_LAST_PAGE}`
-  );
+}
 
-  console.log(
-    `📚 Current Campbell page: ${campbellCurrentPage}`
+
+/* =========================================================
+   78. RESULT BUTTONS
+========================================================= */
+
+const campbellContinueButton =
+  getById(
+    "campbellContinueButton"
   );
 
 
-});
+const campbellRetryButton =
+  getById(
+    "campbellRetryButton"
+  );
+
+
+const campbellReviewButton =
+  getById(
+    "campbellReviewButton"
+  );
+
+
+/* =========================================================
+   79. CONTINUE
+========================================================= */
+
+onClick(
+  campbellContinueButton,
+  () => {
+
+    updateCampbellChapterScreen();
+
+
+    changeScreen(
+      campbellResultScreen,
+      campbellScreen
+    );
+
+  }
+);
+
+
+/* =========================================================
+   80. RETRY
+========================================================= */
+
+onClick(
+  campbellRetryButton,
+  () => {
+
+    startCampbellExam();
+
+  }
+);
+
+
+/* =========================================================
+   81. REVIEW
+========================================================= */
+
+onClick(
+  campbellReviewButton,
+  () => {
+
+    renderCampbellReview();
+
+
+    changeScreen(
+      campbellResultScreen,
+      campbellReviewScreen
+    );
+
+  }
+);
+
+
+/* =========================================================
+   82. RENDER REVIEW
+========================================================= */
+
+function renderCampbellReview() {
+
+  const container =
+    getById(
+      "campbellReviewQuestions"
+    );
+
+
+  if (!container) {
+    return;
+  }
+
+
+  container.innerHTML =
+    "";
+
+
+  const total =
+    campbellExamQuestions.length;
+
+
+  const correct =
+    campbellExamState.correctAnswers;
+
+
+  const percent =
+    Math.round(
+      (correct / total) * 100
+    );
+
+
+  setText(
+    "campbellReviewScore",
+    `${correct}/${total}`
+  );
+
+
+  setProgress(
+    "campbellReviewProgress",
+    percent
+  );
+
+
+  campbellExamState.answers.forEach(
+    (answerData, reviewIndex) => {
+
+      const question =
+        campbellExamQuestions[
+          answerData.questionIndex
+        ];
+
+
+      if (!question) {
+        return;
+      }
+
+
+      const block =
+        document.createElement(
+          "article"
+        );
+
+
+      block.className =
+        "campbell-theory-block";
+
+
+      /* NUMBER */
+
+      const label =
+        document.createElement(
+          "span"
+        );
+
+
+      label.className =
+        "small-label";
+
+
+      label.textContent =
+        `ВОПРОС ${reviewIndex + 1}`;
+
+
+      /* QUESTION */
+
+      const title =
+        document.createElement(
+          "h2"
+        );
+
+
+      title.textContent =
+        question.question;
+
+
+      /* USER ANSWER */
+
+      const userAnswer =
+        document.createElement(
+          "div"
+        );
+
+
+      userAnswer.className =
+        answerData.isCorrect
+          ? "campbell-review-answer correct"
+          : "campbell-review-answer wrong";
+
+
+      const userLabel =
+        document.createElement(
+          "strong"
+        );
+
+
+      userLabel.textContent =
+        answerData.isCorrect
+          ? "ТВОЙ ОТВЕТ ✓"
+          : "ТВОЙ ОТВЕТ ✕";
+
+
+      const userText =
+        document.createElement(
+          "p"
+        );
+
+
+      userText.textContent =
+        question.answers[
+          answerData.selected
+        ];
+
+
+      userAnswer.append(
+        userLabel,
+        userText
+      );
+
+
+      block.append(
+        label,
+        title,
+        userAnswer
+      );
+
+
+      /* CORRECT ANSWER */
+
+      if (
+        !answerData.isCorrect
+      ) {
+
+        const correctBox =
+          document.createElement(
+            "div"
+          );
+
+
+        correctBox.className =
+          "campbell-review-correct";
+
+
+        const correctLabel =
+          document.createElement(
+            "strong"
+          );
+
+
+        correctLabel.textContent =
+          "ПРАВИЛЬНЫЙ ОТВЕТ";
+
+
+        const correctText =
+          document.createElement(
+            "p"
+          );
+
+
+        correctText.textContent =
+          question.answers[
+            question.correct
+          ];
+
+
+        correctBox.append(
+          correctLabel,
+          correctText
+        );
+
+
+        block.appendChild(
+          correctBox
+        );
+
+      }
+
+
+      /* EXPLANATION */
+
+      const note =
+        document.createElement(
+          "div"
+        );
+
+
+      note.className =
+        "campbell-note";
+
+
+      const noteIcon =
+        document.createElement(
+          "span"
+        );
+
+
+      noteIcon.textContent =
+        "💡";
+
+
+      const explanation =
+        document.createElement(
+          "p"
+        );
+
+
+      explanation.textContent =
+        question.explanation;
+
+
+      note.append(
+        noteIcon,
+        explanation
+      );
+
+
+      block.appendChild(
+        note
+      );
+
+
+      container.appendChild(
+        block
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   83. REVIEW FINISH
+========================================================= */
+
+const campbellReviewFinishButton =
+  getById(
+    "campbellReviewFinishButton"
+  );
+
+
+onClick(
+  campbellReviewFinishButton,
+  () => {
+
+    updateCampbellChapterScreen();
+
+
+    changeScreen(
+      campbellReviewScreen,
+      campbellScreen
+    );
+
+  }
+);
+
+
+/* =========================================================
+   84. EXPOSE FUNCTIONS
+
+   Часть 2 уже проверяет наличие
+   window.startCampbellExam.
+========================================================= */
+
+window.startCampbellExam =
+  startCampbellExam;
+
+
+window.stopCampbellExamTimer =
+  stopCampbellExamTimer;
+
+
+/* =========================================================
+   END PART 4
+========================================================= */
+/* =========================================================
+   GROUND — APP.JS
+   PART 5
+   PROFILE + ACHIEVEMENTS + ACTIVITY
+========================================================= */
+
+
+/* =========================================================
+   85. PROFILE DATA
+========================================================= */
+
+const groundAchievements = [
+
+  {
+    id: "first-step",
+    icon: "🌱",
+    title: "Первый шаг",
+    description: "Заверши первый урок",
+
+    check() {
+      return groundState.completedLessons >= 1;
+    }
+  },
+
+  {
+    id: "gene-hunter",
+    icon: "🧬",
+    title: "Охотник за генами",
+    description: "Собери 25 генов",
+
+    check() {
+      return groundState.genes >= 25;
+    }
+  },
+
+  {
+    id: "student",
+    icon: "⚡",
+    title: "Исследователь",
+    description: "Получи 100 XP",
+
+    check() {
+      return groundState.xp >= 100;
+    }
+  },
+
+  {
+    id: "campbell-reader",
+    icon: "📖",
+    title: "Читатель Campbell",
+    description: "Заверши теорию главы 2",
+
+    check() {
+      return (
+        localStorage.getItem(
+          "campbellChapter2TheoryCompleted"
+        ) === "true"
+      );
+    }
+  },
+
+  {
+    id: "campbell-master",
+    icon: "🏆",
+    title: "Химия жизни",
+    description: "Пройди экзамен по главе 2",
+
+    check() {
+      return (
+        localStorage.getItem(
+          "campbellChapter2ExamCompleted"
+        ) === "true"
+      );
+    }
+  },
+
+  {
+    id: "level-5",
+    icon: "⭐",
+    title: "Пятый уровень",
+    description: "Достигни 5 уровня",
+
+    check() {
+      return groundState.level >= 5;
+    }
+  }
+
+];
+
+
+/* =========================================================
+   86. PROFILE LEVEL PROGRESS
+========================================================= */
+
+function getProfileXPData() {
+
+  const xpPerLevel =
+    100;
+
+
+  const xpInLevel =
+    groundState.xp % xpPerLevel;
+
+
+  const percent =
+    Math.round(
+      (xpInLevel / xpPerLevel) * 100
+    );
+
+
+  return {
+
+    current:
+      xpInLevel,
+
+    needed:
+      xpPerLevel,
+
+    percent:
+      percent
+
+  };
+
+}
+
+
+/* =========================================================
+   87. UPDATE PROFILE
+
+   Переопределяем функцию из PART 1.
+   Теперь профиль полноценный.
+========================================================= */
+
+function updateProfile() {
+
+  recalculateLevel();
+
+  updateGlobalStats();
+
+
+  const xpData =
+    getProfileXPData();
+
+
+  /* -------------------------
+     LEVEL
+  ------------------------- */
+
+  setText(
+    "profileLevel",
+    groundState.level
+  );
+
+
+  /* -------------------------
+     XP
+  ------------------------- */
+
+  setText(
+    "profileXP",
+    groundState.xp
+  );
+
+
+  setText(
+    "profileXPText",
+    `${xpData.current} / ${xpData.needed} XP`
+  );
+
+
+  setProgress(
+    "profileXPProgress",
+    xpData.percent
+  );
+
+
+  /* -------------------------
+     GENES
+  ------------------------- */
+
+  setText(
+    "profileGenes",
+    groundState.genes
+  );
+
+
+  /* -------------------------
+     STREAK
+  ------------------------- */
+
+  setText(
+    "profileStreak",
+    groundState.streak
+  );
+
+
+  /* -------------------------
+     COMPLETED
+  ------------------------- */
+
+  setText(
+    "profileCompletedLessons",
+    groundState.completedLessons
+  );
+
+
+  /* -------------------------
+     GRADE
+  ------------------------- */
+
+  setText(
+    "profileGrade",
+    `${groundState.grade} класс`
+  );
+
+
+  /* -------------------------
+     ACHIEVEMENTS
+  ------------------------- */
+
+  renderAchievements();
+
+
+  /* -------------------------
+     ACTIVITY
+  ------------------------- */
+
+  renderProfileActivity();
+
+}
+
+
+/* =========================================================
+   88. FIND ACHIEVEMENTS CONTAINER
+========================================================= */
+
+function getAchievementsContainer() {
+
+  return (
+    getById("achievementsList") ||
+    getById("profileAchievements") ||
+    $(".achievements-list")
+  );
+
+}
+
+
+/* =========================================================
+   89. RENDER ACHIEVEMENTS
+========================================================= */
+
+function renderAchievements() {
+
+  const container =
+    getAchievementsContainer();
+
+
+  if (!container) {
+    return;
+  }
+
+
+  container.innerHTML =
+    "";
+
+
+  let unlockedCount =
+    0;
+
+
+  groundAchievements.forEach(
+    (achievement) => {
+
+      const unlocked =
+        achievement.check();
+
+
+      if (unlocked) {
+
+        unlockedCount += 1;
+
+      }
+
+
+      const card =
+        document.createElement("div");
+
+
+      card.className =
+        "achievement-card";
+
+
+      if (unlocked) {
+
+        card.classList.add(
+          "unlocked"
+        );
+
+      }
+
+
+      /* ICON */
+
+      const icon =
+        document.createElement("div");
+
+
+      icon.className =
+        "achievement-icon";
+
+
+      icon.textContent =
+        unlocked
+          ? achievement.icon
+          : "🔒";
+
+
+      /* INFO */
+
+      const info =
+        document.createElement("div");
+
+
+      info.className =
+        "achievement-info";
+
+
+      const title =
+        document.createElement("strong");
+
+
+      title.textContent =
+        achievement.title;
+
+
+      const description =
+        document.createElement("p");
+
+
+      description.textContent =
+        achievement.description;
+
+
+      info.append(
+        title,
+        description
+      );
+
+
+      /* STATUS */
+
+      const status =
+        document.createElement("span");
+
+
+      status.className =
+        "achievement-status";
+
+
+      status.textContent =
+        unlocked
+          ? "✓"
+          : "";
+
+
+      card.append(
+        icon,
+        info,
+        status
+      );
+
+
+      container.appendChild(
+        card
+      );
+
+    }
+  );
+
+
+  setText(
+    "achievementCount",
+    `${unlockedCount}/${groundAchievements.length}`
+  );
+
+}
+
+
+/* =========================================================
+   90. ACTIVITY STORAGE
+========================================================= */
+
+function getActivityData() {
+
+  try {
+
+    const saved =
+      localStorage.getItem(
+        "groundActivity"
+      );
+
+
+    if (!saved) {
+
+      return {};
+
+    }
+
+
+    const parsed =
+      JSON.parse(saved);
+
+
+    if (
+      typeof parsed !== "object" ||
+      parsed === null
+    ) {
+
+      return {};
+
+    }
+
+
+    return parsed;
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "GROUND: activity data error",
+      error
+    );
+
+
+    return {};
+
+  }
+
+}
+
+
+/* =========================================================
+   91. SAVE ACTIVITY
+========================================================= */
+
+function saveActivityData(data) {
+
+  localStorage.setItem(
+    "groundActivity",
+    JSON.stringify(data)
+  );
+
+}
+
+
+/* =========================================================
+   92. LOCAL DATE KEY
+
+   Формат:
+   YYYY-MM-DD
+========================================================= */
+
+function getLocalDateKey(date = new Date()) {
+
+  const year =
+    date.getFullYear();
+
+
+  const month =
+    String(
+      date.getMonth() + 1
+    ).padStart(2, "0");
+
+
+  const day =
+    String(
+      date.getDate()
+    ).padStart(2, "0");
+
+
+  return `${year}-${month}-${day}`;
+
+}
+
+
+/* =========================================================
+   93. REGISTER ACTIVITY
+
+   Вызываем при завершении урока,
+   теории или экзамена.
+========================================================= */
+
+function registerGroundActivity(
+  amount = 1
+) {
+
+  const activity =
+    getActivityData();
+
+
+  const today =
+    getLocalDateKey();
+
+
+  activity[today] =
+    (
+      Number(activity[today]) ||
+      0
+    ) + amount;
+
+
+  saveActivityData(
+    activity
+  );
+
+
+  updateGroundStreak(
+    activity
+  );
+
+}
+
+
+/* =========================================================
+   94. STREAK CALCULATION
+========================================================= */
+
+function updateGroundStreak(
+  activity = getActivityData()
+) {
+
+  let streak =
+    0;
+
+
+  const date =
+    new Date();
+
+
+  /*
+     Если сегодня активности ещё нет,
+     разрешаем серии продолжаться со вчера.
+  */
+
+  const todayKey =
+    getLocalDateKey(date);
+
+
+  if (!activity[todayKey]) {
+
+    date.setDate(
+      date.getDate() - 1
+    );
+
+  }
+
+
+  while (true) {
+
+    const key =
+      getLocalDateKey(date);
+
+
+    if (!activity[key]) {
+
+      break;
+
+    }
+
+
+    streak += 1;
+
+
+    date.setDate(
+      date.getDate() - 1
+    );
+
+  }
+
+
+  groundState.streak =
+    streak;
+
+
+  saveGroundState();
+
+  updateGlobalStats();
+
+}
+
+
+/* =========================================================
+   95. PROFILE ACTIVITY
+========================================================= */
+
+function renderProfileActivity() {
+
+  const container =
+    getById("profileActivity") ||
+    $(".profile-activity");
+
+
+  if (!container) {
+    return;
+  }
+
+
+  const activity =
+    getActivityData();
+
+
+  container.innerHTML =
+    "";
+
+
+  const dayNames =
+    [
+      "Вс",
+      "Пн",
+      "Вт",
+      "Ср",
+      "Чт",
+      "Пт",
+      "Сб"
+    ];
+
+
+  /*
+     Последние 7 дней.
+  */
+
+  for (
+    let offset = 6;
+    offset >= 0;
+    offset -= 1
+  ) {
+
+    const date =
+      new Date();
+
+
+    date.setDate(
+      date.getDate() - offset
+    );
+
+
+    const key =
+      getLocalDateKey(date);
+
+
+    const amount =
+      Number(
+        activity[key]
+      ) || 0;
+
+
+    const day =
+      document.createElement("div");
+
+
+    day.className =
+      "activity-day";
+
+
+    if (amount > 0) {
+
+      day.classList.add(
+        "active"
+      );
+
+    }
+
+
+    const circle =
+      document.createElement("div");
+
+
+    circle.className =
+      "activity-day-circle";
+
+
+    circle.textContent =
+      amount > 0
+        ? "✓"
+        : "";
+
+
+    const name =
+      document.createElement("span");
+
+
+    name.className =
+      "activity-day-name";
+
+
+    name.textContent =
+      dayNames[
+        date.getDay()
+      ];
+
+
+    day.append(
+      circle,
+      name
+    );
+
+
+    container.appendChild(
+      day
+    );
+
+  }
+
+
+  /* MESSAGE */
+
+  const activeDays =
+    Object.values(
+      activity
+    ).filter(
+      (value) =>
+        Number(value) > 0
+    ).length;
+
+
+  if (activeDays === 0) {
+
+    setText(
+      "activityMessage",
+      "Начни обучение — здесь появится твоя активность."
+    );
+
+  }
+
+  else if (
+    groundState.streak >= 3
+  ) {
+
+    setText(
+      "activityMessage",
+      `🔥 Серия ${groundState.streak} дн. Продолжай!`
+    );
+
+  }
+
+  else {
+
+    setText(
+      "activityMessage",
+      "Хорошее начало. Продолжай заниматься каждый день."
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   96. CAMPBELL ACTIVITY FIX
+
+   Если теория уже завершена,
+   сохраняем специальный флаг,
+   чтобы не записывать её повторно.
+========================================================= */
+
+function registerCampbellTheoryActivity() {
+
+  const key =
+    "campbellChapter2ActivityRegistered";
+
+
+  if (
+    localStorage.getItem(key) ===
+    "true"
+  ) {
+
+    return;
+
+  }
+
+
+  registerGroundActivity(1);
+
+
+  localStorage.setItem(
+    key,
+    "true"
+  );
+
+}
+
+
+/* =========================================================
+   97. CAMPBELL EXAM ACTIVITY
+========================================================= */
+
+function registerCampbellExamActivity() {
+
+  const key =
+    "campbellChapter2ExamActivityRegistered";
+
+
+  if (
+    localStorage.getItem(key) ===
+    "true"
+  ) {
+
+    return;
+
+  }
+
+
+  registerGroundActivity(1);
+
+
+  localStorage.setItem(
+    key,
+    "true"
+  );
+
+}
+
+
+/* =========================================================
+   98. SYNC EXISTING CAMPBELL PROGRESS
+
+   Если пользователь уже завершил Campbell
+   до добавления системы профиля.
+========================================================= */
+
+function syncCampbellProfileProgress() {
+
+  const theoryCompleted =
+    localStorage.getItem(
+      "campbellChapter2TheoryCompleted"
+    ) === "true";
+
+
+  const examCompleted =
+    localStorage.getItem(
+      "campbellChapter2ExamCompleted"
+    ) === "true";
+
+
+  if (theoryCompleted) {
+
+    registerCampbellTheoryActivity();
+
+  }
+
+
+  if (examCompleted) {
+
+    registerCampbellExamActivity();
+
+  }
+
+}
+
+
+/* =========================================================
+   99. COMPLETED LESSON
+========================================================= */
+
+function registerCompletedLesson() {
+
+  groundState.completedLessons +=
+    1;
+
+
+  registerGroundActivity(1);
+
+
+  saveGroundState();
+
+  updateGlobalStats();
+
+  buildRoad();
+
+}
+
+
+/* =========================================================
+   100. PROFILE AVATAR CLICK
+========================================================= */
+
+const profileAvatar =
+  getById("profileAvatar") ||
+  $(".profile-avatar");
+
+
+onClick(
+  profileAvatar,
+  () => {
+
+    profileAvatar.classList.remove(
+      "pet"
+    );
+
+
+    void profileAvatar.offsetWidth;
+
+
+    profileAvatar.classList.add(
+      "pet"
+    );
+
+
+    showGroundToast(
+      "Ground",
+      "Мяу! 🐈‍⬛",
+      "🧬"
+    );
+
+
+    setTimeout(
+      () => {
+
+        profileAvatar.classList.remove(
+          "pet"
+        );
+
+      },
+      900
+    );
+
+  }
+);
+
+
+/* =========================================================
+   101. RESET BUTTON
+
+   Пока НЕ удаляет данные автоматически.
+   Случайным нажатием прогресс не потеряем.
+========================================================= */
+
+const resetProgressButton =
+  getById("resetProgressButton");
+
+
+onClick(
+  resetProgressButton,
+  () => {
+
+    showGroundToast(
+      "Прогресс защищён",
+      "Сброс данных пока отключён, чтобы случайно ничего не удалить.",
+      "🛡️"
+    );
+
+  }
+);
+
+
+/* =========================================================
+   102. SYNC PROFILE
+========================================================= */
+
+syncCampbellProfileProgress();
+
+updateGroundStreak();
+
+updateProfile();
+
+
+/* =========================================================
+   103. EXPORT
+
+   player.js сможет сообщать app.js,
+   что пользователь завершил урок.
+========================================================= */
+
+window.GroundApp = {
+
+  addXP:
+    addXP,
+
+  addGenes:
+    addGenes,
+
+  registerActivity:
+    registerGroundActivity,
+
+  completeLesson:
+    registerCompletedLesson,
+
+  updateProfile:
+    updateProfile,
+
+  showToast:
+    showGroundToast,
+
+  changeScreen:
+    changeScreen
+
+};
+
+
+/* =========================================================
+   END PART 5
+========================================================= */

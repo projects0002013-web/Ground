@@ -1,8 +1,9 @@
 /* =========================================================
    GROUND — STYLE.CSS
    PART 1
-   BASE + WELCOME + COURSE SELECTION
+   BASE + SCREENS + BUTTONS + WELCOME + PATH + GRADE
 ========================================================= */
+
 
 /* =========================================================
    RESET
@@ -31,19 +32,7 @@ body {
     "Segoe UI",
     sans-serif;
 
-  background:
-    radial-gradient(
-      circle at 50% -10%,
-      rgba(40, 217, 120, 0.12),
-      transparent 34%
-    ),
-    linear-gradient(
-      180deg,
-      #073d34 0%,
-      #032b25 45%,
-      #021f1b 100%
-    );
-
+  background: #021f1b;
   color: #effff6;
 
   overflow-x: hidden;
@@ -61,49 +50,104 @@ button {
 }
 
 img {
+  display: block;
   max-width: 100%;
 }
 
-.hidden {
+[hidden] {
   display: none !important;
 }
+
 
 /* =========================================================
    VARIABLES
 ========================================================= */
 
 :root {
-  --ground-bg: #021f1b;
-  --ground-bg-2: #073d34;
+  --bg: #021f1b;
+  --bg-light: #073d34;
 
-  --ground-card: rgba(255, 255, 255, 0.04);
-  --ground-card-2: rgba(255, 255, 255, 0.06);
+  --card: rgba(255, 255, 255, 0.045);
+  --card-light: rgba(255, 255, 255, 0.065);
 
-  --ground-green: #55ee96;
-  --ground-green-2: #28d978;
-  --ground-green-3: #18b95f;
-  --ground-green-dark: #0d8e47;
+  --green: #55ee96;
+  --green-2: #28d978;
+  --green-3: #18b95f;
+  --green-dark: #0d8e47;
 
-  --ground-text: #effff6;
-  --ground-text-soft: #a7c5bb;
-  --ground-muted: #789b90;
+  --text: #effff6;
+  --text-soft: #a7c5bb;
+  --muted: #789b90;
 
-  --ground-border: rgba(255, 255, 255, 0.07);
-  --ground-green-border: rgba(85, 238, 150, 0.14);
+  --border: rgba(255, 255, 255, 0.07);
+  --green-border: rgba(85, 238, 150, 0.14);
 
-  --ground-radius: 22px;
+  --radius: 22px;
 }
+
 
 /* =========================================================
    SCREENS
+
+   ВАЖНО:
+   показывается только .screen.active
 ========================================================= */
 
 .screen {
+  display: none;
+
   width: 100%;
   min-height: 100vh;
 }
 
-.ground-app {
+.screen.active {
+  display: block;
+}
+
+
+/* =========================================================
+   ОБЩИЙ ФОН
+========================================================= */
+
+#welcomeScreen,
+#pathScreen,
+#gradeScreen,
+#homeScreen,
+#libraryScreen,
+#profileScreen,
+#lessonScreen,
+#lessonCompleteScreen,
+#campbellScreen,
+#campbellTheoryScreen,
+#campbellTheoryCompleteScreen,
+#campbellExamScreen,
+#campbellResultScreen,
+#campbellReviewScreen {
+  background:
+    radial-gradient(
+      circle at 50% -5%,
+      rgba(85, 238, 150, 0.12),
+      transparent 30%
+    ),
+    linear-gradient(
+      180deg,
+      #073d34 0%,
+      #032b25 45%,
+      #021f1b 100%
+    );
+}
+
+
+/* =========================================================
+   ОБЩИЕ КОНТЕЙНЕРЫ
+========================================================= */
+
+.app-page,
+.ground-app,
+.library-app,
+.profile-app,
+.lesson-app,
+.campbell-app {
   width: 100%;
   max-width: 760px;
 
@@ -114,45 +158,29 @@ img {
   padding:
     20px
     18px
-    45px;
+    105px;
 }
 
+
 /* =========================================================
-   COMMON TEXT
+   SMALL LABEL
 ========================================================= */
 
-.eyebrow {
-  color: var(--ground-green);
+.small-label {
+  display: inline-block;
+
+  color: var(--green);
 
   font-size: 10px;
-  font-weight: 950;
+  font-weight: 900;
 
-  letter-spacing: 1.3px;
+  letter-spacing: 1.15px;
   text-transform: uppercase;
 }
 
-.section-title {
-  color: var(--ground-text);
-
-  font-size: 22px;
-  font-weight: 950;
-
-  line-height: 1.2;
-}
-
-.section-description {
-  margin-top: 7px;
-
-  color: var(--ground-muted);
-
-  font-size: 12px;
-  font-weight: 650;
-
-  line-height: 1.55;
-}
 
 /* =========================================================
-   COMMON BUTTON
+   PRIMARY BUTTON
 ========================================================= */
 
 .primary-button {
@@ -161,7 +189,7 @@ img {
 
   padding: 15px 18px;
 
-  border: none;
+  border: 0;
   border-radius: 18px;
 
   background:
@@ -185,7 +213,7 @@ img {
   transition:
     transform 0.14s ease,
     box-shadow 0.14s ease,
-    opacity 0.14s ease;
+    filter 0.14s ease;
 }
 
 .primary-button:hover {
@@ -200,75 +228,30 @@ img {
     0 8px 20px rgba(0, 0, 0, 0.17);
 }
 
-/* =========================================================
-   SECONDARY BUTTON
-========================================================= */
-
-.secondary-button {
-  width: 100%;
-  min-height: 52px;
-
-  padding: 13px 16px;
-
-  border-radius: 17px;
-
-  border:
-    1px solid rgba(85, 238, 150, 0.13);
-
-  background:
-    rgba(85, 238, 150, 0.055);
-
-  color: #bfffd8;
-
-  font-size: 13px;
-  font-weight: 900;
-
-  cursor: pointer;
-
-  transition:
-    transform 0.14s ease,
-    background 0.14s ease,
-    border-color 0.14s ease;
-}
-
-.secondary-button:hover {
-  background:
-    rgba(85, 238, 150, 0.09);
-
-  border-color:
-    rgba(85, 238, 150, 0.22);
-}
-
-.secondary-button:active {
-  transform: scale(0.98);
-}
 
 /* =========================================================
    BACK BUTTON
 ========================================================= */
 
-.back-button {
+.back-icon {
   width: 44px;
   height: 44px;
 
-  flex-shrink: 0;
+  flex: 0 0 44px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  border: none;
+  border: 1px solid var(--border);
   border-radius: 14px;
 
   background:
     rgba(255, 255, 255, 0.05);
 
-  border:
-    1px solid rgba(255, 255, 255, 0.07);
-
   color: #dffff0;
 
-  font-size: 21px;
+  font-size: 20px;
   font-weight: 900;
 
   cursor: pointer;
@@ -278,1263 +261,21 @@ img {
     background 0.14s ease;
 }
 
-.back-button:hover {
+.back-icon:hover {
   background:
     rgba(85, 238, 150, 0.08);
 }
 
-.back-button:active {
+.back-icon:active {
   transform: scale(0.94);
 }
 
-/* =========================================================
-   WELCOME SCREEN
-========================================================= */
-
-#welcomeScreen {
-  min-height: 100vh;
-
-  background:
-    radial-gradient(
-      circle at 50% 18%,
-      rgba(85, 238, 150, 0.14),
-      transparent 28%
-    ),
-    linear-gradient(
-      180deg,
-      #073d34 0%,
-      #032b25 48%,
-      #021f1b 100%
-    );
-}
-
-.welcome-app {
-  width: 100%;
-  max-width: 700px;
-
-  min-height: 100vh;
-
-  margin: 0 auto;
-
-  padding:
-    30px
-    20px
-    35px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
 
 /* =========================================================
-   WELCOME LOGO
+   TOPBAR
 ========================================================= */
 
-.welcome-logo {
-  align-self: flex-start;
-
-  display: flex;
-  align-items: center;
-
-  gap: 9px;
-
-  color: #effff6;
-
-  font-size: 21px;
-  font-weight: 950;
-
-  letter-spacing: -0.5px;
-}
-
-.welcome-logo-icon {
-  width: 37px;
-  height: 37px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 12px;
-
-  background:
-    rgba(85, 238, 150, 0.11);
-
-  border:
-    1px solid rgba(85, 238, 150, 0.13);
-
-  font-size: 20px;
-}
-
-/* =========================================================
-   WELCOME HERO
-========================================================= */
-
-.welcome-hero {
-  width: 100%;
-
-  flex: 1;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  padding:
-    25px
-    0
-    20px;
-
-  text-align: center;
-}
-
-/* =========================================================
-   MASCOT AREA
-========================================================= */
-
-.welcome-mascot {
-  position: relative;
-
-  width: 100%;
-  min-height: 340px;
-
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-
-  margin-bottom: 12px;
-}
-
-.welcome-mascot::before {
-  content: "";
-
-  position: absolute;
-
-  width: 260px;
-  height: 260px;
-
-  top: 30px;
-  left: 50%;
-
-  transform: translateX(-50%);
-
-  border-radius: 50%;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(85, 238, 150, 0.16),
-      rgba(85, 238, 150, 0.04) 55%,
-      transparent 72%
-    );
-
-  filter: blur(2px);
-}
-
-/* Сам кот */
-
-.welcome-mascot img,
-.mascot-image {
-  position: relative;
-  z-index: 2;
-
-  width: 290px;
-  height: 330px;
-
-  object-fit: contain;
-
-  filter:
-    drop-shadow(
-      0 18px 22px rgba(0, 0, 0, 0.28)
-    );
-}
-
-/* Тень под котом */
-
-.welcome-mascot::after {
-  content: "";
-
-  position: absolute;
-
-  bottom: 2px;
-  left: 50%;
-
-  width: 190px;
-  height: 25px;
-
-  transform: translateX(-50%);
-
-  border-radius: 50%;
-
-  background:
-    rgba(0, 0, 0, 0.22);
-
-  filter: blur(8px);
-}
-
-/* =========================================================
-   WELCOME TITLE
-========================================================= */
-
-.welcome-content {
-  position: relative;
-  z-index: 3;
-
-  width: 100%;
-  max-width: 520px;
-}
-
-.welcome-content h1 {
-  margin-top: 8px;
-
-  color: #f1fff7;
-
-  font-size: 38px;
-  font-weight: 1000;
-
-  line-height: 1.05;
-
-  letter-spacing: -1.3px;
-}
-
-.welcome-content h1 span {
-  color: var(--ground-green);
-}
-
-.welcome-content > p {
-  max-width: 450px;
-
-  margin:
-    13px
-    auto
-    0;
-
-  color: #9ab9af;
-
-  font-size: 14px;
-  font-weight: 650;
-
-  line-height: 1.6;
-}
-
-/* =========================================================
-   WELCOME FEATURES
-========================================================= */
-
-.welcome-features {
-  width: 100%;
-
-  margin-top: 23px;
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(3, 1fr);
-
-  gap: 9px;
-}
-
-.welcome-feature {
-  min-width: 0;
-
-  padding:
-    13px
-    8px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  gap: 6px;
-
-  border-radius: 16px;
-
-  background:
-    rgba(255, 255, 255, 0.035);
-
-  border:
-    1px solid rgba(255, 255, 255, 0.055);
-}
-
-.welcome-feature span {
-  font-size: 22px;
-}
-
-.welcome-feature strong {
-  color: #cce9df;
-
-  font-size: 10px;
-  font-weight: 850;
-
-  line-height: 1.3;
-}
-
-/* =========================================================
-   WELCOME ACTION
-========================================================= */
-
-.welcome-actions {
-  width: 100%;
-  max-width: 520px;
-
-  margin-top: 25px;
-}
-
-#welcomeStartButton,
-#startButton {
-  width: 100%;
-}
-
-/* =========================================================
-   COURSE SELECT SCREEN
-========================================================= */
-
-#courseScreen,
-#courseSelectionScreen,
-#selectCourseScreen {
-  min-height: 100vh;
-
-  background:
-    radial-gradient(
-      circle at 50% 0%,
-      rgba(40, 217, 120, 0.13),
-      transparent 31%
-    ),
-    linear-gradient(
-      180deg,
-      #073d34,
-      #021f1b
-    );
-}
-
-/* =========================================================
-   COURSE HEADER
-========================================================= */
-
-.course-header {
-  width: 100%;
-
-  padding-top: 10px;
-
-  display: flex;
-  align-items: center;
-
-  gap: 13px;
-}
-
-.course-header-text {
-  flex: 1;
-  min-width: 0;
-}
-
-.course-header-text h1 {
-  margin-top: 4px;
-
-  color: #effff6;
-
-  font-size: 26px;
-  font-weight: 950;
-
-  line-height: 1.15;
-}
-
-.course-header-text p {
-  margin-top: 5px;
-
-  color: #789b90;
-
-  font-size: 11px;
-  font-weight: 700;
-
-  line-height: 1.45;
-}
-
-/* =========================================================
-   COURSE INTRO
-========================================================= */
-
-.course-intro {
-  width: 100%;
-
-  margin-top: 26px;
-}
-
-.course-intro h2 {
-  color: #effff6;
-
-  font-size: 20px;
-  font-weight: 950;
-}
-
-.course-intro p {
-  margin-top: 7px;
-
-  color: #88aa9f;
-
-  font-size: 12px;
-  font-weight: 650;
-
-  line-height: 1.55;
-}
-
-/* =========================================================
-   COURSE GRID
-========================================================= */
-
-.course-grid {
-  width: 100%;
-
-  margin-top: 17px;
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(2, 1fr);
-
-  gap: 11px;
-}
-
-/* =========================================================
-   COURSE CARD
-========================================================= */
-
-.course-card {
-  position: relative;
-
-  min-height: 145px;
-
-  padding: 16px;
-
-  display: flex;
-  flex-direction: column;
-
-  border: none;
-  border-radius: 21px;
-
-  overflow: hidden;
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(255, 255, 255, 0.055),
-      rgba(255, 255, 255, 0.025)
-    );
-
-  border:
-    1px solid rgba(255, 255, 255, 0.07);
-
-  color: white;
-
-  text-align: left;
-
-  cursor: pointer;
-
-  box-shadow:
-    0 10px 28px rgba(0, 0, 0, 0.12);
-
-  transition:
-    transform 0.15s ease,
-    background 0.15s ease,
-    border-color 0.15s ease;
-}
-
-.course-card::after {
-  content: "";
-
-  position: absolute;
-
-  width: 90px;
-  height: 90px;
-
-  right: -35px;
-  top: -35px;
-
-  border-radius: 50%;
-
-  background:
-    rgba(85, 238, 150, 0.04);
-}
-
-.course-card:hover {
-  border-color:
-    rgba(85, 238, 150, 0.19);
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(85, 238, 150, 0.075),
-      rgba(255, 255, 255, 0.025)
-    );
-}
-
-.course-card:active {
-  transform: scale(0.98);
-}
-
-/* =========================================================
-   COURSE ICON
-========================================================= */
-
-.course-card-icon {
-  width: 47px;
-  height: 47px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 15px;
-
-  background:
-    rgba(85, 238, 150, 0.09);
-
-  border:
-    1px solid rgba(85, 238, 150, 0.11);
-
-  font-size: 23px;
-}
-
-/* =========================================================
-   COURSE TEXT
-========================================================= */
-
-.course-card h3 {
-  margin-top: 14px;
-
-  color: #effff6;
-
-  font-size: 16px;
-  font-weight: 950;
-}
-
-.course-card p {
-  margin-top: 5px;
-
-  color: #7f9f94;
-
-  font-size: 10px;
-  font-weight: 700;
-
-  line-height: 1.45;
-}
-
-/* =========================================================
-   COURSE ARROW
-========================================================= */
-
-.course-card-arrow {
-  position: absolute;
-
-  right: 14px;
-  bottom: 13px;
-
-  color: var(--ground-green);
-
-  font-size: 18px;
-  font-weight: 950;
-}
-
-/* =========================================================
-   SPECIAL COURSES
-========================================================= */
-
-.course-card.special {
-  border-color:
-    rgba(85, 238, 150, 0.13);
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(26, 69, 53, 0.95),
-      rgba(12, 34, 27, 0.98)
-    );
-}
-
-.course-card.special .course-card-icon {
-  background:
-    linear-gradient(
-      145deg,
-      rgba(85, 238, 150, 0.18),
-      rgba(40, 217, 120, 0.07)
-    );
-}
-
-/* =========================================================
-   WIDE COURSE CARD
-========================================================= */
-
-.course-card.wide {
-  grid-column:
-    1 / -1;
-
-  min-height: 115px;
-
-  justify-content: center;
-}
-
-.course-card.wide h3 {
-  margin-top: 9px;
-}
-
-/* =========================================================
-   LOCKED COURSE
-========================================================= */
-
-.course-card.locked {
-  opacity: 0.5;
-}
-
-.course-card.locked .course-card-icon {
-  background:
-    rgba(255, 255, 255, 0.04);
-
-  border-color:
-    rgba(255, 255, 255, 0.05);
-}
-
-/* =========================================================
-   SMALL INFO CARD
-========================================================= */
-
-.ground-info-card {
-  width: 100%;
-
-  margin-top: 18px;
-
-  padding: 14px;
-
-  display: flex;
-  align-items: flex-start;
-
-  gap: 11px;
-
-  border-radius: 17px;
-
-  background:
-    rgba(85, 238, 150, 0.055);
-
-  border:
-    1px solid rgba(85, 238, 150, 0.085);
-}
-
-.ground-info-card > span {
-  flex-shrink: 0;
-
-  font-size: 19px;
-}
-
-.ground-info-card p {
-  color: #9dbdb2;
-
-  font-size: 11px;
-  font-weight: 700;
-
-  line-height: 1.5;
-}
-
-/* =========================================================
-   SCROLLBAR
-========================================================= */
-
-::-webkit-scrollbar {
-  width: 5px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  border-radius: 20px;
-
-  background:
-    rgba(85, 238, 150, 0.16);
-}
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media (max-width: 480px) {
-
-  .ground-app {
-    padding:
-      16px
-      14px
-      40px;
-  }
-
-  .welcome-app {
-    padding:
-      22px
-      16px
-      28px;
-  }
-
-  .welcome-logo {
-    font-size: 19px;
-  }
-
-  .welcome-logo-icon {
-    width: 34px;
-    height: 34px;
-
-    font-size: 18px;
-  }
-
-  .welcome-hero {
-    padding-top: 15px;
-  }
-
-  .welcome-mascot {
-    min-height: 305px;
-
-    margin-bottom: 5px;
-  }
-
-  .welcome-mascot img,
-  .mascot-image {
-    width: 255px;
-    height: 295px;
-  }
-
-  .welcome-mascot::before {
-    width: 225px;
-    height: 225px;
-  }
-
-  .welcome-content h1 {
-    font-size: 32px;
-
-    letter-spacing: -1px;
-  }
-
-  .welcome-content > p {
-    font-size: 12px;
-
-    line-height: 1.55;
-  }
-
-  .welcome-features {
-    margin-top: 18px;
-
-    gap: 6px;
-  }
-
-  .welcome-feature {
-    padding:
-      11px
-      5px;
-
-    border-radius: 14px;
-  }
-
-  .welcome-feature span {
-    font-size: 19px;
-  }
-
-  .welcome-feature strong {
-    font-size: 9px;
-  }
-
-  .welcome-actions {
-    margin-top: 20px;
-  }
-
-  .course-header-text h1 {
-    font-size: 23px;
-  }
-
-  .course-grid {
-    gap: 8px;
-  }
-
-  .course-card {
-    min-height: 135px;
-
-    padding: 14px;
-
-    border-radius: 18px;
-  }
-
-  .course-card-icon {
-    width: 43px;
-    height: 43px;
-
-    border-radius: 14px;
-
-    font-size: 21px;
-  }
-
-  .course-card h3 {
-    margin-top: 12px;
-
-    font-size: 14px;
-  }
-
-  .course-card p {
-    font-size: 9px;
-  }
-
-  .course-card.wide {
-    min-height: 105px;
-  }
-}
-
-/* =========================================================
-   VERY SMALL PHONES
-========================================================= */
-
-@media (max-width: 360px) {
-
-  .welcome-mascot {
-    min-height: 275px;
-  }
-
-  .welcome-mascot img,
-  .mascot-image {
-    width: 225px;
-    height: 265px;
-  }
-
-  .welcome-content h1 {
-    font-size: 29px;
-  }
-
-  .course-card {
-    padding: 12px;
-  }
-}
-/* =========================================================
-   GROUND — STYLE.CSS
-   PART 2
-   GRADE + HOME + STATS + LEARNING ROAD
-========================================================= */
-
-
-/* =========================================================
-   PATH SCREEN
-========================================================= */
-
-#pathScreen {
-  min-height: 100vh;
-
-  background:
-    radial-gradient(
-      circle at 50% 0%,
-      rgba(85, 238, 150, 0.12),
-      transparent 30%
-    ),
-    linear-gradient(
-      180deg,
-      #073d34,
-      #021f1b
-    );
-}
-
-.path-container {
-  width: 100%;
-  max-width: 680px;
-
-  min-height: 100vh;
-
-  margin: 0 auto;
-
-  padding:
-    24px
-    18px
-    45px;
-}
-
-
-/* =========================================================
-   PATH HEADER
-========================================================= */
-
-.path-header {
-  width: 100%;
-
-  display: flex;
-  align-items: center;
-
-  gap: 13px;
-}
-
-.path-header-text {
-  min-width: 0;
-  flex: 1;
-}
-
-.path-header-text h1 {
-  color: #effff6;
-
-  font-size: 25px;
-  font-weight: 950;
-
-  line-height: 1.15;
-}
-
-.path-header-text p {
-  margin-top: 5px;
-
-  color: #83a69a;
-
-  font-size: 11px;
-  font-weight: 700;
-
-  line-height: 1.5;
-}
-
-
-/* =========================================================
-   PATH CARDS
-========================================================= */
-
-.path-list {
-  width: 100%;
-
-  margin-top: 27px;
-
-  display: flex;
-  flex-direction: column;
-
-  gap: 12px;
-}
-
-.path-card {
-  position: relative;
-
-  width: 100%;
-  min-height: 115px;
-
-  padding: 17px;
-
-  display: flex;
-  align-items: center;
-
-  gap: 15px;
-
-  overflow: hidden;
-
-  border-radius: 21px;
-
-  border:
-    1px solid rgba(255, 255, 255, 0.07);
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(255, 255, 255, 0.055),
-      rgba(255, 255, 255, 0.025)
-    );
-
-  color: #effff6;
-
-  text-align: left;
-
-  cursor: pointer;
-
-  box-shadow:
-    0 12px 30px rgba(0, 0, 0, 0.12);
-
-  transition:
-    transform 0.15s ease,
-    border-color 0.15s ease,
-    background 0.15s ease;
-}
-
-.path-card:hover {
-  border-color:
-    rgba(85, 238, 150, 0.20);
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(85, 238, 150, 0.075),
-      rgba(255, 255, 255, 0.025)
-    );
-}
-
-.path-card:active {
-  transform: scale(0.985);
-}
-
-.path-card-icon {
-  width: 62px;
-  height: 62px;
-
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 19px;
-
-  background:
-    rgba(85, 238, 150, 0.09);
-
-  border:
-    1px solid rgba(85, 238, 150, 0.12);
-
-  font-size: 29px;
-}
-
-.path-card-content {
-  min-width: 0;
-  flex: 1;
-}
-
-.path-card-content h2,
-.path-card-content h3 {
-  color: #effff6;
-
-  font-size: 17px;
-  font-weight: 950;
-}
-
-.path-card-content p {
-  margin-top: 6px;
-
-  color: #82a297;
-
-  font-size: 11px;
-  font-weight: 700;
-
-  line-height: 1.5;
-}
-
-.path-card-arrow {
-  flex-shrink: 0;
-
-  color: #55ee96;
-
-  font-size: 21px;
-  font-weight: 950;
-}
-
-
-/* =========================================================
-   GRADE SCREEN
-========================================================= */
-
-#gradeScreen {
-  min-height: 100vh;
-
-  background:
-    radial-gradient(
-      circle at 50% 0%,
-      rgba(40, 217, 120, 0.12),
-      transparent 30%
-    ),
-    linear-gradient(
-      180deg,
-      #073d34,
-      #021f1b
-    );
-}
-
-.grade-container {
-  width: 100%;
-  max-width: 680px;
-
-  min-height: 100vh;
-
-  margin: 0 auto;
-
-  padding:
-    24px
-    18px
-    45px;
-}
-
-
-/* =========================================================
-   GRADE HEADER
-========================================================= */
-
-.grade-header {
-  width: 100%;
-
-  display: flex;
-  align-items: center;
-
-  gap: 13px;
-}
-
-.grade-header > div {
-  min-width: 0;
-}
-
-.grade-header h1 {
-  color: #effff6;
-
-  font-size: 25px;
-  font-weight: 950;
-
-  line-height: 1.15;
-}
-
-.grade-header p {
-  margin-top: 5px;
-
-  color: #83a69a;
-
-  font-size: 11px;
-  font-weight: 700;
-
-  line-height: 1.5;
-}
-
-
-/* =========================================================
-   GRADE GRID
-========================================================= */
-
-.grade-grid {
-  width: 100%;
-
-  margin-top: 26px;
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
-
-  gap: 11px;
-}
-
-.grade-card {
-  position: relative;
-
-  width: 100%;
-  min-width: 0;
-  min-height: 135px;
-
-  padding: 17px;
-
-  display: flex;
-  flex-direction: column;
-
-  align-items: flex-start;
-  justify-content: space-between;
-
-  overflow: hidden;
-
-  border-radius: 21px;
-
-  border:
-    1px solid rgba(255, 255, 255, 0.07);
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(255, 255, 255, 0.055),
-      rgba(255, 255, 255, 0.025)
-    );
-
-  color: #effff6;
-
-  text-align: left;
-
-  cursor: pointer;
-
-  box-shadow:
-    0 10px 28px rgba(0, 0, 0, 0.11);
-
-  transition:
-    transform 0.15s ease,
-    border-color 0.15s ease,
-    background 0.15s ease;
-}
-
-.grade-card:hover {
-  border-color:
-    rgba(85, 238, 150, 0.20);
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(85, 238, 150, 0.075),
-      rgba(255, 255, 255, 0.025)
-    );
-}
-
-.grade-card:active {
-  transform: scale(0.98);
-}
-
-.grade-number {
-  color: #55ee96;
-
-  font-size: 36px;
-  font-weight: 1000;
-
-  line-height: 1;
-}
-
-.grade-card h3 {
-  margin-top: 10px;
-
-  color: #effff6;
-
-  font-size: 15px;
-  font-weight: 950;
-}
-
-.grade-card p {
-  margin-top: 5px;
-
-  color: #7e9f94;
-
-  font-size: 10px;
-  font-weight: 700;
-
-  line-height: 1.4;
-}
-
-
-/* =========================================================
-   HOME SCREEN
-========================================================= */
-
-#homeScreen {
-  min-height: 100vh;
-
-  padding-bottom: 95px;
-
-  background:
-    radial-gradient(
-      circle at 50% -5%,
-      rgba(85, 238, 150, 0.10),
-      transparent 28%
-    ),
-    linear-gradient(
-      180deg,
-      #073d34,
-      #021f1b
-    );
-}
-
-.home-app {
-  width: 100%;
-  max-width: 720px;
-
-  min-height: 100vh;
-
-  margin: 0 auto;
-
-  padding:
-    18px
-    18px
-    115px;
-}
-
-
-/* =========================================================
-   HOME TOP BAR
-========================================================= */
-
-.home-topbar {
+.topbar {
   width: 100%;
 
   display: flex;
@@ -1542,72 +283,23 @@ img {
   justify-content: space-between;
 
   gap: 12px;
+
+  padding-bottom: 18px;
 }
 
-.home-brand {
-  min-width: 0;
-
-  display: flex;
-  align-items: center;
-
-  gap: 9px;
-}
-
-.home-brand-icon {
-  width: 39px;
-  height: 39px;
-
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 13px;
-
-  background:
-    rgba(85, 238, 150, 0.10);
-
-  border:
-    1px solid rgba(85, 238, 150, 0.12);
-
-  font-size: 21px;
-}
-
-.home-brand-text strong {
-  display: block;
-
-  color: #effff6;
+.brand {
+  color: var(--text);
 
   font-size: 18px;
-  font-weight: 1000;
+  font-weight: 950;
 
-  line-height: 1;
+  letter-spacing: -0.4px;
 }
 
-.home-brand-text span {
-  display: block;
+.genes {
+  min-width: 70px;
 
-  margin-top: 4px;
-
-  color: #76998d;
-
-  font-size: 9px;
-  font-weight: 800;
-}
-
-
-/* =========================================================
-   GENES COUNTER
-========================================================= */
-
-.genes-counter,
-.gene-counter {
-  min-width: 72px;
-
-  padding:
-    9px
-    12px;
+  padding: 9px 12px;
 
   display: flex;
   align-items: center;
@@ -1623,31 +315,461 @@ img {
   border:
     1px solid rgba(85, 238, 150, 0.11);
 
-  color: #7bf2ac;
+  color: var(--green);
 
   font-size: 13px;
   font-weight: 950;
 }
 
 .gene-value {
-  color: #effff6;
-
-  font-weight: 950;
+  color: var(--text);
 }
 
 
 /* =========================================================
-   HOME PROFILE CARD
+   WELCOME
 ========================================================= */
 
-.home-profile-card {
+#welcomeScreen {
+  position: relative;
+
+  overflow: hidden;
+}
+
+
+/* декоративное свечение */
+
+.welcome-bg {
+  position: absolute;
+
+  width: 430px;
+  height: 430px;
+
+  top: -190px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  border-radius: 50%;
+
+  background:
+    rgba(85, 238, 150, 0.08);
+
+  filter: blur(25px);
+
+  pointer-events: none;
+}
+
+
+/* главный контейнер */
+
+.welcome-content {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+  max-width: 620px;
+
+  min-height: 100vh;
+
+  margin: 0 auto;
+
+  padding:
+    30px
+    20px
+    35px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+}
+
+
+/* =========================================================
+   WELCOME LOGO
+========================================================= */
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 43px;
+  height: 43px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px;
+
+  background:
+    rgba(85, 238, 150, 0.11);
+
+  border:
+    1px solid rgba(85, 238, 150, 0.15);
+
+  font-size: 23px;
+}
+
+.logo h1 {
+  color: #f0fff7;
+
+  font-size: 25px;
+  font-weight: 1000;
+
+  letter-spacing: 1.5px;
+}
+
+
+/* =========================================================
+   WELCOME SUBTITLE
+========================================================= */
+
+.welcome-subtitle {
+  margin-top: 9px;
+
+  color: #9ab9af;
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   DNA DECORATION
+========================================================= */
+
+.dna-decoration {
+  margin-top: 28px;
+
+  color: var(--green);
+
+  font-size: 32px;
+
+  filter:
+    drop-shadow(
+      0 0 15px rgba(85, 238, 150, 0.22)
+    );
+}
+
+
+/* =========================================================
+   MASCOT
+========================================================= */
+
+.mascot-area {
   position: relative;
 
   width: 100%;
 
-  margin-top: 20px;
+  flex: 1;
 
-  padding: 18px;
+  min-height: 330px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.ground-mascot {
+  position: relative;
+
+  width: 280px;
+  height: 300px;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+.ground-mascot::before {
+  content: "";
+
+  position: absolute;
+
+  width: 235px;
+  height: 235px;
+
+  top: 25px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(85, 238, 150, 0.16),
+      rgba(85, 238, 150, 0.04) 55%,
+      transparent 72%
+    );
+}
+
+.ground-mascot::after {
+  content: "";
+
+  position: absolute;
+
+  width: 180px;
+  height: 22px;
+
+  left: 50%;
+  bottom: 3px;
+
+  transform: translateX(-50%);
+
+  border-radius: 50%;
+
+  background:
+    rgba(0, 0, 0, 0.24);
+
+  filter: blur(7px);
+}
+
+
+/* ВАЖНО:
+   ограничиваем размер кота */
+
+.main-mascot {
+  position: relative;
+  z-index: 2;
+
+  width: 255px !important;
+  height: 290px !important;
+
+  max-width: 255px !important;
+
+  object-fit: contain;
+
+  user-select: none;
+
+  filter:
+    drop-shadow(
+      0 18px 23px rgba(0, 0, 0, 0.27)
+    );
+
+  transition:
+    transform 0.2s ease;
+}
+
+.ground-mascot:hover .main-mascot {
+  transform: translateY(-3px);
+}
+
+.ground-mascot:active .main-mascot {
+  transform: scale(0.97);
+}
+
+
+/* =========================================================
+   HEART EFFECT
+========================================================= */
+
+.pet-effects {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 5;
+
+  pointer-events: none;
+}
+
+.pet-heart {
+  position: absolute;
+
+  opacity: 0;
+
+  font-size: 20px;
+
+  pointer-events: none;
+}
+
+.heart1 {
+  top: 75px;
+  left: 30px;
+}
+
+.heart2 {
+  top: 40px;
+  right: 38px;
+}
+
+.heart3 {
+  top: 120px;
+  right: 15px;
+}
+
+.ground-mascot.pet .pet-heart {
+  animation:
+    groundHeart 0.9s ease forwards;
+}
+
+.ground-mascot.pet .heart2 {
+  animation-delay: 0.1s;
+}
+
+.ground-mascot.pet .heart3 {
+  animation-delay: 0.2s;
+}
+
+@keyframes groundHeart {
+
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.7);
+  }
+
+  35% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-35px) scale(1.15);
+  }
+
+}
+
+
+/* =========================================================
+   MASCOT MESSAGE
+========================================================= */
+
+.mascot-message {
+  position: relative;
+  z-index: 4;
+
+  margin-top: 5px;
+
+  color: #8eafa4;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   WELCOME BOTTOM
+========================================================= */
+
+.welcome-bottom {
+  width: 100%;
+  max-width: 470px;
+
+  margin-top: 10px;
+}
+
+.login-text {
+  margin-top: 18px;
+
+  color: #789b90;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.text-button {
+  padding: 3px 5px;
+
+  border: 0;
+
+  background: transparent;
+
+  color: var(--green);
+
+  font-size: inherit;
+  font-weight: 900;
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   PATH SCREEN
+========================================================= */
+
+.path-content,
+.grade-content {
+  width: 100%;
+}
+
+
+/* =========================================================
+   PATH HEADING
+========================================================= */
+
+.path-heading {
+  width: 100%;
+
+  margin-top: 22px;
+}
+
+.path-heading h2 {
+  margin-top: 6px;
+
+  color: var(--text);
+
+  font-size: 29px;
+  font-weight: 1000;
+
+  line-height: 1.1;
+
+  letter-spacing: -0.8px;
+}
+
+.path-heading p {
+  max-width: 470px;
+
+  margin-top: 9px;
+
+  color: var(--muted);
+
+  font-size: 12px;
+  font-weight: 650;
+
+  line-height: 1.55;
+}
+
+
+/* =========================================================
+   PATH OPTIONS
+========================================================= */
+
+.path-options {
+  width: 100%;
+
+  margin-top: 24px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 11px;
+}
+
+
+/* =========================================================
+   PATH CARD
+========================================================= */
+
+.path-card {
+  position: relative;
+
+  width: 100%;
+  min-height: 108px;
+
+  padding: 16px;
 
   display: flex;
   align-items: center;
@@ -1656,55 +778,82 @@ img {
 
   overflow: hidden;
 
-  border-radius: 23px;
+  border:
+    1px solid rgba(255, 255, 255, 0.07);
+
+  border-radius: 20px;
 
   background:
     linear-gradient(
       145deg,
-      rgba(28, 70, 55, 0.97),
-      rgba(12, 34, 27, 0.98)
+      rgba(255, 255, 255, 0.055),
+      rgba(255, 255, 255, 0.025)
     );
 
-  border:
-    1px solid rgba(85, 238, 150, 0.10);
+  color: var(--text);
+
+  text-align: left;
+
+  cursor: pointer;
 
   box-shadow:
-    0 15px 38px rgba(0, 0, 0, 0.15);
+    0 10px 28px rgba(0, 0, 0, 0.12);
+
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease,
+    background 0.15s ease;
 }
 
-.home-profile-card::after {
+.path-card::after {
   content: "";
 
   position: absolute;
 
-  width: 140px;
-  height: 140px;
+  width: 110px;
+  height: 110px;
 
-  right: -60px;
-  top: -60px;
+  top: -50px;
+  right: -45px;
 
   border-radius: 50%;
 
   background:
-    rgba(85, 238, 150, 0.045);
+    rgba(85, 238, 150, 0.035);
 }
 
-.home-avatar {
-  position: relative;
-  z-index: 2;
+.path-card:hover {
+  border-color:
+    rgba(85, 238, 150, 0.2);
 
-  width: 64px;
-  height: 64px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(85, 238, 150, 0.075),
+      rgba(255, 255, 255, 0.025)
+    );
+}
 
-  flex-shrink: 0;
+.path-card:active {
+  transform: scale(0.985);
+}
+
+
+/* =========================================================
+   PATH ICON
+========================================================= */
+
+.path-card-icon {
+  width: 59px;
+  height: 59px;
+
+  flex: 0 0 59px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  overflow: hidden;
-
-  border-radius: 20px;
+  border-radius: 18px;
 
   background:
     rgba(85, 238, 150, 0.09);
@@ -1712,295 +861,28 @@ img {
   border:
     1px solid rgba(85, 238, 150, 0.12);
 
-  font-size: 34px;
+  font-size: 27px;
 }
 
-.home-avatar img {
-  width: 100%;
-  height: 100%;
 
-  object-fit: contain;
-}
+/* =========================================================
+   PATH TEXT
+========================================================= */
 
-.home-profile-info {
-  position: relative;
-  z-index: 2;
-
+.path-card-text {
   min-width: 0;
   flex: 1;
 }
 
-.home-profile-info .small-label {
-  color: #55ee96;
+.path-card-text h3 {
+  color: var(--text);
 
-  font-size: 9px;
-  font-weight: 900;
-
-  letter-spacing: 0.8px;
-}
-
-.home-profile-info h2 {
-  margin-top: 5px;
-
-  color: #effff6;
-
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 950;
 }
 
-.home-profile-info p {
-  margin-top: 5px;
-
-  color: #81a297;
-
-  font-size: 10px;
-  font-weight: 700;
-}
-
-
-/* =========================================================
-   STATS
-========================================================= */
-
-.home-stats,
-.stats-grid {
-  width: 100%;
-
-  margin-top: 12px;
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
-
-  gap: 8px;
-}
-
-.stat-card {
-  min-width: 0;
-
-  padding:
-    13px
-    8px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  gap: 4px;
-
-  border-radius: 17px;
-
-  background:
-    rgba(255, 255, 255, 0.035);
-
-  border:
-    1px solid rgba(255, 255, 255, 0.055);
-}
-
-.stat-card > span:first-child {
-  font-size: 20px;
-}
-
-.stat-card strong {
-  color: #effff6;
-
-  font-size: 17px;
-  font-weight: 950;
-}
-
-.stat-card small {
-  color: #78998e;
-
-  font-size: 9px;
-  font-weight: 800;
-
-  text-align: center;
-}
-
-
-/* =========================================================
-   XP CARD
-========================================================= */
-
-.xp-card {
-  width: 100%;
-
-  margin-top: 10px;
-
-  padding:
-    14px
-    15px;
-
-  border-radius: 18px;
-
-  background:
-    rgba(255, 255, 255, 0.035);
-
-  border:
-    1px solid rgba(255, 255, 255, 0.055);
-}
-
-.xp-card-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  gap: 10px;
-}
-
-.xp-card-top strong {
-  color: #dffff0;
-
-  font-size: 11px;
-  font-weight: 900;
-}
-
-.xp-card-top span {
-  color: #7fa196;
-
-  font-size: 10px;
-  font-weight: 800;
-}
-
-.xp-bar,
-.xp-progress-bar {
-  width: 100%;
-  height: 8px;
-
-  margin-top: 10px;
-
-  overflow: hidden;
-
-  border-radius: 100px;
-
-  background:
-    rgba(255, 255, 255, 0.065);
-}
-
-#xpProgress,
-.xp-progress {
-  width: 0%;
-  height: 100%;
-
-  border-radius: inherit;
-
-  background:
-    linear-gradient(
-      90deg,
-      #20bd63,
-      #55ee96
-    );
-
-  transition:
-    width 0.4s ease;
-}
-
-
-/* =========================================================
-   HOME SECTION
-========================================================= */
-
-.home-section {
-  width: 100%;
-
-  margin-top: 24px;
-}
-
-.home-section-header {
-  width: 100%;
-
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-
-  gap: 12px;
-}
-
-.home-section-header > div {
-  min-width: 0;
-}
-
-.home-section-header h2 {
-  color: #effff6;
-
-  font-size: 19px;
-  font-weight: 950;
-}
-
-.home-section-header p {
-  margin-top: 4px;
-
-  color: #78998e;
-
-  font-size: 10px;
-  font-weight: 700;
-}
-
-
-/* =========================================================
-   TODAY LESSON
-========================================================= */
-
-.today-lesson {
-  width: 100%;
-
-  margin-top: 11px;
-
-  padding: 16px;
-
-  display: flex;
-  align-items: center;
-
-  gap: 13px;
-
-  border-radius: 20px;
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(30, 73, 57, 0.95),
-      rgba(12, 33, 26, 0.98)
-    );
-
-  border:
-    1px solid rgba(85, 238, 150, 0.10);
-}
-
-.today-lesson-icon {
-  width: 52px;
-  height: 52px;
-
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 16px;
-
-  background:
-    rgba(85, 238, 150, 0.09);
-
-  font-size: 25px;
-}
-
-.today-lesson-info {
-  min-width: 0;
-  flex: 1;
-}
-
-.today-lesson-info strong {
-  display: block;
-
-  color: #effff6;
-
-  font-size: 14px;
-  font-weight: 950;
-}
-
-.today-lesson-info p {
-  margin-top: 5px;
+.path-card-text p {
+  margin-top: 6px;
 
   color: #82a297;
 
@@ -2010,13 +892,690 @@ img {
   line-height: 1.45;
 }
 
-.today-lesson-arrow {
+.path-arrow {
+  position: relative;
+  z-index: 2;
+
   flex-shrink: 0;
 
-  color: #55ee96;
+  color: var(--green);
+
+  font-size: 21px;
+  font-weight: 950;
+}
+
+
+/* =========================================================
+   PATH MASCOT
+========================================================= */
+
+.path-mascot-box {
+  width: 100%;
+
+  margin-top: 22px;
+
+  padding: 15px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+
+  border-radius: 19px;
+
+  background:
+    rgba(85, 238, 150, 0.055);
+
+  border:
+    1px solid rgba(85, 238, 150, 0.09);
+}
+
+.path-mascot {
+  width: 70px;
+  height: 78px;
+
+  flex-shrink: 0;
+
+  object-fit: contain;
+}
+
+.path-mascot-message {
+  color: #9dbdb2;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   GRADE GRID
+========================================================= */
+
+.grade-grid {
+  width: 100%;
+
+  margin-top: 25px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 11px;
+}
+
+
+/* =========================================================
+   GRADE CARD
+========================================================= */
+
+.grade-card {
+  width: 100%;
+  min-height: 130px;
+
+  padding: 18px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+
+  gap: 4px;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.07);
+
+  border-radius: 21px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.055),
+      rgba(255, 255, 255, 0.025)
+    );
+
+  color: var(--text);
+
+  cursor: pointer;
+
+  text-align: left;
+
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.11);
+
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.grade-card:hover {
+  border-color:
+    rgba(85, 238, 150, 0.2);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(85, 238, 150, 0.075),
+      rgba(255, 255, 255, 0.025)
+    );
+}
+
+.grade-card:active {
+  transform: scale(0.98);
+}
+
+.grade-card strong {
+  color: var(--green);
+
+  font-size: 39px;
+  font-weight: 1000;
+
+  line-height: 1;
+}
+
+.grade-card span {
+  color: #9ab9af;
+
+  font-size: 12px;
+  font-weight: 800;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+  .app-page,
+  .ground-app,
+  .library-app,
+  .profile-app,
+  .lesson-app,
+  .campbell-app {
+    padding:
+      16px
+      14px
+      100px;
+  }
+
+
+  .welcome-content {
+    padding:
+      23px
+      16px
+      28px;
+  }
+
+
+  .logo-icon {
+    width: 39px;
+    height: 39px;
+
+    font-size: 21px;
+  }
+
+
+  .logo h1 {
+    font-size: 22px;
+  }
+
+
+  .dna-decoration {
+    margin-top: 20px;
+
+    font-size: 28px;
+  }
+
+
+  .mascot-area {
+    min-height: 300px;
+  }
+
+
+  .ground-mascot {
+    width: 245px;
+    height: 270px;
+  }
+
+
+  .main-mascot {
+    width: 225px !important;
+    height: 260px !important;
+
+    max-width: 225px !important;
+  }
+
+
+  .ground-mascot::before {
+    width: 210px;
+    height: 210px;
+  }
+
+
+  .path-heading h2 {
+    font-size: 25px;
+  }
+
+
+  .path-card {
+    min-height: 100px;
+
+    padding: 14px;
+
+    gap: 12px;
+
+    border-radius: 18px;
+  }
+
+
+  .path-card-icon {
+    width: 53px;
+    height: 53px;
+
+    flex-basis: 53px;
+
+    border-radius: 16px;
+
+    font-size: 24px;
+  }
+
+
+  .path-card-text h3 {
+    font-size: 14px;
+  }
+
+
+  .grade-grid {
+    gap: 8px;
+  }
+
+
+  .grade-card {
+    min-height: 115px;
+
+    padding: 15px;
+
+    border-radius: 18px;
+  }
+
+
+  .grade-card strong {
+    font-size: 34px;
+  }
+
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+========================================================= */
+
+@media (max-width: 360px) {
+
+  .mascot-area {
+    min-height: 270px;
+  }
+
+
+  .ground-mascot {
+    width: 220px;
+    height: 245px;
+  }
+
+
+  .main-mascot {
+    width: 205px !important;
+    height: 235px !important;
+
+    max-width: 205px !important;
+  }
+
+
+  .grade-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .grade-card {
+    min-height: 95px;
+  }
+
+}
+/* =========================================================
+   GROUND — STYLE.CSS
+   PART 2
+   HOME + STATS + XP + ROAD + BOTTOM NAV
+========================================================= */
+
+
+/* =========================================================
+   HOME SCREEN
+========================================================= */
+
+#homeScreen {
+  padding-bottom: 82px;
+}
+
+.ground-home-content {
+  width: 100%;
+}
+
+
+/* =========================================================
+   HOME TOPBAR
+========================================================= */
+
+.home-topbar {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 14px;
+
+  padding-bottom: 20px;
+}
+
+.home-brand {
+  color: var(--text);
 
   font-size: 20px;
+  font-weight: 1000;
+
+  letter-spacing: -0.5px;
+}
+
+
+/* =========================================================
+   HOME TOP STATS
+========================================================= */
+
+.home-stats {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+}
+
+.mini-stat {
+  min-width: 58px;
+
+  padding: 9px 11px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 5px;
+
+  border-radius: 14px;
+
+  background:
+    rgba(255, 255, 255, 0.045);
+
+  border:
+    1px solid rgba(255, 255, 255, 0.065);
+
+  color: var(--text);
+
+  font-size: 12px;
   font-weight: 950;
+}
+
+
+/* =========================================================
+   HOME WELCOME CARD
+========================================================= */
+
+.home-welcome {
+  position: relative;
+
+  width: 100%;
+  min-height: 165px;
+
+  padding:
+    23px
+    150px
+    23px
+    22px;
+
+  overflow: hidden;
+
+  border-radius: 24px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(31, 78, 60, 0.97),
+      rgba(11, 37, 29, 0.98)
+    );
+
+  border:
+    1px solid rgba(85, 238, 150, 0.11);
+
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.15);
+}
+
+.home-welcome::before {
+  content: "";
+
+  position: absolute;
+
+  width: 210px;
+  height: 210px;
+
+  right: -80px;
+  top: -80px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(85, 238, 150, 0.055);
+}
+
+.home-welcome > div {
+  position: relative;
+  z-index: 2;
+}
+
+.home-welcome h1 {
+  margin-top: 7px;
+
+  color: var(--text);
+
+  font-size: 29px;
+  font-weight: 1000;
+
+  line-height: 1.1;
+
+  letter-spacing: -0.8px;
+}
+
+.home-welcome p {
+  margin-top: 10px;
+
+  color: #8eafa4;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  line-height: 1.5;
+}
+
+.home-welcome p strong {
+  color: #cffff0;
+}
+
+
+/* =========================================================
+   HOME MASCOT
+
+   ВАЖНО:
+   кот ограничен по размеру
+========================================================= */
+
+.home-mascot {
+  position: absolute;
+
+  z-index: 2;
+
+  right: 10px;
+  bottom: 0;
+
+  width: 135px !important;
+  height: 155px !important;
+
+  max-width: 135px !important;
+
+  object-fit: contain;
+
+  filter:
+    drop-shadow(
+      0 12px 15px rgba(0, 0, 0, 0.24)
+    );
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   LEVEL CARD
+========================================================= */
+
+.level-card {
+  width: 100%;
+
+  margin-top: 12px;
+
+  padding:
+    15px
+    16px;
+
+  border-radius: 19px;
+
+  background:
+    rgba(255, 255, 255, 0.038);
+
+  border:
+    1px solid rgba(255, 255, 255, 0.06);
+}
+
+.level-card-top {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+}
+
+.level-card-top > div:first-child {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+}
+
+.level-label {
+  color: #9cbcaf;
+
+  font-size: 10px;
+  font-weight: 850;
+}
+
+#levelValue {
+  color: var(--green);
+
+  font-size: 15px;
+  font-weight: 1000;
+}
+
+.xp-number {
+  color: #82a297;
+
+  font-size: 10px;
+  font-weight: 800;
+}
+
+
+/* =========================================================
+   XP BAR
+========================================================= */
+
+.xp-bar {
+  width: 100%;
+  height: 9px;
+
+  margin-top: 12px;
+
+  overflow: hidden;
+
+  border-radius: 100px;
+
+  background:
+    rgba(255, 255, 255, 0.07);
+}
+
+.xp-progress {
+  width: 0%;
+  height: 100%;
+
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      90deg,
+      #1cba61,
+      #55ee96
+    );
+
+  box-shadow:
+    0 0 12px rgba(85, 238, 150, 0.18);
+
+  transition:
+    width 0.4s ease;
+}
+
+
+/* =========================================================
+   ROAD HEADER
+========================================================= */
+
+.road-header {
+  width: 100%;
+
+  margin-top: 27px;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 14px;
+}
+
+.road-header > div {
+  min-width: 0;
+}
+
+.road-header h2 {
+  margin-top: 5px;
+
+  color: var(--text);
+
+  font-size: 21px;
+  font-weight: 1000;
+
+  line-height: 1.2;
+}
+
+
+/* =========================================================
+   CHANGE GRADE BUTTON
+========================================================= */
+
+.change-grade-button {
+  flex-shrink: 0;
+
+  min-height: 40px;
+
+  padding:
+    9px
+    12px;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.07);
+
+  border-radius: 13px;
+
+  background:
+    rgba(255, 255, 255, 0.045);
+
+  color: #a8c7bd;
+
+  font-size: 10px;
+  font-weight: 850;
+
+  cursor: pointer;
+
+  transition:
+    background 0.14s ease,
+    transform 0.14s ease;
+}
+
+.change-grade-button:hover {
+  background:
+    rgba(85, 238, 150, 0.07);
+}
+
+.change-grade-button:active {
+  transform: scale(0.96);
 }
 
 
@@ -2029,22 +1588,52 @@ img {
 
   width: 100%;
 
-  margin-top: 16px;
+  margin-top: 18px;
 
   padding:
     10px
     0
-    20px;
+    25px;
 
   display: flex;
   flex-direction: column;
-
   align-items: center;
+}
+
+
+/* центральная линия */
+
+.learning-road::before {
+  content: "";
+
+  position: absolute;
+
+  z-index: 0;
+
+  top: 40px;
+  bottom: 40px;
+
+  left: 50%;
+
+  width: 3px;
+
+  transform: translateX(-50%);
+
+  border-radius: 100px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(85, 238, 150, 0.18),
+      rgba(85, 238, 150, 0.04)
+    );
 }
 
 
 /* =========================================================
    ROAD ITEM
+
+   Эти элементы будет создавать app.js
 ========================================================= */
 
 .road-item {
@@ -2052,21 +1641,20 @@ img {
   z-index: 2;
 
   width: 100%;
+  min-height: 100px;
 
   display: flex;
   align-items: center;
 
-  gap: 13px;
-
-  min-height: 90px;
+  gap: 14px;
 }
 
 .road-item.road-left {
-  padding-right: 18%;
+  padding-right: 16%;
 }
 
 .road-item.road-right {
-  padding-left: 18%;
+  padding-left: 16%;
 
   flex-direction: row-reverse;
 
@@ -2079,16 +1667,18 @@ img {
 ========================================================= */
 
 .road-node {
-  width: 67px;
-  height: 67px;
+  position: relative;
 
-  flex: 0 0 67px;
+  width: 68px;
+  height: 68px;
+
+  flex: 0 0 68px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  border: none;
+  border: 0;
   border-radius: 50%;
 
   background:
@@ -2126,30 +1716,69 @@ img {
     0 8px 18px rgba(0, 0, 0, 0.18);
 }
 
-.road-node.active-node {
+
+/* =========================================================
+   ACTIVE NODE
+========================================================= */
+
+.road-node.active-node,
+.road-node.active {
   background:
     linear-gradient(
       180deg,
-      #55ee96,
-      #25cf70
+      #65f5a1,
+      #29d877
     );
+
+  box-shadow:
+    0 6px 0 #0d8e47,
+    0 0 0 7px rgba(85, 238, 150, 0.07),
+    0 13px 25px rgba(0, 0, 0, 0.18);
 }
 
-.road-node.locked-node {
+
+/* =========================================================
+   COMPLETED NODE
+========================================================= */
+
+.road-node.completed-node,
+.road-node.completed {
   background:
     linear-gradient(
       180deg,
-      #28473f,
+      #4be98c,
+      #19b95e
+    );
+
+  color: #052116;
+}
+
+
+/* =========================================================
+   LOCKED NODE
+========================================================= */
+
+.road-node.locked-node,
+.road-node.locked {
+  background:
+    linear-gradient(
+      180deg,
+      #29483f,
       #19372f
     );
 
-  color: #76988d;
+  color: #75978c;
 
   cursor: not-allowed;
 
   box-shadow:
     0 5px 0 #102a23,
     0 10px 20px rgba(0, 0, 0, 0.14);
+}
+
+.road-node.locked-node:hover,
+.road-node.locked:hover {
+  transform: none;
 }
 
 
@@ -2162,22 +1791,25 @@ img {
   flex: 1;
 
   padding:
-    12px
+    13px
     14px;
 
-  border-radius: 16px;
+  border-radius: 17px;
 
   background:
-    rgba(255, 255, 255, 0.035);
+    rgba(255, 255, 255, 0.038);
 
   border:
-    1px solid rgba(255, 255, 255, 0.05);
+    1px solid rgba(255, 255, 255, 0.055);
+
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.08);
 }
 
 .road-info strong {
   display: block;
 
-  color: #effff6;
+  color: var(--text);
 
   font-size: 12px;
   font-weight: 900;
@@ -2208,19 +1840,19 @@ img {
   z-index: 1;
 
   width: 100%;
-  height: 35px;
+  height: 32px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
   color:
-    rgba(85, 238, 150, 0.25);
+    rgba(85, 238, 150, 0.24);
 
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 950;
 
-  letter-spacing: 7px;
+  letter-spacing: 6px;
 
   transform: rotate(90deg);
 }
@@ -2230,15 +1862,14 @@ img {
    BOSS NODE
 ========================================================= */
 
-.road-node.boss-node {
-  width: 76px;
-  height: 76px;
+.road-node.boss-node,
+.road-node.boss {
+  width: 77px;
+  height: 77px;
 
-  flex-basis: 76px;
+  flex-basis: 77px;
 
   border-radius: 24px;
-
-  font-size: 28px;
 
   background:
     linear-gradient(
@@ -2249,39 +1880,11 @@ img {
 
   color: #362405;
 
+  font-size: 28px;
+
   box-shadow:
     0 6px 0 #9d6b11,
     0 14px 28px rgba(0, 0, 0, 0.19);
-}
-
-
-/* =========================================================
-   CHANGE GRADE BUTTON
-========================================================= */
-
-#changeGradeButton {
-  width: auto;
-  min-height: 39px;
-
-  padding:
-    9px
-    12px;
-
-  border: none;
-  border-radius: 13px;
-
-  background:
-    rgba(255, 255, 255, 0.045);
-
-  border:
-    1px solid rgba(255, 255, 255, 0.065);
-
-  color: #a8c7bd;
-
-  font-size: 10px;
-  font-weight: 850;
-
-  cursor: pointer;
 }
 
 
@@ -2298,7 +1901,7 @@ img {
   bottom: 0;
 
   width: 100%;
-  max-width: 720px;
+  max-width: 760px;
 
   min-height: 72px;
 
@@ -2312,8 +1915,9 @@ img {
 
   display: grid;
 
+  /* В НОВОМ HTML 4 КНОПКИ */
   grid-template-columns:
-    repeat(5, minmax(0, 1fr));
+    repeat(4, minmax(0, 1fr));
 
   align-items: center;
 
@@ -2328,16 +1932,23 @@ img {
 
   -webkit-backdrop-filter:
     blur(16px);
+
+  box-shadow:
+    0 -8px 25px rgba(0, 0, 0, 0.12);
 }
 
-.bottom-nav button,
-.nav-button {
+
+/* =========================================================
+   NAV ITEM
+========================================================= */
+
+.nav-item {
   min-width: 0;
   min-height: 52px;
 
   padding:
     5px
-    2px;
+    3px;
 
   display: flex;
   flex-direction: column;
@@ -2347,7 +1958,7 @@ img {
 
   gap: 4px;
 
-  border: none;
+  border: 0;
   border-radius: 13px;
 
   background: transparent;
@@ -2355,15 +1966,18 @@ img {
   color: #668a7e;
 
   cursor: pointer;
+
+  transition:
+    color 0.14s ease,
+    background 0.14s ease,
+    transform 0.14s ease;
 }
 
-.bottom-nav button span:first-child,
-.nav-button span:first-child {
+.nav-item > span {
   font-size: 20px;
 }
 
-.bottom-nav button span:last-child,
-.nav-button span:last-child {
+.nav-item small {
   max-width: 100%;
 
   overflow: hidden;
@@ -2377,12 +1991,69 @@ img {
   white-space: nowrap;
 }
 
-.bottom-nav button.active,
-.nav-button.active {
-  background:
-    rgba(85, 238, 150, 0.07);
+.nav-item:hover {
+  color: #91bbae;
+}
 
-  color: #55ee96;
+.nav-item:active {
+  transform: scale(0.94);
+}
+
+
+/* =========================================================
+   ACTIVE NAV
+========================================================= */
+
+.nav-item.nav-active,
+.nav-item.active {
+  background:
+    rgba(85, 238, 150, 0.075);
+
+  color: var(--green);
+}
+
+
+/* =========================================================
+   TABLET / DESKTOP
+========================================================= */
+
+@media (min-width: 700px) {
+
+  .home-welcome {
+    min-height: 185px;
+
+    padding:
+      30px
+      190px
+      30px
+      28px;
+  }
+
+
+  .home-welcome h1 {
+    font-size: 34px;
+  }
+
+
+  .home-mascot {
+    right: 20px;
+
+    width: 165px !important;
+    height: 180px !important;
+
+    max-width: 165px !important;
+  }
+
+
+  .road-item.road-left {
+    padding-right: 22%;
+  }
+
+
+  .road-item.road-right {
+    padding-left: 22%;
+  }
+
 }
 
 
@@ -2392,115 +2063,104 @@ img {
 
 @media (max-width: 480px) {
 
-  .path-container,
-  .grade-container {
+  .home-topbar {
+    padding-bottom: 15px;
+  }
+
+
+  .home-brand {
+    font-size: 17px;
+  }
+
+
+  .mini-stat {
+    min-width: 51px;
+
     padding:
-      18px
-      14px
-      40px;
+      8px
+      9px;
+
+    font-size: 11px;
   }
 
-  .path-header-text h1,
-  .grade-header h1 {
-    font-size: 22px;
+
+  .home-welcome {
+    min-height: 150px;
+
+    padding:
+      19px
+      118px
+      19px
+      17px;
+
+    border-radius: 21px;
   }
 
-  .path-card {
-    min-height: 105px;
 
-    padding: 14px;
-
-    gap: 12px;
-
-    border-radius: 18px;
+  .home-welcome h1 {
+    font-size: 24px;
   }
 
-  .path-card-icon {
-    width: 54px;
-    height: 54px;
+
+  .home-welcome p {
+    font-size: 10px;
+  }
+
+
+  .home-mascot {
+    right: 3px;
+
+    width: 112px !important;
+    height: 140px !important;
+
+    max-width: 112px !important;
+  }
+
+
+  .level-card {
+    padding:
+      13px
+      14px;
 
     border-radius: 17px;
-
-    font-size: 25px;
   }
 
-  .path-card-content h2,
-  .path-card-content h3 {
-    font-size: 15px;
+
+  .road-header {
+    margin-top: 23px;
   }
 
-  .grade-grid {
-    gap: 8px;
-  }
 
-  .grade-card {
-    min-height: 125px;
-
-    padding: 14px;
-
-    border-radius: 18px;
-  }
-
-  .grade-number {
-    font-size: 32px;
-  }
-
-  .home-app {
-    padding:
-      14px
-      14px
-      105px;
-  }
-
-  .home-profile-card {
-    padding: 15px;
-
-    border-radius: 20px;
-  }
-
-  .home-avatar {
-    width: 57px;
-    height: 57px;
-
-    border-radius: 18px;
-
-    font-size: 30px;
-  }
-
-  .home-profile-info h2 {
+  .road-header h2 {
     font-size: 18px;
   }
 
-  .home-stats,
-  .stats-grid {
-    gap: 6px;
-  }
 
-  .stat-card {
+  .change-grade-button {
     padding:
-      11px
-      5px;
+      8px
+      9px;
 
-    border-radius: 15px;
+    font-size: 9px;
   }
 
-  .stat-card strong {
-    font-size: 15px;
+
+  .road-item {
+    min-height: 91px;
+
+    gap: 11px;
   }
 
-  .today-lesson {
-    padding: 14px;
-
-    border-radius: 18px;
-  }
 
   .road-item.road-left {
-    padding-right: 10%;
+    padding-right: 8%;
   }
 
+
   .road-item.road-right {
-    padding-left: 10%;
+    padding-left: 8%;
   }
+
 
   .road-node {
     width: 61px;
@@ -2511,15 +2171,29 @@ img {
     font-size: 21px;
   }
 
+
+  .road-node.boss-node,
+  .road-node.boss {
+    width: 69px;
+    height: 69px;
+
+    flex-basis: 69px;
+
+    font-size: 25px;
+  }
+
+
   .road-info {
     padding:
-      10px
-      11px;
+      11px
+      12px;
   }
+
 
   .road-info strong {
     font-size: 11px;
   }
+
 
   .bottom-nav {
     min-height: 68px;
@@ -2537,19 +2211,25 @@ img {
 
 @media (max-width: 360px) {
 
-  .grade-grid {
-    grid-template-columns: 1fr;
+  .home-welcome {
+    padding-right: 103px;
   }
 
-  .grade-card {
-    min-height: 105px;
+
+  .home-mascot {
+    width: 100px !important;
+    height: 128px !important;
+
+    max-width: 100px !important;
   }
+
 
   .road-item.road-left,
   .road-item.road-right {
     padding-left: 0;
     padding-right: 0;
   }
+
 
   .road-node {
     width: 57px;
@@ -2558,8 +2238,8 @@ img {
     flex-basis: 57px;
   }
 
-  .bottom-nav button span:last-child,
-  .nav-button span:last-child {
+
+  .nav-item small {
     font-size: 7px;
   }
 
@@ -2567,82 +2247,51 @@ img {
 /* =========================================================
    GROUND — STYLE.CSS
    PART 3
-   LIBRARY + CAMPBELL CARD + PROFILE + ACHIEVEMENTS
+   LIBRARY + PROFILE
 ========================================================= */
 
 
 /* =========================================================
-   LIBRARY SCREEN
+   LIBRARY
 ========================================================= */
 
-#libraryScreen {
-  min-height: 100vh;
-  padding-bottom: 95px;
-
-  background:
-    radial-gradient(
-      circle at 50% -5%,
-      rgba(85, 238, 150, 0.10),
-      transparent 30%
-    ),
-    linear-gradient(
-      180deg,
-      #073d34,
-      #021f1b
-    );
+#libraryScreen,
+#profileScreen {
+  padding-bottom: 82px;
 }
 
-.library-app {
-  width: 100%;
-  max-width: 720px;
-  min-height: 100vh;
-
-  margin: 0 auto;
-
-  padding:
-    18px
-    18px
-    115px;
-}
-
-
-/* =========================================================
-   LIBRARY HEADER
-========================================================= */
-
-.library-header {
+.library-header,
+.profile-header {
   width: 100%;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  gap: 12px;
+  gap: 14px;
 }
 
 .library-header-left {
   min-width: 0;
 }
 
-.library-header-left .eyebrow {
-  margin-bottom: 5px;
-}
-
 .library-header h1,
-.library-header-left h1 {
-  color: #effff6;
+.profile-header h1 {
+  margin-top: 5px;
 
-  font-size: 25px;
-  font-weight: 950;
+  color: var(--text);
+
+  font-size: 27px;
+  font-weight: 1000;
 
   line-height: 1.15;
 }
 
 .library-header p,
-.library-header-left p {
-  margin-top: 5px;
+.profile-header p {
+  margin-top: 6px;
 
-  color: #7f9f94;
+  color: var(--muted);
 
   font-size: 10px;
   font-weight: 700;
@@ -2658,9 +2307,7 @@ img {
 .library-grade-badge {
   flex-shrink: 0;
 
-  padding:
-    9px
-    12px;
+  padding: 9px 11px;
 
   border-radius: 13px;
 
@@ -2670,7 +2317,7 @@ img {
   border:
     1px solid rgba(85, 238, 150, 0.12);
 
-  color: #75f0a7;
+  color: var(--green);
 
   font-size: 10px;
   font-weight: 900;
@@ -2678,7 +2325,7 @@ img {
 
 
 /* =========================================================
-   LIBRARY SEARCH
+   SEARCH
 ========================================================= */
 
 .library-search {
@@ -2686,7 +2333,7 @@ img {
 
   width: 100%;
 
-  margin-top: 18px;
+  margin-top: 20px;
 }
 
 .library-search-icon {
@@ -2697,37 +2344,34 @@ img {
 
   transform: translateY(-50%);
 
+  font-size: 15px;
+
   pointer-events: none;
-
-  color: #78998e;
-
-  font-size: 16px;
 }
 
-#librarySearchInput,
-.library-search input {
+#librarySearchInput {
   width: 100%;
-  height: 50px;
+  height: 51px;
 
   padding:
     0
-    16px
+    15px
     0
-    43px;
+    44px;
 
   outline: none;
 
-  border-radius: 16px;
-
   border:
-    1px solid rgba(255, 255, 255, 0.07);
+    1px solid var(--border);
+
+  border-radius: 16px;
 
   background:
     rgba(255, 255, 255, 0.04);
 
-  color: #effff6;
+  color: var(--text);
 
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 750;
 
   transition:
@@ -2735,15 +2379,13 @@ img {
     background 0.15s ease;
 }
 
-#librarySearchInput::placeholder,
-.library-search input::placeholder {
-  color: #607f75;
+#librarySearchInput::placeholder {
+  color: #64857a;
 }
 
-#librarySearchInput:focus,
-.library-search input:focus {
+#librarySearchInput:focus {
   border-color:
-    rgba(85, 238, 150, 0.25);
+    rgba(85, 238, 150, 0.3);
 
   background:
     rgba(85, 238, 150, 0.045);
@@ -2751,67 +2393,55 @@ img {
 
 
 /* =========================================================
-   LIBRARY SECTION
+   LIBRARY SECTIONS
 ========================================================= */
 
 .library-section {
   width: 100%;
 
-  margin-top: 24px;
+  margin-top: 27px;
 }
 
 .library-section-title {
+  width: 100%;
+
+  margin-bottom: 12px;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  gap: 10px;
-
-  margin-bottom: 11px;
+  gap: 12px;
 }
 
 .library-section-title h2 {
-  color: #effff6;
+  color: var(--text);
 
   font-size: 17px;
   font-weight: 950;
 }
 
 .library-section-title span {
-  color: #78998e;
+  color: #75978c;
 
-  font-size: 9px;
-  font-weight: 800;
+  font-size: 8px;
+  font-weight: 900;
+
+  letter-spacing: 0.5px;
 }
 
 
 /* =========================================================
-   LIBRARY LIST
+   CAMPBELL LIBRARY CARD
 ========================================================= */
 
-.library-list,
-#libraryLessons {
-  width: 100%;
-
-  display: flex;
-  flex-direction: column;
-
-  gap: 10px;
-}
-
-
-/* =========================================================
-   NORMAL LIBRARY CARD
-========================================================= */
-
-.library-card,
-.lesson-card {
+.campbell-library-card {
   position: relative;
 
   width: 100%;
-  min-width: 0;
+  min-height: 100px;
 
-  padding: 15px;
+  padding: 16px;
 
   display: flex;
   align-items: center;
@@ -2820,195 +2450,26 @@ img {
 
   overflow: hidden;
 
-  border-radius: 19px;
-
   border:
-    1px solid rgba(255, 255, 255, 0.065);
+    1px solid rgba(85, 238, 150, 0.14);
 
-  background:
-    linear-gradient(
-      145deg,
-      rgba(255, 255, 255, 0.05),
-      rgba(255, 255, 255, 0.025)
-    );
-
-  color: #effff6;
-
-  text-align: left;
-
-  cursor: pointer;
-
-  box-shadow:
-    0 9px 25px rgba(0, 0, 0, 0.09);
-
-  transition:
-    transform 0.14s ease,
-    border-color 0.14s ease,
-    background 0.14s ease;
-}
-
-.library-card:hover,
-.lesson-card:hover {
-  border-color:
-    rgba(85, 238, 150, 0.18);
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(85, 238, 150, 0.065),
-      rgba(255, 255, 255, 0.025)
-    );
-}
-
-.library-card:active,
-.lesson-card:active {
-  transform: scale(0.985);
-}
-
-
-/* =========================================================
-   LIBRARY ICON
-========================================================= */
-
-.library-card-icon,
-.lesson-card-icon {
-  width: 51px;
-  height: 51px;
-
-  flex: 0 0 51px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 16px;
-
-  background:
-    rgba(85, 238, 150, 0.075);
-
-  border:
-    1px solid rgba(85, 238, 150, 0.10);
-
-  font-size: 24px;
-}
-
-
-/* =========================================================
-   LIBRARY INFO
-========================================================= */
-
-.library-card-info,
-.lesson-card-info {
-  min-width: 0;
-  flex: 1;
-}
-
-.library-card-info strong,
-.lesson-card-info strong,
-.library-card h3,
-.lesson-card h3 {
-  display: block;
-
-  overflow-wrap: anywhere;
-
-  color: #effff6;
-
-  font-size: 13px;
-  font-weight: 950;
-
-  line-height: 1.35;
-}
-
-.library-card-info p,
-.lesson-card-info p,
-.library-card p,
-.lesson-card p {
-  margin-top: 5px;
-
-  overflow-wrap: anywhere;
-
-  color: #78998e;
-
-  font-size: 9px;
-  font-weight: 700;
-
-  line-height: 1.45;
-}
-
-.library-card-arrow,
-.lesson-card-arrow {
-  flex-shrink: 0;
-
-  color: #55ee96;
-
-  font-size: 19px;
-  font-weight: 950;
-}
-
-
-/* =========================================================
-   LIBRARY LOCKED
-========================================================= */
-
-.library-card.locked,
-.lesson-card.locked {
-  opacity: 0.48;
-
-  cursor: not-allowed;
-}
-
-.library-card.locked
-.library-card-icon,
-.lesson-card.locked
-.lesson-card-icon {
-  background:
-    rgba(255, 255, 255, 0.035);
-
-  border-color:
-    rgba(255, 255, 255, 0.045);
-}
-
-
-/* =========================================================
-   CAMPBELL CARD IN LIBRARY
-========================================================= */
-
-.campbell-library-card {
-  position: relative;
-
-  width: 100%;
-  min-width: 0;
-
-  padding: 17px;
-
-  display: flex;
-  align-items: center;
-
-  gap: 14px;
-
-  overflow: hidden;
-
-  border: none;
   border-radius: 21px;
 
   background:
     linear-gradient(
       135deg,
-      rgba(29, 78, 59, 0.98),
-      rgba(10, 39, 31, 0.98)
+      rgba(32, 81, 62, 0.98),
+      rgba(9, 36, 28, 0.98)
     );
 
-  border:
-    1px solid rgba(85, 238, 150, 0.15);
-
-  color: #effff6;
+  color: var(--text);
 
   text-align: left;
 
   cursor: pointer;
 
   box-shadow:
-    0 12px 30px rgba(0, 0, 0, 0.14);
+    0 13px 32px rgba(0, 0, 0, 0.14);
 
   transition:
     transform 0.15s ease,
@@ -3016,20 +2477,18 @@ img {
 }
 
 .campbell-library-card::after {
-  content: "CAMPBELL";
+  content: "DNA";
 
   position: absolute;
 
-  right: -12px;
-  top: 8px;
+  right: -10px;
+  top: -5px;
 
   color:
-    rgba(85, 238, 150, 0.045);
+    rgba(85, 238, 150, 0.035);
 
-  font-size: 35px;
+  font-size: 55px;
   font-weight: 1000;
-
-  letter-spacing: -2px;
 
   pointer-events: none;
 }
@@ -3047,10 +2506,10 @@ img {
   position: relative;
   z-index: 2;
 
-  width: 58px;
-  height: 58px;
+  width: 59px;
+  height: 59px;
 
-  flex: 0 0 58px;
+  flex: 0 0 59px;
 
   display: flex;
   align-items: center;
@@ -3059,14 +2518,10 @@ img {
   border-radius: 18px;
 
   background:
-    linear-gradient(
-      145deg,
-      rgba(85, 238, 150, 0.17),
-      rgba(85, 238, 150, 0.06)
-    );
+    rgba(85, 238, 150, 0.11);
 
   border:
-    1px solid rgba(85, 238, 150, 0.15);
+    1px solid rgba(85, 238, 150, 0.14);
 
   font-size: 28px;
 }
@@ -3080,12 +2535,12 @@ img {
 }
 
 .campbell-library-label {
-  color: #55ee96;
+  color: var(--green);
 
   font-size: 8px;
   font-weight: 950;
 
-  letter-spacing: 1px;
+  letter-spacing: 0.9px;
 }
 
 .campbell-library-info h3 {
@@ -3093,18 +2548,18 @@ img {
 
   overflow-wrap: anywhere;
 
-  color: #effff6;
+  color: var(--text);
 
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 950;
 
-  line-height: 1.25;
+  line-height: 1.35;
 }
 
 .campbell-library-info p {
   margin-top: 5px;
 
-  color: #82a89a;
+  color: #82a79a;
 
   font-size: 9px;
   font-weight: 700;
@@ -3118,152 +2573,172 @@ img {
 
   flex-shrink: 0;
 
-  color: #55ee96;
+  color: var(--green);
 
-  font-size: 20px;
+  font-size: 21px;
   font-weight: 950;
 }
 
 
 /* =========================================================
-   EMPTY LIBRARY
+   LIBRARY LESSONS
 ========================================================= */
 
-.library-empty {
-  width: 100%;
-
-  padding:
-    35px
-    18px;
-
-  text-align: center;
-
-  border-radius: 20px;
-
-  background:
-    rgba(255, 255, 255, 0.025);
-
-  border:
-    1px dashed rgba(255, 255, 255, 0.07);
-}
-
-.library-empty span {
-  display: block;
-
-  font-size: 32px;
-}
-
-.library-empty strong {
-  display: block;
-
-  margin-top: 10px;
-
-  color: #cde8df;
-
-  font-size: 13px;
-  font-weight: 900;
-}
-
-.library-empty p {
-  margin-top: 6px;
-
-  color: #708f85;
-
-  font-size: 10px;
-  font-weight: 700;
-
-  line-height: 1.5;
-}
-
-
-/* =========================================================
-   PROFILE SCREEN
-========================================================= */
-
-#profileScreen {
-  min-height: 100vh;
-  padding-bottom: 95px;
-
-  background:
-    radial-gradient(
-      circle at 50% -5%,
-      rgba(85, 238, 150, 0.11),
-      transparent 30%
-    ),
-    linear-gradient(
-      180deg,
-      #073d34,
-      #021f1b
-    );
-}
-
-.profile-app {
-  width: 100%;
-  max-width: 720px;
-
-  min-height: 100vh;
-
-  margin: 0 auto;
-
-  padding:
-    18px
-    18px
-    115px;
-}
-
-
-/* =========================================================
-   PROFILE HEADER
-========================================================= */
-
-.profile-header {
+.library-list {
   width: 100%;
 
   display: flex;
+  flex-direction: column;
+
+  gap: 9px;
+}
+
+
+/*
+   app.js может создавать карточки
+   с любым из этих классов.
+*/
+
+.library-card,
+.lesson-card,
+.library-lesson-card {
+  width: 100%;
+  min-width: 0;
+
+  padding: 14px;
+
+  display: flex;
   align-items: center;
-  justify-content: space-between;
 
   gap: 12px;
+
+  border:
+    1px solid var(--border);
+
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.048),
+      rgba(255, 255, 255, 0.025)
+    );
+
+  color: var(--text);
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.14s ease,
+    border-color 0.14s ease,
+    background 0.14s ease;
 }
 
-.profile-header h1 {
-  color: #effff6;
+.library-card:hover,
+.lesson-card:hover,
+.library-lesson-card:hover {
+  border-color:
+    rgba(85, 238, 150, 0.18);
 
-  font-size: 25px;
-  font-weight: 950;
+  background:
+    rgba(85, 238, 150, 0.045);
 }
 
-.profile-header p {
-  margin-top: 4px;
-
-  color: #7d9f94;
-
-  font-size: 10px;
-  font-weight: 700;
+.library-card:active,
+.lesson-card:active,
+.library-lesson-card:active {
+  transform: scale(0.985);
 }
 
-#settingsButton {
-  width: 42px;
-  height: 42px;
+.library-card-icon,
+.lesson-card-icon,
+.library-lesson-icon {
+  width: 49px;
+  height: 49px;
 
-  flex-shrink: 0;
+  flex: 0 0 49px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  border: none;
+  border-radius: 15px;
+
+  background:
+    rgba(85, 238, 150, 0.075);
+
+  font-size: 22px;
+}
+
+.library-card-info,
+.lesson-card-info,
+.library-lesson-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.library-card-info strong,
+.lesson-card-info strong,
+.library-lesson-info strong {
+  display: block;
+
+  overflow-wrap: anywhere;
+
+  color: var(--text);
+
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.library-card-info p,
+.lesson-card-info p,
+.library-lesson-info p {
+  margin-top: 4px;
+
+  color: var(--muted);
+
+  font-size: 9px;
+  font-weight: 700;
+
+  line-height: 1.4;
+}
+
+.library-card.locked,
+.lesson-card.locked,
+.library-lesson-card.locked {
+  opacity: 0.45;
+
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   PROFILE SETTINGS
+========================================================= */
+
+#settingsButton {
+  width: 44px;
+  height: 44px;
+
+  flex: 0 0 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border:
+    1px solid var(--border);
+
   border-radius: 14px;
 
   background:
     rgba(255, 255, 255, 0.045);
 
-  border:
-    1px solid rgba(255, 255, 255, 0.065);
-
   color: #bdd8cf;
 
-  font-size: 18px;
+  font-size: 19px;
 
   cursor: pointer;
 }
@@ -3278,11 +2753,9 @@ img {
 
   width: 100%;
 
-  margin-top: 18px;
+  margin-top: 19px;
 
-  padding:
-    21px
-    18px;
+  padding: 19px;
 
   overflow: hidden;
 
@@ -3296,15 +2769,15 @@ img {
   background:
     linear-gradient(
       145deg,
-      rgba(29, 74, 57, 0.98),
-      rgba(11, 35, 27, 0.98)
+      rgba(30, 77, 59, 0.98),
+      rgba(10, 36, 28, 0.98)
     );
 
   border:
     1px solid rgba(85, 238, 150, 0.11);
 
   box-shadow:
-    0 15px 36px rgba(0, 0, 0, 0.14);
+    0 14px 35px rgba(0, 0, 0, 0.14);
 }
 
 .profile-hero::after {
@@ -3315,8 +2788,8 @@ img {
   width: 170px;
   height: 170px;
 
-  right: -70px;
-  top: -80px;
+  right: -65px;
+  top: -85px;
 
   border-radius: 50%;
 
@@ -3324,14 +2797,19 @@ img {
     rgba(85, 238, 150, 0.05);
 }
 
+
+/* =========================================================
+   PROFILE AVATAR
+========================================================= */
+
 .profile-avatar {
   position: relative;
   z-index: 2;
 
-  width: 75px;
-  height: 75px;
+  width: 76px;
+  height: 76px;
 
-  flex: 0 0 75px;
+  flex: 0 0 76px;
 
   display: flex;
   align-items: center;
@@ -3339,20 +2817,20 @@ img {
 
   overflow: hidden;
 
-  border-radius: 23px;
+  border-radius: 22px;
 
   background:
-    rgba(85, 238, 150, 0.10);
+    rgba(85, 238, 150, 0.09);
 
   border:
-    1px solid rgba(85, 238, 150, 0.13);
-
-  font-size: 40px;
+    1px solid rgba(85, 238, 150, 0.12);
 }
 
 .profile-avatar img {
-  width: 100%;
-  height: 100%;
+  width: 70px !important;
+  height: 70px !important;
+
+  max-width: 70px !important;
 
   object-fit: contain;
 }
@@ -3366,10 +2844,12 @@ img {
 }
 
 .profile-main-info h2 {
-  color: #effff6;
+  margin-top: 4px;
+
+  color: var(--text);
 
   font-size: 20px;
-  font-weight: 950;
+  font-weight: 1000;
 }
 
 #profileGrade {
@@ -3386,7 +2866,7 @@ img {
   background:
     rgba(85, 238, 150, 0.08);
 
-  color: #70efa4;
+  color: var(--green);
 
   font-size: 9px;
   font-weight: 900;
@@ -3433,15 +2913,15 @@ img {
     1px solid rgba(255, 255, 255, 0.055);
 }
 
-.profile-stat-card span:first-child {
+.profile-stat-card > span {
   font-size: 20px;
 }
 
 .profile-stat-card strong {
-  color: #effff6;
+  color: var(--text);
 
   font-size: 17px;
-  font-weight: 950;
+  font-weight: 1000;
 }
 
 .profile-stat-card small {
@@ -3449,8 +2929,6 @@ img {
 
   font-size: 8px;
   font-weight: 800;
-
-  text-align: center;
 }
 
 
@@ -3489,7 +2967,7 @@ img {
   font-weight: 900;
 }
 
-.profile-xp-top span {
+#profileXPText {
   color: #7fa196;
 
   font-size: 10px;
@@ -3535,11 +3013,11 @@ img {
 .profile-section {
   width: 100%;
 
-  margin-top: 23px;
+  margin-top: 24px;
 }
 
 .profile-section-header h2 {
-  color: #effff6;
+  color: var(--text);
 
   font-size: 17px;
   font-weight: 950;
@@ -3558,7 +3036,7 @@ img {
 
 
 /* =========================================================
-   ACTIVITY WEEK
+   ACTIVITY
 ========================================================= */
 
 .activity-card {
@@ -3577,7 +3055,6 @@ img {
     1px solid rgba(255, 255, 255, 0.055);
 }
 
-#activityWeek,
 .activity-week {
   width: 100%;
 
@@ -3628,8 +3105,11 @@ img {
   font-weight: 900;
 }
 
-.activity-day.activity-done
-.activity-circle {
+
+/* JS может добавлять эти классы */
+
+.activity-day.activity-done .activity-circle,
+.activity-day.done .activity-circle {
   background:
     linear-gradient(
       180deg,
@@ -3640,35 +3120,36 @@ img {
   border-color: transparent;
 
   color: #062116;
-
-  box-shadow:
-    0 4px 12px rgba(40, 217, 120, 0.15);
 }
 
-.activity-day.activity-today
-.activity-circle {
+.activity-day.activity-today .activity-circle,
+.activity-day.today .activity-circle {
   border-color:
-    rgba(85, 238, 150, 0.48);
+    rgba(85, 238, 150, 0.5);
 }
+
+
+/* =========================================================
+   ACTIVITY FOOTER
+========================================================= */
 
 .activity-footer {
   width: 100%;
 
   margin-top: 14px;
-
   padding-top: 12px;
 
   display: flex;
   align-items: center;
 
-  gap: 9px;
+  gap: 10px;
 
   border-top:
     1px solid rgba(255, 255, 255, 0.05);
 }
 
 .activity-footer-icon {
-  font-size: 20px;
+  font-size: 21px;
 }
 
 .activity-footer strong {
@@ -3685,8 +3166,6 @@ img {
 
   font-size: 9px;
   font-weight: 700;
-
-  line-height: 1.4;
 }
 
 
@@ -3694,7 +3173,6 @@ img {
    ACHIEVEMENTS
 ========================================================= */
 
-#achievementsContainer,
 .achievements-container {
   width: 100%;
 
@@ -3722,12 +3200,12 @@ img {
   border-radius: 17px;
 
   background:
-    rgba(255, 255, 255, 0.025);
+    rgba(255, 255, 255, 0.027);
 
   border:
     1px solid rgba(255, 255, 255, 0.045);
 
-  opacity: 0.57;
+  opacity: 0.56;
 }
 
 .achievement-card.unlocked {
@@ -3737,14 +3215,14 @@ img {
     rgba(85, 238, 150, 0.045);
 
   border-color:
-    rgba(85, 238, 150, 0.09);
+    rgba(85, 238, 150, 0.1);
 }
 
 .achievement-icon {
-  width: 42px;
-  height: 42px;
+  width: 43px;
+  height: 43px;
 
-  flex: 0 0 42px;
+  flex: 0 0 43px;
 
   display: flex;
   align-items: center;
@@ -3758,8 +3236,7 @@ img {
   font-size: 21px;
 }
 
-.achievement-card.unlocked
-.achievement-icon {
+.achievement-card.unlocked .achievement-icon {
   background:
     rgba(85, 238, 150, 0.09);
 }
@@ -3772,8 +3249,6 @@ img {
 .achievement-info strong {
   display: block;
 
-  overflow-wrap: anywhere;
-
   color: #dff8ef;
 
   font-size: 11px;
@@ -3782,8 +3257,6 @@ img {
 
 .achievement-info p {
   margin-top: 4px;
-
-  overflow-wrap: anywhere;
 
   color: #708f85;
 
@@ -3796,26 +3269,21 @@ img {
 .achievement-status {
   flex-shrink: 0;
 
-  min-width: 38px;
-
   color: #76988d;
 
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 900;
-
-  text-align: right;
 }
 
-.achievement-card.unlocked
-.achievement-status {
-  color: #55ee96;
+.achievement-card.unlocked .achievement-status {
+  color: var(--green);
 
-  font-size: 16px;
+  font-size: 17px;
 }
 
 
 /* =========================================================
-   PROFILE COMPLETED LESSONS
+   COMPLETED LESSONS
 ========================================================= */
 
 .profile-completed-card {
@@ -3863,7 +3331,7 @@ img {
 }
 
 .profile-completed-info strong {
-  color: #effff6;
+  color: var(--text);
 
   font-size: 11px;
   font-weight: 900;
@@ -3879,7 +3347,7 @@ img {
 }
 
 #profileCompletedLessons {
-  color: #55ee96;
+  color: var(--green);
 
   font-size: 21px;
   font-weight: 1000;
@@ -3887,118 +3355,24 @@ img {
 
 
 /* =========================================================
-   LIBRARY + PROFILE NAVIGATION
-========================================================= */
-
-.library-bottom-nav,
-.profile-bottom-nav {
-  position: fixed;
-
-  z-index: 500;
-
-  left: 50%;
-  bottom: 0;
-
-  width: 100%;
-  max-width: 720px;
-
-  min-height: 72px;
-
-  padding:
-    8px
-    10px
-    max(8px, env(safe-area-inset-bottom));
-
-  transform:
-    translateX(-50%);
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(5, minmax(0, 1fr));
-
-  background:
-    rgba(3, 35, 30, 0.96);
-
-  border-top:
-    1px solid rgba(255, 255, 255, 0.065);
-
-  backdrop-filter: blur(16px);
-
-  -webkit-backdrop-filter: blur(16px);
-}
-
-.library-bottom-nav button,
-.profile-bottom-nav button {
-  min-width: 0;
-  min-height: 52px;
-
-  padding: 5px 2px;
-
-  display: flex;
-  flex-direction: column;
-
-  align-items: center;
-  justify-content: center;
-
-  gap: 4px;
-
-  overflow: hidden;
-
-  border: none;
-  border-radius: 13px;
-
-  background: transparent;
-
-  color: #668a7e;
-
-  cursor: pointer;
-}
-
-.library-bottom-nav button span:first-child,
-.profile-bottom-nav button span:first-child {
-  font-size: 20px;
-}
-
-.library-bottom-nav button span:last-child,
-.profile-bottom-nav button span:last-child {
-  max-width: 100%;
-
-  overflow: hidden;
-
-  font-size: 8px;
-  font-weight: 850;
-
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.library-bottom-nav button.active,
-.profile-bottom-nav button.active {
-  background:
-    rgba(85, 238, 150, 0.07);
-
-  color: #55ee96;
-}
-
-
-/* =========================================================
-   GLOBAL OVERFLOW PROTECTION
+   OVERFLOW PROTECTION
 ========================================================= */
 
 .library-app,
 .profile-app,
 .library-section,
 .library-list,
-#libraryLessons,
 .profile-section,
-#achievementsContainer {
+.achievements-container,
+.campbell-library-info,
+.achievement-info {
   min-width: 0;
   max-width: 100%;
 }
 
 .library-card *,
 .lesson-card *,
+.library-lesson-card *,
 .campbell-library-card *,
 .achievement-card * {
   max-width: 100%;
@@ -4011,79 +3385,70 @@ img {
 
 @media (max-width: 480px) {
 
-  .library-app,
-  .profile-app {
-    padding:
-      14px
-      14px
-      105px;
-  }
-
   .library-header h1,
-  .library-header-left h1,
   .profile-header h1 {
-    font-size: 22px;
+    font-size: 23px;
   }
 
-  .library-card,
-  .lesson-card {
-    padding: 13px;
+  .library-grade-badge {
+    padding:
+      8px
+      9px;
 
-    gap: 11px;
-
-    border-radius: 17px;
+    font-size: 9px;
   }
 
-  .library-card-icon,
-  .lesson-card-icon {
-    width: 47px;
-    height: 47px;
-
-    flex-basis: 47px;
-
-    border-radius: 15px;
-
-    font-size: 22px;
+  .library-section {
+    margin-top: 23px;
   }
 
   .campbell-library-card {
-    padding: 14px;
+    min-height: 91px;
 
-    gap: 11px;
+    padding: 13px;
+
+    gap: 10px;
 
     border-radius: 18px;
   }
 
   .campbell-library-icon {
-    width: 52px;
-    height: 52px;
+    width: 51px;
+    height: 51px;
 
-    flex-basis: 52px;
+    flex-basis: 51px;
 
     border-radius: 16px;
 
-    font-size: 25px;
+    font-size: 24px;
   }
 
-  .campbell-library-card::after {
-    font-size: 28px;
+  .campbell-library-info h3 {
+    font-size: 12px;
   }
 
   .profile-hero {
-    padding: 17px 15px;
+    padding: 16px;
+
+    gap: 12px;
 
     border-radius: 20px;
   }
 
   .profile-avatar {
-    width: 65px;
-    height: 65px;
+    width: 66px;
+    height: 66px;
 
-    flex-basis: 65px;
+    flex-basis: 66px;
 
-    border-radius: 20px;
+    border-radius: 19px;
+  }
 
-    font-size: 34px;
+  .profile-avatar img {
+    width: 61px !important;
+    height: 61px !important;
+
+    max-width: 61px !important;
   }
 
   .profile-main-info h2 {
@@ -4109,10 +3474,9 @@ img {
   .activity-card {
     padding:
       14px
-      10px;
+      9px;
   }
 
-  #activityWeek,
   .activity-week {
     gap: 3px;
   }
@@ -4132,12 +3496,1020 @@ img {
     gap: 10px;
   }
 
-  .library-bottom-nav,
-  .profile-bottom-nav {
-    min-height: 68px;
+}
 
-    padding-left: 5px;
-    padding-right: 5px;
+
+/* =========================================================
+   VERY SMALL PHONES
+========================================================= */
+
+@media (max-width: 360px) {
+
+  .library-section-title {
+    align-items: flex-start;
+    flex-direction: column;
+
+    gap: 4px;
+  }
+
+  .campbell-library-icon {
+    width: 46px;
+    height: 46px;
+
+    flex-basis: 46px;
+
+    font-size: 21px;
+  }
+
+  .campbell-library-info h3 {
+    font-size: 11px;
+  }
+
+  .activity-circle {
+    width: 25px;
+    height: 25px;
+  }
+
+}
+/* =========================================================
+   GROUND — STYLE.CSS
+   PART 4
+   LESSON + ANSWERS + COMPLETE + TOAST
+========================================================= */
+
+
+/* =========================================================
+   LESSON SCREEN
+========================================================= */
+
+#lessonScreen {
+  min-height: 100vh;
+}
+
+.lesson-app {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+
+  min-height: 100vh;
+
+  padding-bottom: 105px;
+}
+
+
+/* =========================================================
+   LESSON HEADER
+========================================================= */
+
+.lesson-header {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding-bottom: 18px;
+}
+
+
+/* =========================================================
+   LESSON PROGRESS
+========================================================= */
+
+.lesson-progress {
+  flex: 1;
+
+  height: 10px;
+
+  overflow: hidden;
+
+  border-radius: 100px;
+
+  background:
+    rgba(255, 255, 255, 0.07);
+}
+
+.lesson-progress-fill {
+  width: 0%;
+  height: 100%;
+
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      90deg,
+      #20bd63,
+      #55ee96
+    );
+
+  box-shadow:
+    0 0 13px rgba(85, 238, 150, 0.18);
+
+  transition:
+    width 0.35s ease;
+}
+
+
+/* =========================================================
+   LESSON GENES
+========================================================= */
+
+.lesson-genes {
+  min-width: 64px;
+
+  padding:
+    8px
+    10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 5px;
+
+  border-radius: 13px;
+
+  background:
+    rgba(85, 238, 150, 0.07);
+
+  border:
+    1px solid rgba(85, 238, 150, 0.1);
+
+  color: var(--text);
+
+  font-size: 11px;
+  font-weight: 950;
+}
+
+
+/* =========================================================
+   LESSON CONTENT
+========================================================= */
+
+.lesson-content {
+  width: 100%;
+
+  flex: 1;
+
+  padding-top: 10px;
+}
+
+.lesson-content > h1 {
+  margin-top: 7px;
+
+  color: var(--text);
+
+  font-size: 28px;
+  font-weight: 1000;
+
+  line-height: 1.15;
+
+  letter-spacing: -0.7px;
+}
+
+
+/* =========================================================
+   LESSON CONTENT CONTAINER
+========================================================= */
+
+.lesson-content-container {
+  width: 100%;
+
+  margin-top: 19px;
+
+  color: #c8e0d7;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  line-height: 1.7;
+}
+
+.lesson-content-container h2 {
+  margin:
+    23px
+    0
+    9px;
+
+  color: var(--text);
+
+  font-size: 19px;
+  font-weight: 950;
+
+  line-height: 1.25;
+}
+
+.lesson-content-container h3 {
+  margin:
+    18px
+    0
+    8px;
+
+  color: #ddf8ed;
+
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.lesson-content-container p {
+  margin-bottom: 12px;
+}
+
+.lesson-content-container strong {
+  color: #f0fff7;
+}
+
+.lesson-content-container ul,
+.lesson-content-container ol {
+  margin:
+    10px
+    0
+    14px
+    22px;
+}
+
+.lesson-content-container li {
+  margin-bottom: 7px;
+}
+
+
+/* =========================================================
+   THEORY BLOCKS
+
+   Если player.js создаёт блоки теории,
+   они тоже будут выглядеть нормально.
+========================================================= */
+
+.theory-block,
+.lesson-theory-block {
+  width: 100%;
+
+  margin-top: 13px;
+
+  padding: 16px;
+
+  border-radius: 19px;
+
+  background:
+    rgba(255, 255, 255, 0.035);
+
+  border:
+    1px solid rgba(255, 255, 255, 0.055);
+}
+
+.theory-block h2,
+.lesson-theory-block h2 {
+  margin-top: 0;
+}
+
+
+/* =========================================================
+   NOTE / IMPORTANT
+========================================================= */
+
+.lesson-note,
+.lesson-important {
+  width: 100%;
+
+  margin:
+    15px
+    0;
+
+  padding: 14px;
+
+  border-radius: 16px;
+
+  background:
+    rgba(85, 238, 150, 0.055);
+
+  border:
+    1px solid rgba(85, 238, 150, 0.1);
+
+  color: #bfe3d5;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  line-height: 1.55;
+}
+
+
+/* =========================================================
+   LESSON ANSWERS
+========================================================= */
+
+.lesson-answers {
+  width: 100%;
+
+  margin-top: 20px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 9px;
+}
+
+
+/* =========================================================
+   ANSWER OPTION
+
+   Ответы специально БЕЛЫЕ,
+   как ты и просил.
+========================================================= */
+
+.answer-option,
+.lesson-answer,
+.answer-button {
+  width: 100%;
+  min-height: 60px;
+
+  padding:
+    11px
+    14px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  border:
+    2px solid rgba(255, 255, 255, 0.12);
+
+  border-radius: 17px;
+
+  background: #ffffff;
+
+  color: #17372e;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 4px 0 rgba(0, 0, 0, 0.14);
+
+  transition:
+    transform 0.13s ease,
+    border-color 0.13s ease,
+    box-shadow 0.13s ease,
+    background 0.13s ease;
+}
+
+.answer-option:hover,
+.lesson-answer:hover,
+.answer-button:hover {
+  border-color: #55ee96;
+
+  transform: translateY(-1px);
+}
+
+.answer-option:active,
+.lesson-answer:active,
+.answer-button:active {
+  transform: translateY(3px);
+
+  box-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.14);
+}
+
+
+/* =========================================================
+   ANSWER LETTER
+========================================================= */
+
+.answer-letter {
+  width: 36px;
+  height: 36px;
+
+  flex: 0 0 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+
+  background: #e9f7ef;
+
+  color: #18834d;
+
+  font-size: 12px;
+  font-weight: 1000;
+}
+
+
+/* =========================================================
+   ANSWER TEXT
+========================================================= */
+
+.answer-text {
+  min-width: 0;
+  flex: 1;
+
+  overflow-wrap: anywhere;
+
+  color: #17372e;
+
+  font-size: 12px;
+  font-weight: 850;
+
+  line-height: 1.4;
+}
+
+
+/* =========================================================
+   SELECTED ANSWER
+========================================================= */
+
+.answer-option.selected,
+.lesson-answer.selected,
+.answer-button.selected {
+  border-color: #35d87b;
+
+  background: #effff5;
+
+  box-shadow:
+    0 4px 0 #19a95b;
+}
+
+.answer-option.selected .answer-letter,
+.lesson-answer.selected .answer-letter,
+.answer-button.selected .answer-letter {
+  background: #35d87b;
+
+  color: #062116;
+}
+
+
+/* =========================================================
+   CORRECT ANSWER
+========================================================= */
+
+.answer-option.correct,
+.lesson-answer.correct,
+.answer-button.correct {
+  border-color: #25cf70;
+
+  background: #eafff1;
+
+  box-shadow:
+    0 4px 0 #169e52;
+}
+
+.answer-option.correct .answer-letter,
+.lesson-answer.correct .answer-letter,
+.answer-button.correct .answer-letter {
+  background: #25cf70;
+
+  color: #062116;
+}
+
+
+/* =========================================================
+   WRONG ANSWER
+========================================================= */
+
+.answer-option.wrong,
+.lesson-answer.wrong,
+.answer-button.wrong,
+.answer-option.incorrect,
+.lesson-answer.incorrect,
+.answer-button.incorrect {
+  border-color: #ff6f75;
+
+  background: #fff0f0;
+
+  box-shadow:
+    0 4px 0 #cf454c;
+}
+
+.answer-option.wrong .answer-letter,
+.lesson-answer.wrong .answer-letter,
+.answer-button.wrong .answer-letter,
+.answer-option.incorrect .answer-letter,
+.lesson-answer.incorrect .answer-letter,
+.answer-button.incorrect .answer-letter {
+  background: #ff6f75;
+
+  color: #ffffff;
+}
+
+
+/* =========================================================
+   DISABLED ANSWER
+========================================================= */
+
+.answer-option:disabled,
+.lesson-answer:disabled,
+.answer-button:disabled {
+  cursor: default;
+}
+
+
+/* =========================================================
+   LESSON FEEDBACK
+========================================================= */
+
+.lesson-feedback {
+  width: 100%;
+
+  margin-top: 17px;
+
+  padding: 15px;
+
+  border-radius: 18px;
+
+  background:
+    rgba(85, 238, 150, 0.065);
+
+  border:
+    1px solid rgba(85, 238, 150, 0.12);
+
+  color: #c8ecde;
+
+  font-size: 11px;
+  font-weight: 750;
+
+  line-height: 1.55;
+}
+
+.lesson-feedback.correct {
+  background:
+    rgba(85, 238, 150, 0.07);
+
+  border-color:
+    rgba(85, 238, 150, 0.18);
+}
+
+.lesson-feedback.wrong,
+.lesson-feedback.incorrect {
+  background:
+    rgba(255, 105, 110, 0.07);
+
+  border-color:
+    rgba(255, 105, 110, 0.16);
+}
+
+
+/* =========================================================
+   LESSON BOTTOM
+========================================================= */
+
+.lesson-bottom {
+  position: fixed;
+
+  z-index: 450;
+
+  left: 50%;
+  bottom: 0;
+
+  width: 100%;
+  max-width: 760px;
+
+  padding:
+    13px
+    18px
+    max(15px, env(safe-area-inset-bottom));
+
+  transform:
+    translateX(-50%);
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(2, 31, 27, 0.1),
+      rgba(2, 31, 27, 0.98) 30%
+    );
+}
+
+.lesson-bottom .primary-button {
+  max-width: 100%;
+}
+
+
+/* =========================================================
+   COMPLETE SCREEN
+========================================================= */
+
+#lessonCompleteScreen,
+#campbellTheoryCompleteScreen {
+  min-height: 100vh;
+}
+
+.lesson-complete-app {
+  width: 100%;
+  max-width: 620px;
+
+  min-height: 100vh;
+
+  margin: 0 auto;
+
+  padding:
+    35px
+    18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* =========================================================
+   COMPLETE CONTENT
+========================================================= */
+
+.lesson-complete-content {
+  width: 100%;
+
+  padding:
+    30px
+    22px;
+
+  text-align: center;
+
+  border-radius: 27px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(31, 77, 60, 0.97),
+      rgba(8, 34, 27, 0.98)
+    );
+
+  border:
+    1px solid rgba(85, 238, 150, 0.12);
+
+  box-shadow:
+    0 22px 55px rgba(0, 0, 0, 0.2);
+}
+
+
+/* =========================================================
+   COMPLETE ICON
+========================================================= */
+
+.lesson-complete-icon {
+  width: 82px;
+  height: 82px;
+
+  margin:
+    0
+    auto
+    17px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 25px;
+
+  background:
+    rgba(85, 238, 150, 0.09);
+
+  border:
+    1px solid rgba(85, 238, 150, 0.13);
+
+  font-size: 38px;
+
+  box-shadow:
+    0 13px 30px rgba(0, 0, 0, 0.12);
+}
+
+.lesson-complete-content h1 {
+  margin-top: 8px;
+
+  color: var(--text);
+
+  font-size: 28px;
+  font-weight: 1000;
+
+  line-height: 1.15;
+}
+
+.lesson-complete-content > p {
+  max-width: 390px;
+
+  margin:
+    10px
+    auto
+    0;
+
+  color: #86a99d;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  line-height: 1.55;
+}
+
+
+/* =========================================================
+   COMPLETE REWARDS
+========================================================= */
+
+.lesson-complete-rewards {
+  width: 100%;
+
+  margin-top: 24px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 10px;
+}
+
+.lesson-reward-card {
+  min-width: 0;
+
+  padding:
+    17px
+    8px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 5px;
+
+  border-radius: 18px;
+
+  background:
+    rgba(255, 255, 255, 0.04);
+
+  border:
+    1px solid rgba(255, 255, 255, 0.06);
+}
+
+.lesson-reward-card > span {
+  font-size: 24px;
+}
+
+.lesson-reward-card strong {
+  color: var(--green);
+
+  font-size: 16px;
+  font-weight: 1000;
+
+  overflow-wrap: anywhere;
+}
+
+.lesson-reward-card small {
+  color: #75988c;
+
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.lesson-complete-content > .primary-button {
+  margin-top: 22px;
+}
+
+
+/* =========================================================
+   GROUND TOAST
+========================================================= */
+
+.ground-toast {
+  position: fixed;
+
+  z-index: 9999;
+
+  left: 50%;
+  bottom: 90px;
+
+  width:
+    calc(100% - 30px);
+
+  max-width: 430px;
+
+  padding:
+    13px
+    15px;
+
+  transform:
+    translateX(-50%);
+
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+
+  border-radius: 17px;
+
+  background:
+    rgba(9, 43, 34, 0.98);
+
+  border:
+    1px solid rgba(85, 238, 150, 0.16);
+
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.28);
+
+  backdrop-filter:
+    blur(14px);
+
+  -webkit-backdrop-filter:
+    blur(14px);
+
+  animation:
+    groundToastIn 0.25s ease;
+}
+
+#groundToastIcon {
+  width: 39px;
+  height: 39px;
+
+  flex: 0 0 39px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background:
+    rgba(85, 238, 150, 0.09);
+
+  font-size: 19px;
+}
+
+.ground-toast > div {
+  min-width: 0;
+}
+
+#groundToastTitle {
+  display: block;
+
+  color: #eafff2;
+
+  font-size: 11px;
+  font-weight: 950;
+}
+
+#groundToastText {
+  margin-top: 3px;
+
+  overflow-wrap: anywhere;
+
+  color: #87aa9e;
+
+  font-size: 9px;
+  font-weight: 700;
+
+  line-height: 1.4;
+}
+
+
+/* =========================================================
+   TOAST ANIMATION
+========================================================= */
+
+@keyframes groundToastIn {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateX(-50%)
+      translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateX(-50%)
+      translateY(0);
+  }
+
+}
+
+
+/* =========================================================
+   TABLET / DESKTOP
+========================================================= */
+
+@media (min-width: 700px) {
+
+  .lesson-content > h1 {
+    font-size: 32px;
+  }
+
+  .lesson-content-container {
+    font-size: 14px;
+  }
+
+  .lesson-complete-content {
+    padding:
+      38px
+      35px;
+  }
+
+  .lesson-complete-content h1 {
+    font-size: 32px;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+  .lesson-header {
+    gap: 9px;
+
+    padding-bottom: 13px;
+  }
+
+  .lesson-header .back-icon {
+    width: 40px;
+    height: 40px;
+
+    flex-basis: 40px;
+
+    border-radius: 13px;
+  }
+
+  .lesson-genes {
+    min-width: 57px;
+
+    padding:
+      7px
+      8px;
+
+    font-size: 10px;
+  }
+
+  .lesson-content > h1 {
+    font-size: 24px;
+  }
+
+  .lesson-content-container {
+    margin-top: 16px;
+
+    font-size: 12px;
+  }
+
+  .answer-option,
+  .lesson-answer,
+  .answer-button {
+    min-height: 56px;
+
+    padding:
+      10px
+      11px;
+
+    border-radius: 15px;
+  }
+
+  .answer-letter {
+    width: 33px;
+    height: 33px;
+
+    flex-basis: 33px;
+  }
+
+  .answer-text {
+    font-size: 11px;
+  }
+
+  .lesson-bottom {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .lesson-complete-app {
+    padding:
+      25px
+      14px;
+  }
+
+  .lesson-complete-content {
+    padding:
+      26px
+      17px;
+
+    border-radius: 23px;
+  }
+
+  .lesson-complete-icon {
+    width: 72px;
+    height: 72px;
+
+    border-radius: 22px;
+
+    font-size: 33px;
+  }
+
+  .lesson-complete-content h1 {
+    font-size: 24px;
   }
 
 }
@@ -4149,90 +4521,112 @@ img {
 
 @media (max-width: 360px) {
 
-  .library-grade-badge {
+  .lesson-complete-rewards {
+    gap: 7px;
+  }
+
+  .lesson-reward-card {
     padding:
-      7px
-      8px;
-
-    font-size: 8px;
+      14px
+      5px;
   }
 
-  .campbell-library-icon {
-    width: 47px;
-    height: 47px;
-
-    flex-basis: 47px;
-
-    font-size: 22px;
+  .ground-toast {
+    width:
+      calc(100% - 20px);
   }
 
-  .campbell-library-info h3 {
-    font-size: 13px;
+}
+/* =========================================================
+   SCREEN TRANSITIONS
+========================================================= */
+
+.screen {
+  display: none;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.screen.active {
+  display: block;
+  animation: screenEnter 0.32s cubic-bezier(.22,.8,.32,1);
+}
+
+@keyframes screenEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.995);
   }
 
-  .profile-avatar {
-    width: 58px;
-    height: 58px;
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
 
-    flex-basis: 58px;
 
-    font-size: 31px;
+/* немного оживляем карточки */
+
+.path-card,
+.grade-card,
+.campbell-library-card,
+.library-card,
+.lesson-card,
+.library-lesson-card {
+  animation: cardEnter 0.38s ease both;
+}
+
+@keyframes cardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
   }
 
-  .activity-circle {
-    width: 25px;
-    height: 25px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
+}
 
+
+/* нажатия на основные карточки */
+
+.path-card:active,
+.grade-card:active,
+.campbell-library-card:active {
+  transform: scale(0.97);
+}
+
+
+/* уважает настройку "уменьшение движения" */
+
+@media (prefers-reduced-motion: reduce) {
+  .screen.active,
+  .path-card,
+  .grade-card,
+  .campbell-library-card,
+  .library-card,
+  .lesson-card,
+  .library-lesson-card {
+    animation: none;
+  }
 }
 /* =========================================================
    GROUND — STYLE.CSS
-   PART 4/4
-   CAMPBELL BIOLOGY
+   PART 5
+   CAMPBELL + READER
 ========================================================= */
 
 
 /* =========================================================
-   CAMPBELL — COMMON
+   CAMPBELL
 ========================================================= */
-
-#campbellScreen,
-#campbellTheoryScreen,
-#campbellExamScreen,
-#campbellResultScreen,
-#campbellReviewScreen {
-  min-height: 100vh;
-
-  background:
-    radial-gradient(
-      circle at 50% -5%,
-      rgba(85, 238, 150, 0.11),
-      transparent 30%
-    ),
-    linear-gradient(
-      180deg,
-      #073d34 0%,
-      #032b25 45%,
-      #021f1b 100%
-    );
-
-  color: #effff6;
-
-  overflow-x: hidden;
-}
 
 .campbell-app {
   width: 100%;
-  max-width: 720px;
-
-  min-height: 100vh;
+  max-width: 760px;
 
   margin: 0 auto;
-
-  padding:
-    18px
-    18px
-    45px;
 }
 
 
@@ -4244,9 +4638,11 @@ img {
   width: 100%;
 
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 
-  gap: 12px;
+  gap: 14px;
+
+  margin-bottom: 20px;
 }
 
 .campbell-header-content {
@@ -4254,44 +4650,24 @@ img {
   flex: 1;
 }
 
-.campbell-header .small-label,
-.campbell-header-content .small-label {
-  display: block;
-
-  color: #55ee96;
-
-  font-size: 9px;
-  font-weight: 950;
-
-  letter-spacing: 1px;
-
-  text-transform: uppercase;
-}
-
-.campbell-header h1,
 .campbell-header-content h1 {
-  margin-top: 4px;
+  margin-top: 5px;
 
-  overflow-wrap: anywhere;
+  color: var(--text);
 
-  color: #effff6;
-
-  font-size: 24px;
+  font-size: 25px;
   font-weight: 1000;
 
   line-height: 1.15;
 }
 
-.campbell-header p,
 .campbell-header-content p {
   margin-top: 5px;
 
-  color: #78998e;
+  color: var(--muted);
 
   font-size: 10px;
-  font-weight: 700;
-
-  line-height: 1.45;
+  font-weight: 750;
 }
 
 
@@ -4304,9 +4680,7 @@ img {
 
   width: 100%;
 
-  margin-top: 20px;
-
-  padding: 22px 18px;
+  padding: 24px;
 
   overflow: hidden;
 
@@ -4315,15 +4689,15 @@ img {
   background:
     linear-gradient(
       145deg,
-      rgba(29, 78, 59, 0.98),
-      rgba(9, 36, 28, 0.99)
+      #1d513e,
+      #0a2d24
     );
 
   border:
-    1px solid rgba(85, 238, 150, 0.14);
+    1px solid rgba(85, 238, 150, 0.13);
 
   box-shadow:
-    0 15px 38px rgba(0, 0, 0, 0.15);
+    0 16px 40px rgba(0, 0, 0, 0.16);
 }
 
 .campbell-hero::after {
@@ -4331,23 +4705,18 @@ img {
 
   position: absolute;
 
-  right: -16px;
-  top: -20px;
+  right: 17px;
+  bottom: -18px;
 
-  font-size: 125px;
+  font-size: 90px;
 
-  opacity: 0.045;
+  opacity: 0.06;
 
-  transform: rotate(-15deg);
-
-  pointer-events: none;
+  transform: rotate(-18deg);
 }
 
 .campbell-hero-label {
-  position: relative;
-  z-index: 2;
-
-  color: #55ee96;
+  color: var(--green);
 
   font-size: 9px;
   font-weight: 950;
@@ -4359,13 +4728,13 @@ img {
   position: relative;
   z-index: 2;
 
-  margin-top: 7px;
+  max-width: 450px;
 
-  max-width: 520px;
+  margin-top: 8px;
 
-  color: #effff6;
+  color: var(--text);
 
-  font-size: 25px;
+  font-size: 26px;
   font-weight: 1000;
 
   line-height: 1.15;
@@ -4375,11 +4744,11 @@ img {
   position: relative;
   z-index: 2;
 
-  max-width: 540px;
+  max-width: 430px;
 
-  margin-top: 9px;
+  margin-top: 10px;
 
-  color: #90b0a5;
+  color: #91b4a7;
 
   font-size: 11px;
   font-weight: 700;
@@ -4389,17 +4758,18 @@ img {
 
 
 /* =========================================================
-   CAMPBELL COURSE PROGRESS
+   CAMPBELL PROGRESS
 ========================================================= */
 
-.campbell-progress-card {
+.campbell-progress-card,
+.campbell-reading-card {
   width: 100%;
 
   margin-top: 12px;
 
   padding: 15px;
 
-  border-radius: 19px;
+  border-radius: 18px;
 
   background:
     rgba(255, 255, 255, 0.035);
@@ -4408,7 +4778,8 @@ img {
     1px solid rgba(255, 255, 255, 0.055);
 }
 
-.campbell-progress-top {
+.campbell-progress-top,
+.campbell-reading-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -4416,21 +4787,24 @@ img {
   gap: 10px;
 }
 
-.campbell-progress-top strong {
+.campbell-progress-top strong,
+.campbell-reading-top strong {
   color: #dffff0;
 
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 900;
 }
 
-#campbellProgressText {
-  color: #55ee96;
+#campbellProgressText,
+#campbellReadingPercent {
+  color: var(--green);
 
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 950;
 }
 
-.campbell-progress-track {
+.campbell-progress-track,
+.campbell-reading-track {
   width: 100%;
   height: 8px;
 
@@ -4444,7 +4818,8 @@ img {
     rgba(255, 255, 255, 0.065);
 }
 
-#campbellProgressBar {
+#campbellProgressBar,
+#campbellReadingProgress {
   width: 0%;
   height: 100%;
 
@@ -4468,7 +4843,7 @@ img {
 .campbell-actions {
   width: 100%;
 
-  margin-top: 18px;
+  margin-top: 20px;
 
   display: flex;
   flex-direction: column;
@@ -4477,34 +4852,25 @@ img {
 }
 
 .campbell-action-card {
-  position: relative;
-
   width: 100%;
-  min-width: 0;
+  min-height: 92px;
 
-  padding: 16px;
+  padding: 14px;
 
   display: flex;
   align-items: center;
 
   gap: 13px;
 
-  overflow: hidden;
-
-  border: none;
-  border-radius: 20px;
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(255, 255, 255, 0.05),
-      rgba(255, 255, 255, 0.025)
-    );
-
   border:
     1px solid rgba(255, 255, 255, 0.065);
 
-  color: #effff6;
+  border-radius: 19px;
+
+  background:
+    rgba(255, 255, 255, 0.04);
+
+  color: var(--text);
 
   text-align: left;
 
@@ -4518,10 +4884,10 @@ img {
 
 .campbell-action-card:hover {
   border-color:
-    rgba(85, 238, 150, 0.20);
+    rgba(85, 238, 150, 0.2);
 
   background:
-    rgba(85, 238, 150, 0.055);
+    rgba(85, 238, 150, 0.05);
 }
 
 .campbell-action-card:active {
@@ -4529,22 +4895,19 @@ img {
 }
 
 .campbell-action-icon {
-  width: 53px;
-  height: 53px;
+  width: 54px;
+  height: 54px;
 
-  flex: 0 0 53px;
+  flex: 0 0 54px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  border-radius: 17px;
+  border-radius: 16px;
 
   background:
-    rgba(85, 238, 150, 0.09);
-
-  border:
-    1px solid rgba(85, 238, 150, 0.11);
+    rgba(85, 238, 150, 0.08);
 
   font-size: 25px;
 }
@@ -4557,9 +4920,7 @@ img {
 .campbell-action-info strong {
   display: block;
 
-  overflow-wrap: anywhere;
-
-  color: #effff6;
+  color: var(--text);
 
   font-size: 13px;
   font-weight: 950;
@@ -4568,100 +4929,33 @@ img {
 .campbell-action-info p {
   margin-top: 5px;
 
-  overflow-wrap: anywhere;
-
-  color: #78998e;
+  color: #789b90;
 
   font-size: 9px;
   font-weight: 700;
 
-  line-height: 1.45;
+  line-height: 1.4;
 }
 
 .campbell-action-arrow {
-  flex-shrink: 0;
+  color: var(--green);
 
-  color: #55ee96;
-
-  font-size: 19px;
+  font-size: 20px;
   font-weight: 950;
-}
-
-.campbell-action-card.locked {
-  opacity: 0.48;
 }
 
 
 /* =========================================================
-   CAMPBELL READING PROGRESS
+   LOCKED EXAM
 ========================================================= */
 
-.campbell-reading-card {
-  width: 100%;
-
-  margin-top: 11px;
-
-  padding: 14px;
-
-  border-radius: 18px;
-
-  background:
-    rgba(255, 255, 255, 0.03);
-
-  border:
-    1px solid rgba(255, 255, 255, 0.05);
+.campbell-action-card.locked {
+  opacity: 0.55;
 }
 
-.campbell-reading-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  gap: 10px;
-}
-
-.campbell-reading-top strong {
-  color: #cfe8df;
-
-  font-size: 10px;
-  font-weight: 900;
-}
-
-#campbellReadingPercent {
-  color: #55ee96;
-
-  font-size: 10px;
-  font-weight: 950;
-}
-
-.campbell-reading-track {
-  width: 100%;
-  height: 7px;
-
-  margin-top: 9px;
-
-  overflow: hidden;
-
-  border-radius: 100px;
-
-  background:
-    rgba(255, 255, 255, 0.06);
-}
-
-#campbellReadingProgress {
-  width: 0%;
-  height: 100%;
-
-  border-radius: inherit;
-
-  background:
-    linear-gradient(
-      90deg,
-      #20bd63,
-      #55ee96
-    );
-
-  transition: width 0.35s ease;
+.campbell-action-card.locked
+.campbell-action-icon {
+  filter: grayscale(0.6);
 }
 
 
@@ -4669,11 +4963,18 @@ img {
    CAMPBELL READER
 ========================================================= */
 
+.campbell-reader-app {
+  padding-bottom: 35px;
+}
+
 .campbell-reader {
   width: 100%;
-
-  margin-top: 18px;
 }
+
+
+/* =========================================================
+   READER TOP
+========================================================= */
 
 .campbell-reader-top {
   width: 100%;
@@ -4682,34 +4983,34 @@ img {
   align-items: center;
   justify-content: space-between;
 
-  gap: 12px;
+  gap: 10px;
 
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 #campbellReaderPageNumber {
-  color: #d7eee6;
+  color: #a8c8bd;
 
-  font-size: 11px;
-  font-weight: 900;
+  font-size: 10px;
+  font-weight: 850;
 }
 
 #campbellReaderPageTop {
-  min-width: 35px;
+  min-width: 36px;
 
-  padding: 6px 9px;
+  padding: 6px 8px;
+
+  text-align: center;
 
   border-radius: 10px;
 
   background:
     rgba(85, 238, 150, 0.08);
 
-  color: #55ee96;
+  color: var(--green);
 
   font-size: 10px;
   font-weight: 950;
-
-  text-align: center;
 }
 
 
@@ -4719,19 +5020,19 @@ img {
 
 .campbell-reader-progress {
   width: 100%;
-  height: 7px;
+  height: 8px;
 
-  margin-bottom: 13px;
+  margin-bottom: 15px;
 
   overflow: hidden;
 
   border-radius: 100px;
 
   background:
-    rgba(255, 255, 255, 0.06);
+    rgba(255, 255, 255, 0.07);
 }
 
-#campbellReaderProgressFill {
+.campbell-reader-progress-fill {
   width: 0%;
   height: 100%;
 
@@ -4744,7 +5045,8 @@ img {
       #55ee96
     );
 
-  transition: width 0.3s ease;
+  transition:
+    width 0.35s ease;
 }
 
 
@@ -4752,53 +5054,70 @@ img {
    PAGE CONTAINER
 ========================================================= */
 
-.campbell-page-container {
+.campbell-page-container,
+.campbell-reader-container {
   position: relative;
 
   width: 100%;
 
-  min-height: 400px;
+  min-height: 420px;
+
+  padding: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   overflow: hidden;
 
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
+  border-radius: 20px;
 
-  border-radius: 18px;
+  background: #f2f2ec;
 
-  background: #ffffff;
+  border:
+    1px solid rgba(255, 255, 255, 0.09);
 
   box-shadow:
-    0 16px 38px rgba(0, 0, 0, 0.24);
-}
-
-#campbellReaderImage {
-  display: block;
-
-  width: 100%;
-  max-width: 100%;
-
-  height: auto;
-
-  object-fit: contain;
-
-  opacity: 0;
-
-  transition: opacity 0.2s ease;
+    0 18px 40px rgba(0, 0, 0, 0.2);
 }
 
 
 /* =========================================================
-   PAGE LOADING
+   CAMPBELL PAGE IMAGE
+
+   ГЛАВНОЕ:
+   изображение не может стать гигантским.
+========================================================= */
+
+#campbellReaderImage {
+  display: block;
+
+  width: auto !important;
+  height: auto !important;
+
+  max-width: 100% !important;
+  max-height: 78vh !important;
+
+  margin: 0 auto;
+
+  object-fit: contain;
+
+  border-radius: 7px;
+
+  background: white;
+}
+
+
+/* =========================================================
+   LOADING
 ========================================================= */
 
 #campbellReaderLoading {
   position: absolute;
 
-  inset: 0;
+  z-index: 10;
 
-  z-index: 5;
+  inset: 0;
 
   display: flex;
   flex-direction: column;
@@ -4806,47 +5125,128 @@ img {
   align-items: center;
   justify-content: center;
 
-  gap: 10px;
+  gap: 13px;
 
   background:
-    rgba(255, 255, 255, 0.96);
+    #f2f2ec;
 
-  color: #184c3c;
+  color: #45645a;
 
-  font-size: 11px;
-  font-weight: 900;
+  font-size: 10px;
+  font-weight: 850;
 }
 
 .campbell-loader {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
+
+  border:
+    4px solid rgba(20, 90, 60, 0.12);
+
+  border-top-color:
+    #22bd65;
 
   border-radius: 50%;
 
-  border:
-    4px solid rgba(24, 185, 95, 0.15);
-
-  border-top-color: #18b95f;
-
   animation:
-    campbellSpin 0.8s linear infinite;
+    campbellLoaderSpin 0.75s linear infinite;
 }
 
-@keyframes campbellSpin {
+@keyframes campbellLoaderSpin {
+
   to {
     transform: rotate(360deg);
   }
+
 }
 
 
 /* =========================================================
-   READER BUTTONS
+   PAGE CHANGE ANIMATION
+========================================================= */
+
+#campbellReaderImage.page-enter {
+  animation:
+    campbellPageEnter 0.28s ease;
+}
+
+@keyframes campbellPageEnter {
+
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.campbell-reader-error {
+  width: 100%;
+
+  margin-top: 12px;
+
+  padding: 20px;
+
+  text-align: center;
+
+  border-radius: 18px;
+
+  background:
+    rgba(255, 105, 110, 0.06);
+
+  border:
+    1px solid rgba(255, 105, 110, 0.13);
+}
+
+.campbell-reader-error > span {
+  display: block;
+
+  margin-bottom: 7px;
+
+  font-size: 27px;
+}
+
+.campbell-reader-error strong {
+  color: #ffd8d9;
+
+  font-size: 12px;
+  font-weight: 950;
+}
+
+.campbell-reader-error p {
+  max-width: 400px;
+
+  margin:
+    6px
+    auto
+    0;
+
+  color: #ae8585;
+
+  font-size: 9px;
+  font-weight: 700;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   READER CONTROLS
 ========================================================= */
 
 .campbell-reader-controls {
   width: 100%;
 
-  margin-top: 13px;
+  margin-top: 15px;
 
   display: grid;
 
@@ -4856,364 +5256,64 @@ img {
   gap: 9px;
 }
 
-#campbellReaderPrevButton,
-#campbellReaderNextButton,
-#completeCampbellTheoryButton {
-  min-width: 0;
-  min-height: 50px;
-
-  padding:
-    12px
-    10px;
-
-  border-radius: 16px;
-
-  font-size: 11px;
-  font-weight: 950;
-
-  cursor: pointer;
-}
-
-#campbellReaderPrevButton {
-  border:
-    1px solid rgba(255, 255, 255, 0.075);
-
-  background:
-    rgba(255, 255, 255, 0.04);
-
-  color: #bcd8ce;
-}
-
-#campbellReaderNextButton,
-#completeCampbellTheoryButton {
-  border: none;
-
-  background:
-    linear-gradient(
-      180deg,
-      #55ee96,
-      #28d978
-    );
-
-  color: #062116;
-
-  box-shadow:
-    0 4px 0 #0d8e47;
-}
-
-#campbellReaderPrevButton:disabled,
-#campbellReaderNextButton:disabled,
-#completeCampbellTheoryButton:disabled {
-  opacity: 0.4;
-
-  cursor: not-allowed;
-
-  box-shadow: none;
-}
-
-#completeCampbellTheoryButton {
-  width: 100%;
-
-  margin-top: 10px;
-}
-
-
-/* =========================================================
-   EXAM HEADER
-========================================================= */
-
-.campbell-exam-top {
-  width: 100%;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  gap: 10px;
-
-  margin-top: 18px;
-}
-
-#campbellQuestionCounter,
-#campbellExamQuestionCounter {
-  color: #9bb9af;
-
-  font-size: 10px;
-  font-weight: 850;
-}
-
-#campbellExamTimer {
-  flex-shrink: 0;
-
-  padding:
-    8px
-    11px;
-
-  border-radius: 12px;
-
-  background:
-    rgba(85, 238, 150, 0.075);
-
-  border:
-    1px solid rgba(85, 238, 150, 0.10);
-
-  color: #70efa4;
-
-  font-size: 11px;
-  font-weight: 950;
-
-  font-variant-numeric:
-    tabular-nums;
-}
-
-#campbellExamTimer.warning {
-  background:
-    rgba(255, 193, 7, 0.09);
-
-  border-color:
-    rgba(255, 193, 7, 0.16);
-
-  color: #ffd56a;
-}
-
-#campbellExamTimer.danger {
-  background:
-    rgba(255, 88, 88, 0.10);
-
-  border-color:
-    rgba(255, 88, 88, 0.18);
-
-  color: #ff8e8e;
-}
-
-
-/* =========================================================
-   EXAM PROGRESS
-========================================================= */
-
-.campbell-exam-progress-track {
-  width: 100%;
-  height: 7px;
-
-  margin-top: 12px;
-
-  overflow: hidden;
-
-  border-radius: 100px;
-
-  background:
-    rgba(255, 255, 255, 0.06);
-}
-
-#campbellExamProgress,
-#campbellExamProgressBar {
-  width: 0%;
-  height: 100%;
-
-  border-radius: inherit;
-
-  background:
-    linear-gradient(
-      90deg,
-      #20bd63,
-      #55ee96
-    );
-
-  transition: width 0.3s ease;
-}
-
-
-/* =========================================================
-   QUESTION CARD
-========================================================= */
-
-.campbell-question-card {
-  width: 100%;
-
-  margin-top: 17px;
-
-  padding: 20px 17px;
-
-  border-radius: 22px;
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(255, 255, 255, 0.055),
-      rgba(255, 255, 255, 0.025)
-    );
-
-  border:
-    1px solid rgba(255, 255, 255, 0.065);
-}
-
-.campbell-question-card .small-label {
-  color: #55ee96;
-
-  font-size: 9px;
-  font-weight: 950;
-
-  letter-spacing: 0.8px;
-}
-
-#campbellQuestionText,
-#campbellExamQuestion {
-  margin-top: 7px;
-
-  overflow-wrap: anywhere;
-
-  color: #effff6;
-
-  font-size: 19px;
-  font-weight: 950;
-
-  line-height: 1.35;
-}
-
-#campbellExamQuestionHint {
-  margin-top: 8px;
-
-  color: #7d9f94;
-
-  font-size: 10px;
-  font-weight: 700;
-
-  line-height: 1.45;
-}
-
-
-/* =========================================================
-   ANSWERS — WHITE DESIGN
-========================================================= */
-
-#campbellExamAnswers {
-  width: 100%;
-
-  margin-top: 14px;
-
-  display: flex;
-  flex-direction: column;
-
-  gap: 9px;
-}
-
-.answer-option {
-  width: 100%;
-  min-width: 0;
-  min-height: 61px;
+.campbell-reader-controls button {
+  min-height: 49px;
 
   padding:
     10px
-    13px;
-
-  display: flex;
-  align-items: center;
-
-  gap: 11px;
-
-  border-radius: 17px;
+    12px;
 
   border:
-    2px solid #d9e3df;
+    1px solid rgba(255, 255, 255, 0.075);
 
-  background: #ffffff;
+  border-radius: 15px;
 
-  color: #17382e;
+  background:
+    rgba(255, 255, 255, 0.045);
 
-  text-align: left;
+  color: #c7e1d7;
+
+  font-size: 10px;
+  font-weight: 900;
 
   cursor: pointer;
 
-  box-shadow:
-    0 4px 0 #c7d2ce;
-
   transition:
-    transform 0.12s ease,
-    border-color 0.12s ease,
-    background 0.12s ease,
-    box-shadow 0.12s ease;
+    transform 0.13s ease,
+    background 0.13s ease;
 }
 
-.answer-option:hover {
-  border-color: #78e7a8;
-
-  background: #f7fffa;
+.campbell-reader-controls button:hover {
+  background:
+    rgba(85, 238, 150, 0.07);
 }
 
-.answer-option:active {
-  transform: translateY(3px);
-
-  box-shadow:
-    0 1px 0 #c7d2ce;
+.campbell-reader-controls button:active {
+  transform: scale(0.97);
 }
 
-.answer-option.selected {
-  border-color: #28d978;
+.campbell-reader-controls button:disabled {
+  opacity: 0.3;
 
-  background: #effff5;
-
-  box-shadow:
-    0 4px 0 #0fa958;
-}
-
-.answer-letter {
-  width: 37px;
-  height: 37px;
-
-  flex: 0 0 37px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 11px;
-
-  background: #eef4f1;
-
-  border:
-    1px solid #d9e3df;
-
-  color: #34594c;
-
-  font-size: 11px;
-  font-weight: 1000;
-}
-
-.answer-option.selected
-.answer-letter {
-  background: #28d978;
-
-  border-color: #28d978;
-
-  color: #062116;
-}
-
-.answer-text {
-  min-width: 0;
-  flex: 1;
-
-  overflow-wrap: anywhere;
-
-  color: #17382e;
-
-  font-size: 12px;
-  font-weight: 850;
-
-  line-height: 1.4;
+  cursor: not-allowed;
 }
 
 
 /* =========================================================
-   EXAM NEXT BUTTON
+   COMPLETE THEORY BUTTON
 ========================================================= */
 
-#campbellExamNextButton {
+#completeCampbellTheoryButton {
   width: 100%;
-  min-height: 53px;
+  min-height: 55px;
 
-  margin-top: 16px;
+  margin-top: 12px;
 
-  border: none;
+  padding:
+    13px
+    16px;
+
+  border: 0;
   border-radius: 17px;
 
   background:
@@ -5234,12 +5334,668 @@ img {
     0 5px 0 #0d8e47;
 
   transition:
-    transform 0.12s ease,
-    opacity 0.12s ease;
+    transform 0.14s ease,
+    box-shadow 0.14s ease;
 }
 
-#campbellExamNextButton:active {
+#completeCampbellTheoryButton:active {
   transform: translateY(3px);
+
+  box-shadow:
+    0 2px 0 #0d8e47;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+  .campbell-header {
+    gap: 10px;
+
+    margin-bottom: 16px;
+  }
+
+  .campbell-header-content h1 {
+    font-size: 21px;
+  }
+
+  .campbell-hero {
+    padding: 19px;
+
+    border-radius: 21px;
+  }
+
+  .campbell-hero h2 {
+    font-size: 22px;
+  }
+
+  .campbell-action-card {
+    min-height: 84px;
+
+    padding: 12px;
+
+    gap: 10px;
+
+    border-radius: 17px;
+  }
+
+  .campbell-action-icon {
+    width: 49px;
+    height: 49px;
+
+    flex-basis: 49px;
+
+    font-size: 22px;
+  }
+
+  .campbell-page-container,
+  .campbell-reader-container {
+    min-height: 350px;
+
+    padding: 6px;
+
+    border-radius: 16px;
+  }
+
+  #campbellReaderImage {
+    max-height: 72vh !important;
+  }
+
+  .campbell-reader-controls {
+    gap: 7px;
+  }
+
+  .campbell-reader-controls button {
+    min-height: 46px;
+
+    padding:
+      9px
+      7px;
+
+    font-size: 9px;
+  }
+
+}
+
+
+/* =========================================================
+   VERY SMALL PHONE
+========================================================= */
+
+@media (max-width: 360px) {
+
+  .campbell-page-container,
+  .campbell-reader-container {
+    min-height: 300px;
+  }
+
+  .campbell-hero h2 {
+    font-size: 20px;
+  }
+
+}
+/* =========================================================
+   FIX — TEXT CLARITY
+   Более чёткий и контрастный текст
+========================================================= */
+
+body {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+
+/* основной вторичный текст */
+
+.welcome-subtitle,
+.path-heading p,
+.path-card-text p,
+.path-mascot-message,
+
+.home-welcome p,
+.xp-number,
+.road-info small,
+
+.library-header p,
+.library-section-title span,
+.campbell-library-info p,
+.library-card-info p,
+.lesson-card-info p,
+.library-lesson-info p,
+
+.profile-header p,
+.profile-section-header p,
+.profile-completed-info p,
+.achievement-info p,
+#activityMessage,
+
+.campbell-header-content p,
+.campbell-hero p,
+.campbell-action-info p,
+
+.lesson-complete-content > p {
+
+  color: #a9c8bd !important;
+
+  font-weight: 700;
+}
+
+
+/* совсем маленькие подписи */
+
+.small-label,
+.level-label,
+.campbell-library-label,
+.campbell-hero-label,
+.activity-day-name {
+
+  font-weight: 900;
+
+  opacity: 1;
+}
+
+
+/* основной текст */
+
+h1,
+h2,
+h3,
+strong {
+
+  text-shadow: none;
+
+  -webkit-font-smoothing: antialiased;
+}
+
+
+/* карточки не должны выглядеть выцветшими */
+
+.path-card,
+.grade-card,
+.library-card,
+.lesson-card,
+.library-lesson-card,
+.profile-stat-card,
+.achievement-card,
+.campbell-action-card {
+
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+
+/* заблокированные элементы остаются видимыми */
+
+.campbell-action-card.locked {
+  opacity: 0.72;
+}
+
+.achievement-card {
+  opacity: 0.72;
+}
+
+.achievement-card.unlocked {
+  opacity: 1;
+}
+
+
+/* более чёткие подписи */
+
+.nav-item small {
+  font-weight: 900;
+}
+
+.answer-text {
+  font-weight: 850;
+}
+/* =========================================================
+   GROUND — STYLE.CSS
+   PART 6/6
+   CAMPBELL EXAM + RESULT + REVIEW
+========================================================= */
+
+
+/* =========================================================
+   CAMPBELL EXAM
+========================================================= */
+
+#campbellExamScreen {
+  min-height: 100vh;
+}
+
+#campbellExamScreen .campbell-app {
+  padding-bottom: 45px;
+}
+
+
+/* =========================================================
+   EXAM TOP
+========================================================= */
+
+.campbell-exam-top {
+  width: 100%;
+
+  margin-top: 6px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+}
+
+#campbellExamQuestionCounter {
+  color: #b8d5cb;
+
+  font-size: 11px;
+  font-weight: 900;
+}
+
+
+/* =========================================================
+   TIMER
+========================================================= */
+
+#campbellExamTimer {
+  min-width: 74px;
+
+  padding: 9px 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 13px;
+
+  background:
+    rgba(85, 238, 150, 0.08);
+
+  border:
+    1px solid rgba(85, 238, 150, 0.13);
+
+  color: var(--green);
+
+  font-size: 12px;
+  font-weight: 1000;
+
+  letter-spacing: 0.4px;
+}
+
+
+/* таймер заканчивается */
+
+#campbellExamTimer.warning {
+  background:
+    rgba(255, 190, 80, 0.09);
+
+  border-color:
+    rgba(255, 190, 80, 0.2);
+
+  color: #ffd36b;
+}
+
+#campbellExamTimer.danger {
+  background:
+    rgba(255, 100, 105, 0.09);
+
+  border-color:
+    rgba(255, 100, 105, 0.2);
+
+  color: #ff8c90;
+
+  animation:
+    timerPulse 1s ease infinite;
+}
+
+@keyframes timerPulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.04);
+  }
+
+}
+
+
+/* =========================================================
+   EXAM PROGRESS
+========================================================= */
+
+.campbell-exam-progress-track {
+  width: 100%;
+  height: 9px;
+
+  margin-top: 13px;
+
+  overflow: hidden;
+
+  border-radius: 100px;
+
+  background:
+    rgba(255, 255, 255, 0.07);
+}
+
+#campbellExamProgressBar {
+  width: 0%;
+  height: 100%;
+
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      90deg,
+      #20bd63,
+      #55ee96
+    );
+
+  box-shadow:
+    0 0 12px rgba(85, 238, 150, 0.17);
+
+  transition:
+    width 0.35s ease;
+}
+
+
+/* =========================================================
+   QUESTION CARD
+========================================================= */
+
+.campbell-question-card {
+  width: 100%;
+
+  margin-top: 22px;
+
+  padding: 21px;
+
+  border-radius: 22px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.055),
+      rgba(255, 255, 255, 0.028)
+    );
+
+  border:
+    1px solid rgba(255, 255, 255, 0.07);
+
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.1);
+}
+
+#campbellExamQuestion {
+  margin-top: 8px;
+
+  color: #f4fff9;
+
+  font-size: 20px;
+  font-weight: 950;
+
+  line-height: 1.4;
+
+  letter-spacing: -0.25px;
+}
+
+#campbellExamQuestionHint {
+  margin-top: 12px;
+
+  padding:
+    10px
+    12px;
+
+  border-radius: 13px;
+
+  background:
+    rgba(85, 238, 150, 0.055);
+
+  color: #b1d0c5;
+
+  font-size: 10px;
+  font-weight: 750;
+
+  line-height: 1.55;
+}
+
+
+/* =========================================================
+   EXAM ANSWERS
+========================================================= */
+
+#campbellExamAnswers {
+  width: 100%;
+
+  margin-top: 16px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+
+/* =========================================================
+   БЕЛЫЕ ОТВЕТЫ
+========================================================= */
+
+#campbellExamAnswers .answer-option {
+  width: 100%;
+  min-height: 64px;
+
+  padding:
+    12px
+    14px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  border:
+    2px solid #ffffff;
+
+  border-radius: 18px;
+
+  background: #ffffff;
+
+  color: #14372d;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 5px 0 rgba(0, 0, 0, 0.14);
+
+  transition:
+    transform 0.14s ease,
+    border-color 0.14s ease,
+    background 0.14s ease,
+    box-shadow 0.14s ease;
+}
+
+#campbellExamAnswers .answer-option:hover {
+  border-color: #55ee96;
+
+  transform:
+    translateY(-2px);
+}
+
+#campbellExamAnswers .answer-option:active {
+  transform:
+    translateY(3px);
+
+  box-shadow:
+    0 2px 0 rgba(0, 0, 0, 0.14);
+}
+
+
+/* =========================================================
+   ANSWER LETTER
+========================================================= */
+
+#campbellExamAnswers .answer-letter {
+  width: 39px;
+  height: 39px;
+
+  flex: 0 0 39px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: #e8f7ee;
+
+  color: #16824a;
+
+  font-size: 13px;
+  font-weight: 1000;
+}
+
+
+/* =========================================================
+   ANSWER TEXT
+========================================================= */
+
+#campbellExamAnswers .answer-text {
+  min-width: 0;
+  flex: 1;
+
+  overflow-wrap: anywhere;
+
+  color: #14372d;
+
+  font-size: 12px;
+  font-weight: 850;
+
+  line-height: 1.45;
+}
+
+
+/* =========================================================
+   SELECTED ANSWER
+========================================================= */
+
+#campbellExamAnswers .answer-option.selected {
+  border-color: #37d97d;
+
+  background: #effff5;
+
+  box-shadow:
+    0 5px 0 #1ba95d;
+}
+
+#campbellExamAnswers
+.answer-option.selected
+.answer-letter {
+  background: #37d97d;
+
+  color: #062116;
+}
+
+
+/* =========================================================
+   CORRECT
+========================================================= */
+
+#campbellExamAnswers .answer-option.correct {
+  border-color: #24ce70;
+
+  background: #eafff1;
+
+  box-shadow:
+    0 5px 0 #14994d;
+}
+
+#campbellExamAnswers
+.answer-option.correct
+.answer-letter {
+  background: #24ce70;
+
+  color: #062116;
+}
+
+
+/* =========================================================
+   WRONG
+========================================================= */
+
+#campbellExamAnswers .answer-option.wrong,
+#campbellExamAnswers .answer-option.incorrect {
+  border-color: #ff696f;
+
+  background: #fff0f0;
+
+  box-shadow:
+    0 5px 0 #c94349;
+}
+
+#campbellExamAnswers
+.answer-option.wrong
+.answer-letter,
+#campbellExamAnswers
+.answer-option.incorrect
+.answer-letter {
+  background: #ff696f;
+
+  color: #ffffff;
+}
+
+
+/* =========================================================
+   NEXT / ANSWER BUTTON
+========================================================= */
+
+#campbellExamNextButton {
+  width: 100%;
+  min-height: 56px;
+
+  margin-top: 20px;
+
+  padding:
+    14px
+    18px;
+
+  border: 0;
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #55ee96,
+      #28d978
+    );
+
+  color: #062116;
+
+  font-size: 13px;
+  font-weight: 1000;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 6px 0 #0d8e47;
+
+  transition:
+    transform 0.14s ease,
+    box-shadow 0.14s ease,
+    opacity 0.14s ease;
+}
+
+#campbellExamNextButton:active:not(:disabled) {
+  transform:
+    translateY(4px);
+
+  box-shadow:
+    0 2px 0 #0d8e47;
 }
 
 #campbellExamNextButton:disabled {
@@ -5247,7 +6003,8 @@ img {
 
   cursor: not-allowed;
 
-  box-shadow: none;
+  box-shadow:
+    0 4px 0 rgba(0, 0, 0, 0.15);
 }
 
 
@@ -5255,80 +6012,132 @@ img {
    RESULT SCREEN
 ========================================================= */
 
-.campbell-result-card {
-  width: 100%;
-
-  margin-top: 25px;
-
-  padding:
-    27px
-    18px;
-
-  border-radius: 25px;
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(29, 76, 58, 0.98),
-      rgba(9, 35, 27, 0.99)
-    );
-
-  border:
-    1px solid rgba(85, 238, 150, 0.13);
-
-  text-align: center;
-
-  box-shadow:
-    0 16px 40px rgba(0, 0, 0, 0.16);
+#campbellResultScreen {
+  min-height: 100vh;
 }
 
-#campbellResultIcon {
-  width: 75px;
-  height: 75px;
-
-  margin:
-    0
-    auto;
+#campbellResultScreen .campbell-app {
+  min-height: 100vh;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  border-radius: 23px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+
+/* =========================================================
+   RESULT CARD
+========================================================= */
+
+.campbell-result-card {
+  width: 100%;
+  max-width: 570px;
+
+  padding:
+    31px
+    23px;
+
+  text-align: center;
+
+  border-radius: 27px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(31, 78, 60, 0.98),
+      rgba(8, 34, 27, 0.99)
+    );
+
+  border:
+    1px solid rgba(85, 238, 150, 0.13);
+
+  box-shadow:
+    0 22px 55px rgba(0, 0, 0, 0.2);
+
+  animation:
+    resultEnter 0.4s ease;
+}
+
+@keyframes resultEnter {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(15px)
+      scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+
+}
+
+
+/* =========================================================
+   RESULT ICON
+========================================================= */
+
+#campbellResultIcon {
+  width: 82px;
+  height: 82px;
+
+  margin:
+    0
+    auto
+    16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 25px;
 
   background:
     rgba(85, 238, 150, 0.09);
 
   border:
-    1px solid rgba(85, 238, 150, 0.12);
+    1px solid rgba(85, 238, 150, 0.14);
 
-  font-size: 37px;
+  font-size: 38px;
 }
+
+
+/* =========================================================
+   RESULT TEXT
+========================================================= */
 
 #campbellResultTitle {
-  margin-top: 15px;
+  color: #f4fff9;
 
-  color: #effff6;
-
-  font-size: 23px;
+  font-size: 27px;
   font-weight: 1000;
+
+  line-height: 1.15;
 }
 
-#campbellResultMessage,
-#campbellResultDescription {
-  max-width: 460px;
+#campbellResultMessage {
+  max-width: 390px;
 
   margin:
-    7px
+    9px
     auto
     0;
 
-  color: #88aa9f;
+  color: #a8c8bd;
 
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
 
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 
@@ -5337,30 +6146,26 @@ img {
 ========================================================= */
 
 .campbell-result-percent {
-  margin-top: 20px;
+  margin-top: 22px;
 
-  color: #55ee96;
+  color: var(--green);
 
-  font-size: 48px;
+  font-size: 42px;
   font-weight: 1000;
 
   line-height: 1;
 }
 
-#campbellResultPercent {
-  color: inherit;
-}
+
+/* =========================================================
+   RESULT PROGRESS
+========================================================= */
 
 .campbell-result-progress-track {
   width: 100%;
-  max-width: 390px;
-
   height: 9px;
 
-  margin:
-    13px
-    auto
-    0;
+  margin-top: 15px;
 
   overflow: hidden;
 
@@ -5383,7 +6188,8 @@ img {
       #55ee96
     );
 
-  transition: width 0.5s ease;
+  transition:
+    width 0.7s ease;
 }
 
 
@@ -5394,47 +6200,47 @@ img {
 .campbell-result-stats {
   width: 100%;
 
-  margin-top: 18px;
+  margin-top: 20px;
 
   display: grid;
 
   grid-template-columns:
     repeat(3, minmax(0, 1fr));
 
-  gap: 7px;
+  gap: 8px;
 }
 
 .campbell-result-stat {
   min-width: 0;
 
   padding:
-    12px
-    5px;
+    14px
+    6px;
 
-  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 4px;
+
+  border-radius: 16px;
 
   background:
-    rgba(255, 255, 255, 0.035);
+    rgba(255, 255, 255, 0.04);
 
   border:
-    1px solid rgba(255, 255, 255, 0.05);
+    1px solid rgba(255, 255, 255, 0.055);
 }
 
 .campbell-result-stat strong {
-  display: block;
-
-  color: #effff6;
+  color: #f2fff8;
 
   font-size: 18px;
   font-weight: 1000;
 }
 
 .campbell-result-stat span {
-  display: block;
-
-  margin-top: 3px;
-
-  color: #76988d;
+  color: #91b1a6;
 
   font-size: 8px;
   font-weight: 800;
@@ -5442,41 +6248,42 @@ img {
 
 
 /* =========================================================
-   REWARD
+   RESULT REWARD
 ========================================================= */
 
 .campbell-reward {
   width: 100%;
 
-  margin-top: 13px;
+  margin-top: 11px;
 
   padding:
-    12px
-    14px;
+    14px
+    15px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  gap: 8px;
+  gap: 7px;
 
-  border-radius: 15px;
+  border-radius: 16px;
 
   background:
-    rgba(85, 238, 150, 0.07);
+    rgba(85, 238, 150, 0.065);
 
   border:
-    1px solid rgba(85, 238, 150, 0.10);
+    1px solid rgba(85, 238, 150, 0.1);
 
-  color: #bfffd8;
+  color: #b7d8cc;
 
   font-size: 10px;
-  font-weight: 900;
+  font-weight: 800;
 }
 
 #campbellRewardText {
-  color: #55ee96;
+  color: var(--green);
 
+  font-size: 12px;
   font-weight: 1000;
 }
 
@@ -5488,12 +6295,10 @@ img {
 .campbell-result-actions {
   width: 100%;
 
-  margin-top: 15px;
+  margin-top: 19px;
 
-  display: grid;
-
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
+  display: flex;
+  flex-direction: column;
 
   gap: 9px;
 }
@@ -5502,24 +6307,29 @@ img {
 #campbellReviewButton,
 #campbellRetryButton {
   width: 100%;
-  min-width: 0;
-
   min-height: 51px;
 
   padding:
-    11px
-    10px;
+    12px
+    15px;
 
   border-radius: 16px;
 
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 950;
 
   cursor: pointer;
+
+  transition:
+    transform 0.13s ease,
+    background 0.13s ease;
 }
 
+
+/* CONTINUE */
+
 #campbellContinueButton {
-  border: none;
+  border: 0;
 
   background:
     linear-gradient(
@@ -5531,36 +6341,66 @@ img {
   color: #062116;
 
   box-shadow:
-    0 4px 0 #0d8e47;
+    0 5px 0 #0d8e47;
 }
 
-#campbellReviewButton,
-#campbellRetryButton {
+
+/* REVIEW */
+
+#campbellReviewButton {
   border:
     1px solid rgba(85, 238, 150, 0.13);
 
   background:
-    rgba(85, 238, 150, 0.055);
+    rgba(85, 238, 150, 0.065);
 
-  color: #bfffd8;
+  color: #bff0d9;
 }
 
+
+/* RETRY */
+
 #campbellRetryButton {
-  grid-column:
-    1 / -1;
+  border:
+    1px solid rgba(255, 255, 255, 0.065);
+
+  background:
+    rgba(255, 255, 255, 0.035);
+
+  color: #a7c7bc;
+}
+
+#campbellContinueButton:active,
+#campbellReviewButton:active,
+#campbellRetryButton:active {
+  transform:
+    scale(0.98);
 }
 
 
 /* =========================================================
-   REVIEW
+   REVIEW SCREEN
+========================================================= */
+
+#campbellReviewScreen {
+  min-height: 100vh;
+}
+
+#campbellReviewScreen .campbell-app {
+  padding-bottom: 40px;
+}
+
+
+/* =========================================================
+   REVIEW SUMMARY
 ========================================================= */
 
 .campbell-review-summary {
   width: 100%;
 
-  margin-top: 17px;
-
-  padding: 14px;
+  padding:
+    15px
+    16px;
 
   display: flex;
   align-items: center;
@@ -5568,32 +6408,37 @@ img {
 
   gap: 10px;
 
-  border-radius: 18px;
+  border-radius: 17px;
 
   background:
-    rgba(85, 238, 150, 0.055);
+    rgba(255, 255, 255, 0.04);
 
   border:
-    1px solid rgba(85, 238, 150, 0.09);
+    1px solid rgba(255, 255, 255, 0.06);
 }
 
 .campbell-review-summary strong {
-  color: #dffff0;
+  color: #dff7ee;
 
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 900;
 }
 
 #campbellReviewScore {
-  color: #55ee96;
+  color: var(--green);
 
-  font-size: 17px;
+  font-size: 13px;
   font-weight: 1000;
 }
 
+
+/* =========================================================
+   REVIEW PROGRESS
+========================================================= */
+
 .campbell-review-progress-track {
   width: 100%;
-  height: 7px;
+  height: 8px;
 
   margin-top: 10px;
 
@@ -5602,11 +6447,11 @@ img {
   border-radius: 100px;
 
   background:
-    rgba(255, 255, 255, 0.06);
+    rgba(255, 255, 255, 0.065);
 }
 
 #campbellReviewProgress {
-  width: 100%;
+  width: 0%;
   height: 100%;
 
   border-radius: inherit;
@@ -5617,6 +6462,9 @@ img {
       #20bd63,
       #55ee96
     );
+
+  transition:
+    width 0.4s ease;
 }
 
 
@@ -5627,52 +6475,45 @@ img {
 #campbellReviewQuestions {
   width: 100%;
 
-  margin-top: 14px;
+  margin-top: 17px;
 
   display: flex;
   flex-direction: column;
 
-  gap: 12px;
+  gap: 13px;
 }
+
+
+/* =========================================================
+   REVIEW BLOCK
+========================================================= */
 
 .campbell-theory-block {
   width: 100%;
-  min-width: 0;
 
-  padding: 17px;
-
-  overflow: hidden;
+  padding: 18px;
 
   border-radius: 20px;
 
   background:
-    rgba(255, 255, 255, 0.035);
+    rgba(255, 255, 255, 0.04);
 
   border:
-    1px solid rgba(255, 255, 255, 0.055);
-}
+    1px solid rgba(255, 255, 255, 0.06);
 
-.campbell-theory-block
-.small-label {
-  color: #55ee96;
-
-  font-size: 8px;
-  font-weight: 950;
-
-  letter-spacing: 0.7px;
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.08);
 }
 
 .campbell-theory-block h2 {
   margin-top: 7px;
 
-  overflow-wrap: anywhere;
-
-  color: #effff6;
+  color: #f1fff7;
 
   font-size: 15px;
   font-weight: 950;
 
-  line-height: 1.4;
+  line-height: 1.45;
 }
 
 
@@ -5680,15 +6521,20 @@ img {
    REVIEW USER ANSWER
 ========================================================= */
 
-.campbell-review-answer,
-.campbell-review-correct {
+.campbell-review-answer {
   width: 100%;
 
-  margin-top: 12px;
+  margin-top: 14px;
 
-  padding: 12px;
+  padding: 13px;
 
   border-radius: 14px;
+
+  background:
+    rgba(255, 255, 255, 0.04);
+
+  border:
+    1px solid rgba(255, 255, 255, 0.06);
 }
 
 .campbell-review-answer strong,
@@ -5705,75 +6551,86 @@ img {
 .campbell-review-correct p {
   margin-top: 5px;
 
-  overflow-wrap: anywhere;
+  color: #e9fff5;
 
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
 
   line-height: 1.45;
 }
 
+
+/* =========================================================
+   REVIEW CORRECT USER ANSWER
+========================================================= */
+
 .campbell-review-answer.correct {
   background:
-    rgba(85, 238, 150, 0.075);
+    rgba(85, 238, 150, 0.065);
 
-  border:
-    1px solid rgba(85, 238, 150, 0.13);
+  border-color:
+    rgba(85, 238, 150, 0.14);
 }
 
-.campbell-review-answer.correct
-strong {
-  color: #55ee96;
+.campbell-review-answer.correct strong {
+  color: var(--green);
 }
 
-.campbell-review-answer.correct p {
-  color: #cffff0;
-}
 
-.campbell-review-answer.wrong {
+/* =========================================================
+   REVIEW WRONG USER ANSWER
+========================================================= */
+
+.campbell-review-answer.wrong,
+.campbell-review-answer.incorrect {
   background:
-    rgba(255, 86, 86, 0.07);
+    rgba(255, 105, 110, 0.065);
 
-  border:
-    1px solid rgba(255, 86, 86, 0.12);
+  border-color:
+    rgba(255, 105, 110, 0.14);
 }
 
-.campbell-review-answer.wrong
-strong {
-  color: #ff8e8e;
+.campbell-review-answer.wrong strong,
+.campbell-review-answer.incorrect strong {
+  color: #ff9296;
 }
 
-.campbell-review-answer.wrong p {
-  color: #ffd2d2;
-}
+
+/* =========================================================
+   CORRECT ANSWER
+========================================================= */
 
 .campbell-review-correct {
+  width: 100%;
+
+  margin-top: 8px;
+
+  padding: 13px;
+
+  border-radius: 14px;
+
   background:
-    rgba(85, 238, 150, 0.075);
+    rgba(85, 238, 150, 0.065);
 
   border:
     1px solid rgba(85, 238, 150, 0.13);
 }
 
 .campbell-review-correct strong {
-  color: #55ee96;
-}
-
-.campbell-review-correct p {
-  color: #cffff0;
+  color: var(--green);
 }
 
 
 /* =========================================================
-   EXPLANATION
+   REVIEW EXPLANATION
 ========================================================= */
 
 .campbell-note {
   width: 100%;
 
-  margin-top: 12px;
+  margin-top: 9px;
 
-  padding: 12px;
+  padding: 13px;
 
   display: flex;
   align-items: flex-start;
@@ -5783,10 +6640,10 @@ strong {
   border-radius: 14px;
 
   background:
-    rgba(255, 255, 255, 0.035);
+    rgba(255, 220, 100, 0.055);
 
   border:
-    1px solid rgba(255, 255, 255, 0.05);
+    1px solid rgba(255, 220, 100, 0.1);
 }
 
 .campbell-note > span {
@@ -5796,11 +6653,7 @@ strong {
 }
 
 .campbell-note p {
-  min-width: 0;
-
-  overflow-wrap: anywhere;
-
-  color: #9bb9af;
+  color: #c8c09b;
 
   font-size: 10px;
   font-weight: 700;
@@ -5810,16 +6663,16 @@ strong {
 
 
 /* =========================================================
-   REVIEW FINISH
+   FINISH REVIEW
 ========================================================= */
 
 #campbellReviewFinishButton {
   width: 100%;
-  min-height: 52px;
+  min-height: 54px;
 
-  margin-top: 15px;
+  margin-top: 17px;
 
-  border: none;
+  border: 0;
   border-radius: 17px;
 
   background:
@@ -5831,7 +6684,7 @@ strong {
 
   color: #062116;
 
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 1000;
 
   cursor: pointer;
@@ -5840,76 +6693,12 @@ strong {
     0 5px 0 #0d8e47;
 }
 
+#campbellReviewFinishButton:active {
+  transform:
+    translateY(3px);
 
-/* =========================================================
-   GLOBAL CAMPBELL PROTECTION
-========================================================= */
-
-.campbell-app,
-.campbell-hero,
-.campbell-actions,
-.campbell-action-card,
-.campbell-reader,
-.campbell-page-container,
-.campbell-question-card,
-#campbellExamAnswers,
-.answer-option,
-.campbell-result-card,
-#campbellReviewQuestions,
-.campbell-theory-block {
-  min-width: 0;
-  max-width: 100%;
-}
-
-.campbell-app *,
-.campbell-action-card *,
-.answer-option *,
-.campbell-theory-block * {
-  box-sizing: border-box;
-}
-
-
-/* =========================================================
-   TABLET / SMALL SCREEN
-========================================================= */
-
-@media (max-width: 600px) {
-
-  .campbell-app {
-    padding:
-      15px
-      14px
-      38px;
-  }
-
-  .campbell-header h1,
-  .campbell-header-content h1 {
-    font-size: 21px;
-  }
-
-  .campbell-hero {
-    padding:
-      19px
-      15px;
-
-    border-radius: 21px;
-  }
-
-  .campbell-hero h2 {
-    font-size: 21px;
-  }
-
-  .campbell-page-container {
-    min-height: 300px;
-
-    border-radius: 14px;
-  }
-
-  #campbellQuestionText,
-  #campbellExamQuestion {
-    font-size: 17px;
-  }
-
+  box-shadow:
+    0 2px 0 #0d8e47;
 }
 
 
@@ -5919,147 +6708,80 @@ strong {
 
 @media (max-width: 480px) {
 
-  .campbell-app {
-    padding:
-      14px
-      12px
-      35px;
-  }
-
-  .campbell-header {
-    gap: 9px;
-  }
-
-  .campbell-header h1,
-  .campbell-header-content h1 {
-    font-size: 19px;
-  }
-
-  .campbell-hero {
-    margin-top: 16px;
-
-    padding:
-      17px
-      14px;
-
-    border-radius: 19px;
-  }
-
-  .campbell-hero h2 {
-    font-size: 19px;
-  }
-
-  .campbell-action-card {
-    padding: 13px;
-
-    gap: 10px;
-
-    border-radius: 17px;
-  }
-
-  .campbell-action-icon {
-    width: 48px;
-    height: 48px;
-
-    flex-basis: 48px;
-
-    border-radius: 15px;
-
-    font-size: 22px;
-  }
-
-  .campbell-page-container {
-    min-height: 250px;
-
-    border-radius: 12px;
-  }
-
-  .campbell-reader-controls {
-    gap: 7px;
-  }
-
-  #campbellReaderPrevButton,
-  #campbellReaderNextButton {
-    min-height: 47px;
-
-    padding:
-      10px
-      7px;
-
-    font-size: 9px;
+  #campbellExamQuestion {
+    font-size: 17px;
   }
 
   .campbell-question-card {
-    padding:
-      17px
-      13px;
+    padding: 17px;
 
     border-radius: 19px;
   }
 
-  #campbellQuestionText,
-  #campbellExamQuestion {
-    font-size: 16px;
-  }
-
-  .answer-option {
-    min-height: 58px;
+  #campbellExamAnswers .answer-option {
+    min-height: 59px;
 
     padding:
-      9px
-      10px;
+      10px
+      11px;
 
-    gap: 9px;
+    gap: 10px;
 
-    border-radius: 15px;
+    border-radius: 16px;
   }
 
-  .answer-letter {
-    width: 34px;
-    height: 34px;
+  #campbellExamAnswers .answer-letter {
+    width: 35px;
+    height: 35px;
 
-    flex-basis: 34px;
+    flex-basis: 35px;
 
-    border-radius: 10px;
+    border-radius: 11px;
   }
 
-  .answer-text {
+  #campbellExamAnswers .answer-text {
     font-size: 11px;
   }
 
   .campbell-result-card {
-    margin-top: 19px;
-
     padding:
-      23px
-      13px;
+      26px
+      17px;
 
-    border-radius: 21px;
+    border-radius: 23px;
   }
 
   #campbellResultIcon {
-    width: 67px;
-    height: 67px;
+    width: 72px;
+    height: 72px;
+
+    border-radius: 22px;
 
     font-size: 33px;
   }
 
   #campbellResultTitle {
-    font-size: 20px;
+    font-size: 23px;
   }
 
   .campbell-result-percent {
-    font-size: 42px;
+    font-size: 37px;
   }
 
-  .campbell-result-actions {
-    gap: 7px;
+  .campbell-result-stat {
+    padding:
+      12px
+      4px;
+  }
+
+  .campbell-result-stat strong {
+    font-size: 15px;
   }
 
   .campbell-theory-block {
-    padding: 14px;
+    padding: 15px;
 
-    border-radius: 17px;
+    border-radius: 18px;
   }
 
 }
@@ -6071,64 +6793,34 @@ strong {
 
 @media (max-width: 360px) {
 
-  .campbell-app {
-    padding-left: 10px;
-    padding-right: 10px;
+  .campbell-result-stats {
+    gap: 5px;
   }
 
-  .campbell-header h1,
-  .campbell-header-content h1 {
-    font-size: 17px;
-  }
-
-  .campbell-hero h2 {
-    font-size: 18px;
-  }
-
-  .campbell-page-container {
-    min-height: 210px;
-  }
-
-  .campbell-exam-top {
-    align-items: flex-start;
+  .campbell-result-stat span {
+    font-size: 7px;
   }
 
   #campbellExamTimer {
-    padding:
-      7px
-      8px;
+    min-width: 65px;
 
-    font-size: 9px;
-  }
-
-  .answer-option {
     padding:
       8px
       9px;
-  }
-
-  .answer-letter {
-    width: 31px;
-    height: 31px;
-
-    flex-basis: 31px;
-  }
-
-  .answer-text {
-    font-size: 10px;
-  }
-
-  .campbell-result-actions {
-    grid-template-columns: 1fr;
-  }
-
-  #campbellRetryButton {
-    grid-column: auto;
   }
 
 }
 
 
 /* =========================================================
-   GROUND — END
+   REDUCED MOTION
 ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  #campbellExamTimer.danger,
+  .campbell-result-card {
+    animation: none;
+  }
+
+}
