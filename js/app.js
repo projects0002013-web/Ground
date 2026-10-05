@@ -1,7 +1,7 @@
 /* =========================================================
    GROUND — APP.JS
    PART 1
-   CORE + SCREENS + NAVIGATION + PROFILE FIX
+   CORE + SCREENS + NAVIGATION + PROFILE
 ========================================================= */
 
 "use strict";
@@ -11,11 +11,13 @@
    1. HELPERS
 ========================================================= */
 
-const $ = (selector) => document.querySelector(selector);
+const $ = (selector) =>
+  document.querySelector(selector);
 
 const $$ = (selector) =>
-  Array.from(document.querySelectorAll(selector));
-
+  Array.from(
+    document.querySelectorAll(selector)
+  );
 
 function getById(id) {
   return document.getElementById(id);
@@ -23,7 +25,28 @@ function getById(id) {
 
 
 /* =========================================================
-   2. SCREENS
+   2. SAFE EVENTS
+
+   Если элемента нет в HTML,
+   приложение НЕ ломается.
+========================================================= */
+
+function onClick(element, callback) {
+
+  if (!element) {
+    return;
+  }
+
+  element.addEventListener(
+    "click",
+    callback
+  );
+
+}
+
+
+/* =========================================================
+   3. SCREENS
 ========================================================= */
 
 const welcomeScreen =
@@ -57,7 +80,9 @@ const campbellTheoryScreen =
   getById("campbellTheoryScreen");
 
 const campbellTheoryCompleteScreen =
-  getById("campbellTheoryCompleteScreen");
+  getById(
+    "campbellTheoryCompleteScreen"
+  );
 
 const campbellExamScreen =
   getById("campbellExamScreen");
@@ -68,20 +93,23 @@ const campbellResultScreen =
 const campbellReviewScreen =
   getById("campbellReviewScreen");
 
-
-const allScreens = $$(".screen");
+const allScreens =
+  $$(".screen");
 
 
 /* =========================================================
-   3. SCREEN SWITCHER
+   4. SCREEN SWITCHER
 
-   Именно эта функция включает анимацию CSS:
-   .screen.active
+   Сохраняем анимацию переходов.
 ========================================================= */
 
-function changeScreen(fromScreen, toScreen) {
+function changeScreen(
+  fromScreen,
+  toScreen
+) {
 
   if (!toScreen) {
+
     console.error(
       "GROUND: экран для перехода не найден."
     );
@@ -90,22 +118,27 @@ function changeScreen(fromScreen, toScreen) {
   }
 
 
-  allScreens.forEach((screen) => {
+  allScreens.forEach(
+    (screen) => {
 
-    screen.classList.remove("active");
+      screen.classList.remove(
+        "active"
+      );
 
-  });
+    }
+  );
 
 
   /*
-     Перезапускаем CSS-анимацию
-     при каждом открытии экрана.
+     Перезапускаем CSS-анимацию.
   */
 
   void toScreen.offsetWidth;
 
 
-  toScreen.classList.add("active");
+  toScreen.classList.add(
+    "active"
+  );
 
 
   window.scrollTo({
@@ -114,27 +147,8 @@ function changeScreen(fromScreen, toScreen) {
   });
 
 
-  updateBottomNavigation(toScreen);
-
-}
-
-
-/* =========================================================
-   4. SAFE CLICK
-
-   Если какой-то элемент пока отсутствует,
-   весь app.js из-за этого НЕ ломается.
-========================================================= */
-
-function onClick(element, callback) {
-
-  if (!element) {
-    return;
-  }
-
-  element.addEventListener(
-    "click",
-    callback
+  updateBottomNavigation(
+    toScreen
   );
 
 }
@@ -144,10 +158,15 @@ function onClick(element, callback) {
    5. LOCAL STORAGE
 ========================================================= */
 
-function getNumber(key, fallback = 0) {
+function getNumber(
+  key,
+  fallback = 0
+) {
 
   const value =
-    Number(localStorage.getItem(key));
+    Number(
+      localStorage.getItem(key)
+    );
 
   return Number.isFinite(value)
     ? value
@@ -156,7 +175,10 @@ function getNumber(key, fallback = 0) {
 }
 
 
-function getText(key, fallback = "") {
+function getText(
+  key,
+  fallback = ""
+) {
 
   const value =
     localStorage.getItem(key);
@@ -224,22 +246,30 @@ function saveGroundState() {
 
   localStorage.setItem(
     "groundGenes",
-    String(groundState.genes)
+    String(
+      groundState.genes
+    )
   );
 
   localStorage.setItem(
     "groundXP",
-    String(groundState.xp)
+    String(
+      groundState.xp
+    )
   );
 
   localStorage.setItem(
     "groundLevel",
-    String(groundState.level)
+    String(
+      groundState.level
+    )
   );
 
   localStorage.setItem(
     "groundStreak",
-    String(groundState.streak)
+    String(
+      groundState.streak
+    )
   );
 
   localStorage.setItem(
@@ -253,10 +283,13 @@ function saveGroundState() {
 
 
 /* =========================================================
-   8. SET TEXT SAFELY
+   8. SAFE TEXT
 ========================================================= */
 
-function setText(id, value) {
+function setText(
+  id,
+  value
+) {
 
   const element =
     getById(id);
@@ -265,16 +298,20 @@ function setText(id, value) {
     return;
   }
 
-  element.textContent = value;
+  element.textContent =
+    value;
 
 }
 
 
 /* =========================================================
-   9. SET WIDTH SAFELY
+   9. SAFE PROGRESS
 ========================================================= */
 
-function setProgress(id, percent) {
+function setProgress(
+  id,
+  percent
+) {
 
   const element =
     getById(id);
@@ -287,7 +324,10 @@ function setProgress(id, percent) {
   const safePercent =
     Math.max(
       0,
-      Math.min(100, percent)
+      Math.min(
+        100,
+        percent
+      )
     );
 
 
@@ -307,20 +347,16 @@ function updateGlobalStats() {
      ГЕНЫ
   */
 
-  $$(
-    ".gene-value"
-  ).forEach((element) => {
+  $$(".gene-value")
+    .forEach(
+      (element) => {
 
-    element.textContent =
-      groundState.genes;
+        element.textContent =
+          groundState.genes;
 
-  });
+      }
+    );
 
-
-  /*
-     Элементы с конкретными ID,
-     если они есть в HTML.
-  */
 
   setText(
     "homeGenes",
@@ -334,7 +370,7 @@ function updateGlobalStats() {
 
 
   /*
-     LEVEL
+     УРОВЕНЬ
   */
 
   setText(
@@ -364,7 +400,7 @@ function updateGlobalStats() {
 
 
   /*
-     COMPLETED LESSONS
+     ПРОЙДЕННЫЕ УРОКИ
   */
 
   setText(
@@ -375,13 +411,11 @@ function updateGlobalStats() {
 
   /*
      XP
-
-     Сейчас:
-     каждый уровень = 100 XP.
   */
 
   const xpInLevel =
     groundState.xp % 100;
+
 
   setText(
     "xpValue",
@@ -423,7 +457,7 @@ function updateGlobalStats() {
 
 
 /* =========================================================
-   11. LEVEL CALCULATION
+   11. LEVEL
 ========================================================= */
 
 function recalculateLevel() {
@@ -442,7 +476,8 @@ function recalculateLevel() {
 
 function addXP(amount) {
 
-  groundState.xp += amount;
+  groundState.xp +=
+    Number(amount) || 0;
 
   recalculateLevel();
 
@@ -459,7 +494,8 @@ function addXP(amount) {
 
 function addGenes(amount) {
 
-  groundState.genes += amount;
+  groundState.genes +=
+    Number(amount) || 0;
 
   saveGroundState();
 
@@ -472,7 +508,8 @@ function addGenes(amount) {
    14. TOAST
 ========================================================= */
 
-let groundToastTimer = null;
+let groundToastTimer =
+  null;
 
 
 function showGroundToast(
@@ -505,7 +542,8 @@ function showGroundToast(
   );
 
 
-  toast.hidden = false;
+  toast.hidden =
+    false;
 
 
   clearTimeout(
@@ -514,11 +552,15 @@ function showGroundToast(
 
 
   groundToastTimer =
-    setTimeout(() => {
+    setTimeout(
+      () => {
 
-      toast.hidden = true;
+        toast.hidden =
+          true;
 
-    }, 2600);
+      },
+      2600
+    );
 
 }
 
@@ -535,217 +577,221 @@ function updateBottomNavigation(
   activeScreen
 ) {
 
-  let activeNav = "";
+  let activeNav =
+    "";
 
 
   if (
-    activeScreen === homeScreen
+    activeScreen ===
+    homeScreen
   ) {
 
-    activeNav = "home";
+    activeNav =
+      "home";
 
   }
 
 
   else if (
-    activeScreen === libraryScreen ||
-    activeScreen === campbellScreen
+    activeScreen ===
+      libraryScreen ||
+
+    activeScreen ===
+      campbellScreen ||
+
+    activeScreen ===
+      campbellTheoryScreen
   ) {
 
-    activeNav = "library";
+    activeNav =
+      "library";
 
   }
 
 
   else if (
-    activeScreen === profileScreen
+    activeScreen ===
+    profileScreen
   ) {
 
-    activeNav = "profile";
+    activeNav =
+      "profile";
 
   }
 
 
   else if (
-    activeScreen === lessonScreen
+    activeScreen ===
+    lessonScreen
   ) {
 
-    activeNav = "road";
+    activeNav =
+      "road";
 
   }
 
 
-  navItems.forEach((button) => {
-
-    const nav =
-      button.dataset.nav;
-
-
-    button.classList.toggle(
-      "active",
-      nav === activeNav
-    );
-
-    button.classList.toggle(
-      "nav-active",
-      nav === activeNav
-    );
-
-  });
-
-}
-
-
-/* =========================================================
-   16. NAVIGATION CLICK
-
-   ИСПРАВЛЯЕТ ПРОФИЛЬ
-========================================================= */
-
-navItems.forEach((button) => {
-
-  button.addEventListener(
-    "click",
-    () => {
+  navItems.forEach(
+    (button) => {
 
       const nav =
         button.dataset.nav;
 
 
-      /* -------------------------
-         HOME
-      ------------------------- */
+      button.classList.toggle(
+        "active",
+        nav === activeNav
+      );
 
-      if (nav === "home") {
-
-        changeScreen(
-          null,
-          homeScreen
-        );
-
-        return;
-
-      }
-
-
-      /* -------------------------
-         ROAD
-      ------------------------- */
-
-      if (nav === "road") {
-
-        changeScreen(
-          null,
-          homeScreen
-        );
-
-
-        /*
-           После открытия главной
-           прокручиваем к дорожке.
-        */
-
-        setTimeout(() => {
-
-          const road =
-            $(".learning-road");
-
-
-          if (road) {
-
-            road.scrollIntoView({
-              behavior: "smooth",
-              block: "start"
-            });
-
-          }
-
-        }, 170);
-
-
-        return;
-
-      }
-
-
-      /* -------------------------
-         LIBRARY
-      ------------------------- */
-
-      if (nav === "library") {
-
-        if (
-          typeof buildLibrary ===
-          "function"
-        ) {
-
-          buildLibrary();
-
-        }
-
-
-        changeScreen(
-          null,
-          libraryScreen
-        );
-
-        return;
-
-      }
-
-
-      /* -------------------------
-         PROFILE
-
-         ВОТ ЭТО ИСПРАВЛЯЕТ
-         НЕРАБОТАЮЩИЙ ПРОФИЛЬ.
-      ------------------------- */
-
-      if (nav === "profile") {
-
-        updateProfile();
-
-        changeScreen(
-          null,
-          profileScreen
-        );
-
-        return;
-
-      }
+      button.classList.toggle(
+        "nav-active",
+        nav === activeNav
+      );
 
     }
   );
 
-});
+}
 
 
 /* =========================================================
-   17. PROFILE
+   16. PROFILE
 ========================================================= */
 
 function updateProfile() {
 
   updateGlobalStats();
 
-
-  /*
-     В будущем сюда добавим:
-     - достижения
-     - активность
-     - серию дней
-     - историю уроков
-  */
-
 }
 
 
 /* =========================================================
-   18. SETTINGS BUTTON
+   17. BOTTOM NAVIGATION CLICKS
+========================================================= */
+
+navItems.forEach(
+  (button) => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        const nav =
+          button.dataset.nav;
+
+
+        /* HOME */
+
+        if (
+          nav === "home"
+        ) {
+
+          changeScreen(
+            null,
+            homeScreen
+          );
+
+          return;
+        }
+
+
+        /* ROAD */
+
+        if (
+          nav === "road"
+        ) {
+
+          changeScreen(
+            null,
+            homeScreen
+          );
+
+
+          setTimeout(
+            () => {
+
+              const road =
+                getById(
+                  "learningRoad"
+                ) ||
+                $(".learning-road");
+
+
+              if (road) {
+
+                road.scrollIntoView({
+                  behavior:
+                    "smooth",
+                  block:
+                    "start"
+                });
+
+              }
+
+            },
+            170
+          );
+
+          return;
+        }
+
+
+        /* LIBRARY */
+
+        if (
+          nav === "library"
+        ) {
+
+          if (
+            typeof buildLibrary ===
+            "function"
+          ) {
+
+            buildLibrary();
+
+          }
+
+
+          changeScreen(
+            null,
+            libraryScreen
+          );
+
+          return;
+        }
+
+
+        /* PROFILE */
+
+        if (
+          nav === "profile"
+        ) {
+
+          updateProfile();
+
+          changeScreen(
+            null,
+            profileScreen
+          );
+
+          return;
+        }
+
+      }
+    );
+
+  }
+);
+
+
+/* =========================================================
+   18. SETTINGS
 ========================================================= */
 
 const settingsButton =
-  getById("settingsButton");
+  getById(
+    "settingsButton"
+  );
 
 
 onClick(
@@ -763,11 +809,13 @@ onClick(
 
 
 /* =========================================================
-   19. WELCOME BUTTON
+   19. WELCOME
 ========================================================= */
 
 const startButton =
-  getById("startButton");
+  getById(
+    "startButton"
+  );
 
 
 onClick(
@@ -788,7 +836,9 @@ onClick(
 ========================================================= */
 
 const pathBackButton =
-  getById("pathBackButton");
+  getById(
+    "pathBackButton"
+  );
 
 
 onClick(
@@ -808,74 +858,69 @@ onClick(
    21. PATH CARDS
 ========================================================= */
 
-$$(
-  ".path-card"
-).forEach((card) => {
+$$(".path-card")
+  .forEach(
+    (card) => {
 
-  card.addEventListener(
-    "click",
-    () => {
+      card.addEventListener(
+        "click",
+        () => {
 
-      const path =
-        card.dataset.path;
-
-
-      /*
-         SCHOOL
-      */
-
-      if (
-        path === "school"
-      ) {
-
-        changeScreen(
-          pathScreen,
-          gradeScreen
-        );
-
-        return;
-
-      }
+          const path =
+            card.dataset.path;
 
 
-      /*
-         ENT / OLYMPIAD
+          /* SCHOOL */
 
-         Пока интерфейс подготовлен,
-         контент добавим позже.
-      */
+          if (
+            path === "school"
+          ) {
 
-      if (
-        path === "ent"
-      ) {
+            changeScreen(
+              pathScreen,
+              gradeScreen
+            );
 
-        showGroundToast(
-          "ЕНТ",
-          "Курс подготовки к ЕНТ скоро появится.",
-          "🎯"
-        );
-
-        return;
-
-      }
+            return;
+          }
 
 
-      if (
-        path === "olympiad"
-      ) {
+          /* ENT */
 
-        showGroundToast(
-          "Олимпиада",
-          "Олимпиадный курс скоро появится.",
-          "🏆"
-        );
+          if (
+            path === "ent"
+          ) {
 
-      }
+            showGroundToast(
+              "ЕНТ",
+              "Курс подготовки к ЕНТ скоро появится.",
+              "🎯"
+            );
+
+            return;
+          }
+
+
+          /* OLYMPIAD */
+
+          if (
+            path ===
+            "olympiad"
+          ) {
+
+            showGroundToast(
+              "Олимпиада",
+              "Олимпиадный курс скоро появится.",
+              "🏆"
+            );
+
+          }
+
+        }
+      );
 
     }
   );
-
-});
 
 
 /* =========================================================
@@ -883,7 +928,9 @@ $$(
 ========================================================= */
 
 const gradeBackButton =
-  getById("gradeBackButton");
+  getById(
+    "gradeBackButton"
+  );
 
 
 onClick(
@@ -903,58 +950,59 @@ onClick(
    23. GRADE CARDS
 ========================================================= */
 
-$$(
-  ".grade-card"
-).forEach((card) => {
+$$(".grade-card")
+  .forEach(
+    (card) => {
 
-  card.addEventListener(
-    "click",
-    () => {
+      card.addEventListener(
+        "click",
+        () => {
 
-      const grade =
-        card.dataset.grade;
-
-
-      if (!grade) {
-        return;
-      }
+          const grade =
+            card.dataset.grade;
 
 
-      groundState.grade =
-        grade;
+          if (!grade) {
+            return;
+          }
 
 
-      saveGroundState();
-
-      updateGlobalStats();
-
-
-      if (
-        typeof buildRoad ===
-        "function"
-      ) {
-
-        buildRoad();
-
-      }
+          groundState.grade =
+            grade;
 
 
-      changeScreen(
-        gradeScreen,
-        homeScreen
-      );
+          saveGroundState();
+
+          updateGlobalStats();
 
 
-      showGroundToast(
-        `${grade} класс`,
-        "Курс выбран. Начинаем!",
-        "🧬"
+          if (
+            typeof buildRoad ===
+            "function"
+          ) {
+
+            buildRoad();
+
+          }
+
+
+          changeScreen(
+            gradeScreen,
+            homeScreen
+          );
+
+
+          showGroundToast(
+            `${grade} класс`,
+            "Курс выбран. Начинаем!",
+            "🧬"
+          );
+
+        }
       );
 
     }
   );
-
-});
 
 
 /* =========================================================
@@ -962,7 +1010,9 @@ $$(
 ========================================================= */
 
 const changeGradeButton =
-  getById("changeGradeButton");
+  getById(
+    "changeGradeButton"
+  );
 
 
 onClick(
@@ -979,7 +1029,7 @@ onClick(
 
 
 /* =========================================================
-   25. MASCOT INTERACTION
+   25. MASCOT
 ========================================================= */
 
 const groundMascot =
@@ -997,10 +1047,6 @@ if (groundMascot) {
       );
 
 
-      /*
-         Перезапуск анимации сердечек
-      */
-
       void groundMascot.offsetWidth;
 
 
@@ -1009,13 +1055,16 @@ if (groundMascot) {
       );
 
 
-      setTimeout(() => {
+      setTimeout(
+        () => {
 
-        groundMascot.classList.remove(
-          "pet"
-        );
+          groundMascot.classList.remove(
+            "pet"
+          );
 
-      }, 1000);
+        },
+        1000
+      );
 
     }
   );
@@ -1024,7 +1073,7 @@ if (groundMascot) {
 
 
 /* =========================================================
-   26. INITIAL APP UPDATE
+   26. INITIAL UPDATE
 ========================================================= */
 
 updateGlobalStats();
@@ -1032,252 +1081,343 @@ updateGlobalStats();
 
 /* =========================================================
    END PART 1
+
+   ↓ ЧАСТЬ 2 ВСТАВЛЯЕТСЯ ПРЯМО ПОД ЭТОЙ СТРОКОЙ ↓
 ========================================================= */
 /* =========================================================
    GROUND — APP.JS
    PART 2
-   ROAD + LIBRARY + CAMPBELL OPENING
+   ROAD + LIBRARY + CAMPBELL CHAPTER
 ========================================================= */
 
 
 /* =========================================================
    27. ROAD DATA
-
-   Пока базовая дорожка.
-   Позже данные уроков будем брать из database.js.
 ========================================================= */
 
-const defaultRoadLessons = [
+const roadData = {
 
-  {
-    id: "lesson-1",
-    number: 1,
-    title: "Основы биологии",
-    description: "Первый шаг",
-    icon: "🧬"
-  },
+  "7": [
+    {
+      id: "7-1",
+      title: "Введение в биологию",
+      subtitle: "Живые организмы и их свойства",
+      icon: "🌱",
+      unlocked: true
+    },
 
-  {
-    id: "lesson-2",
-    number: 2,
-    title: "Клетка",
-    description: "Строение клетки",
-    icon: "🔬"
-  },
+    {
+      id: "7-2",
+      title: "Клетка",
+      subtitle: "Основная единица жизни",
+      icon: "🔬"
+    },
 
-  {
-    id: "lesson-3",
-    number: 3,
-    title: "Химия жизни",
-    description: "Молекулы живых систем",
-    icon: "⚗️"
-  },
+    {
+      id: "7-3",
+      title: "Организмы",
+      subtitle: "Разнообразие живого мира",
+      icon: "🧬"
+    }
+  ],
 
-  {
-    id: "lesson-4",
-    number: 4,
-    title: "Контрольный уровень",
-    description: "Проверь свои знания",
-    icon: "🏆",
-    boss: true
-  }
 
-];
+  "8": [
+    {
+      id: "8-1",
+      title: "Организм человека",
+      subtitle: "Системы органов",
+      icon: "🫀",
+      unlocked: true
+    },
+
+    {
+      id: "8-2",
+      title: "Кровообращение",
+      subtitle: "Сердце и сосуды",
+      icon: "❤️"
+    },
+
+    {
+      id: "8-3",
+      title: "Дыхание",
+      subtitle: "Газообмен",
+      icon: "🫁"
+    }
+  ],
+
+
+  "9": [
+    {
+      id: "9-1",
+      title: "От гена к белку",
+      subtitle: "ДНК, РНК и синтез белка",
+      icon: "🧬",
+      unlocked: true
+    },
+
+    {
+      id: "9-2",
+      title: "Генетика",
+      subtitle: "Наследственность и изменчивость",
+      icon: "🧬"
+    },
+
+    {
+      id: "9-3",
+      title: "Регуляция генов",
+      subtitle: "Как клетка управляет генами",
+      icon: "🔬"
+    }
+  ],
+
+
+  "10": [
+    {
+      id: "10-1",
+      title: "Клеточная биология",
+      subtitle: "Строение и функции клетки",
+      icon: "🔬",
+      unlocked: true
+    },
+
+    {
+      id: "10-2",
+      title: "Метаболизм",
+      subtitle: "Энергия клетки",
+      icon: "⚡"
+    },
+
+    {
+      id: "10-3",
+      title: "Деление клетки",
+      subtitle: "Митоз и мейоз",
+      icon: "🧬"
+    }
+  ],
+
+
+  "11": [
+    {
+      id: "11-1",
+      title: "Молекулярная биология",
+      subtitle: "Гены и молекулы",
+      icon: "🧬",
+      unlocked: true
+    },
+
+    {
+      id: "11-2",
+      title: "Эволюция",
+      subtitle: "Изменение живых организмов",
+      icon: "🌍"
+    },
+
+    {
+      id: "11-3",
+      title: "Экология",
+      subtitle: "Организмы и окружающая среда",
+      icon: "🌿"
+    }
+  ]
+
+};
 
 
 /* =========================================================
-   28. GET ROAD CONTAINER
+   28. ROAD ELEMENT
 ========================================================= */
 
-function getRoadContainer() {
+const learningRoad =
+  getById("learningRoad") ||
+  $(".learning-road") ||
+  getById("roadContainer");
 
-  return (
-    getById("learningRoad") ||
-    $(".learning-road")
+
+/* =========================================================
+   29. COMPLETED ROAD LESSONS
+========================================================= */
+
+function getCompletedRoadLessons() {
+
+  try {
+
+    return JSON.parse(
+      localStorage.getItem(
+        "groundCompletedRoadLessons"
+      ) || "[]"
+    );
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "GROUND: ошибка чтения прогресса дорожки.",
+      error
+    );
+
+    return [];
+
+  }
+
+}
+
+
+function saveCompletedRoadLessons(
+  lessons
+) {
+
+  localStorage.setItem(
+    "groundCompletedRoadLessons",
+    JSON.stringify(lessons)
   );
 
 }
 
 
 /* =========================================================
-   29. BUILD ROAD
+   30. IS ROAD LEVEL COMPLETED
+========================================================= */
+
+function isRoadLessonCompleted(
+  id
+) {
+
+  return getCompletedRoadLessons()
+    .includes(id);
+
+}
+
+
+/* =========================================================
+   31. BUILD ROAD
 ========================================================= */
 
 function buildRoad() {
 
-  const road =
-    getRoadContainer();
-
-
-  if (!road) {
+  if (!learningRoad) {
     return;
   }
 
 
-  road.innerHTML = "";
+  const grade =
+    groundState.grade;
+
+
+  const lessons =
+    roadData[grade] || [];
 
 
   const completed =
-    groundState.completedLessons;
+    getCompletedRoadLessons();
 
 
-  defaultRoadLessons.forEach(
+  learningRoad.innerHTML =
+    "";
+
+
+  lessons.forEach(
     (lesson, index) => {
 
-      /* -------------------------
-         ITEM
-      ------------------------- */
+      const previousLesson =
+        lessons[index - 1];
+
+
+      const previousCompleted =
+        !previousLesson ||
+        completed.includes(
+          previousLesson.id
+        );
+
+
+      const unlocked =
+        lesson.unlocked ||
+        previousCompleted;
+
+
+      const done =
+        completed.includes(
+          lesson.id
+        );
+
 
       const item =
-        document.createElement("div");
+        document.createElement(
+          "button"
+        );
+
+
+      item.type =
+        "button";
 
 
       item.className =
-        index % 2 === 0
-          ? "road-item road-left"
-          : "road-item road-right";
+        "road-level";
 
 
-      /* -------------------------
-         NODE
-      ------------------------- */
-
-      const node =
-        document.createElement("button");
+      item.dataset.lessonId =
+        lesson.id;
 
 
-      node.type = "button";
+      if (done) {
 
-      node.className =
-        "road-node";
-
-
-      /*
-         Состояние уровня:
-
-         completed
-         active
-         locked
-      */
-
-      if (
-        index < completed
-      ) {
-
-        node.classList.add(
+        item.classList.add(
           "completed"
         );
 
-        node.textContent =
-          "✓";
-
       }
 
-      else if (
-        index === completed
-      ) {
 
-        node.classList.add(
-          "active"
+      if (unlocked) {
+
+        item.classList.add(
+          "unlocked"
         );
-
-        node.textContent =
-          lesson.icon;
 
       }
 
       else {
 
-        node.classList.add(
+        item.classList.add(
           "locked"
         );
 
-        node.textContent =
-          "🔒";
-
       }
 
 
-      /*
-         Boss
-      */
+      item.innerHTML = `
 
-      if (lesson.boss) {
+        <span class="road-level-icon">
+          ${
+            done
+              ? "✓"
+              : unlocked
+                ? lesson.icon
+                : "🔒"
+          }
+        </span>
 
-        node.classList.add(
-          "boss"
-        );
+        <span class="road-level-info">
 
-      }
+          <strong>
+            ${lesson.title}
+          </strong>
 
+          <small>
+            ${lesson.subtitle}
+          </small>
 
-      /* -------------------------
-         INFO
-      ------------------------- */
+        </span>
 
-      const info =
-        document.createElement("div");
-
-
-      info.className =
-        "road-info";
-
-
-      const title =
-        document.createElement("strong");
+      `;
 
 
-      title.textContent =
-        lesson.title;
-
-
-      const description =
-        document.createElement("small");
-
-
-      if (
-        index < completed
-      ) {
-
-        description.textContent =
-          "Пройдено ✓";
-
-      }
-
-      else if (
-        index === completed
-      ) {
-
-        description.textContent =
-          lesson.description;
-
-      }
-
-      else {
-
-        description.textContent =
-          "Сначала пройди предыдущий уровень";
-
-      }
-
-
-      info.append(
-        title,
-        description
-      );
-
-
-      /* -------------------------
-         CLICK
-      ------------------------- */
-
-      node.addEventListener(
+      item.addEventListener(
         "click",
         () => {
 
-          if (
-            index > groundState.completedLessons
-          ) {
+          if (!unlocked) {
 
             showGroundToast(
               "Уровень закрыт",
@@ -1286,79 +1426,20 @@ function buildRoad() {
             );
 
             return;
-
           }
 
 
-          /*
-             Пока открытие обычного урока
-             передадим player.js.
-
-             Если функция существует —
-             запускаем её.
-          */
-
-          if (
-            typeof window.startLesson ===
-            "function"
-          ) {
-
-            window.startLesson(
-              lesson.id
-            );
-
-            return;
-
-          }
-
-
-          showGroundToast(
-            lesson.title,
-            "Урок подключим через player.js.",
-            "📚"
+          openRoadLesson(
+            lesson
           );
 
         }
       );
 
 
-      item.append(
-        node,
-        info
-      );
-
-
-      road.appendChild(
+      learningRoad.appendChild(
         item
       );
-
-
-      /* -------------------------
-         CONNECTOR
-      ------------------------- */
-
-      if (
-        index <
-        defaultRoadLessons.length - 1
-      ) {
-
-        const connector =
-          document.createElement("div");
-
-
-        connector.className =
-          "auto-road-connector";
-
-
-        connector.textContent =
-          "•••";
-
-
-        road.appendChild(
-          connector
-        );
-
-      }
 
     }
   );
@@ -1367,298 +1448,322 @@ function buildRoad() {
 
 
 /* =========================================================
-   30. LIBRARY DATA
+   32. OPEN ROAD LESSON
 ========================================================= */
 
-const defaultLibraryLessons = [
+function openRoadLesson(
+  lesson
+) {
+
+  /*
+     Если player.js предоставляет
+     специальную функцию запуска —
+     используем её.
+  */
+
+  if (
+    typeof window.startLesson ===
+    "function"
+  ) {
+
+    window.startLesson(
+      lesson.id
+    );
+
+    return;
+  }
+
+
+  /*
+     Если специального урока пока нет,
+     открываем общий экран урока.
+  */
+
+  if (lessonScreen) {
+
+    setText(
+      "lessonTitle",
+      lesson.title
+    );
+
+
+    setText(
+      "lessonSubtitle",
+      lesson.subtitle
+    );
+
+
+    changeScreen(
+      homeScreen,
+      lessonScreen
+    );
+
+
+    return;
+  }
+
+
+  showGroundToast(
+    lesson.title,
+    "Урок скоро будет доступен.",
+    lesson.icon
+  );
+
+}
+
+
+/* =========================================================
+   33. HOME ROAD BUTTON
+========================================================= */
+
+const continueLearningButton =
+  getById(
+    "continueLearningButton"
+  ) ||
+  getById(
+    "todayLessonButton"
+  );
+
+
+onClick(
+  continueLearningButton,
+  () => {
+
+    if (!learningRoad) {
+      return;
+    }
+
+
+    learningRoad.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+
+  }
+);
+
+
+/* =========================================================
+   34. LIBRARY DATA
+========================================================= */
+
+const libraryData = [
 
   {
-    id: "school-cell",
-    icon: "🔬",
-    title: "Клетка",
-    description:
-      "Строение и основные функции клетки"
+    id: "campbell",
+    title: "Campbell Biology",
+    subtitle:
+      "Углублённая биология",
+    icon: "📚",
+    type: "book"
   },
 
   {
-    id: "school-dna",
-    icon: "🧬",
-    title: "ДНК и наследственность",
-    description:
-      "Основы генетической информации"
+    id: "school",
+    title:
+      `${groundState.grade} класс`,
+    subtitle:
+      "Школьная программа",
+    icon: "🎓",
+    type: "school"
   },
 
   {
-    id: "school-metabolism",
-    icon: "⚡",
-    title: "Обмен веществ",
-    description:
-      "Энергия и процессы в организме"
+    id: "ent",
+    title: "ЕНТ",
+    subtitle:
+      "Подготовка к экзамену",
+    icon: "🎯",
+    type: "ent"
+  },
+
+  {
+    id: "olympiad",
+    title: "Олимпиада",
+    subtitle:
+      "Углублённые задания",
+    icon: "🏆",
+    type: "olympiad"
   }
 
 ];
 
 
 /* =========================================================
-   31. FIND LIBRARY LIST
+   35. LIBRARY ELEMENTS
 ========================================================= */
 
-function getLibraryList() {
+const libraryList =
+  getById("libraryList") ||
+  getById("libraryContent") ||
+  $(".library-list");
 
-  return (
-    getById("libraryList") ||
-    $(".library-list")
+
+const libraryBackButton =
+  getById(
+    "libraryBackButton"
   );
-
-}
 
 
 /* =========================================================
-   32. BUILD LIBRARY
+   36. BUILD LIBRARY
 ========================================================= */
 
 function buildLibrary() {
 
-  /*
-     Сначала обновляем класс.
-  */
-
-  setText(
-    "libraryGrade",
-    `${groundState.grade} класс`
-  );
-
-
-  const list =
-    getLibraryList();
-
-
-  if (!list) {
-
-    /*
-       Если список уроков в HTML
-       называется иначе — приложение
-       всё равно продолжит работать.
-    */
-
+  if (!libraryList) {
     return;
-
   }
 
 
-  list.innerHTML = "";
+  libraryList.innerHTML =
+    "";
 
 
-  defaultLibraryLessons.forEach(
-    (lesson) => {
+  libraryData.forEach(
+    (item) => {
 
-      const button =
-        document.createElement("button");
+      const card =
+        document.createElement(
+          "button"
+        );
 
 
-      button.type =
+      card.type =
         "button";
 
 
-      button.className =
-        "library-lesson-card";
+      card.className =
+        "library-card";
 
 
-      /* -------------------------
-         ICON
-      ------------------------- */
-
-      const icon =
-        document.createElement("div");
+      card.dataset.libraryId =
+        item.id;
 
 
-      icon.className =
-        "library-lesson-icon";
+      card.innerHTML = `
+
+        <span class="library-card-icon">
+          ${item.icon}
+        </span>
+
+        <span class="library-card-content">
+
+          <strong>
+            ${
+              item.id === "school"
+                ? `${groundState.grade} класс`
+                : item.title
+            }
+          </strong>
+
+          <small>
+            ${item.subtitle}
+          </small>
+
+        </span>
+
+        <span class="library-card-arrow">
+          →
+        </span>
+
+      `;
 
 
-      icon.textContent =
-        lesson.icon;
-
-
-      /* -------------------------
-         INFO
-      ------------------------- */
-
-      const info =
-        document.createElement("div");
-
-
-      info.className =
-        "library-lesson-info";
-
-
-      const title =
-        document.createElement("strong");
-
-
-      title.textContent =
-        lesson.title;
-
-
-      const description =
-        document.createElement("p");
-
-
-      description.textContent =
-        lesson.description;
-
-
-      info.append(
-        title,
-        description
-      );
-
-
-      /* -------------------------
-         ARROW
-      ------------------------- */
-
-      const arrow =
-        document.createElement("span");
-
-
-      arrow.textContent =
-        "→";
-
-
-      arrow.style.color =
-        "var(--green)";
-
-
-      arrow.style.fontWeight =
-        "900";
-
-
-      /* -------------------------
-         CLICK
-      ------------------------- */
-
-      button.addEventListener(
+      card.addEventListener(
         "click",
         () => {
 
-          if (
-            typeof window.startLesson ===
-            "function"
-          ) {
-
-            window.startLesson(
-              lesson.id
-            );
-
-            return;
-
-          }
-
-
-          showGroundToast(
-            lesson.title,
-            "Этот урок подключим через database.js.",
-            lesson.icon
+          openLibraryItem(
+            item
           );
 
         }
       );
 
 
-      button.append(
-        icon,
-        info,
-        arrow
-      );
-
-
-      list.appendChild(
-        button
+      libraryList.appendChild(
+        card
       );
 
     }
   );
 
-
-  /*
-     После построения библиотеки
-     применяем поиск.
-  */
-
-  applyLibrarySearch();
-
 }
 
 
 /* =========================================================
-   33. LIBRARY SEARCH
+   37. OPEN LIBRARY ITEM
 ========================================================= */
 
-const librarySearchInput =
-  getById("librarySearchInput");
+function openLibraryItem(
+  item
+) {
 
+  if (
+    item.id === "campbell"
+  ) {
 
-function applyLibrarySearch() {
+    openCampbellChapter();
 
-  if (!librarySearchInput) {
     return;
   }
 
 
-  const query =
-    librarySearchInput.value
-      .trim()
-      .toLowerCase();
+  if (
+    item.id === "school"
+  ) {
+
+    showGroundToast(
+      `${groundState.grade} класс`,
+      "Школьная библиотека будет пополняться.",
+      "🎓"
+    );
+
+    return;
+  }
 
 
-  $$(
-    ".library-lesson-card"
-  ).forEach((card) => {
+  if (
+    item.id === "ent"
+  ) {
 
-    const text =
-      card.textContent
-        .toLowerCase();
+    showGroundToast(
+      "ЕНТ",
+      "Материалы для ЕНТ скоро появятся.",
+      "🎯"
+    );
 
-
-    card.hidden =
-      query.length > 0 &&
-      !text.includes(query);
-
-  });
-
-}
+    return;
+  }
 
 
-if (librarySearchInput) {
+  if (
+    item.id === "olympiad"
+  ) {
 
-  librarySearchInput.addEventListener(
-    "input",
-    applyLibrarySearch
-  );
+    showGroundToast(
+      "Олимпиада",
+      "Олимпиадная библиотека скоро появится.",
+      "🏆"
+    );
+
+  }
 
 }
 
 
 /* =========================================================
-   34. CAMPBELL LIBRARY CARD
+   38. LIBRARY BACK
 ========================================================= */
 
-const campbellLibraryCard =
-  getById("campbellLibraryCard") ||
-  $(".campbell-library-card");
-
-
 onClick(
-  campbellLibraryCard,
+  libraryBackButton,
   () => {
-
-    updateCampbellChapterScreen();
-
 
     changeScreen(
       libraryScreen,
-      campbellScreen
+      homeScreen
     );
 
   }
@@ -1666,19 +1771,204 @@ onClick(
 
 
 /* =========================================================
-   35. CAMPBELL BACK
+   39. CAMPBELL STATE
+
+   Глава 2:
+   PDF 47–66
+========================================================= */
+
+const savedCampbellPage =
+  getNumber(
+    "campbellChapter2CurrentPage",
+    47
+  );
+
+
+const campbellState = {
+
+  startPage: 47,
+
+  endPage: 66,
+
+  currentPage:
+    Math.max(
+      47,
+      Math.min(
+        66,
+        savedCampbellPage
+      )
+    ),
+
+  theoryCompleted:
+    localStorage.getItem(
+      "campbellChapter2TheoryCompleted"
+    ) === "true",
+
+  examCompleted:
+    localStorage.getItem(
+      "campbellChapter2ExamCompleted"
+    ) === "true",
+
+  examScore:
+    getNumber(
+      "campbellChapter2ExamScore",
+      0
+    )
+
+};
+
+
+/* =========================================================
+   40. CAMPBELL ELEMENTS
 ========================================================= */
 
 const campbellBackButton =
-  getById("campbellBackButton");
+  getById(
+    "campbellBackButton"
+  );
 
+
+const openCampbellTheoryButton =
+  getById(
+    "openCampbellTheoryButton"
+  ) ||
+  getById(
+    "campbellTheoryButton"
+  );
+
+
+const openCampbellExamButton =
+  getById(
+    "openCampbellExamButton"
+  ) ||
+  getById(
+    "campbellExamButton"
+  );
+
+
+/* =========================================================
+   41. OPEN CAMPBELL CHAPTER
+========================================================= */
+
+function openCampbellChapter() {
+
+  if (!campbellScreen) {
+
+    console.error(
+      "GROUND: #campbellScreen не найден."
+    );
+
+    return;
+  }
+
+
+  updateCampbellChapterScreen();
+
+
+  changeScreen(
+    libraryScreen,
+    campbellScreen
+  );
+
+}
+
+
+/* =========================================================
+   42. UPDATE CAMPBELL CHAPTER
+========================================================= */
+
+function updateCampbellChapterScreen() {
+
+  const totalPages =
+    campbellState.endPage -
+    campbellState.startPage +
+    1;
+
+
+  const current =
+    campbellState.currentPage -
+    campbellState.startPage +
+    1;
+
+
+  const readerPercent =
+    Math.round(
+      (current / totalPages) *
+      100
+    );
+
+
+  setText(
+    "campbellCurrentPage",
+    campbellState.currentPage
+  );
+
+
+  setText(
+    "campbellTotalPages",
+    totalPages
+  );
+
+
+  setProgress(
+    "campbellChapterProgress",
+    readerPercent
+  );
+
+
+  /*
+     THEORY STATUS
+  */
+
+  setText(
+    "campbellTheoryStatus",
+    campbellState.theoryCompleted
+      ? "Пройдено"
+      : "Не завершено"
+  );
+
+
+  /*
+     EXAM STATUS
+  */
+
+  setText(
+    "campbellExamStatus",
+    campbellState.examCompleted
+      ? `Результат: ${campbellState.examScore}%`
+      : campbellState.theoryCompleted
+        ? "Доступен"
+        : "Сначала пройди теорию"
+  );
+
+
+  /*
+     EXAM LOCK
+  */
+
+  if (openCampbellExamButton) {
+
+    openCampbellExamButton.disabled =
+      !campbellState.theoryCompleted;
+
+
+    openCampbellExamButton.classList.toggle(
+      "locked",
+      !campbellState.theoryCompleted
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   43. CAMPBELL BACK
+========================================================= */
 
 onClick(
   campbellBackButton,
   () => {
-
-    buildLibrary();
-
 
     changeScreen(
       campbellScreen,
@@ -1690,322 +1980,32 @@ onClick(
 
 
 /* =========================================================
-   36. CAMPBELL THEORY BACK
+   44. OPEN CAMPBELL THEORY
 ========================================================= */
-
-const campbellTheoryBackButton =
-  getById(
-    "campbellTheoryBackButton"
-  );
-
 
 onClick(
-  campbellTheoryBackButton,
+  openCampbellTheoryButton,
   () => {
 
-    updateCampbellChapterScreen();
+    if (!campbellTheoryScreen) {
 
-
-    changeScreen(
-      campbellTheoryScreen,
-      campbellScreen
-    );
-
-  }
-);
-
-
-/* =========================================================
-   37. CAMPBELL EXAM BACK
-========================================================= */
-
-const campbellExamBackButton =
-  getById(
-    "campbellExamBackButton"
-  );
-
-
-onClick(
-  campbellExamBackButton,
-  () => {
-
-    /*
-       Сам таймер экзамена
-       остановим в части экзамена.
-    */
-
-    if (
-      typeof stopCampbellExamTimer ===
-      "function"
-    ) {
-
-      stopCampbellExamTimer();
-
-    }
-
-
-    updateCampbellChapterScreen();
-
-
-    changeScreen(
-      campbellExamScreen,
-      campbellScreen
-    );
-
-  }
-);
-
-
-/* =========================================================
-   38. CAMPBELL REVIEW BACK
-========================================================= */
-
-const campbellReviewBackButton =
-  getById(
-    "campbellReviewBackButton"
-  );
-
-
-onClick(
-  campbellReviewBackButton,
-  () => {
-
-    changeScreen(
-      campbellReviewScreen,
-      campbellResultScreen
-    );
-
-  }
-);
-
-
-/* =========================================================
-   39. CAMPBELL STATE
-========================================================= */
-
-const campbellState = {
-
-  startPage:
-    47,
-
-  endPage:
-    66,
-
-  currentPage:
-    getNumber(
-      "campbellChapter2CurrentPage",
-      47
-    ),
-
-  theoryCompleted:
-    localStorage.getItem(
-      "campbellChapter2TheoryCompleted"
-    ) === "true"
-
-};
-
-
-/* =========================================================
-   40. FIX CAMPBELL PAGE RANGE
-========================================================= */
-
-if (
-  campbellState.currentPage <
-  campbellState.startPage
-) {
-
-  campbellState.currentPage =
-    campbellState.startPage;
-
-}
-
-
-if (
-  campbellState.currentPage >
-  campbellState.endPage
-) {
-
-  campbellState.currentPage =
-    campbellState.endPage;
-
-}
-
-
-/* =========================================================
-   41. CAMPBELL READING PERCENT
-========================================================= */
-
-function getCampbellReadingPercent() {
-
-  if (
-    campbellState.theoryCompleted
-  ) {
-
-    return 100;
-
-  }
-
-
-  const total =
-    campbellState.endPage -
-    campbellState.startPage +
-    1;
-
-
-  const read =
-    campbellState.currentPage -
-    campbellState.startPage +
-    1;
-
-
-  return Math.round(
-    (read / total) * 100
-  );
-
-}
-
-
-/* =========================================================
-   42. UPDATE CAMPBELL CHAPTER SCREEN
-========================================================= */
-
-function updateCampbellChapterScreen() {
-
-  const readingPercent =
-    getCampbellReadingPercent();
-
-
-  setText(
-    "campbellReadingPercent",
-    `${readingPercent}%`
-  );
-
-
-  setProgress(
-    "campbellReadingProgress",
-    readingPercent
-  );
-
-
-  /*
-     Общий прогресс главы:
-
-     Теория = первые 50%.
-     Экзамен позже даст вторые 50%.
-  */
-
-  let chapterProgress =
-    Math.round(
-      readingPercent * 0.5
-    );
-
-
-  const examCompleted =
-    localStorage.getItem(
-      "campbellChapter2ExamCompleted"
-    ) === "true";
-
-
-  if (examCompleted) {
-
-    chapterProgress =
-      100;
-
-  }
-
-
-  setText(
-    "campbellProgressText",
-    `${chapterProgress}%`
-  );
-
-
-  setProgress(
-    "campbellProgressBar",
-    chapterProgress
-  );
-
-
-  /*
-     ЭКЗАМЕН
-  */
-
-  const examButton =
-    getById(
-      "campbellExamButton"
-    );
-
-
-  const examStatus =
-    getById(
-      "campbellExamStatus"
-    );
-
-
-  if (
-    campbellState.theoryCompleted
-  ) {
-
-    if (examButton) {
-
-      examButton.classList.remove(
-        "locked"
+      console.error(
+        "GROUND: #campbellTheoryScreen не найден."
       );
 
+      return;
     }
 
 
-    if (examStatus) {
+    changeScreen(
+      campbellScreen,
+      campbellTheoryScreen
+    );
 
-      examStatus.textContent =
-        examCompleted
-          ? "✓ Экзамен пройден"
-          : "Экзамен разблокирован";
-
-    }
-
-  }
-
-  else {
-
-    if (examButton) {
-
-      examButton.classList.add(
-        "locked"
-      );
-
-    }
-
-
-    if (examStatus) {
-
-      examStatus.textContent =
-        "🔒 Сначала изучи материал главы";
-
-    }
-
-  }
-
-}
-
-
-/* =========================================================
-   43. CAMPBELL THEORY BUTTON
-========================================================= */
-
-const campbellTheoryButton =
-  getById(
-    "campbellTheoryButton"
-  );
-
-
-onClick(
-  campbellTheoryButton,
-  () => {
 
     /*
-       В части 3 функция покажет
-       реальную страницу 47–66.
+       renderCampbellPage находится
+       в PART 3.
     */
 
     if (
@@ -2017,28 +2017,16 @@ onClick(
 
     }
 
-
-    changeScreen(
-      campbellScreen,
-      campbellTheoryScreen
-    );
-
   }
 );
 
 
 /* =========================================================
-   44. CAMPBELL EXAM BUTTON
+   45. OPEN CAMPBELL EXAM
 ========================================================= */
 
-const campbellExamButton =
-  getById(
-    "campbellExamButton"
-  );
-
-
 onClick(
-  campbellExamButton,
+  openCampbellExamButton,
   () => {
 
     if (
@@ -2047,19 +2035,13 @@ onClick(
 
       showGroundToast(
         "Экзамен закрыт",
-        "Сначала дочитай материал главы 2.",
+        "Сначала закончи теорию главы.",
         "🔒"
       );
 
       return;
-
     }
 
-
-    /*
-       Реальный экзамен подключим
-       в следующей части.
-    */
 
     if (
       typeof startCampbellExam ===
@@ -2069,48 +2051,17 @@ onClick(
       startCampbellExam();
 
       return;
-
     }
 
 
-    showGroundToast(
-      "Экзамен",
-      "Экзамен сейчас подключаем.",
-      "📝"
-    );
+    if (campbellExamScreen) {
 
-  }
-);
+      changeScreen(
+        campbellScreen,
+        campbellExamScreen
+      );
 
-
-/* =========================================================
-   45. THEORY COMPLETE → EXAM
-========================================================= */
-
-const campbellTheoryCompleteButton =
-  getById(
-    "campbellTheoryCompleteButton"
-  );
-
-
-onClick(
-  campbellTheoryCompleteButton,
-  () => {
-
-    updateCampbellChapterScreen();
-
-
-    changeScreen(
-      campbellTheoryCompleteScreen,
-      campbellScreen
-    );
-
-
-    showGroundToast(
-      "Экзамен открыт",
-      "Теперь можно проверить знания по главе 2.",
-      "🔓"
-    );
+    }
 
   }
 );
@@ -2129,6 +2080,8 @@ updateCampbellChapterScreen();
 
 /* =========================================================
    END PART 2
+
+   ↓ PART 3 ВСТАВЛЯЕМ СРАЗУ ПОД ЭТИМ ↓
 ========================================================= */
 /* =========================================================
    GROUND — APP.JS
@@ -2138,7 +2091,7 @@ updateCampbellChapterScreen();
 
 
 /* =========================================================
-   47. CAMPBELL ELEMENTS
+   47. CAMPBELL READER ELEMENTS
 ========================================================= */
 
 const campbellReaderImage =
@@ -2150,21 +2103,50 @@ const campbellReaderLoading =
 const campbellReaderError =
   getById("campbellReaderError");
 
+
+/*
+   Поддерживаем ОБА варианта ID.
+
+   Новый:
+   campbellPrevButton
+   campbellNextButton
+
+   Старый:
+   campbellReaderPrevButton
+   campbellReaderNextButton
+*/
+
 const campbellPrevButton =
-  getById("campbellPrevButton");
+  getById("campbellPrevButton") ||
+  getById("campbellReaderPrevButton");
 
 const campbellNextButton =
-  getById("campbellNextButton");
+  getById("campbellNextButton") ||
+  getById("campbellReaderNextButton");
+
 
 const completeCampbellTheoryButton =
-  getById("completeCampbellTheoryButton");
+  getById(
+    "completeCampbellTheoryButton"
+  );
+
+
+const campbellTheoryBackButton =
+  getById(
+    "campbellTheoryBackButton"
+  ) ||
+  getById(
+    "campbellReaderBackButton"
+  );
 
 
 /* =========================================================
-   48. IMAGE PATH
+   48. CAMPBELL IMAGE PATH
 ========================================================= */
 
-function getCampbellPagePath(page) {
+function getCampbellPagePath(
+  page
+) {
 
   return (
     `images/campbell/chapter2/page-${page}.webp`
@@ -2181,14 +2163,16 @@ function saveCampbellPage() {
 
   localStorage.setItem(
     "campbellChapter2CurrentPage",
-    String(campbellState.currentPage)
+    String(
+      campbellState.currentPage
+    )
   );
 
 }
 
 
 /* =========================================================
-   50. READER PROGRESS
+   50. CAMPBELL PROGRESS
 ========================================================= */
 
 function getCampbellReaderPercent() {
@@ -2213,7 +2197,7 @@ function getCampbellReaderPercent() {
 
 
 /* =========================================================
-   51. UPDATE READER INFO
+   51. UPDATE READER INTERFACE
 ========================================================= */
 
 function updateCampbellReaderInfo() {
@@ -2221,12 +2205,13 @@ function updateCampbellReaderInfo() {
   const page =
     campbellState.currentPage;
 
+
   const percent =
     getCampbellReaderPercent();
 
 
   /*
-     PAGE TEXT
+     PAGE NUMBER
   */
 
   setText(
@@ -2241,6 +2226,12 @@ function updateCampbellReaderInfo() {
   );
 
 
+  setText(
+    "campbellPageNumber",
+    String(page)
+  );
+
+
   /*
      PROGRESS
   */
@@ -2251,11 +2242,6 @@ function updateCampbellReaderInfo() {
   );
 
 
-  /*
-     Иногда HTML может использовать
-     другой ID — поддерживаем и его.
-  */
-
   setProgress(
     "campbellReaderProgress",
     percent
@@ -2263,39 +2249,45 @@ function updateCampbellReaderInfo() {
 
 
   /*
-     PREVIOUS
+     PREVIOUS BUTTON
   */
 
   if (campbellPrevButton) {
 
     campbellPrevButton.disabled =
-      page <= campbellState.startPage;
+      page <=
+      campbellState.startPage;
 
   }
 
 
   /*
-     NEXT
+     NEXT BUTTON
   */
 
   if (campbellNextButton) {
 
     campbellNextButton.disabled =
-      page >= campbellState.endPage;
+      page >=
+      campbellState.endPage;
 
   }
 
 
   /*
-     КНОПКА ЗАВЕРШЕНИЯ
+     COMPLETE THEORY
 
-     Показываем только на странице 66.
+     Показываем только
+     на последней странице.
   */
 
-  if (completeCampbellTheoryButton) {
+  if (
+    completeCampbellTheoryButton
+  ) {
 
     completeCampbellTheoryButton.hidden =
-      page !== campbellState.endPage;
+      page !==
+      campbellState.endPage;
 
   }
 
@@ -2303,12 +2295,14 @@ function updateCampbellReaderInfo() {
 
 
 /* =========================================================
-   52. LOADING STATE
+   52. LOADING
 ========================================================= */
 
 function showCampbellLoading() {
 
-  if (campbellReaderLoading) {
+  if (
+    campbellReaderLoading
+  ) {
 
     campbellReaderLoading.hidden =
       false;
@@ -2316,7 +2310,9 @@ function showCampbellLoading() {
   }
 
 
-  if (campbellReaderError) {
+  if (
+    campbellReaderError
+  ) {
 
     campbellReaderError.hidden =
       true;
@@ -2332,7 +2328,9 @@ function showCampbellLoading() {
 
 function hideCampbellLoading() {
 
-  if (campbellReaderLoading) {
+  if (
+    campbellReaderLoading
+  ) {
 
     campbellReaderLoading.hidden =
       true;
@@ -2343,15 +2341,19 @@ function hideCampbellLoading() {
 
 
 /* =========================================================
-   54. ERROR STATE
+   54. IMAGE ERROR
 ========================================================= */
 
-function showCampbellImageError(page) {
+function showCampbellImageError(
+  page
+) {
 
   hideCampbellLoading();
 
 
-  if (campbellReaderImage) {
+  if (
+    campbellReaderImage
+  ) {
 
     campbellReaderImage.hidden =
       true;
@@ -2359,7 +2361,9 @@ function showCampbellImageError(page) {
   }
 
 
-  if (campbellReaderError) {
+  if (
+    campbellReaderError
+  ) {
 
     campbellReaderError.hidden =
       false;
@@ -2374,7 +2378,7 @@ function showCampbellImageError(page) {
     if (errorText) {
 
       errorText.textContent =
-        `Не удалось загрузить page-${page}.webp. Проверь папку images/campbell/chapter2/.`;
+        `Не удалось загрузить page-${page}.webp. Проверь файл images/campbell/chapter2/page-${page}.webp`;
 
     }
 
@@ -2382,7 +2386,7 @@ function showCampbellImageError(page) {
 
 
   console.error(
-    `GROUND: Campbell page ${page} not found.`
+    `GROUND: не удалось загрузить Campbell page-${page}.webp`
   );
 
 }
@@ -2394,8 +2398,12 @@ function showCampbellImageError(page) {
 
 function animateCampbellPage() {
 
-  if (!campbellReaderImage) {
+  if (
+    !campbellReaderImage
+  ) {
+
     return;
+
   }
 
 
@@ -2405,7 +2413,7 @@ function animateCampbellPage() {
 
 
   /*
-     Перезапуск CSS-анимации.
+     Перезапускаем CSS animation.
   */
 
   void campbellReaderImage.offsetWidth;
@@ -2424,26 +2432,36 @@ function animateCampbellPage() {
 
 function renderCampbellPage() {
 
-  if (!campbellReaderImage) {
+  if (
+    !campbellReaderImage
+  ) {
 
     console.error(
       "GROUND: #campbellReaderImage не найден."
     );
 
     return;
+
   }
 
 
   /*
-     Защита диапазона 47–66.
+     Защита диапазона.
+
+     Страница никогда не уйдёт
+     ниже 47 или выше 66.
   */
 
   campbellState.currentPage =
     Math.max(
       campbellState.startPage,
+
       Math.min(
         campbellState.endPage,
-        campbellState.currentPage
+        Number(
+          campbellState.currentPage
+        ) ||
+        campbellState.startPage
       )
     );
 
@@ -2453,23 +2471,29 @@ function renderCampbellPage() {
 
 
   const src =
-    getCampbellPagePath(page);
+    getCampbellPagePath(
+      page
+    );
 
 
   /*
-     Обновляем интерфейс сразу.
+     Сразу обновляем номер страницы
+     и кнопки.
   */
 
   updateCampbellReaderInfo();
 
+
   showCampbellLoading();
 
 
-  campbellReaderImage.hidden =
-    true;
+  /*
+     Скрываем старую ошибку.
+  */
 
-
-  if (campbellReaderError) {
+  if (
+    campbellReaderError
+  ) {
 
     campbellReaderError.hidden =
       true;
@@ -2478,129 +2502,73 @@ function renderCampbellPage() {
 
 
   /*
-     Создаём временное изображение.
+     ВАЖНО:
 
-     Так старая страница не мигает,
-     пока новая ещё загружается.
+     Здесь больше не делаем сложную
+     систему с отдельным preloadImage
+     перед каждой сменой страницы.
+
+     Сам <img> загружает нужный файл.
+     Это проще и надёжнее.
   */
 
-  const preloadImage =
-    new Image();
+  campbellReaderImage.hidden =
+    false;
 
 
-  preloadImage.decoding =
-    "async";
-
-
-  preloadImage.alt =
-    `Campbell Biology — страница ${page}`;
-
-
-  /*
-     SUCCESS
-  */
-
-  preloadImage.addEventListener(
-    "load",
+  campbellReaderImage.onload =
     () => {
 
-      /*
-         Если пользователь очень быстро
-         перелистнул дальше, не показываем
-         уже устаревшую картинку.
-      */
-
-      if (
-        page !==
-        campbellState.currentPage
-      ) {
-
-        return;
-
-      }
-
-
-      campbellReaderImage.src =
-        src;
-
-
-      campbellReaderImage.alt =
-        `Campbell Biology — страница ${page}`;
-
+      hideCampbellLoading();
 
       campbellReaderImage.hidden =
         false;
 
-
-      hideCampbellLoading();
-
-
       animateCampbellPage();
-
 
       saveCampbellPage();
 
-
       updateCampbellChapterScreen();
 
-    },
-    {
-      once: true
-    }
-  );
+    };
 
 
-  /*
-     ERROR
-  */
-
-  preloadImage.addEventListener(
-    "error",
+  campbellReaderImage.onerror =
     () => {
-
-      if (
-        page !==
-        campbellState.currentPage
-      ) {
-
-        return;
-
-      }
-
 
       showCampbellImageError(
         page
       );
 
-    },
-    {
-      once: true
-    }
-  );
+    };
 
 
   /*
-     Начинаем загрузку.
+     Добавляем маленький параметр
+     версии страницы.
+
+     Он помогает браузеру не держать
+     старую картинку в кэше.
   */
 
-  preloadImage.src =
-    src;
+  campbellReaderImage.src =
+    `${src}?page=${page}`;
 
 }
 
 
 /* =========================================================
-   57. PRELOAD NEIGHBOUR PAGE
-
-   Подгружаем следующую страницу заранее,
-   чтобы листалось быстрее.
+   57. PRELOAD PAGE
 ========================================================= */
 
-function preloadCampbellPage(page) {
+function preloadCampbellPage(
+  page
+) {
 
   if (
     page <
       campbellState.startPage ||
+
     page >
       campbellState.endPage
   ) {
@@ -2614,12 +2582,10 @@ function preloadCampbellPage(page) {
     new Image();
 
 
-  image.decoding =
-    "async";
-
-
   image.src =
-    getCampbellPagePath(page);
+    getCampbellPagePath(
+      page
+    );
 
 }
 
@@ -2629,6 +2595,11 @@ function preloadCampbellPage(page) {
 ========================================================= */
 
 function nextCampbellPage() {
+
+  /*
+     Если уже 66 —
+     дальше не идём.
+  */
 
   if (
     campbellState.currentPage >=
@@ -2640,18 +2611,32 @@ function nextCampbellPage() {
   }
 
 
-  campbellState.currentPage +=
-    1;
+  /*
+     +1 страница.
+
+     47 → 48
+     48 → 49
+     ...
+  */
+
+  campbellState.currentPage++;
+
+
+  console.log(
+    "GROUND Campbell:",
+    campbellState.currentPage
+  );
 
 
   saveCampbellPage();
+
 
   renderCampbellPage();
 
 
   /*
-     Следующую после неё
-     грузим заранее.
+     Заранее загружаем
+     следующую страницу.
   */
 
   preloadCampbellPage(
@@ -2677,11 +2662,11 @@ function previousCampbellPage() {
   }
 
 
-  campbellState.currentPage -=
-    1;
+  campbellState.currentPage--;
 
 
   saveCampbellPage();
+
 
   renderCampbellPage();
 
@@ -2694,23 +2679,103 @@ function previousCampbellPage() {
 
 
 /* =========================================================
-   60. BUTTON EVENTS
+   60. READER BUTTON EVENTS
+========================================================= */
+
+/*
+   Не используем прямой:
+
+   button.addEventListener(...)
+
+   без проверки.
+
+   Именно такие места раньше
+   могли ронять весь JS.
+*/
+
+if (
+  campbellNextButton
+) {
+
+  campbellNextButton.addEventListener(
+    "click",
+    (event) => {
+
+      event.preventDefault();
+
+      event.stopPropagation();
+
+
+      nextCampbellPage();
+
+    }
+  );
+
+}
+
+else {
+
+  console.warn(
+    "GROUND: кнопка Campbell NEXT не найдена."
+  );
+
+}
+
+
+if (
+  campbellPrevButton
+) {
+
+  campbellPrevButton.addEventListener(
+    "click",
+    (event) => {
+
+      event.preventDefault();
+
+      event.stopPropagation();
+
+
+      previousCampbellPage();
+
+    }
+  );
+
+}
+
+else {
+
+  console.warn(
+    "GROUND: кнопка Campbell PREVIOUS не найдена."
+  );
+
+}
+
+
+/* =========================================================
+   61. BACK FROM THEORY
 ========================================================= */
 
 onClick(
-  campbellNextButton,
-  nextCampbellPage
-);
+  campbellTheoryBackButton,
+  () => {
+
+    saveCampbellPage();
 
 
-onClick(
-  campbellPrevButton,
-  previousCampbellPage
+    updateCampbellChapterScreen();
+
+
+    changeScreen(
+      campbellTheoryScreen,
+      campbellScreen
+    );
+
+  }
 );
 
 
 /* =========================================================
-   61. COMPLETE THEORY
+   62. COMPLETE CAMPBELL THEORY
 ========================================================= */
 
 onClick(
@@ -2718,8 +2783,8 @@ onClick(
   () => {
 
     /*
-       Нельзя завершить раньше
-       последней страницы.
+       Завершение разрешено
+       только на странице 66.
     */
 
     if (
@@ -2729,7 +2794,7 @@ onClick(
 
       showGroundToast(
         "Ещё не всё",
-        "Сначала дойди до последней страницы главы.",
+        "Сначала дочитай главу до страницы 66.",
         "📖"
       );
 
@@ -2737,11 +2802,6 @@ onClick(
 
     }
 
-
-    /*
-       Если уже проходили раньше —
-       повторно награду не выдаём.
-    */
 
     const alreadyCompleted =
       localStorage.getItem(
@@ -2760,14 +2820,21 @@ onClick(
 
 
     /*
-       Награда только первый раз.
+       Награда выдаётся
+       только один раз.
     */
 
-    if (!alreadyCompleted) {
+    if (
+      !alreadyCompleted
+    ) {
 
-      addXP(50);
+      addXP(
+        50
+      );
 
-      addGenes(10);
+      addGenes(
+        10
+      );
 
     }
 
@@ -2776,7 +2843,7 @@ onClick(
 
 
     /*
-       Награда на экране завершения.
+       REWARD
     */
 
     setText(
@@ -2796,8 +2863,8 @@ onClick(
 
 
     /*
-       Если специальных Campbell ID
-       нет — используем общие.
+       Поддерживаем также
+       общий экран награды.
     */
 
     setText(
@@ -2816,10 +2883,25 @@ onClick(
     );
 
 
-    changeScreen(
-      campbellTheoryScreen,
+    if (
       campbellTheoryCompleteScreen
-    );
+    ) {
+
+      changeScreen(
+        campbellTheoryScreen,
+        campbellTheoryCompleteScreen
+      );
+
+    }
+
+    else {
+
+      changeScreen(
+        campbellTheoryScreen,
+        campbellScreen
+      );
+
+    }
 
 
     showGroundToast(
@@ -2833,16 +2915,46 @@ onClick(
 
 
 /* =========================================================
-   62. KEYBOARD CONTROL
+   63. THEORY COMPLETE CONTINUE
+========================================================= */
 
-   На ноутбуке можно листать:
-   ← предыдущая
-   → следующая
+const campbellTheoryContinueButton =
+  getById(
+    "campbellTheoryContinueButton"
+  ) ||
+  getById(
+    "campbellTheoryCompleteButton"
+  );
+
+
+onClick(
+  campbellTheoryContinueButton,
+  () => {
+
+    updateCampbellChapterScreen();
+
+
+    changeScreen(
+      campbellTheoryCompleteScreen,
+      campbellScreen
+    );
+
+  }
+);
+
+
+/* =========================================================
+   64. KEYBOARD CONTROL
 ========================================================= */
 
 document.addEventListener(
   "keydown",
   (event) => {
+
+    /*
+       Стрелки работают только
+       когда открыт Campbell Reader.
+    */
 
     if (
       !campbellTheoryScreen ||
@@ -2856,20 +2968,32 @@ document.addEventListener(
     }
 
 
+    /*
+       RIGHT
+    */
+
     if (
       event.key ===
       "ArrowRight"
     ) {
+
+      event.preventDefault();
 
       nextCampbellPage();
 
     }
 
 
+    /*
+       LEFT
+    */
+
     if (
       event.key ===
       "ArrowLeft"
     ) {
+
+      event.preventDefault();
 
       previousCampbellPage();
 
@@ -2880,18 +3004,20 @@ document.addEventListener(
 
 
 /* =========================================================
-   63. TOUCH SWIPE
-
-   На телефоне:
-   свайп влево  → следующая
-   свайп вправо → предыдущая
+   65. TOUCH SWIPE
 ========================================================= */
 
 let campbellTouchStartX =
   null;
 
 
-if (campbellTheoryScreen) {
+let campbellTouchStartY =
+  null;
+
+
+if (
+  campbellTheoryScreen
+) {
 
   campbellTheoryScreen.addEventListener(
     "touchstart",
@@ -2909,6 +3035,10 @@ if (campbellTheoryScreen) {
       campbellTouchStartX =
         event.touches[0].clientX;
 
+
+      campbellTouchStartY =
+        event.touches[0].clientY;
+
     },
     {
       passive: true
@@ -2922,7 +3052,10 @@ if (campbellTheoryScreen) {
 
       if (
         campbellTouchStartX ===
-        null
+          null ||
+
+        campbellTouchStartY ===
+          null
       ) {
 
         return;
@@ -2937,6 +3070,9 @@ if (campbellTheoryScreen) {
         campbellTouchStartX =
           null;
 
+        campbellTouchStartY =
+          null;
+
         return;
 
       }
@@ -2947,29 +3083,61 @@ if (campbellTheoryScreen) {
           .clientX;
 
 
-      const difference =
+      const endY =
+        event.changedTouches[0]
+          .clientY;
+
+
+      const differenceX =
         endX -
         campbellTouchStartX;
 
 
+      const differenceY =
+        endY -
+        campbellTouchStartY;
+
+
       /*
-         Минимум 60px,
-         чтобы случайное касание
-         не листало страницу.
+         Листаем только если движение
+         явно горизонтальное.
+
+         Поэтому обычная прокрутка
+         страницы вверх/вниз
+         не будет случайно листать книгу.
       */
 
       if (
-        Math.abs(difference) >=
-        60
+        Math.abs(
+          differenceX
+        ) >= 60 &&
+
+        Math.abs(
+          differenceX
+        ) >
+        Math.abs(
+          differenceY
+        )
       ) {
 
+        /*
+           SWIPE LEFT
+           → следующая
+        */
+
         if (
-          difference < 0
+          differenceX < 0
         ) {
 
           nextCampbellPage();
 
         }
+
+
+        /*
+           SWIPE RIGHT
+           → предыдущая
+        */
 
         else {
 
@@ -2983,6 +3151,10 @@ if (campbellTheoryScreen) {
       campbellTouchStartX =
         null;
 
+
+      campbellTouchStartY =
+        null;
+
     },
     {
       passive: true
@@ -2993,14 +3165,26 @@ if (campbellTheoryScreen) {
 
 
 /* =========================================================
-   64. INITIAL READER UPDATE
+   66. INITIAL CAMPBELL UPDATE
 ========================================================= */
 
 updateCampbellReaderInfo();
 
 
+/*
+   Заранее подготавливаем страницу
+   после сохранённой.
+*/
+
+preloadCampbellPage(
+  campbellState.currentPage + 1
+);
+
+
 /* =========================================================
    END PART 3
+
+   ↓ PART 4 ВСТАВЛЯЕМ ПРЯМО ПОД ЭТОЙ СТРОКОЙ ↓
 ========================================================= */
 /* =========================================================
    GROUND — APP.JS
@@ -3010,11 +3194,7 @@ updateCampbellReaderInfo();
 
 
 /* =========================================================
-   65. EXAM QUESTIONS
-
-   ВАЖНО:
-   Сейчас это тестовый набор для проверки механики.
-   Позже просто заменим вопросы на ваши настоящие.
+   67. EXAM QUESTIONS
 ========================================================= */
 
 const campbellExamQuestions = [
@@ -3097,11 +3277,8 @@ const campbellExamQuestions = [
 
     answers: [
       "Атомы разных элементов с одинаковой массой",
-
       "Атомы одного элемента с разным количеством нейтронов",
-
       "Молекулы с одинаковым числом атомов",
-
       "Ионы с одинаковым зарядом"
     ],
 
@@ -3136,11 +3313,8 @@ const campbellExamQuestions = [
 
     answers: [
       "Атомы обязательно становятся изотопами",
-
       "Электроны передаются между атомами, образуя противоположно заряженные ионы",
-
       "Протоны переходят между ядрами",
-
       "Нейтроны образуют общую пару"
     ],
 
@@ -3157,11 +3331,8 @@ const campbellExamQuestions = [
 
     answers: [
       "Изменение только температуры вещества",
-
       "Процесс образования и разрушения химических связей с преобразованием веществ",
-
       "Движение электронов вокруг ядра",
-
       "Изменение количества протонов элемента"
     ],
 
@@ -3175,7 +3346,7 @@ const campbellExamQuestions = [
 
 
 /* =========================================================
-   66. EXAM STATE
+   68. EXAM STATE
 ========================================================= */
 
 const campbellExamState = {
@@ -3198,24 +3369,41 @@ const campbellExamState = {
 
 
 /* =========================================================
-   67. EXAM ELEMENTS
+   69. EXAM ELEMENTS
 ========================================================= */
 
 const campbellExamQuestion =
-  getById("campbellExamQuestion");
+  getById(
+    "campbellExamQuestion"
+  );
+
 
 const campbellExamAnswers =
-  getById("campbellExamAnswers");
+  getById(
+    "campbellExamAnswers"
+  );
+
 
 const campbellExamNextButton =
-  getById("campbellExamNextButton");
+  getById(
+    "campbellExamNextButton"
+  );
+
 
 const campbellExamTimer =
-  getById("campbellExamTimer");
+  getById(
+    "campbellExamTimer"
+  );
+
+
+const campbellExamBackButton =
+  getById(
+    "campbellExamBackButton"
+  );
 
 
 /* =========================================================
-   68. START EXAM
+   70. START EXAM
 ========================================================= */
 
 function startCampbellExam() {
@@ -3235,23 +3423,41 @@ function startCampbellExam() {
   }
 
 
+  if (
+    !campbellExamScreen
+  ) {
+
+    console.error(
+      "GROUND: #campbellExamScreen не найден."
+    );
+
+    return;
+
+  }
+
+
   stopCampbellExamTimer();
 
 
   campbellExamState.currentQuestion =
     0;
 
+
   campbellExamState.selectedAnswer =
     null;
+
 
   campbellExamState.answers =
     [];
 
+
   campbellExamState.correctAnswers =
     0;
 
+
   campbellExamState.secondsLeft =
     600;
+
 
   campbellExamState.finished =
     false;
@@ -3265,7 +3471,9 @@ function startCampbellExam() {
 
   renderCampbellExamQuestion();
 
+
   updateCampbellExamTimer();
+
 
   startCampbellExamTimer();
 
@@ -3273,7 +3481,7 @@ function startCampbellExam() {
 
 
 /* =========================================================
-   69. RENDER QUESTION
+   71. RENDER QUESTION
 ========================================================= */
 
 function renderCampbellExamQuestion() {
@@ -3299,7 +3507,9 @@ function renderCampbellExamQuestion() {
     null;
 
 
-  /* QUESTION COUNTER */
+  /*
+     QUESTION COUNTER
+  */
 
   setText(
     "campbellExamQuestionCounter",
@@ -3307,7 +3517,9 @@ function renderCampbellExamQuestion() {
   );
 
 
-  /* PROGRESS */
+  /*
+     PROGRESS
+  */
 
   const progress =
     (
@@ -3322,9 +3534,19 @@ function renderCampbellExamQuestion() {
   );
 
 
-  /* QUESTION */
+  setProgress(
+    "campbellExamProgress",
+    progress
+  );
 
-  if (campbellExamQuestion) {
+
+  /*
+     QUESTION
+  */
+
+  if (
+    campbellExamQuestion
+  ) {
 
     campbellExamQuestion.textContent =
       question.question;
@@ -3332,7 +3554,9 @@ function renderCampbellExamQuestion() {
   }
 
 
-  /* HINT */
+  /*
+     HINT
+  */
 
   setText(
     "campbellExamQuestionHint",
@@ -3340,10 +3564,20 @@ function renderCampbellExamQuestion() {
   );
 
 
-  /* ANSWERS */
+  /*
+     ANSWERS
+  */
 
-  if (!campbellExamAnswers) {
+  if (
+    !campbellExamAnswers
+  ) {
+
+    console.error(
+      "GROUND: #campbellExamAnswers не найден."
+    );
+
     return;
+
   }
 
 
@@ -3352,14 +3586,26 @@ function renderCampbellExamQuestion() {
 
 
   const letters =
-    ["A", "B", "C", "D", "E", "F"];
+    [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F"
+    ];
 
 
   question.answers.forEach(
-    (answer, answerIndex) => {
+    (
+      answer,
+      answerIndex
+    ) => {
 
       const button =
-        document.createElement("button");
+        document.createElement(
+          "button"
+        );
 
 
       button.type =
@@ -3371,7 +3617,9 @@ function renderCampbellExamQuestion() {
 
 
       const letter =
-        document.createElement("span");
+        document.createElement(
+          "span"
+        );
 
 
       letter.className =
@@ -3379,11 +3627,14 @@ function renderCampbellExamQuestion() {
 
 
       letter.textContent =
-        letters[answerIndex] || "?";
+        letters[answerIndex] ||
+        "?";
 
 
       const text =
-        document.createElement("span");
+        document.createElement(
+          "span"
+        );
 
 
       text.className =
@@ -3421,9 +3672,13 @@ function renderCampbellExamQuestion() {
   );
 
 
-  /* NEXT BUTTON */
+  /*
+     NEXT BUTTON
+  */
 
-  if (campbellExamNextButton) {
+  if (
+    campbellExamNextButton
+  ) {
 
     campbellExamNextButton.disabled =
       true;
@@ -3432,7 +3687,9 @@ function renderCampbellExamQuestion() {
     campbellExamNextButton.textContent =
       index ===
       campbellExamQuestions.length - 1
+
         ? "Завершить экзамен"
+
         : "Продолжить";
 
   }
@@ -3441,7 +3698,7 @@ function renderCampbellExamQuestion() {
 
 
 /* =========================================================
-   70. SELECT ANSWER
+   72. SELECT ANSWER
 ========================================================= */
 
 function selectCampbellAnswer(
@@ -3479,7 +3736,9 @@ function selectCampbellAnswer(
     question.correct;
 
 
-  /* SAVE ANSWER */
+  /*
+     SAVE ANSWER
+  */
 
   campbellExamState.answers.push({
 
@@ -3500,13 +3759,14 @@ function selectCampbellAnswer(
 
   if (isCorrect) {
 
-    campbellExamState.correctAnswers +=
-      1;
+    campbellExamState.correctAnswers++;
 
   }
 
 
-  /* LOCK ALL ANSWERS */
+  /*
+     LOCK ANSWERS
+  */
 
   const answerButtons =
     Array.from(
@@ -3517,11 +3777,18 @@ function selectCampbellAnswer(
 
 
   answerButtons.forEach(
-    (answerButton, index) => {
+    (
+      answerButton,
+      index
+    ) => {
 
       answerButton.disabled =
         true;
 
+
+      /*
+         CORRECT
+      */
 
       if (
         index ===
@@ -3535,8 +3802,14 @@ function selectCampbellAnswer(
       }
 
 
+      /*
+         WRONG SELECTED
+      */
+
       if (
-        index === answerIndex &&
+        index ===
+          answerIndex &&
+
         !isCorrect
       ) {
 
@@ -3550,18 +3823,28 @@ function selectCampbellAnswer(
   );
 
 
-  /* FEEDBACK */
+  /*
+     FEEDBACK
+  */
 
   setText(
     "campbellExamQuestionHint",
 
     isCorrect
+
       ? `✓ Правильно. ${question.explanation}`
+
       : `✕ Неправильно. ${question.explanation}`
   );
 
 
-  if (campbellExamNextButton) {
+  /*
+     ENABLE NEXT
+  */
+
+  if (
+    campbellExamNextButton
+  ) {
 
     campbellExamNextButton.disabled =
       false;
@@ -3572,7 +3855,7 @@ function selectCampbellAnswer(
 
 
 /* =========================================================
-   71. NEXT QUESTION
+   73. NEXT QUESTION
 ========================================================= */
 
 function nextCampbellExamQuestion() {
@@ -3601,17 +3884,22 @@ function nextCampbellExamQuestion() {
   }
 
 
-  campbellExamState.currentQuestion +=
-    1;
+  campbellExamState.currentQuestion++;
 
 
   renderCampbellExamQuestion();
+
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
 
 }
 
 
 /* =========================================================
-   72. NEXT BUTTON
+   74. NEXT BUTTON
 ========================================================= */
 
 onClick(
@@ -3621,7 +3909,7 @@ onClick(
 
 
 /* =========================================================
-   73. TIMER
+   75. TIMER
 ========================================================= */
 
 function startCampbellExamTimer() {
@@ -3633,8 +3921,7 @@ function startCampbellExamTimer() {
     setInterval(
       () => {
 
-        campbellExamState.secondsLeft -=
-          1;
+        campbellExamState.secondsLeft--;
 
 
         updateCampbellExamTimer();
@@ -3657,36 +3944,43 @@ function startCampbellExamTimer() {
 
 
 /* =========================================================
-   74. STOP TIMER
+   76. STOP TIMER
 ========================================================= */
 
 function stopCampbellExamTimer() {
 
   if (
-    campbellExamState.timer
+    !campbellExamState.timer
   ) {
 
-    clearInterval(
-      campbellExamState.timer
-    );
-
-
-    campbellExamState.timer =
-      null;
+    return;
 
   }
+
+
+  clearInterval(
+    campbellExamState.timer
+  );
+
+
+  campbellExamState.timer =
+    null;
 
 }
 
 
 /* =========================================================
-   75. UPDATE TIMER
+   77. UPDATE TIMER
 ========================================================= */
 
 function updateCampbellExamTimer() {
 
-  if (!campbellExamTimer) {
+  if (
+    !campbellExamTimer
+  ) {
+
     return;
+
   }
 
 
@@ -3717,6 +4011,10 @@ function updateCampbellExamTimer() {
   );
 
 
+  /*
+     1 MINUTE
+  */
+
   if (
     seconds <= 60
   ) {
@@ -3726,6 +4024,11 @@ function updateCampbellExamTimer() {
     );
 
   }
+
+
+  /*
+     3 MINUTES
+  */
 
   else if (
     seconds <= 180
@@ -3741,7 +4044,7 @@ function updateCampbellExamTimer() {
 
 
 /* =========================================================
-   76. FINISH EXAM
+   78. FINISH EXAM
 ========================================================= */
 
 function finishCampbellExam() {
@@ -3775,9 +4078,16 @@ function finishCampbellExam() {
 
 
   const percent =
-    Math.round(
-      (correct / total) * 100
-    );
+    total > 0
+
+      ? Math.round(
+          (
+            correct /
+            total
+          ) * 100
+        )
+
+      : 0;
 
 
   /*
@@ -3788,11 +4098,6 @@ function finishCampbellExam() {
     percent >= 70;
 
 
-  /*
-     Был ли экзамен уже успешно
-     пройден раньше?
-  */
-
   const previouslyCompleted =
     localStorage.getItem(
       "campbellChapter2ExamCompleted"
@@ -3800,11 +4105,14 @@ function finishCampbellExam() {
 
 
   /*
-     Если прошёл сейчас —
-     сохраняем.
+     SAVE SUCCESS
   */
 
   if (passed) {
+
+    campbellState.examCompleted =
+      true;
+
 
     localStorage.setItem(
       "campbellChapter2ExamCompleted",
@@ -3815,8 +4123,50 @@ function finishCampbellExam() {
 
 
   /*
-     Награда выдаётся только
-     за ПЕРВОЕ успешное прохождение.
+     SAVE SCORE
+
+     Сохраняем лучший результат
+     отдельно от последнего.
+  */
+
+  const oldBest =
+    getNumber(
+      "campbellChapter2ExamScore",
+      0
+    );
+
+
+  const bestScore =
+    Math.max(
+      oldBest,
+      percent
+    );
+
+
+  campbellState.examScore =
+    bestScore;
+
+
+  localStorage.setItem(
+    "campbellChapter2ExamScore",
+    String(bestScore)
+  );
+
+
+  localStorage.setItem(
+    "campbellChapter2LastScore",
+    String(percent)
+  );
+
+
+  localStorage.setItem(
+    "campbellChapter2CorrectAnswers",
+    String(correct)
+  );
+
+
+  /*
+     REWARD
   */
 
   let rewardXP =
@@ -3853,34 +4203,31 @@ function finishCampbellExam() {
 
 
   /*
-     SAVE RESULT
-  */
-
-  localStorage.setItem(
-    "campbellChapter2LastScore",
-    String(percent)
-  );
-
-
-  localStorage.setItem(
-    "campbellChapter2CorrectAnswers",
-    String(correct)
-  );
-
-
-  /*
-     UPDATE RESULT SCREEN
+     RESULT
   */
 
   renderCampbellResult({
 
-    total,
-    correct,
-    wrong,
-    percent,
-    passed,
-    rewardXP,
-    rewardGenes
+    total:
+      total,
+
+    correct:
+      correct,
+
+    wrong:
+      wrong,
+
+    percent:
+      percent,
+
+    passed:
+      passed,
+
+    rewardXP:
+      rewardXP,
+
+    rewardGenes:
+      rewardGenes
 
   });
 
@@ -3888,23 +4235,40 @@ function finishCampbellExam() {
   updateCampbellChapterScreen();
 
 
-  changeScreen(
-    campbellExamScreen,
+  if (
     campbellResultScreen
-  );
+  ) {
+
+    changeScreen(
+      campbellExamScreen,
+      campbellResultScreen
+    );
+
+  }
+
+  else {
+
+    changeScreen(
+      campbellExamScreen,
+      campbellScreen
+    );
+
+  }
 
 }
 
 
 /* =========================================================
-   77. RENDER RESULT
+   79. RENDER RESULT
 ========================================================= */
 
 function renderCampbellResult(
   result
 ) {
 
-  /* ICON */
+  /*
+     ICON
+  */
 
   setText(
     "campbellResultIcon",
@@ -3915,7 +4279,9 @@ function renderCampbellResult(
   );
 
 
-  /* TITLE */
+  /*
+     TITLE
+  */
 
   setText(
     "campbellResultTitle",
@@ -3926,18 +4292,24 @@ function renderCampbellResult(
   );
 
 
-  /* MESSAGE */
+  /*
+     MESSAGE
+  */
 
   setText(
     "campbellResultMessage",
 
     result.passed
+
       ? "Отличная работа! Глава 2 завершена."
+
       : "Для прохождения нужно набрать минимум 70%. Повтори материал и попробуй снова."
   );
 
 
-  /* PERCENT */
+  /*
+     PERCENT
+  */
 
   setText(
     "campbellResultPercent",
@@ -3945,18 +4317,15 @@ function renderCampbellResult(
   );
 
 
-  /*
-     Если процент находится
-     внутри отдельного элемента.
-  */
-
   const percentElement =
     $(".campbell-result-percent");
 
 
   if (
     percentElement &&
-    !getById("campbellResultPercent")
+    !getById(
+      "campbellResultPercent"
+    )
   ) {
 
     percentElement.textContent =
@@ -3965,7 +4334,9 @@ function renderCampbellResult(
   }
 
 
-  /* PROGRESS */
+  /*
+     PROGRESS
+  */
 
   setProgress(
     "campbellResultProgress",
@@ -3973,7 +4344,9 @@ function renderCampbellResult(
   );
 
 
-  /* STATS */
+  /*
+     STATS
+  */
 
   setText(
     "campbellResultCorrect",
@@ -3993,9 +4366,12 @@ function renderCampbellResult(
   );
 
 
-  /* REWARD */
+  /*
+     REWARD
+  */
 
-  let rewardText;
+  let rewardText =
+    "";
 
 
   if (
@@ -4008,6 +4384,7 @@ function renderCampbellResult(
 
   }
 
+
   else if (
     result.passed
   ) {
@@ -4016,6 +4393,7 @@ function renderCampbellResult(
       "Экзамен уже был пройден ✓";
 
   }
+
 
   else {
 
@@ -4030,22 +4408,62 @@ function renderCampbellResult(
     rewardText
   );
 
+
+  /*
+     Дополнительные ID,
+     если они есть в HTML.
+  */
+
+  setText(
+    "campbellResultRewardXP",
+    `+${result.rewardXP} XP`
+  );
+
+
+  setText(
+    "campbellResultRewardGenes",
+    `+${result.rewardGenes}`
+  );
+
 }
 
 
 /* =========================================================
-   78. RESULT BUTTONS
+   80. EXAM BACK
 ========================================================= */
 
-const campbellContinueButton =
+onClick(
+  campbellExamBackButton,
+  () => {
+
+    stopCampbellExamTimer();
+
+
+    changeScreen(
+      campbellExamScreen,
+      campbellScreen
+    );
+
+  }
+);
+
+
+/* =========================================================
+   81. RESULT BUTTONS
+========================================================= */
+
+const campbellResultContinueButton =
   getById(
-    "campbellContinueButton"
+    "campbellResultContinueButton"
   );
 
 
-const campbellRetryButton =
+const campbellRetryExamButton =
   getById(
-    "campbellRetryButton"
+    "campbellRetryExamButton"
+  ) ||
+  getById(
+    "campbellResultRetryButton"
   );
 
 
@@ -4055,12 +4473,12 @@ const campbellReviewButton =
   );
 
 
-/* =========================================================
-   79. CONTINUE
-========================================================= */
+/*
+   CONTINUE
+*/
 
 onClick(
-  campbellContinueButton,
+  campbellResultContinueButton,
   () => {
 
     updateCampbellChapterScreen();
@@ -4075,12 +4493,12 @@ onClick(
 );
 
 
-/* =========================================================
-   80. RETRY
-========================================================= */
+/*
+   RETRY
+*/
 
 onClick(
-  campbellRetryButton,
+  campbellRetryExamButton,
   () => {
 
     startCampbellExam();
@@ -4089,20 +4507,33 @@ onClick(
 );
 
 
-/* =========================================================
-   81. REVIEW
-========================================================= */
+/*
+   REVIEW
+
+   Сам экран разбора продолжим
+   в следующей части.
+*/
 
 onClick(
   campbellReviewButton,
   () => {
 
-    renderCampbellReview();
+    if (
+      typeof openCampbellReview ===
+      "function"
+    ) {
+
+      openCampbellReview();
+
+      return;
+
+    }
 
 
-    changeScreen(
-      campbellResultScreen,
-      campbellReviewScreen
+    showGroundToast(
+      "Разбор",
+      "Разбор ответов скоро откроется.",
+      "📖"
     );
 
   }
@@ -4110,251 +4541,233 @@ onClick(
 
 
 /* =========================================================
-   82. RENDER REVIEW
+   END PART 4
+
+   ↓ PART 5 ВСТАВЛЯЕМ ПРЯМО ПОД ЭТИМ ↓
+========================================================= */
+/* =========================================================
+   GROUND — APP.JS
+   PART 5
+   EXAM REVIEW + LESSON COMPLETE + RESTORE STATE
 ========================================================= */
 
-function renderCampbellReview() {
 
-  const container =
-    getById(
-      "campbellReviewQuestions"
+/* =========================================================
+   82. REVIEW ELEMENTS
+========================================================= */
+
+
+
+const campbellReviewList =
+  getById("campbellReviewList") ||
+  getById("campbellReviewContent");
+
+const campbellReviewBackButton =
+  getById("campbellReviewBackButton");
+
+const campbellReviewFinishButton =
+  getById("campbellReviewFinishButton");
+
+
+/* =========================================================
+   83. OPEN REVIEW
+========================================================= */
+
+function openCampbellReview() {
+
+  if (!campbellReviewScreen) {
+
+    showGroundToast(
+      "Разбор ответов",
+      "Экран разбора пока не найден в HTML.",
+      "📖"
     );
 
-
-  if (!container) {
     return;
   }
 
 
-  container.innerHTML =
+  renderCampbellReview();
+
+
+  changeScreen(
+    campbellResultScreen,
+    campbellReviewScreen
+  );
+
+}
+
+
+/* =========================================================
+   84. RENDER REVIEW
+========================================================= */
+
+function renderCampbellReview() {
+
+  if (!campbellReviewList) {
+    return;
+  }
+
+
+  campbellReviewList.innerHTML =
     "";
 
 
-  const total =
-    campbellExamQuestions.length;
+  const savedAnswers =
+    campbellExamState.answers;
 
 
-  const correct =
-    campbellExamState.correctAnswers;
+  campbellExamQuestions.forEach(
+    (question, index) => {
 
-
-  const percent =
-    Math.round(
-      (correct / total) * 100
-    );
-
-
-  setText(
-    "campbellReviewScore",
-    `${correct}/${total}`
-  );
-
-
-  setProgress(
-    "campbellReviewProgress",
-    percent
-  );
-
-
-  campbellExamState.answers.forEach(
-    (answerData, reviewIndex) => {
-
-      const question =
-        campbellExamQuestions[
-          answerData.questionIndex
-        ];
-
-
-      if (!question) {
-        return;
-      }
-
-
-      const block =
-        document.createElement(
-          "article"
+      const saved =
+        savedAnswers.find(
+          (item) =>
+            item.questionIndex === index
         );
 
 
-      block.className =
-        "campbell-theory-block";
+      const selectedIndex =
+        saved
+          ? saved.selected
+          : null;
 
 
-      /* NUMBER */
-
-      const label =
-        document.createElement(
-          "span"
-        );
+      const isCorrect =
+        selectedIndex ===
+        question.correct;
 
 
-      label.className =
-        "small-label";
+      const card =
+        document.createElement("article");
 
 
-      label.textContent =
-        `ВОПРОС ${reviewIndex + 1}`;
+      card.className =
+        "campbell-review-card";
 
 
-      /* QUESTION */
-
-      const title =
-        document.createElement(
-          "h2"
-        );
-
-
-      title.textContent =
-        question.question;
-
-
-      /* USER ANSWER */
-
-      const userAnswer =
-        document.createElement(
-          "div"
-        );
-
-
-      userAnswer.className =
-        answerData.isCorrect
-          ? "campbell-review-answer correct"
-          : "campbell-review-answer wrong";
-
-
-      const userLabel =
-        document.createElement(
-          "strong"
-        );
-
-
-      userLabel.textContent =
-        answerData.isCorrect
-          ? "ТВОЙ ОТВЕТ ✓"
-          : "ТВОЙ ОТВЕТ ✕";
-
-
-      const userText =
-        document.createElement(
-          "p"
-        );
-
-
-      userText.textContent =
-        question.answers[
-          answerData.selected
-        ];
-
-
-      userAnswer.append(
-        userLabel,
-        userText
+      card.classList.add(
+        isCorrect
+          ? "correct"
+          : "wrong"
       );
 
 
-      block.append(
-        label,
-        title,
+      const title =
+        document.createElement("h3");
+
+
+      title.textContent =
+        `${index + 1}. ${question.question}`;
+
+
+      card.appendChild(
+        title
+      );
+
+
+      /*
+         USER ANSWER
+      */
+
+      const userAnswer =
+        document.createElement("p");
+
+
+      userAnswer.className =
+        "campbell-review-user-answer";
+
+
+      if (
+        selectedIndex !== null &&
+        question.answers[selectedIndex]
+      ) {
+
+        userAnswer.textContent =
+          `Твой ответ: ${question.answers[selectedIndex]}`;
+
+      }
+
+      else {
+
+        userAnswer.textContent =
+          "Твой ответ: нет ответа";
+
+      }
+
+
+      card.appendChild(
         userAnswer
       );
 
 
-      /* CORRECT ANSWER */
+      /*
+         CORRECT ANSWER
+      */
 
-      if (
-        !answerData.isCorrect
-      ) {
-
-        const correctBox =
-          document.createElement(
-            "div"
-          );
+      const correctAnswer =
+        document.createElement("p");
 
 
-        correctBox.className =
-          "campbell-review-correct";
+      correctAnswer.className =
+        "campbell-review-correct-answer";
 
 
-        const correctLabel =
-          document.createElement(
-            "strong"
-          );
+      correctAnswer.textContent =
+        `Правильный ответ: ${question.answers[question.correct]}`;
 
 
-        correctLabel.textContent =
-          "ПРАВИЛЬНЫЙ ОТВЕТ";
+      card.appendChild(
+        correctAnswer
+      );
 
 
-        const correctText =
-          document.createElement(
-            "p"
-          );
+      /*
+         RESULT
+      */
+
+      const result =
+        document.createElement("strong");
 
 
-        correctText.textContent =
-          question.answers[
-            question.correct
-          ];
+      result.className =
+        "campbell-review-result";
 
 
-        correctBox.append(
-          correctLabel,
-          correctText
-        );
+      result.textContent =
+        isCorrect
+          ? "✓ Правильно"
+          : "✕ Неправильно";
 
 
-        block.appendChild(
-          correctBox
-        );
-
-      }
+      card.appendChild(
+        result
+      );
 
 
-      /* EXPLANATION */
-
-      const note =
-        document.createElement(
-          "div"
-        );
-
-
-      note.className =
-        "campbell-note";
-
-
-      const noteIcon =
-        document.createElement(
-          "span"
-        );
-
-
-      noteIcon.textContent =
-        "💡";
-
+      /*
+         EXPLANATION
+      */
 
       const explanation =
-        document.createElement(
-          "p"
-        );
+        document.createElement("p");
+
+
+      explanation.className =
+        "campbell-review-explanation";
 
 
       explanation.textContent =
         question.explanation;
 
 
-      note.append(
-        noteIcon,
+      card.appendChild(
         explanation
       );
 
 
-      block.appendChild(
-        note
-      );
-
-
-      container.appendChild(
-        block
+      campbellReviewList.appendChild(
+        card
       );
 
     }
@@ -4364,14 +4777,25 @@ function renderCampbellReview() {
 
 
 /* =========================================================
-   83. REVIEW FINISH
+   85. REVIEW BACK
 ========================================================= */
 
-const campbellReviewFinishButton =
-  getById(
-    "campbellReviewFinishButton"
-  );
+onClick(
+  campbellReviewBackButton,
+  () => {
 
+    changeScreen(
+      campbellReviewScreen,
+      campbellResultScreen
+    );
+
+  }
+);
+
+
+/* =========================================================
+   86. REVIEW FINISH
+========================================================= */
 
 onClick(
   campbellReviewFinishButton,
@@ -4390,948 +4814,585 @@ onClick(
 
 
 /* =========================================================
-   84. EXPOSE FUNCTIONS
-
-   Часть 2 уже проверяет наличие
-   window.startCampbellExam.
+   87. LESSON COMPLETE ELEMENTS
 ========================================================= */
 
-window.startCampbellExam =
-  startCampbellExam;
-
-
-window.stopCampbellExamTimer =
-  stopCampbellExamTimer;
+const lessonCompleteButton =
+  getById(
+    "lessonCompleteButton"
+  );
 
 
 /* =========================================================
-   END PART 4
-========================================================= */
-/* =========================================================
-   GROUND — APP.JS
-   PART 5
-   PROFILE + ACHIEVEMENTS + ACTIVITY
+   88. OPEN LESSON COMPLETE
 ========================================================= */
 
+function openLessonComplete(
+  xp = 0,
+  genes = 0
+) {
 
-/* =========================================================
-   85. PROFILE DATA
-========================================================= */
+  setText(
+    "lessonRewardXP",
+    `+${xp} XP`
+  );
 
-const groundAchievements = [
 
-  {
-    id: "first-step",
-    icon: "🌱",
-    title: "Первый шаг",
-    description: "Заверши первый урок",
+  setText(
+    "lessonRewardGenes",
+    `+${genes}`
+  );
 
-    check() {
-      return groundState.completedLessons >= 1;
-    }
-  },
 
-  {
-    id: "gene-hunter",
-    icon: "🧬",
-    title: "Охотник за генами",
-    description: "Собери 25 генов",
+  if (
+    lessonCompleteScreen
+  ) {
 
-    check() {
-      return groundState.genes >= 25;
-    }
-  },
+    /*
+       Находим активный экран,
+       чтобы корректно его закрыть.
+    */
 
-  {
-    id: "student",
-    icon: "⚡",
-    title: "Исследователь",
-    description: "Получи 100 XP",
+    const activeScreen =
+      $(".screen.active");
 
-    check() {
-      return groundState.xp >= 100;
-    }
-  },
 
-  {
-    id: "campbell-reader",
-    icon: "📖",
-    title: "Читатель Campbell",
-    description: "Заверши теорию главы 2",
+    if (
+      activeScreen &&
+      activeScreen !==
+      lessonCompleteScreen
+    ) {
 
-    check() {
-      return (
-        localStorage.getItem(
-          "campbellChapter2TheoryCompleted"
-        ) === "true"
+      changeScreen(
+        activeScreen,
+        lessonCompleteScreen
       );
+
     }
-  },
 
-  {
-    id: "campbell-master",
-    icon: "🏆",
-    title: "Химия жизни",
-    description: "Пройди экзамен по главе 2",
+    else {
 
-    check() {
-      return (
-        localStorage.getItem(
-          "campbellChapter2ExamCompleted"
-        ) === "true"
+      showScreen(
+        lessonCompleteScreen
       );
-    }
-  },
 
-  {
-    id: "level-5",
-    icon: "⭐",
-    title: "Пятый уровень",
-    description: "Достигни 5 уровня",
-
-    check() {
-      return groundState.level >= 5;
     }
+
   }
-
-];
-
-
-/* =========================================================
-   86. PROFILE LEVEL PROGRESS
-========================================================= */
-
-function getProfileXPData() {
-
-  const xpPerLevel =
-    100;
-
-
-  const xpInLevel =
-    groundState.xp % xpPerLevel;
-
-
-  const percent =
-    Math.round(
-      (xpInLevel / xpPerLevel) * 100
-    );
-
-
-  return {
-
-    current:
-      xpInLevel,
-
-    needed:
-      xpPerLevel,
-
-    percent:
-      percent
-
-  };
 
 }
 
 
 /* =========================================================
-   87. UPDATE PROFILE
+   89. LESSON COMPLETE CONTINUE
+========================================================= */
 
-   Переопределяем функцию из PART 1.
-   Теперь профиль полноценный.
+onClick(
+  lessonCompleteButton,
+  () => {
+
+    updateHomeStats();
+
+
+    buildRoad();
+
+
+    changeScreen(
+      lessonCompleteScreen,
+      homeScreen
+    );
+
+  }
+);
+
+
+/* =========================================================
+   90. COMPLETE ROAD LESSON
+========================================================= */
+
+function completeRoadLesson(
+  lessonId,
+  xp = 20,
+  genes = 5
+) {
+
+  if (!lessonId) {
+    return;
+  }
+
+
+  const completed =
+    getCompletedRoadLessons();
+
+
+  const alreadyCompleted =
+    completed.includes(
+      lessonId
+    );
+
+
+  /*
+     Сохраняем прохождение.
+  */
+
+  if (!alreadyCompleted) {
+
+    completed.push(
+      lessonId
+    );
+
+
+    saveCompletedRoadLessons(
+      completed
+    );
+
+
+    /*
+       Награда только один раз.
+    */
+
+    addXP(
+      xp
+    );
+
+
+    addGenes(
+      genes
+    );
+
+  }
+
+
+  buildRoad();
+
+
+  openLessonComplete(
+    alreadyCompleted
+      ? 0
+      : xp,
+
+    alreadyCompleted
+      ? 0
+      : genes
+  );
+
+}
+
+
+/* =========================================================
+   91. EXPOSE COMPLETE FUNCTION
+
+   player.js сможет вызвать:
+
+   window.completeGroundLesson("9-1", 20, 5);
+========================================================= */
+
+window.completeGroundLesson =
+  completeRoadLesson;
+
+
+/* =========================================================
+   92. CLOSE GENERIC LESSON
+========================================================= */
+
+function closeGroundLesson() {
+
+  if (
+    lessonScreen &&
+    lessonScreen.classList.contains(
+      "active"
+    )
+  ) {
+
+    changeScreen(
+      lessonScreen,
+      homeScreen
+    );
+
+  }
+
+}
+
+
+/*
+   Делаем функцию доступной
+   для player.js.
+*/
+
+window.closeGroundLesson =
+  closeGroundLesson;
+
+
+/* =========================================================
+   93. SAFE CLOSE LESSON BUTTON
+
+   Поддерживаем несколько ID,
+   чтобы старый HTML тоже работал.
+========================================================= */
+
+const appCloseLessonButton =
+  getById("closeLessonButton") ||
+  getById("lessonCloseButton") ||
+  getById("closeLesson");
+
+
+onClick(
+  appCloseLessonButton,
+  closeGroundLesson
+);
+
+
+/* =========================================================
+   94. SAVE APP STATE
+========================================================= */
+
+function saveGroundState() {
+
+  try {
+
+    localStorage.setItem(
+      "groundAppState",
+      JSON.stringify({
+        grade:
+          groundState.grade,
+
+        campbellPage:
+          campbellState.currentPage
+      })
+    );
+
+  }
+
+  catch (error) {
+
+    console.warn(
+      "GROUND: не удалось сохранить состояние.",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   95. RESTORE APP STATE
+========================================================= */
+
+function restoreGroundState() {
+
+  let savedState =
+    null;
+
+
+  try {
+
+    savedState =
+      JSON.parse(
+        localStorage.getItem(
+          "groundAppState"
+        ) || "null"
+      );
+
+  }
+
+  catch (error) {
+
+    console.warn(
+      "GROUND: сохранённое состояние повреждено.",
+      error
+    );
+
+  }
+
+
+  /*
+     RESTORE GRADE
+  */
+
+  if (
+    savedState &&
+    savedState.grade &&
+    roadData[savedState.grade]
+  ) {
+
+    groundState.grade =
+      String(
+        savedState.grade
+      );
+
+  }
+
+
+  /*
+     RESTORE CAMPBELL PAGE
+  */
+
+  if (
+    savedState &&
+    Number.isFinite(
+      Number(
+        savedState.campbellPage
+      )
+    )
+  ) {
+
+    campbellState.currentPage =
+      Math.max(
+        campbellState.startPage,
+
+        Math.min(
+          campbellState.endPage,
+          Number(
+            savedState.campbellPage
+          )
+        )
+      );
+
+  }
+
+
+  /*
+     Синхронизация состояния
+     Campbell с localStorage.
+  */
+
+  campbellState.theoryCompleted =
+    localStorage.getItem(
+      "campbellChapter2TheoryCompleted"
+    ) === "true";
+
+
+  campbellState.examCompleted =
+    localStorage.getItem(
+      "campbellChapter2ExamCompleted"
+    ) === "true";
+
+
+  campbellState.examScore =
+    getNumber(
+      "campbellChapter2ExamScore",
+      0
+    );
+
+}
+
+
+/* =========================================================
+   96. AUTO SAVE
+========================================================= */
+
+window.addEventListener(
+  "beforeunload",
+  () => {
+
+    saveGroundState();
+
+  }
+);
+
+
+document.addEventListener(
+  "visibilitychange",
+  () => {
+
+    if (
+      document.visibilityState ===
+      "hidden"
+    ) {
+
+      saveGroundState();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   97. PROFILE FALLBACK
+
+   Это страховка для проблемы,
+   когда профиль раньше
+   не открывался.
+========================================================= */
+
+const profileNavButtons =
+  $$(
+    '[data-screen="profile"],' +
+    '[data-target="profile"],' +
+    '[data-page="profile"]'
+  );
+
+
+profileNavButtons.forEach(
+  (button) => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        if (!profileScreen) {
+
+          console.warn(
+            "GROUND: #profileScreen не найден."
+          );
+
+          return;
+
+        }
+
+
+        const activeScreen =
+          $(".screen.active");
+
+
+        changeScreen(
+          activeScreen,
+          profileScreen
+        );
+
+
+        updateProfile();
+
+      }
+    );
+
+  }
+);
+
+
+/* =========================================================
+   98. PROFILE BACK FALLBACK
+========================================================= */
+
+const profileBackButton =
+  getById("profileBackButton");
+
+
+onClick(
+  profileBackButton,
+  () => {
+
+    changeScreen(
+      profileScreen,
+      homeScreen
+    );
+
+  }
+);
+
+
+/* =========================================================
+   99. UPDATE PROFILE
 ========================================================= */
 
 function updateProfile() {
 
-  recalculateLevel();
-
-  updateGlobalStats();
-
-
-  const xpData =
-    getProfileXPData();
+  const genes =
+    getNumber(
+      "groundGenes",
+      groundState.genes || 0
+    );
 
 
-  /* -------------------------
-     LEVEL
-  ------------------------- */
-
-  setText(
-    "profileLevel",
-    groundState.level
-  );
+  const xp =
+    getNumber(
+      "groundXP",
+      groundState.xp || 0
+    );
 
 
-  /* -------------------------
-     XP
-  ------------------------- */
-
-  setText(
-    "profileXP",
-    groundState.xp
-  );
+  const level =
+    Math.floor(
+      xp / 100
+    ) + 1;
 
 
-  setText(
-    "profileXPText",
-    `${xpData.current} / ${xpData.needed} XP`
-  );
+  const completedLessons =
+    getCompletedRoadLessons()
+      .length;
 
-
-  setProgress(
-    "profileXPProgress",
-    xpData.percent
-  );
-
-
-  /* -------------------------
-     GENES
-  ------------------------- */
 
   setText(
     "profileGenes",
-    groundState.genes
+    genes
   );
 
-
-  /* -------------------------
-     STREAK
-  ------------------------- */
 
   setText(
-    "profileStreak",
-    groundState.streak
+    "profileXP",
+    xp
   );
 
-
-  /* -------------------------
-     COMPLETED
-  ------------------------- */
 
   setText(
-    "profileCompletedLessons",
-    groundState.completedLessons
+    "profileLevel",
+    level
   );
 
 
-  /* -------------------------
-     GRADE
-  ------------------------- */
+  setText(
+    "profileLessons",
+    completedLessons
+  );
+
 
   setText(
     "profileGrade",
     `${groundState.grade} класс`
   );
 
-
-  /* -------------------------
-     ACHIEVEMENTS
-  ------------------------- */
-
-  renderAchievements();
-
-
-  /* -------------------------
-     ACTIVITY
-  ------------------------- */
-
-  renderProfileActivity();
-
 }
 
 
 /* =========================================================
-   88. FIND ACHIEVEMENTS CONTAINER
+   100. UPDATE HOME
 ========================================================= */
 
-function getAchievementsContainer() {
-
-  return (
-    getById("achievementsList") ||
-    getById("profileAchievements") ||
-    $(".achievements-list")
-  );
-
-}
-
-
-/* =========================================================
-   89. RENDER ACHIEVEMENTS
-========================================================= */
-
-function renderAchievements() {
-
-  const container =
-    getAchievementsContainer();
-
-
-  if (!container) {
-    return;
-  }
-
-
-  container.innerHTML =
-    "";
-
-
-  let unlockedCount =
-    0;
-
-
-  groundAchievements.forEach(
-    (achievement) => {
-
-      const unlocked =
-        achievement.check();
-
-
-      if (unlocked) {
-
-        unlockedCount += 1;
-
-      }
-
-
-      const card =
-        document.createElement("div");
-
-
-      card.className =
-        "achievement-card";
-
-
-      if (unlocked) {
-
-        card.classList.add(
-          "unlocked"
-        );
-
-      }
-
-
-      /* ICON */
-
-      const icon =
-        document.createElement("div");
-
-
-      icon.className =
-        "achievement-icon";
-
-
-      icon.textContent =
-        unlocked
-          ? achievement.icon
-          : "🔒";
-
-
-      /* INFO */
-
-      const info =
-        document.createElement("div");
-
-
-      info.className =
-        "achievement-info";
-
-
-      const title =
-        document.createElement("strong");
-
-
-      title.textContent =
-        achievement.title;
-
-
-      const description =
-        document.createElement("p");
-
-
-      description.textContent =
-        achievement.description;
-
-
-      info.append(
-        title,
-        description
-      );
-
-
-      /* STATUS */
-
-      const status =
-        document.createElement("span");
-
-
-      status.className =
-        "achievement-status";
-
-
-      status.textContent =
-        unlocked
-          ? "✓"
-          : "";
-
-
-      card.append(
-        icon,
-        info,
-        status
-      );
-
-
-      container.appendChild(
-        card
-      );
-
-    }
-  );
-
-
-  setText(
-    "achievementCount",
-    `${unlockedCount}/${groundAchievements.length}`
-  );
-
-}
-
-
-/* =========================================================
-   90. ACTIVITY STORAGE
-========================================================= */
-
-function getActivityData() {
-
-  try {
-
-    const saved =
-      localStorage.getItem(
-        "groundActivity"
-      );
-
-
-    if (!saved) {
-
-      return {};
-
-    }
-
-
-    const parsed =
-      JSON.parse(saved);
-
-
-    if (
-      typeof parsed !== "object" ||
-      parsed === null
-    ) {
-
-      return {};
-
-    }
-
-
-    return parsed;
-
-  }
-
-  catch (error) {
-
-    console.error(
-      "GROUND: activity data error",
-      error
-    );
-
-
-    return {};
-
-  }
-
-}
-
-
-/* =========================================================
-   91. SAVE ACTIVITY
-========================================================= */
-
-function saveActivityData(data) {
-
-  localStorage.setItem(
-    "groundActivity",
-    JSON.stringify(data)
-  );
-
-}
-
-
-/* =========================================================
-   92. LOCAL DATE KEY
-
-   Формат:
-   YYYY-MM-DD
-========================================================= */
-
-function getLocalDateKey(date = new Date()) {
-
-  const year =
-    date.getFullYear();
-
-
-  const month =
-    String(
-      date.getMonth() + 1
-    ).padStart(2, "0");
-
-
-  const day =
-    String(
-      date.getDate()
-    ).padStart(2, "0");
-
-
-  return `${year}-${month}-${day}`;
-
-}
-
-
-/* =========================================================
-   93. REGISTER ACTIVITY
-
-   Вызываем при завершении урока,
-   теории или экзамена.
-========================================================= */
-
-function registerGroundActivity(
-  amount = 1
-) {
-
-  const activity =
-    getActivityData();
-
-
-  const today =
-    getLocalDateKey();
-
-
-  activity[today] =
-    (
-      Number(activity[today]) ||
-      0
-    ) + amount;
-
-
-  saveActivityData(
-    activity
-  );
-
-
-  updateGroundStreak(
-    activity
-  );
-
-}
-
-
-/* =========================================================
-   94. STREAK CALCULATION
-========================================================= */
-
-function updateGroundStreak(
-  activity = getActivityData()
-) {
-
-  let streak =
-    0;
-
-
-  const date =
-    new Date();
-
-
-  /*
-     Если сегодня активности ещё нет,
-     разрешаем серии продолжаться со вчера.
-  */
-
-  const todayKey =
-    getLocalDateKey(date);
-
-
-  if (!activity[todayKey]) {
-
-    date.setDate(
-      date.getDate() - 1
-    );
-
-  }
-
-
-  while (true) {
-
-    const key =
-      getLocalDateKey(date);
-
-
-    if (!activity[key]) {
-
-      break;
-
-    }
-
-
-    streak += 1;
-
-
-    date.setDate(
-      date.getDate() - 1
-    );
-
-  }
-
-
-  groundState.streak =
-    streak;
-
-
-  saveGroundState();
+function refreshGroundUI() {
 
   updateGlobalStats();
 
-}
-
-
-/* =========================================================
-   95. PROFILE ACTIVITY
-========================================================= */
-
-function renderProfileActivity() {
-
-  const container =
-    getById("profileActivity") ||
-    $(".profile-activity");
-
-
-  if (!container) {
-    return;
-  }
-
-
-  const activity =
-    getActivityData();
-
-
-  container.innerHTML =
-    "";
-
-
-  const dayNames =
-    [
-      "Вс",
-      "Пн",
-      "Вт",
-      "Ср",
-      "Чт",
-      "Пт",
-      "Сб"
-    ];
-
-
-  /*
-     Последние 7 дней.
-  */
-
-  for (
-    let offset = 6;
-    offset >= 0;
-    offset -= 1
-  ) {
-
-    const date =
-      new Date();
-
-
-    date.setDate(
-      date.getDate() - offset
-    );
-
-
-    const key =
-      getLocalDateKey(date);
-
-
-    const amount =
-      Number(
-        activity[key]
-      ) || 0;
-
-
-    const day =
-      document.createElement("div");
-
-
-    day.className =
-      "activity-day";
-
-
-    if (amount > 0) {
-
-      day.classList.add(
-        "active"
-      );
-
-    }
-
-
-    const circle =
-      document.createElement("div");
-
-
-    circle.className =
-      "activity-day-circle";
-
-
-    circle.textContent =
-      amount > 0
-        ? "✓"
-        : "";
-
-
-    const name =
-      document.createElement("span");
-
-
-    name.className =
-      "activity-day-name";
-
-
-    name.textContent =
-      dayNames[
-        date.getDay()
-      ];
-
-
-    day.append(
-      circle,
-      name
-    );
-
-
-    container.appendChild(
-      day
-    );
-
-  }
-
-
-  /* MESSAGE */
-
-  const activeDays =
-    Object.values(
-      activity
-    ).filter(
-      (value) =>
-        Number(value) > 0
-    ).length;
-
-
-  if (activeDays === 0) {
-
-    setText(
-      "activityMessage",
-      "Начни обучение — здесь появится твоя активность."
-    );
-
-  }
-
-  else if (
-    groundState.streak >= 3
-  ) {
-
-    setText(
-      "activityMessage",
-      `🔥 Серия ${groundState.streak} дн. Продолжай!`
-    );
-
-  }
-
-  else {
-
-    setText(
-      "activityMessage",
-      "Хорошее начало. Продолжай заниматься каждый день."
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   96. CAMPBELL ACTIVITY FIX
-
-   Если теория уже завершена,
-   сохраняем специальный флаг,
-   чтобы не записывать её повторно.
-========================================================= */
-
-function registerCampbellTheoryActivity() {
-
-  const key =
-    "campbellChapter2ActivityRegistered";
-
-
-  if (
-    localStorage.getItem(key) ===
-    "true"
-  ) {
-
-    return;
-
-  }
-
-
-  registerGroundActivity(1);
-
-
-  localStorage.setItem(
-    key,
-    "true"
-  );
-
-}
-
-
-/* =========================================================
-   97. CAMPBELL EXAM ACTIVITY
-========================================================= */
-
-function registerCampbellExamActivity() {
-
-  const key =
-    "campbellChapter2ExamActivityRegistered";
-
-
-  if (
-    localStorage.getItem(key) ===
-    "true"
-  ) {
-
-    return;
-
-  }
-
-
-  registerGroundActivity(1);
-
-
-  localStorage.setItem(
-    key,
-    "true"
-  );
-
-}
-
-
-/* =========================================================
-   98. SYNC EXISTING CAMPBELL PROGRESS
-
-   Если пользователь уже завершил Campbell
-   до добавления системы профиля.
-========================================================= */
-
-function syncCampbellProfileProgress() {
-
-  const theoryCompleted =
-    localStorage.getItem(
-      "campbellChapter2TheoryCompleted"
-    ) === "true";
-
-
-  const examCompleted =
-    localStorage.getItem(
-      "campbellChapter2ExamCompleted"
-    ) === "true";
-
-
-  if (theoryCompleted) {
-
-    registerCampbellTheoryActivity();
-
-  }
-
-
-  if (examCompleted) {
-
-    registerCampbellExamActivity();
-
-  }
-
-}
-
-
-/* =========================================================
-   99. COMPLETED LESSON
-========================================================= */
-
-function registerCompletedLesson() {
-
-  groundState.completedLessons +=
-    1;
-
-
-  registerGroundActivity(1);
-
-
-  saveGroundState();
-
-  updateGlobalStats();
+  updateProfile();
 
   buildRoad();
 
+  buildLibrary();
+
+  updateCampbellChapterScreen();
+
+  updateCampbellReaderInfo();
+
 }
 
 
 /* =========================================================
-   100. PROFILE AVATAR CLICK
+   101. RESTORE EVERYTHING
 ========================================================= */
 
-const profileAvatar =
-  getById("profileAvatar") ||
-  $(".profile-avatar");
+restoreGroundState();
 
 
-onClick(
-  profileAvatar,
-  () => {
-
-    profileAvatar.classList.remove(
-      "pet"
-    );
+refreshGroundUI();
 
 
-    void profileAvatar.offsetWidth;
+/* =========================================================
+   102. GLOBAL ERROR PROTECTION
 
+   Ошибка в одном обработчике
+   теперь будет видна в консоли.
+========================================================= */
 
-    profileAvatar.classList.add(
-      "pet"
-    );
+window.addEventListener(
+  "error",
+  (event) => {
 
-
-    showGroundToast(
-      "Ground",
-      "Мяу! 🐈‍⬛",
-      "🧬"
-    );
-
-
-    setTimeout(
-      () => {
-
-        profileAvatar.classList.remove(
-          "pet"
-        );
-
-      },
-      900
+    console.error(
+      "GROUND JS ERROR:",
+      event.message,
+      event.filename,
+      event.lineno
     );
 
   }
@@ -5339,74 +5400,1057 @@ onClick(
 
 
 /* =========================================================
-   101. RESET BUTTON
+   103. DEBUG
 
-   Пока НЕ удаляет данные автоматически.
-   Случайным нажатием прогресс не потеряем.
+   После запуска в Console должно быть:
+
+   GROUND: app.js loaded successfully
 ========================================================= */
 
-const resetProgressButton =
-  getById("resetProgressButton");
-
-
-onClick(
-  resetProgressButton,
-  () => {
-
-    showGroundToast(
-      "Прогресс защищён",
-      "Сброс данных пока отключён, чтобы случайно ничего не удалить.",
-      "🛡️"
-    );
-
-  }
+console.log(
+  "GROUND: app.js loaded successfully"
 );
-
-
-/* =========================================================
-   102. SYNC PROFILE
-========================================================= */
-
-syncCampbellProfileProgress();
-
-updateGroundStreak();
-
-updateProfile();
-
-
-/* =========================================================
-   103. EXPORT
-
-   player.js сможет сообщать app.js,
-   что пользователь завершил урок.
-========================================================= */
-
-window.GroundApp = {
-
-  addXP:
-    addXP,
-
-  addGenes:
-    addGenes,
-
-  registerActivity:
-    registerGroundActivity,
-
-  completeLesson:
-    registerCompletedLesson,
-
-  updateProfile:
-    updateProfile,
-
-  showToast:
-    showGroundToast,
-
-  changeScreen:
-    changeScreen
-
-};
 
 
 /* =========================================================
    END PART 5
+
+   ↓ PART 6 ВСТАВЛЯЕМ ПРЯМО ПОД ЭТИМ ↓
 ========================================================= */
+/* =========================================================
+   GROUND — APP.JS
+   PART 6
+   NAVIGATION + TRANSITIONS + FINAL INITIALIZATION
+========================================================= */
+
+
+/* =========================================================
+   104. SCREEN HELPERS
+========================================================= */
+
+function getActiveScreen() {
+
+  return document.querySelector(
+    ".screen.active"
+  );
+
+}
+
+
+function showScreen(
+  targetScreen
+) {
+
+  if (!targetScreen) {
+
+    console.warn(
+      "GROUND: showScreen получил пустой экран."
+    );
+
+    return;
+  }
+
+
+  const currentScreen =
+    getActiveScreen();
+
+
+  changeScreen(
+    currentScreen,
+    targetScreen
+  );
+
+}
+
+
+/* =========================================================
+   105. SAFE SCREEN OPEN
+========================================================= */
+
+function openGroundScreen(
+  screenId
+) {
+
+  const target =
+    getById(
+      screenId
+    );
+
+
+  if (!target) {
+
+    console.warn(
+      `GROUND: экран #${screenId} не найден.`
+    );
+
+    return;
+  }
+
+
+  showScreen(
+    target
+  );
+
+}
+
+
+/* =========================================================
+   106. EXPOSE SCREEN FUNCTIONS
+========================================================= */
+
+window.openGroundScreen =
+  openGroundScreen;
+
+
+window.showGroundScreen =
+  showScreen;
+
+
+/* =========================================================
+   107. BOTTOM NAV FALLBACK
+
+   Поддерживаем разные варианты HTML,
+   которые были в предыдущих версиях Ground.
+========================================================= */
+
+const bottomNavButtons =
+  $$(
+    ".bottom-nav button," +
+    ".bottom-navigation button," +
+    ".nav-item"
+  );
+
+
+bottomNavButtons.forEach(
+  (button) => {
+
+    /*
+       Не создаём второй обработчик
+       для .nav-item из PART 1.
+    */
+
+    if (
+      button.classList.contains(
+        "nav-item"
+      )
+    ) {
+
+      return;
+
+    }
+
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        const target =
+          button.dataset.screen ||
+          button.dataset.target ||
+          button.dataset.page ||
+          button.dataset.nav;
+
+
+        if (!target) {
+          return;
+        }
+
+
+        /*
+           HOME
+        */
+
+        if (
+          target === "home" ||
+          target === "homeScreen"
+        ) {
+
+          showScreen(
+            homeScreen
+          );
+
+          return;
+        }
+
+
+        /*
+           ROAD
+        */
+
+        if (
+          target === "road" ||
+          target === "path"
+        ) {
+
+          showScreen(
+            homeScreen
+          );
+
+
+          setTimeout(
+            () => {
+
+              if (
+                learningRoad
+              ) {
+
+                learningRoad.scrollIntoView({
+                  behavior:
+                    "smooth",
+
+                  block:
+                    "center"
+                });
+
+              }
+
+            },
+            180
+          );
+
+
+          return;
+        }
+
+
+        /*
+           LIBRARY
+        */
+
+        if (
+          target === "library" ||
+          target === "libraryScreen"
+        ) {
+
+          buildLibrary();
+
+
+          showScreen(
+            libraryScreen
+          );
+
+
+          return;
+        }
+
+
+        /*
+           PROFILE
+        */
+
+        if (
+          target === "profile" ||
+          target === "profileScreen"
+        ) {
+
+          updateProfile();
+
+
+          showScreen(
+            profileScreen
+          );
+
+
+          return;
+        }
+
+      }
+    );
+
+  }
+);
+
+
+/* =========================================================
+   108. TRANSITION CLASS
+========================================================= */
+
+function restartScreenAnimation(
+  screen
+) {
+
+  if (!screen) {
+    return;
+  }
+
+
+  screen.classList.remove(
+    "screen-enter"
+  );
+
+
+  void screen.offsetWidth;
+
+
+  screen.classList.add(
+    "screen-enter"
+  );
+
+}
+
+
+/* =========================================================
+   109. OBSERVE SCREEN CHANGES
+
+   Когда появляется .active,
+   запускаем анимацию.
+========================================================= */
+
+
+
+/* =========================================================
+   111. CAMPBELL THEORY DIRECT FALLBACK
+========================================================= */
+
+const theoryDirectButtons =
+  $$(
+    '[data-open="campbell-theory"]'
+  );
+
+
+theoryDirectButtons.forEach(
+  (button) => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        if (
+          !campbellTheoryScreen
+        ) {
+
+          return;
+
+        }
+
+
+        showScreen(
+          campbellTheoryScreen
+        );
+
+
+        renderCampbellPage();
+
+      }
+    );
+
+  }
+);
+
+
+/* =========================================================
+   112. CAMPBELL EXAM DIRECT FALLBACK
+========================================================= */
+
+const examDirectButtons =
+  $$(
+    '[data-open="campbell-exam"]'
+  );
+
+
+examDirectButtons.forEach(
+  (button) => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        startCampbellExam();
+
+      }
+    );
+
+  }
+);
+
+
+/* =========================================================
+   113. READER IMAGE PROTECTION
+========================================================= */
+
+if (
+  campbellReaderImage
+) {
+
+  campbellReaderImage.setAttribute(
+    "draggable",
+    "false"
+  );
+
+
+  campbellReaderImage.addEventListener(
+    "contextmenu",
+    (event) => {
+
+      /*
+         Не блокируем браузер полностью.
+         Просто не запускаем
+         никакую дополнительную логику.
+      */
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   114. CAMPBELL PAGE CACHE PRELOAD
+========================================================= */
+
+function preloadCampbellNeighbours() {
+
+  preloadCampbellPage(
+    campbellState.currentPage - 1
+  );
+
+
+  preloadCampbellPage(
+    campbellState.currentPage + 1
+  );
+
+}
+
+
+/* =========================================================
+   115. SAVE CAMPBELL WHEN PAGE CHANGES
+========================================================= */
+
+function syncCampbellState() {
+
+  localStorage.setItem(
+    "campbellChapter2CurrentPage",
+    String(
+      campbellState.currentPage
+    )
+  );
+
+
+  saveGroundState();
+
+}
+
+
+/* =========================================================
+   116. SAFE GLOBAL STATE SAVE
+
+   Это дополняет PART 1:
+   сохраняем и статистику,
+   и текущее состояние приложения.
+========================================================= */
+
+function saveAllGroundData() {
+
+  /*
+     Основные данные пользователя.
+  */
+
+  localStorage.setItem(
+    "groundSelectedGrade",
+    String(
+      groundState.grade
+    )
+  );
+
+
+  localStorage.setItem(
+    "groundGenes",
+    String(
+      groundState.genes
+    )
+  );
+
+
+  localStorage.setItem(
+    "groundXP",
+    String(
+      groundState.xp
+    )
+  );
+
+
+  localStorage.setItem(
+    "groundLevel",
+    String(
+      groundState.level
+    )
+  );
+
+
+  localStorage.setItem(
+    "groundStreak",
+    String(
+      groundState.streak
+    )
+  );
+
+
+  localStorage.setItem(
+    "groundCompletedLessons",
+    String(
+      groundState.completedLessons
+    )
+  );
+
+
+  /*
+     Campbell.
+  */
+
+  localStorage.setItem(
+    "campbellChapter2CurrentPage",
+    String(
+      campbellState.currentPage
+    )
+  );
+
+
+  /*
+     Общее состояние.
+  */
+
+  localStorage.setItem(
+    "groundAppState",
+    JSON.stringify({
+
+      grade:
+        groundState.grade,
+
+      campbellPage:
+        campbellState.currentPage
+
+    })
+  );
+
+}
+
+
+/* =========================================================
+   117. AUTO SAVE
+========================================================= */
+
+window.addEventListener(
+  "pagehide",
+  () => {
+
+    saveAllGroundData();
+
+  }
+);
+
+
+/* =========================================================
+   118. UPDATE NAVIGATION ACTIVE STATE
+========================================================= */
+
+function refreshNavigationState() {
+
+  const active =
+    getActiveScreen();
+
+
+  if (!active) {
+    return;
+  }
+
+
+  updateBottomNavigation(
+    active
+  );
+
+}
+
+
+/* =========================================================
+   119. ESCAPE KEY
+========================================================= */
+
+document.addEventListener(
+  "keydown",
+  (event) => {
+
+    if (
+      event.key !== "Escape"
+    ) {
+
+      return;
+
+    }
+
+
+    const active =
+      getActiveScreen();
+
+
+    /*
+       THEORY → CAMPBELL
+    */
+
+    if (
+      active ===
+      campbellTheoryScreen
+    ) {
+
+      saveCampbellPage();
+
+
+      showScreen(
+        campbellScreen
+      );
+
+
+      return;
+    }
+
+
+    /*
+       EXAM → CAMPBELL
+    */
+
+    if (
+      active ===
+      campbellExamScreen
+    ) {
+
+      stopCampbellExamTimer();
+
+
+      showScreen(
+        campbellScreen
+      );
+
+
+      return;
+    }
+
+
+    /*
+       RESULT → CAMPBELL
+    */
+
+    if (
+      active ===
+      campbellResultScreen
+    ) {
+
+      showScreen(
+        campbellScreen
+      );
+
+
+      return;
+    }
+
+
+    /*
+       REVIEW → RESULT
+    */
+
+    if (
+      active ===
+      campbellReviewScreen
+    ) {
+
+      showScreen(
+        campbellResultScreen
+      );
+
+
+      return;
+    }
+
+
+    /*
+       CAMPBELL → LIBRARY
+    */
+
+    if (
+      active ===
+      campbellScreen
+    ) {
+
+      showScreen(
+        libraryScreen
+      );
+
+
+      return;
+    }
+
+
+    /*
+       LIBRARY / PROFILE → HOME
+    */
+
+    if (
+      active ===
+        libraryScreen ||
+
+      active ===
+        profileScreen
+    ) {
+
+      showScreen(
+        homeScreen
+      );
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   120. PREVENT DOUBLE CLICKS DURING TRANSITION
+========================================================= */
+
+let groundTransitionLocked =
+  false;
+
+
+function temporarilyLockTransition() {
+
+  if (
+    groundTransitionLocked
+  ) {
+
+    return false;
+
+  }
+
+
+  groundTransitionLocked =
+    true;
+
+
+  setTimeout(
+    () => {
+
+      groundTransitionLocked =
+        false;
+
+    },
+    220
+  );
+
+
+  return true;
+
+}
+
+
+/* =========================================================
+   121. INITIAL SCREEN
+========================================================= */
+
+function initializeGroundScreen() {
+
+  const active =
+    getActiveScreen();
+
+
+  /*
+     Если HTML уже имеет
+     активный экран — оставляем его.
+  */
+
+  if (active) {
+
+    restartScreenAnimation(
+      active
+    );
+
+
+    updateBottomNavigation(
+      active
+    );
+
+
+    return;
+  }
+
+
+  /*
+     Если active нигде нет —
+     открываем welcome.
+  */
+
+  if (
+    welcomeScreen
+  ) {
+
+    welcomeScreen.classList.add(
+      "active"
+    );
+
+
+    restartScreenAnimation(
+      welcomeScreen
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   122. FINAL APP INITIALIZATION
+========================================================= */
+
+function initializeGroundApp() {
+
+  /*
+     STATS
+  */
+
+  updateGlobalStats();
+
+
+  /*
+     ROAD
+  */
+
+  buildRoad();
+
+
+  /*
+     LIBRARY
+  */
+
+  buildLibrary();
+
+
+  /*
+     CAMPBELL
+  */
+
+  updateCampbellChapterScreen();
+
+
+  updateCampbellReaderInfo();
+
+
+  preloadCampbellNeighbours();
+
+
+  /*
+     PROFILE
+  */
+
+  updateProfile();
+
+
+  /*
+     SCREEN
+  */
+
+  initializeGroundScreen();
+
+
+  /*
+     NAV
+  */
+
+  refreshNavigationState();
+
+
+  console.log(
+    "GROUND: initialization complete"
+  );
+
+}
+
+
+/* =========================================================
+   123. START
+========================================================= */
+
+initializeGroundApp();
+
+
+/* =========================================================
+   124. DEBUG INFO
+
+   Если Campbell опять не листается,
+   в Console можно увидеть,
+   нашлись ли элементы.
+========================================================= */
+
+console.log(
+  "GROUND Campbell Reader:",
+  {
+    image:
+      Boolean(
+        campbellReaderImage
+      ),
+
+    previousButton:
+      Boolean(
+        campbellPrevButton
+      ),
+
+    nextButton:
+      Boolean(
+        campbellNextButton
+      ),
+
+    page:
+      campbellState.currentPage
+  }
+);
+
+
+/* =========================================================
+   125. READY
+========================================================= */
+
+console.log(
+  "================================"
+);
+
+console.log(
+  "GROUND APP READY"
+);
+
+console.log(
+  "Campbell pages:",
+  `${campbellState.startPage}-${campbellState.endPage}`
+);
+
+console.log(
+  "Current Campbell page:",
+  campbellState.currentPage
+);
+
+console.log(
+  "================================"
+);
+
+
+/* =========================================================
+   END PART 6
+========================================================= */
+/* =========================================================
+   GROUND — CAMPBELL IMAGE ZOOM
+========================================================= */
+
+const campbellZoomInButton =
+  getById("campbellZoomInButton");
+
+const campbellZoomOutButton =
+  getById("campbellZoomOutButton");
+
+const campbellZoomResetButton =
+  getById("campbellZoomResetButton");
+
+const campbellZoomValue =
+  getById("campbellZoomValue");
+
+
+let campbellZoom = 100;
+
+const CAMPBELL_ZOOM_MIN = 50;
+const CAMPBELL_ZOOM_MAX = 300;
+const CAMPBELL_ZOOM_STEP = 25;
+
+
+/* ========================================
+   ОБНОВИТЬ ZOOM
+======================================== */
+
+function updateCampbellZoom() {
+
+  if (!campbellReaderImage) {
+    return;
+  }
+
+  campbellReaderImage.style.transform =
+    `scale(${campbellZoom / 100})`;
+
+  if (campbellZoomValue) {
+    campbellZoomValue.textContent =
+      `${campbellZoom}%`;
+  }
+
+  if (campbellZoomOutButton) {
+    campbellZoomOutButton.disabled =
+      campbellZoom <= CAMPBELL_ZOOM_MIN;
+  }
+
+  if (campbellZoomInButton) {
+    campbellZoomInButton.disabled =
+      campbellZoom >= CAMPBELL_ZOOM_MAX;
+  }
+
+}
+
+
+/* ========================================
+   ПРИБЛИЗИТЬ +
+======================================== */
+
+onClick(
+  campbellZoomInButton,
+  () => {
+
+    if (
+      campbellZoom >=
+      CAMPBELL_ZOOM_MAX
+    ) {
+      return;
+    }
+
+    campbellZoom +=
+      CAMPBELL_ZOOM_STEP;
+
+    updateCampbellZoom();
+
+  }
+);
+
+
+/* ========================================
+   ОТДАЛИТЬ −
+======================================== */
+
+onClick(
+  campbellZoomOutButton,
+  () => {
+
+    if (
+      campbellZoom <=
+      CAMPBELL_ZOOM_MIN
+    ) {
+      return;
+    }
+
+    campbellZoom -=
+      CAMPBELL_ZOOM_STEP;
+
+    updateCampbellZoom();
+
+  }
+);
+
+
+/* ========================================
+   СБРОСИТЬ
+======================================== */
+
+onClick(
+  campbellZoomResetButton,
+  () => {
+
+    campbellZoom = 100;
+
+    updateCampbellZoom();
+
+  }
+);
+
+
+/* ========================================
+   СТАРТОВОЕ ЗНАЧЕНИЕ
+======================================== */
+
+updateCampbellZoom();

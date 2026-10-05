@@ -2161,17 +2161,18 @@
             ...
             images/campbell/chapter2/page-66.webp
           -->
-
-          <img
-            id="campbellReaderImage"
-            src=""
-            alt="Страница Campbell Biology"
-            draggable="false"
-          >
+<!-- ВОТ СЮДА КНОПКИ -->
 
 
-        </div>
+<img
+  id="campbellReaderImage"
+  src=""
+  alt="Страница Campbell Biology"
+  draggable="false"
+>
 
+
+        \</div>
 
 
         <!-- ОШИБКА ИЗОБРАЖЕНИЯ -->
@@ -2201,26 +2202,58 @@
 
         <!-- КНОПКИ -->
 
-        <div class="campbell-reader-controls">
+        <!-- ЗУМ -->
 
-          <button
-            id="campbellPrevButton"
-            type="button"
-          >
-            ← Предыдущая
-          </button>
+<div class="campbell-zoom-controls">
+
+  <button
+    id="campbellZoomOutButton"
+    type="button"
+  >
+    −
+  </button>
+
+  <span id="campbellZoomValue">
+    100%
+  </span>
+
+  <button
+    id="campbellZoomInButton"
+    type="button"
+  >
+    +
+  </button>
+
+  <button
+    id="campbellZoomResetButton"
+    type="button"
+  >
+    Сбросить
+  </button>
+
+</div>
 
 
-          <button
-            id="campbellNextButtonы"
-            type="button"
-          >
-            Следующая →
-          </button>
+<!-- КНОПКИ -->
 
-        </div>
+<div class="campbell-reader-controls">
+
+  <button
+    id="campbellPrevButton"
+    type="button"
+  >
+    ← Предыдущая
+  </button>
 
 
+  <button
+    id="campbellNextButton"
+    type="button"
+  >
+    Следующая →
+  </button>
+
+</div>
 
         <!-- ЗАВЕРШЕНИЕ ТЕОРИИ -->
 

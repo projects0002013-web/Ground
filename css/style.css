@@ -6824,3 +6824,99 @@ strong {
   }
 
 }
+/* ========================================
+   CAMPBELL — ZOOM
+======================================== */
+
+.campbell-zoom-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  margin: 0 0 16px;
+}
+
+.campbell-zoom-controls button {
+  min-width: 46px;
+  height: 42px;
+
+  padding: 0 14px;
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+
+  background: #171717;
+  color: #ffffff;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease;
+}
+
+.campbell-zoom-controls button:hover {
+  background: #222222;
+}
+
+.campbell-zoom-controls button:active {
+  transform: scale(0.94);
+}
+
+#campbellZoomValue {
+  min-width: 60px;
+
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  text-align: center;
+}
+
+
+/* ОБЛАСТЬ СТРАНИЦЫ */
+
+.campbell-reader-page,
+.campbell-reader-image-wrap,
+.campbell-page-container {
+  overflow: auto;
+
+  max-width: 100%;
+
+  -webkit-overflow-scrolling: touch;
+}
+
+
+/* САМА СТРАНИЦА */
+
+#campbellReaderImage {
+  display: block;
+
+  width: 100%;
+  max-width: none;
+  height: auto;
+
+  margin: 0 auto;
+
+  transform-origin: top center;
+
+  transition:
+    width 0.2s ease;
+}
+/* ========================================
+   CAMPBELL ZOOM FIX
+======================================== */
+
+#campbellReaderImage {
+  transform-origin: top center;
+  transition: transform 0.2s ease;
+}
+#campbellReaderImage {
+  transform-origin: top center;
+  transition: transform 0.2s ease;
+}
