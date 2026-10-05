@@ -665,64 +665,59 @@ document.addEventListener("DOMContentLoaded", () => {
      КНОПКА
   ======================================== */
 
+ if (checkAnswerButton) {
+
   checkAnswerButton.addEventListener(
     "click",
     () => {
 
-      if (
-        selectedAnswer === null
-      ) {
-
+      if (selectedAnswer === null) {
         return;
-
       }
 
-
       if (!answerChecked) {
-
         checkAnswer();
-
       }
 
       else {
-
         nextQuestion();
-
       }
 
     }
   );
 
+} // ← ВАЖНО: закрываем if
 
-  /* ========================================
-     ДАЛЬШЕ
-  ======================================== */
 
-  function nextQuestion() {
+/* ========================================
+   ДАЛЬШЕ
+======================================== */
 
-    if (
-      currentQuestion <
-      currentLesson.questions.length - 1
-    ) {
+function nextQuestion() {
 
-      currentQuestion++;
+  if (
+    currentQuestion <
+    currentLesson.questions.length - 1
+  ) {
 
-      renderQuestion();
+    currentQuestion++;
 
-      window.scrollTo(
-        0,
-        0
-      );
+    renderQuestion();
 
-    }
-
-    else {
-
-      finishLesson();
-
-    }
+    window.scrollTo(
+      0,
+      0
+    );
 
   }
+
+  else {
+
+    finishLesson();
+
+  }
+
+}
 
 
   /* ========================================
@@ -944,9 +939,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
+  if (closeLessonButton) {
+
   closeLessonButton.addEventListener(
     "click",
     closeLesson
   );
+
+}
 
 });
