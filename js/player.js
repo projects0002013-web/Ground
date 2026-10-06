@@ -1,8 +1,13 @@
 /* ==========================================
    GROUND — PLAYER.JS
+   Lesson Player
 ========================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
+
+  /* ========================================
+     DOM
+  ======================================== */
 
   const homeScreen =
     document.getElementById("homeScreen");
@@ -38,6 +43,10 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector(".lesson-category");
 
 
+  /* ========================================
+     СОСТОЯНИЕ УРОКА
+  ======================================== */
+
   let currentLesson = null;
 
   let currentQuestion = 0;
@@ -62,10 +71,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* ========================================
+     ВЫБРАННЫЙ КЛАСС
+  ======================================== */
+
+  function getCurrentGrade() {
+
+    return (
+      localStorage.getItem(
+        "groundSelectedGrade"
+      ) ||
+      localStorage.getItem(
+        "groundGrade"
+      ) ||
+      "9"
+    );
+
+  }
+
+
+  /* ========================================
      ДАТА
   ======================================== */
 
-  function getLocalDateString(date = new Date()) {
+  function getLocalDateString(
+    date = new Date()
+  ) {
 
     return (
       date.getFullYear() +
@@ -97,11 +127,13 @@ document.addEventListener("DOMContentLoaded", () => {
           ) || "[]"
         );
 
+      if (
+        Array.isArray(data)
+      ) {
 
-      if (Array.isArray(data)) {
         return data;
-      }
 
+      }
 
       return [];
 
@@ -121,7 +153,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const today =
       getLocalDateString();
 
-
     const activity =
       getActivityHistory();
 
@@ -134,11 +165,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-
-    /*
-      Храним последние 365
-      активных дат.
-    */
 
     const cleaned =
       activity
@@ -178,21 +204,14 @@ document.addEventListener("DOMContentLoaded", () => {
       );
 
 
-    /* записываем активность */
-
     saveActivityToday();
 
-
-    /* первый день */
 
     if (!lastDate) {
 
       streak = 1;
 
     }
-
-
-    /* сегодня уже занимались */
 
     else if (
       lastDate === today
@@ -201,7 +220,6 @@ document.addEventListener("DOMContentLoaded", () => {
       return streak;
 
     }
-
 
     else {
 
@@ -229,8 +247,6 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
 
-      /* вчера */
-
       if (
         difference === 1
       ) {
@@ -239,9 +255,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       }
 
-
-      /* пропущен день */
-
       else if (
         difference > 1
       ) {
@@ -249,7 +262,6 @@ document.addEventListener("DOMContentLoaded", () => {
         streak = 1;
 
       }
-
 
       else {
 
@@ -278,6 +290,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* ========================================
+     🧬 ГЕНЫ
+  ======================================== */
+
+  function updateLessonGenes() {
+
+    if (!lessonGenes) {
+      return;
+    }
+
+
+    const genes =
+      Number(
+        localStorage.getItem(
+          "groundGenes"
+        ) || 0
+      );
+
+
+    lessonGenes.textContent =
+      genes;
+
+  }
+
+
+  /* ========================================
      ОТКРЫТЬ УРОК
   ======================================== */
 
@@ -285,9 +322,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function (lessonId = 1) {
 
       const grade =
-        localStorage.getItem(
-          "groundGrade"
-        ) || "9";
+        getCurrentGrade();
 
 
       if (
@@ -304,10 +339,14 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
 
+      const numericLessonId =
+        Number(lessonId);
+
+
       const lesson =
         window.GroundDB.getLesson(
           grade,
-          lessonId
+          numericLessonId
         );
 
 
@@ -326,7 +365,7 @@ document.addEventListener("DOMContentLoaded", () => {
         lesson;
 
       currentLessonId =
-        Number(lessonId);
+        numericLessonId;
 
       currentQuestion =
         0;
@@ -353,7 +392,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
       document
-        .querySelectorAll(".screen")
+        .querySelectorAll(
+          ".screen"
+        )
         .forEach(screen => {
 
           screen.classList.remove(
@@ -361,6 +402,17 @@ document.addEventListener("DOMContentLoaded", () => {
           );
 
         });
+
+
+      if (!lessonScreen) {
+
+        alert(
+          "Ошибка: экран урока не найден."
+        );
+
+        return;
+
+      }
 
 
       lessonScreen.classList.add(
@@ -380,13 +432,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* ========================================
-     ВОПРОС
+     ПОКАЗАТЬ ВОПРОС
   ======================================== */
 
   function renderQuestion() {
 
-    if (!currentLesson) {
+    if (
+      !currentLesson ||
+      !Array.isArray(
+        currentLesson.questions
+      )
+    ) {
+
       return;
+
     }
 
 
@@ -408,24 +467,34 @@ document.addEventListener("DOMContentLoaded", () => {
       false;
 
 
-    checkAnswerButton.disabled =
-      true;
+    if (checkAnswerButton) {
+
+      checkAnswerButton.disabled =
+        true;
+
+      checkAnswerButton.textContent =
+        "Проверить";
+
+    }
 
 
-    checkAnswerButton.textContent =
-      "Проверить";
+    if (explanation) {
+
+      explanation.className =
+        "answer-explanation";
+
+      explanation.innerHTML =
+        "";
+
+    }
 
 
-    explanation.className =
-      "answer-explanation";
+    if (questionTitle) {
 
+      questionTitle.textContent =
+        data.question;
 
-    explanation.innerHTML =
-      "";
-
-
-    questionTitle.textContent =
-      data.question;
+    }
 
 
     if (questionHint) {
@@ -433,6 +502,11 @@ document.addEventListener("DOMContentLoaded", () => {
       questionHint.textContent =
         `Вопрос ${currentQuestion + 1} из ${currentLesson.questions.length} • Выбери один правильный ответ`;
 
+    }
+
+
+    if (!answerContainer) {
+      return;
     }
 
 
@@ -452,13 +526,11 @@ document.addEventListener("DOMContentLoaded", () => {
         button.type =
           "button";
 
-
         button.className =
           "answer-button";
 
 
         button.innerHTML = `
-
           <span class="answer-letter">
             ${letters[index] || index + 1}
           </span>
@@ -466,7 +538,6 @@ document.addEventListener("DOMContentLoaded", () => {
           <span class="answer-text">
             ${answer}
           </span>
-
         `;
 
 
@@ -494,10 +565,8 @@ document.addEventListener("DOMContentLoaded", () => {
     updateProgress();
 
   }
-
-
-  /* ========================================
-     ВЫБОР
+    /* ========================================
+     ВЫБОР ОТВЕТА
   ======================================== */
 
   function selectAnswer(
@@ -514,17 +583,21 @@ document.addEventListener("DOMContentLoaded", () => {
       index;
 
 
-    answerContainer
-      .querySelectorAll(
-        ".answer-button"
-      )
-      .forEach(item => {
+    if (answerContainer) {
 
-        item.classList.remove(
-          "selected"
-        );
+      answerContainer
+        .querySelectorAll(
+          ".answer-button"
+        )
+        .forEach(item => {
 
-      });
+          item.classList.remove(
+            "selected"
+          );
+
+        });
+
+    }
 
 
     button.classList.add(
@@ -532,17 +605,31 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
 
-    checkAnswerButton.disabled =
-      false;
+    if (checkAnswerButton) {
+
+      checkAnswerButton.disabled =
+        false;
+
+    }
 
   }
 
 
   /* ========================================
-     ПРОВЕРКА
+     ПРОВЕРКА ОТВЕТА
   ======================================== */
 
   function checkAnswer() {
+
+    if (
+      !currentLesson ||
+      selectedAnswer === null
+    ) {
+
+      return;
+
+    }
+
 
     const data =
       currentLesson.questions[
@@ -550,14 +637,21 @@ document.addEventListener("DOMContentLoaded", () => {
       ];
 
 
+    if (!data) {
+      return;
+    }
+
+
     answerChecked =
       true;
 
 
     const buttons =
-      answerContainer.querySelectorAll(
-        ".answer-button"
-      );
+      answerContainer
+        ? answerContainer.querySelectorAll(
+            ".answer-button"
+          )
+        : [];
 
 
     buttons.forEach(
@@ -590,9 +684,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
         }
 
+
+        button.disabled =
+          true;
+
       }
     );
 
+
+    /* ======================================
+       ПРАВИЛЬНЫЙ ОТВЕТ
+    ====================================== */
 
     if (
       selectedAnswer ===
@@ -602,59 +704,80 @@ document.addEventListener("DOMContentLoaded", () => {
       correctAnswers++;
 
 
-      explanation.className =
-        "answer-explanation correct-message";
+      if (explanation) {
+
+        explanation.className =
+          "answer-explanation correct-message";
 
 
-      explanation.innerHTML = `
+        explanation.innerHTML = `
+          <strong>
+            Правильно! 🎉
+          </strong>
 
-        <strong>
-          Правильно! 🎉
-        </strong>
+          <br>
 
-        <br>
+          ${data.explanation || ""}
+        `;
 
-        ${data.explanation}
-
-      `;
+      }
 
     }
+
+
+    /* ======================================
+       НЕПРАВИЛЬНЫЙ ОТВЕТ
+    ====================================== */
 
     else {
 
-      explanation.className =
-        "answer-explanation wrong-message";
+      if (explanation) {
+
+        explanation.className =
+          "answer-explanation wrong-message";
 
 
-      explanation.innerHTML = `
+        explanation.innerHTML = `
+          <strong>
+            Не совсем
+          </strong>
 
-        <strong>
-          Не совсем
-        </strong>
+          <br>
 
-        <br>
+          ${data.explanation || ""}
+        `;
 
-        ${data.explanation}
-
-      `;
-
-    }
-
-
-    if (
-      currentQuestion ===
-      currentLesson.questions.length - 1
-    ) {
-
-      checkAnswerButton.textContent =
-        "Завершить урок";
+      }
 
     }
 
-    else {
 
-      checkAnswerButton.textContent =
-        "Продолжить";
+    /* ======================================
+       МЕНЯЕМ КНОПКУ
+    ====================================== */
+
+    if (checkAnswerButton) {
+
+      checkAnswerButton.disabled =
+        false;
+
+
+      if (
+        currentQuestion ===
+        currentLesson.questions.length - 1
+      ) {
+
+        checkAnswerButton.textContent =
+          "Завершить урок";
+
+      }
+
+      else {
+
+        checkAnswerButton.textContent =
+          "Продолжить";
+
+      }
 
     }
 
@@ -662,74 +785,124 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* ========================================
-     КНОПКА
+     ГЛАВНАЯ КНОПКА УРОКА
   ======================================== */
 
- if (checkAnswerButton) {
+  if (checkAnswerButton) {
 
-  checkAnswerButton.addEventListener(
-    "click",
-    () => {
+    checkAnswerButton.addEventListener(
+      "click",
+      () => {
 
-      if (selectedAnswer === null) {
-        return;
-      }
+        /* Ничего не выбрано */
 
-      if (!answerChecked) {
-        checkAnswer();
-      }
+        if (
+          selectedAnswer === null &&
+          !answerChecked
+        ) {
 
-      else {
+          return;
+
+        }
+
+
+        /* Первый клик:
+           проверяем ответ */
+
+        if (!answerChecked) {
+
+          checkAnswer();
+
+          return;
+
+        }
+
+
+        /* Второй клик:
+           следующий вопрос */
+
         nextQuestion();
+
       }
-
-    }
-  );
-
-} // ← ВАЖНО: закрываем if
-
-
-/* ========================================
-   ДАЛЬШЕ
-======================================== */
-
-function nextQuestion() {
-
-  if (
-    currentQuestion <
-    currentLesson.questions.length - 1
-  ) {
-
-    currentQuestion++;
-
-    renderQuestion();
-
-    window.scrollTo(
-      0,
-      0
     );
 
   }
 
-  else {
+
+  /* ========================================
+     СЛЕДУЮЩИЙ ВОПРОС
+  ======================================== */
+
+  function nextQuestion() {
+
+    if (!currentLesson) {
+      return;
+    }
+
+
+    if (
+      currentQuestion <
+      currentLesson.questions.length - 1
+    ) {
+
+      currentQuestion++;
+
+
+      renderQuestion();
+
+
+      window.scrollTo(
+        0,
+        0
+      );
+
+
+      return;
+
+    }
+
+
+    /* Последний вопрос */
 
     finishLesson();
 
   }
 
-}
-
 
   /* ========================================
-     ПРОГРЕСС
+     ПРОГРЕСС УРОКА
   ======================================== */
 
   function updateProgress() {
 
+    if (
+      !progressBar ||
+      !currentLesson
+    ) {
+
+      return;
+
+    }
+
+
+    const total =
+      currentLesson.questions.length;
+
+
+    if (total <= 0) {
+
+      progressBar.style.width =
+        "0%";
+
+      return;
+
+    }
+
+
     const progress =
       (
         currentQuestion /
-        currentLesson.questions.length
+        total
       ) * 100;
 
 
@@ -740,26 +913,72 @@ function nextQuestion() {
 
 
   /* ========================================
-     ГЕНЫ
+     ПРОГРЕСС ДОРОЖКИ
   ======================================== */
 
-  function updateLessonGenes() {
+  function getCompletedRoadLessons() {
 
-    const genes =
-      Number(
-        localStorage.getItem(
-          "groundGenes"
-        ) || 0
-      );
+    try {
+
+      const data =
+        JSON.parse(
+          localStorage.getItem(
+            "groundCompletedRoadLessons"
+          ) || "[]"
+        );
 
 
-    lessonGenes.textContent =
-      genes;
+      return Array.isArray(data)
+        ? data
+        : [];
+
+    }
+
+    catch (error) {
+
+      return [];
+
+    }
 
   }
 
 
-  /* ========================================
+  function completeRoadLesson() {
+
+    const grade =
+      getCurrentGrade();
+
+
+    const roadLessonId =
+      `${grade}-${currentLessonId}`;
+
+
+    const completed =
+      getCompletedRoadLessons();
+
+
+    if (
+      !completed.includes(
+        roadLessonId
+      )
+    ) {
+
+      completed.push(
+        roadLessonId
+      );
+
+
+      localStorage.setItem(
+        "groundCompletedRoadLessons",
+        JSON.stringify(
+          completed
+        )
+      );
+
+    }
+
+  }
+    /* ========================================
      ЗАВЕРШИТЬ УРОК
   ======================================== */
 
@@ -770,14 +989,18 @@ function nextQuestion() {
     }
 
 
-    progressBar.style.width =
-      "100%";
+    /* Полная полоска прогресса */
+
+    if (progressBar) {
+
+      progressBar.style.width =
+        "100%";
+
+    }
 
 
     const grade =
-      localStorage.getItem(
-        "groundGrade"
-      ) || "9";
+      getCurrentGrade();
 
 
     const completionKey =
@@ -806,7 +1029,10 @@ function nextQuestion() {
       );
 
 
-    /* награда только один раз */
+    /* ======================================
+       НАГРАДА
+       Даём только за первое прохождение
+    ====================================== */
 
     if (!alreadyCompleted) {
 
@@ -842,13 +1068,24 @@ function nextQuestion() {
     }
 
 
-    /* 🔥 серия */
+    /* ======================================
+       ОТМЕЧАЕМ УРОК НА ДОРОЖКЕ
+    ====================================== */
+
+    completeRoadLesson();
+
+
+    /* ======================================
+       🔥 СЕРИЯ
+    ====================================== */
 
     const streak =
       updateStreak();
 
 
-    /* ⭐ уровень */
+    /* ======================================
+       ⭐ УРОВЕНЬ
+    ====================================== */
 
     const level =
       Math.floor(
@@ -865,10 +1102,13 @@ function nextQuestion() {
     updateLessonGenes();
 
 
+    /* ======================================
+       РЕЗУЛЬТАТ
+    ====================================== */
+
     if (!alreadyCompleted) {
 
       alert(
-
         "🎉 Урок завершён!\n\n" +
 
         `Правильных ответов: ${correctAnswers}/${currentLesson.questions.length}\n\n` +
@@ -879,8 +1119,7 @@ function nextQuestion() {
 
         `🔥 Серия: ${streak} дн.\n\n` +
 
-        "🔓 Следующий урок открыт!"
-
+        "🔓 Следующий уровень открыт!"
       );
 
     }
@@ -888,20 +1127,22 @@ function nextQuestion() {
     else {
 
       alert(
-
         "✅ Урок пройден ещё раз!\n\n" +
 
         `Правильных ответов: ${correctAnswers}/${currentLesson.questions.length}\n\n` +
 
         `🔥 Серия: ${streak} дн.`
-
       );
 
     }
 
 
+    /* Возвращаемся назад */
+
     closeLesson();
 
+
+    /* Обновляем весь интерфейс Ground */
 
     if (
       typeof window.updateGroundUI ===
@@ -916,19 +1157,60 @@ function nextQuestion() {
 
 
   /* ========================================
-     ЗАКРЫТЬ
+     ЗАКРЫТЬ УРОК
   ======================================== */
 
   function closeLesson() {
 
-    lessonScreen.classList.remove(
-      "active"
-    );
+    /* Сбрасываем состояние */
+
+    selectedAnswer =
+      null;
+
+    answerChecked =
+      false;
 
 
-    homeScreen.classList.add(
-      "active"
-    );
+    /* Убираем экран урока */
+
+    if (lessonScreen) {
+
+      lessonScreen.classList.remove(
+        "active"
+      );
+
+    }
+
+
+    /* Убираем active со всех экранов,
+       кроме главной */
+
+    document
+      .querySelectorAll(".screen")
+      .forEach(screen => {
+
+        if (
+          screen !== homeScreen
+        ) {
+
+          screen.classList.remove(
+            "active"
+          );
+
+        }
+
+      });
+
+
+    /* Возвращаем главную */
+
+    if (homeScreen) {
+
+      homeScreen.classList.add(
+        "active"
+      );
+
+    }
 
 
     window.scrollTo(
@@ -936,16 +1218,67 @@ function nextQuestion() {
       0
     );
 
+
+    /* Обновляем интерфейс */
+
+    if (
+      typeof window.updateGroundUI ===
+      "function"
+    ) {
+
+      window.updateGroundUI();
+
+    }
+
   }
 
 
+  /* ========================================
+     ✕ КНОПКА ВЫХОДА
+  ======================================== */
+
   if (closeLessonButton) {
 
-  closeLessonButton.addEventListener(
-    "click",
-    closeLesson
+    closeLessonButton.addEventListener(
+      "click",
+      () => {
+
+        closeLesson();
+
+      }
+    );
+
+  }
+
+
+  /* ========================================
+     ESC — ВЫХОД ИЗ УРОКА
+  ======================================== */
+
+  document.addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        event.key === "Escape" &&
+        lessonScreen &&
+        lessonScreen.classList.contains(
+          "active"
+        )
+      ) {
+
+        closeLesson();
+
+      }
+
+    }
   );
 
-}
+
+  /* ========================================
+     ГОТОВО
+  ======================================== */
+
+  updateLessonGenes();
 
 });

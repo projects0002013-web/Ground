@@ -1293,160 +1293,113 @@ function isRoadLessonCompleted(
 /* =========================================================
    31. BUILD ROAD
 ========================================================= */
-
 function buildRoad() {
 
   if (!learningRoad) {
     return;
   }
 
+  const grade = groundState.grade;
+  const lessons = roadData[grade] || [];
+  const completed = getCompletedRoadLessons();
 
-  const grade =
-    groundState.grade;
+  learningRoad.innerHTML = "";
 
+  lessons.forEach((lesson, index) => {
 
-  const lessons =
-    roadData[grade] || [];
+    const previousLesson = lessons[index - 1];
 
+    const previousCompleted =
+      !previousLesson ||
+      completed.includes(previousLesson.id);
 
-  const completed =
-    getCompletedRoadLessons();
+    const unlocked =
+      lesson.unlocked ||
+      previousCompleted;
 
+    const done =
+      completed.includes(lesson.id);
 
-  learningRoad.innerHTML =
-    "";
+    /* Весь уровень */
+    const item =
+      document.createElement("div");
 
+    item.className = "road-item";
 
-  lessons.forEach(
-    (lesson, index) => {
+    if (index % 3 === 1) {
+      item.classList.add("right");
+    }
 
-      const previousLesson =
-        lessons[index - 1];
+    if (index % 3 === 2) {
+      item.classList.add("left");
+    }
 
+    /* Круглая кнопка */
+    const node =
+      document.createElement("button");
 
-      const previousCompleted =
-        !previousLesson ||
-        completed.includes(
-          previousLesson.id
-        );
+    node.type = "button";
+    node.className = "road-node";
+    node.dataset.lessonId = lesson.id;
 
+    if (done) {
+      node.classList.add("completed");
+    }
+    else if (unlocked) {
+      node.classList.add("active");
+    }
+    else {
+      node.classList.add("locked");
+    }
 
-      const unlocked =
-        lesson.unlocked ||
-        previousCompleted;
+    node.innerHTML = `
+      <span class="road-node-icon">
+        ${
+          done
+            ? "✓"
+            : unlocked
+              ? lesson.icon
+              : "🔒"
+        }
+      </span>
+    `;
 
+    /* Название под кружком */
+    const info =
+      document.createElement("div");
 
-      const done =
-        completed.includes(
-          lesson.id
-        );
+    info.className = "road-info";
 
+    info.innerHTML = `
+      <strong>${lesson.title}</strong>
+      <small>${lesson.subtitle}</small>
+    `;
 
-      const item =
-        document.createElement(
-          "button"
-        );
+    node.addEventListener(
+      "click",
+      () => {
 
+        if (!unlocked) {
 
-      item.type =
-        "button";
-
-
-      item.className =
-        "road-level";
-
-
-      item.dataset.lessonId =
-        lesson.id;
-
-
-      if (done) {
-
-        item.classList.add(
-          "completed"
-        );
-
-      }
-
-
-      if (unlocked) {
-
-        item.classList.add(
-          "unlocked"
-        );
-
-      }
-
-      else {
-
-        item.classList.add(
-          "locked"
-        );
-
-      }
-
-
-      item.innerHTML = `
-
-        <span class="road-level-icon">
-          ${
-            done
-              ? "✓"
-              : unlocked
-                ? lesson.icon
-                : "🔒"
-          }
-        </span>
-
-        <span class="road-level-info">
-
-          <strong>
-            ${lesson.title}
-          </strong>
-
-          <small>
-            ${lesson.subtitle}
-          </small>
-
-        </span>
-
-      `;
-
-
-      item.addEventListener(
-        "click",
-        () => {
-
-          if (!unlocked) {
-
-            showGroundToast(
-              "Уровень закрыт",
-              "Сначала пройди предыдущий урок.",
-              "🔒"
-            );
-
-            return;
-          }
-
-
-          openRoadLesson(
-            lesson
+          showGroundToast(
+            "Уровень закрыт",
+            "Сначала пройди предыдущий урок.",
+            "🔒"
           );
 
+          return;
         }
-      );
 
+        openRoadLesson(lesson);
+      }
+    );
 
-      learningRoad.appendChild(
-        item
-      );
+    item.appendChild(node);
+    item.appendChild(info);
 
-    }
-  );
-
+    learningRoad.appendChild(item);
+  });
 }
-
-
 /* =========================================================
    32. OPEN ROAD LESSON
 ========================================================= */
@@ -1871,6 +1824,17 @@ function openCampbellChapter() {
   );
 
 }
+/* Открытие Campbell из новой библиотеки */
+
+const campbellLibraryButton =
+  getById("campbellLibraryButton");
+
+onClick(
+  campbellLibraryButton,
+  () => {
+    openCampbellChapter();
+  }
+);
 
 
 /* =========================================================
