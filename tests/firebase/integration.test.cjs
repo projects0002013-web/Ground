@@ -1,0 +1,184 @@
+const { test, before, after } = require("node:test");
+const assert = require("node:assert/strict"),
+  fs = require("node:fs");
+const {
+  initializeTestEnvironment,
+  assertFails,
+  assertSucceeds,
+} = require("@firebase/rules-unit-testing");
+const { initializeApp, deleteApp } = require("firebase/app");
+const {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithCredential,
+  connectAuthEmulator,
+} = require("firebase/auth");
+const {
+  getFirestore,
+  connectFirestoreEmulator,
+  doc,
+  getDoc,
+  updateDoc,
+  setDoc,
+  serverTimestamp,
+} = require("firebase/firestore");
+const {
+  getFunctions,
+  connectFunctionsEmulator,
+  httpsCallable,
+} = require("firebase/functions");
+const engine = require("../../functions/progress.cjs");
+const PROJECT = "demo-ground";
+let rulesEnv,
+  apps = [];
+async function device(name, subject = "alice") {
+  const app = initializeApp(
+    {
+      apiKey: "demo-emulator-only",
+      authDomain: `${PROJECT}.firebaseapp.com`,
+      projectId: PROJECT,
+      appId: "demo-emulator-only",
+    },
+    name,
+  );
+  apps.push(app);
+  const auth = getAuth(app);
+  connectAuthEmulator(auth, "http://127.0.0.1:9099", { disableWarnings: true });
+  const token = JSON.stringify({
+    sub: subject,
+    email: `${subject}@example.test`,
+    email_verified: true,
+    name: `Student ${subject}`,
+  });
+  await signInWithCredential(auth, GoogleAuthProvider.credential(token));
+  const db = getFirestore(app);
+  connectFirestoreEmulator(db, "127.0.0.1", 8080);
+  const functions = getFunctions(app, "europe-west1");
+  connectFunctionsEmulator(functions, "127.0.0.1", 5001);
+  return {
+    app,
+    auth,
+    db,
+    uid: auth.currentUser.uid,
+    ensure: httpsCallable(functions, "ensureProfile"),
+    record: httpsCallable(functions, "recordAttempt"),
+  };
+}
+function attempt(key, id) {
+  const a = engine.catalog.activities[key];
+  return {
+    id,
+    key,
+    version: a.version,
+    answers: a.questions.map((q, index) => ({ index, selected: q.correct })),
+  };
+}
+before(async () => {
+  rulesEnv = await initializeTestEnvironment({
+    projectId: PROJECT,
+    firestore: {
+      host: "127.0.0.1",
+      port: 8080,
+      rules: fs.readFileSync("firestore.rules", "utf8"),
+    },
+  });
+  await rulesEnv.clearFirestore();
+});
+after(async () => {
+  await Promise.all(apps.map(deleteApp));
+  await rulesEnv.cleanup();
+});
+test("real SDK + Auth/Firestore/Functions emulators: concurrency, replay, isolation and protected rewards", async () => {
+  const laptop = await device("laptop"),
+    phone = await device("phone"),
+    bob = await device("bob", "bob");
+  assert.equal(laptop.uid, phone.uid);
+  assert.notEqual(laptop.uid, bob.uid);
+  await Promise.all([laptop.ensure({}), phone.ensure({}), bob.ensure({})]);
+  const own = doc(laptop.db, "users", laptop.uid);
+  let profile = (await getDoc(own)).data();
+  assert.equal(profile.xp, 0);
+  assert.ok(profile.createdAt.toDate());
+  const a = attempt("8:1", "device-laptop-attempt-0001"),
+    b = attempt("8:1", "device-phone-attempt-00002");
+  const responses = await Promise.all([laptop.record(a), phone.record(b)]);
+  assert.equal(
+    responses.reduce((n, r) => n + r.data.result.rewardXP, 0),
+    30,
+  );
+  profile = (await getDoc(doc(phone.db, "users", phone.uid))).data();
+  assert.equal(profile.xp, 30);
+  assert.equal(profile.genes, 5);
+  assert.equal(profile.level, 1);
+  assert.ok(profile.completed["8:1"]);
+  await Promise.all([laptop.record(a), phone.record(a), laptop.ensure({})]);
+  assert.equal((await getDoc(own)).data().xp, 30);
+  await assertFails(
+    updateDoc(own, { xp: 9999, genes: 9999, updatedAt: serverTimestamp() }),
+  );
+  await assertFails(
+    updateDoc(own, {
+      completed: { "8:2": { percent: 100 } },
+      updatedAt: serverTimestamp(),
+    }),
+  );
+  await assertFails(
+    setDoc(doc(laptop.db, "users", laptop.uid, "attempts", "fake-result"), {
+      result: { passed: true },
+    }),
+  );
+  await assertFails(getDoc(doc(laptop.db, "users", bob.uid)));
+  await assertFails(
+    updateDoc(doc(laptop.db, "users", bob.uid), {
+      nickname: "Stolen",
+      updatedAt: serverTimestamp(),
+    }),
+  );
+  const anon = rulesEnv.unauthenticatedContext().firestore();
+  await assertFails(getDoc(doc(anon, "users", laptop.uid)));
+  await assertSucceeds(
+    updateDoc(own, {
+      selectedGrade: "7",
+      layout: "phone",
+      nickname: "Исследователь",
+      updatedAt: serverTimestamp(),
+    }),
+  );
+  await assertFails(
+    updateDoc(own, { layout: "forged", updatedAt: serverTimestamp() }),
+  );
+  await assertFails(
+    updateDoc(own, { bookRead: [99], updatedAt: serverTimestamp() }),
+  );
+  await assert.rejects(
+    laptop.record({
+      ...attempt("8:2", "forged-reward-attempt-0003"),
+      rewardXP: 100000,
+    }),
+  );
+  await assert.rejects(
+    bob.record(attempt("8:2", "locked-attempt-number-0001")),
+  );
+  const failed = attempt("7:1", "failed-ecosystem-attempt-001");
+  failed.answers = failed.answers.slice(0, 27);
+  const failure = (await laptop.record(failed)).data.result;
+  assert.equal(failure.passed, false);
+  assert.equal(failure.total, 40);
+  assert.equal((await getDoc(own)).data().xp, 30);
+  await laptop.record(attempt("8:2", "second-lesson-attempt-0001"));
+  await laptop.ensure({});
+  profile = (await getDoc(own)).data();
+  assert.equal(profile.xp, 60);
+  assert.equal(profile.genes, 10);
+  assert.equal(profile.nickname, "Исследователь");
+  assert.equal((await getDoc(doc(bob.db, "users", bob.uid))).data().xp, 0);
+  const ledger = await getDoc(
+    doc(laptop.db, "users", laptop.uid, "attempts", a.id),
+  );
+  assert.equal(ledger.data().result.correct, 12);
+  const attacker = {
+    ...attempt("8:3", "spoof-other-user-attempt-01"),
+    uid: bob.uid,
+  };
+  await assert.rejects(laptop.record(attacker));
+});

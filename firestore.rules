@@ -1,0 +1,30 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function owner(uid) { return request.auth != null && request.auth.uid == uid; }
+    function settingsValid(data) {
+      return data.selectedGrade in ['7','8','9','10','11','ent','olympiad']
+        && data.layout in ['auto','laptop','phone']
+        && data.nickname is string && data.nickname.size() <= 40
+        && data.onboarded is bool
+        && data.bookPage is int && data.bookPage >= 0 && data.bookPage < 4
+        && data.scanPage in [47,48]
+        && data.bookRead is list && data.bookRead.size() <= 4
+        && data.bookRead.toSet().hasOnly([0,1,2,3])
+        && data.updatedAt == request.time;
+    }
+    match /users/{uid} {
+      allow read: if owner(uid);
+      allow create, delete: if false;
+      allow update: if owner(uid)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'selectedGrade','layout','nickname','onboarded','bookRead','bookPage','scanPage','updatedAt'
+        ]) && settingsValid(request.resource.data);
+      match /attempts/{id} {
+        allow read: if owner(uid);
+        allow write: if false;
+      }
+    }
+    match /{document=**} { allow read, write: if false; }
+  }
+}

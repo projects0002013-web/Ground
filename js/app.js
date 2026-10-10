@@ -1,9 +1,17 @@
-/* Ground — static study app. All learner data stays in this browser. */
+/* Ground — local study app with optional Firebase account synchronization. */
 (() => {
   "use strict";
   const DB = window.GroundDB;
   const P = window.GroundPlayer;
-  const STORAGE = "ground.v2";
+  let STORAGE = "ground.v2";
+  let account = {
+    user: null,
+    phase: "loading",
+    pending: 0,
+    busy: false,
+    error: "",
+  };
+  let scopeUID = null;
   const app = document.getElementById("app");
   const dialog = document.getElementById("dialog");
   const defaults = () => ({
@@ -28,7 +36,8 @@
   function load() {
     try {
       const value = JSON.parse(localStorage.getItem(STORAGE) || "null");
-      if (!value || value.version !== 2) return migrateLegacy();
+      if (!value || value.version !== 2)
+        return STORAGE === "ground.v2" ? migrateLegacy() : defaults();
       const base = defaults();
       for (const key of [
         "onboarded",
@@ -112,8 +121,57 @@
         }
       }
     }
+    if (!localStorage.getItem("groundXP")) {
+      const oldLevel = Number(localStorage.getItem("groundLevel") || 1);
+      if (Number.isInteger(oldLevel) && oldLevel > 1 && oldLevel <= 10000)
+        base.xp = (oldLevel - 1) * 100;
+    }
+    try {
+      const road = JSON.parse(
+        localStorage.getItem("groundCompletedRoadLessons") || "null",
+      );
+      const ids = Array.isArray(road)
+        ? road
+        : road && Array.isArray(road[base.course])
+          ? road[base.course]
+          : [];
+      for (const value of ids) {
+        const [oldCourse, raw] = String(value).includes(":")
+          ? String(value).split(":")
+          : [base.course, String(value)];
+        if (!["8", "9", "10", "11"].includes(oldCourse)) continue;
+        const oldId = Number(raw),
+          newId = oldCourse === "8" ? { 1: 1, 2: 4 }[oldId] : oldId;
+        if (
+          DB.courses[oldCourse].lessons.some(
+            (l) => l.id === newId && !l.challenge,
+          )
+        )
+          base.completed[`${oldCourse}:${newId}`] = {
+            percent: 100,
+            at: new Date().toISOString(),
+          };
+      }
+    } catch {}
     const last = localStorage.getItem("groundLastStudyDate");
-    if (last && /^\d{4}-\d{2}-\d{2}$/.test(last)) base.days.push(last);
+    if (
+      last &&
+      /^\d{4}-\d{2}-\d{2}$/.test(last) &&
+      Number.isFinite(Date.parse(last))
+    ) {
+      const count = Math.max(
+        1,
+        Math.min(
+          3650,
+          Math.floor(Number(localStorage.getItem("groundStreak") || 1)) || 1,
+        ),
+      );
+      const day = new Date(`${last}T12:00:00`);
+      for (let i = 0; i < count; i++) {
+        base.days.push(P.dayKey(day));
+        day.setDate(day.getDate() - 1);
+      }
+    }
     return base;
   }
   function compatibleCompleted(completed, savedVersions) {
@@ -313,9 +371,10 @@
   const level = () => Math.floor(state.xp / 100) + 1;
   const button = (text, action, options = "") =>
     `<button class="button" data-action="${action}" ${options}>${text}</button>`;
-  function persist() {
+  function persist(sync = true) {
     try {
       localStorage.setItem(STORAGE, JSON.stringify(state));
+      if (sync && account.user) window.GroundCloud.preferences(state);
     } catch {
       if (storageAvailable)
         toast(
@@ -349,6 +408,86 @@
       heading.tabIndex = -1;
       heading.focus({ preventScroll: true });
     }
+  }
+  function cloudChanged(next) {
+    const uid = next.user?.uid || null;
+    const dataChanged = uid !== scopeUID || !!(uid && next.profile);
+    if (uid !== scopeUID) {
+      persist(false);
+      if (scopeUID) {
+        try {
+          localStorage.removeItem(
+            window.GroundCloudProgress.accountKey(scopeUID),
+          );
+        } catch {}
+      }
+      scopeUID = uid;
+      STORAGE = uid ? window.GroundCloudProgress.accountKey(uid) : "ground.v2";
+      Object.assign(state, defaults(), load());
+      if (uid) {
+        state.name = next.user.displayName.slice(0, 40);
+        state.onboarded = true;
+      }
+      if (dialog.open) closeDialog();
+      view = state.onboarded ? "home" : "welcome";
+      window.GroundCloud.setBaseline(state);
+    }
+    account = next;
+    if (uid && next.profile) {
+      Object.assign(
+        state,
+        window.GroundCloudProgress.merge(
+          next.profile,
+          state,
+          next.queue,
+          next.history,
+        ),
+      );
+      const pref = { ...next.profile, ...next.pendingPrefs };
+      if (DB.courses[pref.selectedGrade]) state.course = pref.selectedGrade;
+      if (["auto", "laptop", "phone"].includes(pref.layout))
+        state.layout = pref.layout;
+      state.name = (
+        pref.nickname ||
+        pref.displayName ||
+        next.user.displayName ||
+        "Биолог"
+      ).slice(0, 40);
+      if (Array.isArray(pref.bookRead))
+        state.bookRead = pref.bookRead.filter(
+          (n) => Number.isInteger(n) && n >= 0 && n < 4,
+        );
+      if (
+        Number.isInteger(pref.bookPage) &&
+        pref.bookPage >= 0 &&
+        pref.bookPage < 4
+      )
+        state.bookPage = pref.bookPage;
+      if ([47, 48].includes(pref.scanPage)) state.scanPage = pref.scanPage;
+      reconcileCourseVersions(state, next.profile.courseVersions);
+      window.GroundCloud.setBaseline(state);
+    }
+    if (dataChanged) persist(false);
+    if (view !== "lesson") render();
+  }
+  function accountCard() {
+    const labels = {
+      loading: "Загружаем аккаунт…",
+      syncing: "Сохраняем прогресс…",
+      synced: "Прогресс сохранён в облаке",
+      offline: "Нет сети — попытки сохраняются на устройстве",
+      error: "Синхронизация требует внимания",
+      guest: "Гостевой прогресс хранится на этом устройстве",
+      unconfigured: "Вход пока недоступен",
+    };
+    const status = account.error || labels[account.phase] || labels.loading;
+    if (!account.user)
+      return `<section class="panel account-card"><div><h3>Твои знания с тобой</h3><p>Войди через Google, чтобы продолжить на другом устройстве.</p><p class="account-status" role="status">${e(status)}</p></div><button class="button secondary" data-action="google-login" ${account.busy || ["loading", "unconfigured"].includes(account.phase) ? "disabled" : ""}>${account.busy ? "Открываем Google…" : "Войти через Google"}</button></section>`;
+    const user = account.user;
+    const photo = /^https:\/\//.test(user.photoURL)
+      ? `<img class="account-avatar" src="${attr(user.photoURL)}" referrerpolicy="no-referrer" alt="Аватар Google">`
+      : '<img class="account-avatar" src="images/mascot-head.png" alt="Аватар">';
+    return `<section class="panel account-card"><div class="account-identity">${photo}<div><h3>${e(user.displayName)}</h3><p class="account-email">${e(user.email)}</p><p class="account-status" role="status">${e(status)}${account.pending ? ` · ожидает: ${account.pending}` : ""}</p></div></div><div class="account-actions">${account.phase === "error" || account.pending ? '<button class="text-link" data-action="cloud-retry">Повторить синхронизацию</button>' : ""}<button class="text-link" data-action="import-guest" ${!account.profile ? "disabled" : ""}>Перенести гостевые попытки</button><button class="button secondary small" data-action="google-logout" ${account.busy ? "disabled" : ""}>Выйти из аккаунта</button></div></section>`;
   }
   function brand() {
     return '<span class="brand-symbol" aria-hidden="true">❧</span><span>GROUND<small>ИЗУЧАЙ ЖИВОЕ</small></span>';
@@ -428,7 +567,7 @@
     );
   }
   function welcome() {
-    return `<div class="welcome"><header class="welcome-header"><div class="brand">${brand()}</div><span class="pill">БИОЛОГИЯ В НОВОМ РИТМЕ</span></header><main id="main" class="welcome-body"><div class="welcome-copy"><div class="eyebrow">ДЛЯ ТВОИХ БОЛЬШИХ ОТКРЫТИЙ</div><h1>Жизнь удивляет.<br><em>Пойми, как<br>она устроена.</em></h1><p>Изучай биологию маленькими шагами. Применяй знания, открывай уровни и расти вместе с Ground.</p>${button("Начать своё путешествие →", "choose-course")}<div class="welcome-features"><span>✓ Короткие уроки</span><span>✓ Практика и объяснения</span><span>✓ Твой прогресс</span></div></div><div class="welcome-art"><img src="images/mascot.png" alt="Твой спутник — кот-учёный Ground"><div class="float-chip">🧬 +5 генов за открытие</div><div class="float-chip">✦ С каждым уроком умнее</div></div></main><footer class="welcome-footer"><span>ИЗУЧАЙ. ПОНИМАЙ. ПРИМЕНЯЙ.</span><span>7–11 классы · ЕНТ · Олимпиады</span></footer></div>`;
+    return `<div class="welcome"><header class="welcome-header"><div class="brand">${brand()}</div><span class="pill">БИОЛОГИЯ В НОВОМ РИТМЕ</span></header><main id="main" class="welcome-body"><div class="welcome-copy"><div class="eyebrow">ДЛЯ ТВОИХ БОЛЬШИХ ОТКРЫТИЙ</div><h1>Жизнь удивляет.<br><em>Пойми, как<br>она устроена.</em></h1><p>Изучай биологию маленькими шагами. Применяй знания, открывай уровни и расти вместе с Ground.</p>${button("Начать своё путешествие →", "choose-course")}${accountCard()}<div class="welcome-features"><span>✓ Короткие уроки</span><span>✓ Практика и объяснения</span><span>✓ Твой прогресс</span></div></div><div class="welcome-art"><img src="images/mascot.png" alt="Твой спутник — кот-учёный Ground"><div class="float-chip">🧬 +5 генов за открытие</div><div class="float-chip">✦ С каждым уроком умнее</div></div></main><footer class="welcome-footer"><span>ИЗУЧАЙ. ПОНИМАЙ. ПРИМЕНЯЙ.</span><span>7–11 классы · ЕНТ · Олимпиады</span></footer></div>`;
   }
   function tracks() {
     return `<div class="welcome"><header class="welcome-header"><div class="brand">${brand()}</div><button class="button secondary small" data-action="onboard-back">← Назад</button></header><main id="main" class="onboarding"><div class="page-heading"><div class="eyebrow">ШАГ 1 / ТВОЁ НАПРАВЛЕНИЕ</div><h1>С чего начнём?</h1><p>Выбери путь. Его можно сменить в любой момент.</p></div><div class="cards">${[
@@ -589,7 +728,7 @@
       ],
     ];
     return shell(
-      `${heading("Твои маленькие победы", "Знания растут. И ты вместе с ними.", `<button class="button secondary small" data-action="edit-profile">Настройки</button>`)}<section class="profile-hero"><div class="profile-picture"><img src="images/mascot.png" alt="Кот-учёный Ground"></div><div><div class="eyebrow">ИССЛЕДОВАТЕЛЬ ЖИВОГО</div><h2>${e(state.name)}</h2><p>${e(courseLabel())} · Уровень ${level()}</p></div></section><div class="metrics-grid">${[
+      `${heading("Твои маленькие победы", "Знания растут. И ты вместе с ними.", `<button class="button secondary small" data-action="edit-profile">Настройки</button>`)}${accountCard()}<section class="profile-hero"><div class="profile-picture"><img src="images/mascot.png" alt="Кот-учёный Ground"></div><div><div class="eyebrow">ИССЛЕДОВАТЕЛЬ ЖИВОГО</div><h2>${e(state.name)}</h2><p>${e(courseLabel())} · Уровень ${level()}</p></div></section><div class="metrics-grid">${[
         ["✦", state.xp, "опыта XP"],
         ["🧬", state.genes, "генов"],
         ["🔥", streak, "дней подряд"],
@@ -601,7 +740,7 @@
         )
         .join(
           "",
-        )}</div>${progressCard()}<div class="two-col section"><section class="panel"><div class="panel-header"><h2>Достижения</h2><small class="muted">${achievements.filter((a) => a[3]).length}/4</small></div>${achievements.map(([icon, title, text, done]) => `<div class="achievement ${done ? "" : "locked"}"><div class="achievement-icon">${icon}</div><div><strong>${title}</strong><p>${done ? "✓ Получено" : text}</p></div></div>`).join("")}</section><section><div class="panel-header"><h2>История открытий</h2></div>${historyRows(4)}</section></div><p class="local-note">${storageAvailable ? "Прогресс сохраняется в этом браузере на этом устройстве. Экспортируй резервную копию в настройках, чтобы перенести его." : "Хранилище браузера недоступно. Прогресс сохранится только до закрытия страницы; используй экспорт в настройках."} Облачной регистрации в этой версии нет.</p>`,
+        )}</div>${progressCard()}<div class="two-col section"><section class="panel"><div class="panel-header"><h2>Достижения</h2><small class="muted">${achievements.filter((a) => a[3]).length}/4</small></div>${achievements.map(([icon, title, text, done]) => `<div class="achievement ${done ? "" : "locked"}"><div class="achievement-icon">${icon}</div><div><strong>${title}</strong><p>${done ? "✓ Получено" : text}</p></div></div>`).join("")}</section><section><div class="panel-header"><h2>История открытий</h2></div>${historyRows(4)}</section></div><p class="local-note">${storageAvailable ? "Копия прогресса сохраняется в этом браузере. Резервную копию можно скачать в настройках." : "Хранилище браузера недоступно. Прогресс сохранится только до закрытия страницы; используй экспорт в настройках."} ${account.user ? "Аккаунт синхронизируется через Google. Награды подтверждаются после соединения." : "Для облачного сохранения войди через Google."}</p>`,
     );
   }
   function table(data) {
@@ -620,6 +759,8 @@
   function createSession(lesson, courseKey, kind = "lesson") {
     return {
       key: kind === "book" ? "book:chemistry" : `${courseKey}:${lesson.id}`,
+      attemptId: crypto.randomUUID(),
+      courseVersion: DB.courses[courseKey]?.progressVersion || 1,
       courseKey,
       lessonId: lesson.id,
       title: lesson.title,
@@ -830,7 +971,19 @@
   function finishSession(expired = false) {
     const s = state.session;
     if (!s) return;
-    P.complete(state, s);
+    P.complete(state, account.user ? { ...s, rewardXP: 0, rewardGenes: 0 } : s);
+    state.lastResult.attemptId = s.attemptId || crypto.randomUUID();
+    state.lastResult.courseVersion =
+      s.courseVersion || DB.courses[s.courseKey]?.progressVersion || 1;
+    if (account.user) {
+      state.lastResult.cloudPending = true;
+      try {
+        window.GroundCloud.enqueue(state.lastResult);
+      } catch (error) {
+        state.lastResult.cloudError = error.message;
+        toast(error.message);
+      }
+    }
     state.lastResult.expired = expired;
     view = "result";
     persist();
@@ -864,7 +1017,7 @@
     const practice = r.kind === "practice";
     const positive = r.passed;
     return shell(
-      `<section class="result"><div class="result-symbol" aria-hidden="true">${positive ? "🌱" : "🔬"}</div><div class="eyebrow">${r.expired ? "ВРЕМЯ ЗАВЕРШИЛОСЬ" : practice ? "ТРЕНИРОВКА ЗАВЕРШЕНА" : "ТВОЁ НОВОЕ ОТКРЫТИЕ"}</div><h1>${positive ? "Отличная работа!" : "Ещё немного практики"}</h1><p>${e(r.title)}<br>${positive ? (practice ? "Ты стал на шаг увереннее." : r.rewardXP ? "Знания с тобой. Следующий этап открыт." : "Ты уже проходил это занятие. Отличное повторение!") : "Для прохождения нужно не менее 70% правильных ответов. Разбери ошибки и попробуй ещё раз."}</p><div class="pill">${r.percent}% верных ответов · ${Math.floor((r.durationSeconds || 0) / 60)}:${String((r.durationSeconds || 0) % 60).padStart(2, "0")}</div><div class="result-stats"><div><strong>${r.correct}/${r.total}</strong><small>правильных ответов</small></div><div><strong>+${r.rewardXP}</strong><small>опыта XP</small></div><div><strong>+${r.rewardGenes}</strong><small>генов</small></div></div><div class="result-actions">${button(positive ? "Продолжить путь →" : "Попробовать ещё раз", "result-next")}<button class="button secondary" data-action="review-result">Разобрать ответы</button></div></section>`,
+      `<section class="result"><div class="result-symbol" aria-hidden="true">${positive ? "🌱" : "🔬"}</div><div class="eyebrow">${r.expired ? "ВРЕМЯ ЗАВЕРШИЛОСЬ" : practice ? "ТРЕНИРОВКА ЗАВЕРШЕНА" : "ТВОЁ НОВОЕ ОТКРЫТИЕ"}</div><h1>${positive ? "Отличная работа!" : "Ещё немного практики"}</h1><p>${e(r.title)}<br>${r.cloudError ? e(r.cloudError) : positive ? (practice ? "Ты стал на шаг увереннее." : r.cloudPending ? "Ответы сохранены. Награда появится после синхронизации." : r.rewardXP ? "Знания с тобой. Следующий этап открыт." : "Ты уже проходил это занятие. Отличное повторение!") : "Для прохождения нужно не менее 70% правильных ответов. Разбери ошибки и попробуй ещё раз."}</p><div class="pill">${r.percent}% верных ответов · ${Math.floor((r.durationSeconds || 0) / 60)}:${String((r.durationSeconds || 0) % 60).padStart(2, "0")}</div><div class="result-stats"><div><strong>${r.correct}/${r.total}</strong><small>правильных ответов</small></div><div><strong>+${r.rewardXP}</strong><small>опыта XP</small></div><div><strong>+${r.rewardGenes}</strong><small>генов</small></div></div><div class="result-actions">${button(positive ? "Продолжить путь →" : "Попробовать ещё раз", "result-next")}<button class="button secondary" data-action="review-result">Разобрать ответы</button></div></section>`,
     );
   }
   function reviewView() {
@@ -915,7 +1068,7 @@
   }
   function editProfile() {
     openDialog(
-      `<h2>Твой профиль</h2><p>Имя и резервная копия прогресса. Данные хранятся только на твоём устройстве.</p><form id="profile-form"><label for="profile-name">Как к тебе обращаться?</label><input id="profile-name" class="input" maxlength="40" required value="${attr(state.name)}"><fieldset class="layout-settings"><legend>Вид интерфейса</legend><div class="layout-options">${[
+      `<h2>Твой профиль</h2><p>${account.user ? "Настройки синхронизируются с аккаунтом. Незавершённый урок сохраняется на этом устройстве." : "Имя и резервная копия прогресса. Данные хранятся на твоём устройстве."}</p><form id="profile-form"><label for="profile-name">Как к тебе обращаться?</label><input id="profile-name" class="input" maxlength="40" required value="${attr(state.name)}"><fieldset class="layout-settings"><legend>Вид интерфейса</legend><div class="layout-options">${[
         ["auto", "Авто", "По размеру экрана"],
         ["laptop", "Ноутбук", "Меню слева"],
         ["phone", "Телефон", "Меню снизу"],
@@ -1017,6 +1170,54 @@
   function handleAction(node) {
     const action = node.dataset.action;
     switch (action) {
+      case "google-login":
+        window.GroundAuth.signIn();
+        break;
+      case "google-logout":
+        if (account.pending)
+          toast(
+            "Несинхронизированные попытки останутся для следующего входа в этот аккаунт.",
+          );
+        window.GroundAuth.signOut();
+        break;
+      case "cloud-retry":
+        window.GroundCloud.retry();
+        break;
+      case "import-guest": {
+        let guest;
+        try {
+          guest = JSON.parse(localStorage.getItem("ground.v2") || "null");
+        } catch {
+          guest = null;
+        }
+        if (!guest?.history?.length) {
+          toast(
+            "Нет гостевых попыток для переноса. Гостевой прогресс остаётся на устройстве.",
+          );
+          break;
+        }
+        openDialog(
+          `<h2>Перенести гостевые попытки?</h2><p>Сохраним историю ответов в этом аккаунте и заново проверим результаты. Прежний гостевой профиль останется на устройстве. Баллы без истории ответов не переносятся.</p><div class="dialog-actions"><button class="button secondary" data-action="close-dialog">Отмена</button><button class="button" id="confirm-guest-import">Перенести</button></div>`,
+        );
+        document.getElementById("confirm-guest-import").addEventListener(
+          "click",
+          () => {
+            try {
+              const imported = window.GroundCloud.importGuest(
+                validateImport(guest),
+              );
+              closeDialog();
+              toast(
+                `В очереди: ${imported.imported}. Не подходят текущим материалам: ${imported.skipped}.`,
+              );
+            } catch (error) {
+              toast(error.message);
+            }
+          },
+          { once: true },
+        );
+        break;
+      }
       case "nav":
         navigate(node.dataset.view);
         break;
@@ -1153,6 +1354,12 @@
         document.getElementById("import-file")?.click();
         break;
       case "reset-confirm":
+        if (account.user) {
+          toast(
+            "Для сброса гостевого прогресса сначала выйди из аккаунта. Облачные достижения сохраняются.",
+          );
+          break;
+        }
         openDialog(
           `<h2>Начать с чистого листа?</h2><p>Все уроки, награды и история будут удалены с этого устройства. Сначала экспортируй прогресс, если хочешь сохранить копию.</p><div class="dialog-actions"><button class="button secondary" data-action="close-dialog">Оставить</button><button class="button danger" data-action="reset">Удалить прогресс</button></div>`,
         );
@@ -1210,11 +1417,30 @@
       if (file.size > 2 * 1024 * 1024) throw new Error("size");
       const imported = validateImport(JSON.parse(await file.text()));
       openDialog(
-        `<h2>Восстановить прогресс?</h2><p>Копия профиля «${e(imported.name)}» заменит текущий прогресс: ${imported.xp} XP, ${Object.keys(imported.completed).length} пройденных занятий.</p><div class="dialog-actions"><button class="button secondary" data-action="close-dialog">Отмена</button><button class="button" id="confirm-import">Восстановить</button></div>`,
+        `<h2>Восстановить прогресс?</h2><p>${account.user ? `Ответы из копии «${e(imported.name)}» будут отправлены на серверную проверку. Облачные XP и гены сохранятся; непроверяемые старые награды не переносятся.` : `Копия профиля «${e(imported.name)}» заменит текущий прогресс: ${imported.xp} XP, ${Object.keys(imported.completed).length} пройденных занятий.`}</p><div class="dialog-actions"><button class="button secondary" data-action="close-dialog">Отмена</button><button class="button" id="confirm-import">Восстановить</button></div>`,
       );
       document.getElementById("confirm-import").addEventListener(
         "click",
         () => {
+          if (account.user) {
+            let count;
+            try {
+              ({ imported: count } = window.GroundCloud.importGuest(imported));
+            } catch (error) {
+              toast(error.message);
+              return;
+            }
+            state.name = imported.name;
+            state.course = imported.course;
+            state.layout = imported.layout;
+            persist();
+            closeDialog();
+            navigate("profile");
+            toast(
+              `В очереди на проверку: ${count}. Облачные награды сохраняются.`,
+            );
+            return;
+          }
           Object.assign(state, imported);
           persist();
           closeDialog();
@@ -1245,8 +1471,12 @@
       navigate("home");
     }
   });
-  window.addEventListener("pagehide", persist);
+  window.addEventListener("pagehide", () => persist());
   render();
+  window.GroundCloud.subscribe(cloudChanged);
+  window.GroundCloud.start();
+  if ("serviceWorker" in navigator)
+    navigator.serviceWorker.register("sw.js").catch(() => {});
   if (!storageAvailable)
     toast(
       "Прогресс не прочитан. Можно продолжить и экспортировать копию в профиле.",

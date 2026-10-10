@@ -2307,3 +2307,50 @@ dialog .layout-option {
 .lesson-bottom .button {
   white-space: nowrap;
 }
+
+.account-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin: 20px 0;
+}
+.account-card > div {
+  min-width: 0;
+}
+.account-card p {
+  margin-top: 7px;
+}
+.account-identity {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.account-identity > div {
+  min-width: 0;
+}
+.account-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex: 0 0 52px;
+}
+.account-email,
+.account-status {
+  overflow-wrap: anywhere;
+  font-size: 13px;
+}
+.account-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.welcome-copy .account-card {
+  padding: 20px;
+}
+.welcome-copy .account-card h3 {
+  font-size: 17px;
+}
