@@ -31,6 +31,21 @@
               ([key, value]) => old[key] !== value,
             ),
           );
+          const changedCourse = Object.entries(engine.catalog.versions).some(
+            ([key, version]) => old.courseVersions?.[key] !== version,
+          );
+          if (changedCourse) {
+            const next = engine.currentProfile(old);
+            for (const key of [
+              "completed",
+              "completedLessons",
+              "completedExams",
+              "completedRoadLessons",
+              "courseVersions",
+            ])
+              patch[key] = next[key];
+            patch.revision = (old.revision || 0) + 1;
+          }
           if (Object.keys(patch).length)
             transaction.update(ref, {
               ...patch,

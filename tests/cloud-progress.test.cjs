@@ -10,6 +10,7 @@ const now = new Date("2026-10-10T10:00:00Z");
 function result() {
   return {
     key: "8:1",
+    courseVersion: DB.courses["8"].progressVersion,
     kind: "lesson",
     courseKey: "8",
     lessonId: 1,
@@ -48,7 +49,7 @@ test("shuffled browser answers map to canonical server choices without trusting 
     source.questions.map((q, index) => ({ index, selected: q.correct })),
   );
   assert.equal(Object.hasOwn(mapped, "xp"), false);
-  assert.equal(S.evaluate(mapped, now).result.correct, 12);
+  assert.equal(S.evaluate(mapped, now).result.correct, 40);
   const replay = S.apply(S.emptyProfile("alice"), S.evaluate(mapped, now), now);
   assert.equal(replay.profile.xp, 30);
   assert.equal(replay.profile.genes, 5);
@@ -162,11 +163,23 @@ test("study days use Kazakhstan timezone and preserve cumulative currency across
     ...S.emptyProfile("alice"),
     xp: 90,
     genes: 15,
-    courseVersions: { 7: 1 },
+    courseVersions: { ...S.catalog.versions, 7: 1 },
     completed: { "7:1": { percent: 100 }, "8:1": { percent: 70 } },
   };
   const compatible = S.currentProfile(legacy);
   assert.equal(compatible.xp, 90);
   assert.equal(compatible.completed["7:1"], undefined);
   assert.ok(compatible.completed["8:1"]);
+});
+test("obsolete offline attempts cannot unlock replacement course content", () => {
+  const stale = { result: { ...result(), courseVersion: 1 }, error: "" };
+  const merged = C.merge(
+    S.emptyProfile("alice"),
+    { history: [], lastResult: null },
+    [stale],
+    [],
+  );
+  assert.equal(merged.completed["8:1"], undefined);
+  assert.equal(merged.xp, 0);
+  assert.equal(merged.history.length, 1);
 });

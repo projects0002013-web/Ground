@@ -124,3 +124,45 @@ test("browser adapter rejects malformed submissions and locked lessons and updat
   assert.equal(b.documents.get("users/alice").xp, 30);
   assert.equal(b.documents.get("users/alice").displayName, "New Google name");
 });
+test("catalog migration preserves balances and current courses, resets obsolete content once, then rewards the new lesson", async () => {
+  const b = backend();
+  await b.ensureProfile(user("alice"));
+  const old = b.documents.get("users/alice");
+  Object.assign(old, {
+    xp: 90,
+    genes: 15,
+    level: 1,
+    revision: 8,
+    layout: "phone",
+    days: ["2026-10-10"],
+    streak: 1,
+    courseVersions: { 7: 2 },
+    completed: {
+      "7:1": { percent: 100, at: "2026-10-10" },
+      "8:1": { percent: 100, at: "2026-10-10" },
+      "8:4": { percent: 100, at: "2026-10-10" },
+      "9:1": { percent: 100, at: "2026-10-10" },
+      "10:1": { percent: 100, at: "2026-10-10" },
+      "11:1": { percent: 100, at: "2026-10-10" },
+      "ent:1": { percent: 100, at: "2026-10-10" },
+    },
+  });
+  await b.ensureProfile(user("alice"));
+  const migrated = b.documents.get("users/alice");
+  assert.equal(migrated.xp, 90);
+  assert.equal(migrated.genes, 15);
+  assert.equal(migrated.layout, "phone");
+  assert.deepEqual(migrated.days, ["2026-10-10"]);
+  assert.equal(migrated.streak, 1);
+  assert.equal(migrated.revision, 9);
+  assert.deepEqual(Object.keys(migrated.completed), ["7:1", "ent:1"]);
+  assert.deepEqual(migrated.courseVersions, engine.catalog.versions);
+  assert.ok(migrated.completedRoadLessons.includes("8:1"));
+  assert.ok(!migrated.completedRoadLessons.includes("8:2"));
+  const writes = b.writes();
+  await b.ensureProfile(user("alice"));
+  assert.equal(b.writes(), writes);
+  await b.recordAttempt("alice", attempt("new-content-attempt-00001"));
+  assert.equal(b.documents.get("users/alice").xp, 120);
+  assert.equal(b.documents.get("users/alice").genes, 20);
+});

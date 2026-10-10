@@ -26,5 +26,17 @@ for (const course of ["7", "8", "9", "10", "11", "ent", "olympiad"])
 const template = fs.readFileSync("scripts/firestore.rules.template", "utf8");
 fs.writeFileSync(
   "firestore.rules",
-  template.replace("/* CATALOG */", JSON.stringify(metadata, null, 2)),
+  template
+    .replace("/* CATALOG */", JSON.stringify(metadata, null, 2))
+    .replace("/* VERSIONS */", JSON.stringify(catalog.versions))
+    .replace(
+      "/* OBSOLETE_KEYS */",
+      Object.entries(catalog.versions)
+        .map(
+          ([course, version]) =>
+            `(versions.get(${JSON.stringify(course)}, 1) == ${version} ? [] : ${JSON.stringify(Object.keys(catalog.activities).filter((key) => key.startsWith(course + ":")))})`,
+        )
+        .join(".concat(") +
+        ")".repeat(Object.keys(catalog.versions).length - 1),
+    ),
 );

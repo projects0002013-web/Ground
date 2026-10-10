@@ -81,6 +81,15 @@
       )
         delete next.completed[key];
     }
+    next.completedLessons = Object.keys(next.completed);
+    next.completedExams = next.completedLessons.filter(
+      (key) => catalog.activities[key]?.exam,
+    );
+    next.completedRoadLessons = Object.values(catalog.activities)
+      .filter(
+        (a) => a.kind !== "book" && (!a.previous || next.completed[a.previous]),
+      )
+      .map((a) => a.key);
     return next;
   }
   function evaluate(input, now = new Date()) {

@@ -20,7 +20,11 @@
     name: "Биолог",
     course: "8",
     layout: "auto",
-    courseVersions: { 7: DB.courses["7"].progressVersion },
+    courseVersions: Object.fromEntries(
+      Object.entries(DB.courses)
+        .filter(([, c]) => c.progressVersion)
+        .map(([key, c]) => [key, c.progressVersion]),
+    ),
     xp: 0,
     genes: 0,
     completed: {},
@@ -107,6 +111,7 @@
       if (Number.isFinite(value)) base[key] = Math.max(0, value);
     }
     for (const grade of ["8", "9", "10", "11"]) {
+      if ((DB.courses[grade].progressVersion || 1) > 1) continue;
       const ids = grade === "8" ? { 1: 1, 2: 4 } : { 1: 1, 2: 2, 3: 3 };
       for (const [oldId, newId] of Object.entries(ids)) {
         if (
@@ -140,6 +145,7 @@
           ? String(value).split(":")
           : [base.course, String(value)];
         if (!["8", "9", "10", "11"].includes(oldCourse)) continue;
+        if ((DB.courses[oldCourse].progressVersion || 1) > 1) continue;
         const oldId = Number(raw),
           newId = oldCourse === "8" ? { 1: 1, 2: 4 }[oldId] : oldId;
         if (
@@ -324,7 +330,10 @@
               validTable(x.table)) &&
           (x.selfCheck == null ||
             (Array.isArray(x.selfCheck) &&
-              x.selfCheck.every((q) => typeof q === "string"))),
+              x.selfCheck.every((q) => typeof q === "string"))) &&
+          (x.sourceTasks == null ||
+            (Array.isArray(x.sourceTasks) &&
+              x.sourceTasks.every((q) => typeof q === "string"))),
       ) &&
       Number.isInteger(s.step) &&
       s.step >= 0 &&
@@ -597,7 +606,7 @@
       .join("")}</div></main></div>`;
   }
   function grades() {
-    return `<div class="welcome"><header class="welcome-header"><div class="brand">${brand()}</div><button class="button secondary small" data-action="choose-course">← Направления</button></header><main id="main" class="onboarding"><div class="page-heading"><div class="eyebrow">ШАГ 2 / ТВОЙ КУРС</div><h1>В каком ты классе?</h1><p>Можно выбрать любой курс, который тебе интересен.</p></div><div class="grade-grid">${[7, 8, 9, 10, 11].map((g) => `<button class="grade-card" data-action="select-course" data-course="${g}"><strong>${g}</strong><span>класс</span></button>`).join("")}</div><div class="panel section"><p>Не знаешь, с чего начать? В 8 классе разберём прокариот и эукариот, типы клеток и органоиды.</p></div></main></div>`;
+    return `<div class="welcome"><header class="welcome-header"><div class="brand">${brand()}</div><button class="button secondary small" data-action="choose-course">← Направления</button></header><main id="main" class="onboarding"><div class="page-heading"><div class="eyebrow">ШАГ 2 / ТВОЙ КУРС</div><h1>В каком ты классе?</h1><p>Можно выбрать любой курс, который тебе интересен.</p></div><div class="grade-grid">${[7, 8, 9, 10, 11].map((g) => `<button class="grade-card" data-action="select-course" data-course="${g}"><strong>${g}</strong><span>класс</span></button>`).join("")}</div><div class="panel section"><p>Не знаешь, с чего начать? В 8 классе — 14 тем, в 9 — 16, в 10 — 13. В 11 классе — 15 модулей подготовки к ЕНТ и пробник.</p></div></main></div>`;
   }
   function bookCards() {
     const list = [
@@ -690,8 +699,30 @@
         .join("")}</div><div id="library-results">${libraryResults()}</div>`,
     );
   }
+  function currentHistory() {
+    const signature = (question, options, correct) =>
+      JSON.stringify([question, options.slice().sort(), options[correct]]);
+    const available = new Set(
+      course().lessons.flatMap((l) =>
+        l.questions.map((q) => signature(q.question, q.answers, q.correct)),
+      ),
+    );
+    return state.history
+      .filter(
+        (h) =>
+          h.courseKey === state.course &&
+          (h.kind === "practice" ||
+            (h.courseVersion || 1) === (course().progressVersion || 1)),
+      )
+      .map((h) => ({
+        ...h,
+        answers: h.answers.filter((a) =>
+          available.has(signature(a.question, a.options, a.correct)),
+        ),
+      }));
+  }
   function practice() {
-    const wrong = state.history.flatMap((h) =>
+    const wrong = currentHistory().flatMap((h) =>
       h.answers.filter((a) => a.selected !== a.correct),
     );
     return shell(
@@ -788,7 +819,7 @@
       startedAt: Date.now(),
       deadline:
         kind === "challenge" || kind === "book"
-          ? Date.now() + 5 * 60 * 1000
+          ? Date.now() + (lesson.durationMinutes || 5) * 60 * 1000
           : null,
     };
   }
@@ -839,7 +870,7 @@
     let questions;
     if (errorsOnly) {
       const seen = new Set();
-      questions = state.history
+      questions = currentHistory()
         .flatMap((h) => h.answers.filter((a) => a.selected !== a.correct))
         .filter((a) => {
           if (seen.has(a.question)) return false;
@@ -891,6 +922,9 @@
         .join("") +
       (card.selfCheck?.length
         ? `<section class="self-check"><h2>Проверь себя</h2><p>Ответь устно или письменно. Эти вопросы не входят в оценку итогового теста.</p><ol>${card.selfCheck.map((q) => `<li>${e(q)}</li>`).join("")}</ol></section>`
+        : "") +
+      (card.sourceTasks?.length
+        ? `<details class="source-work self-check"><summary>Открыть задания из PDF (${card.sourceTasks.length})</summary><ol>${card.sourceTasks.map((q) => `<li>${e(q)}</li>`).join("")}</ol></details>`
         : "") +
       sourceLink(card.source)
     );
@@ -1472,6 +1506,8 @@
     }
   });
   window.addEventListener("pagehide", () => persist());
+  // Commit restored/migrated guest data before the first lesson or navigation.
+  persist(false);
   render();
   window.GroundCloud.subscribe(cloudChanged);
   window.GroundCloud.start();

@@ -1,0 +1,156 @@
+{
+  "1": {
+    "title": "Клеточная биология",
+    "source": "materials/grade8/lesson-01-cell-biology.pdf",
+    "pdfSha256": "758b24b65077ef60f800700ad2c5bec64949a3920ee39711397a426f1cd1e447",
+    "assessmentOrigin": "source",
+    "assessmentSha256": "18c4d07495fed2849b24cef7302997161657084ce31adaa216eca4b40328ecdd",
+    "selfCheckCount": 10,
+    "theoryCount": 4,
+    "sourceTasksCount": 0,
+    "sourceTasksSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "2": {
+    "title": "Химия жизни",
+    "source": "materials/grade8/lesson-02-chemistry-of-life.pdf",
+    "pdfSha256": "fb8478d49dacd33686a6f9ca2d5c696930d7f7cc09d404c70c0a80f020c98f93",
+    "assessmentOrigin": "authored",
+    "assessmentSha256": "16b68c832b16f9bbcde3fec017e8da3014051ff1851a15f92b54ba0c1da992eb",
+    "selfCheckCount": 15,
+    "theoryCount": 5,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "d7a932bcdc68df9215ab58ca42bda545084d4f32bb578a8fca9f0f5ef15e9f4b"
+  },
+  "3": {
+    "title": "Разнообразие живых организмов",
+    "source": "materials/grade8/lesson-03-diversity.pdf",
+    "pdfSha256": "2ab63692080f8a59957fd40f3bad0778e0fc59a5b39ecb042ed2c9373f628a36",
+    "assessmentOrigin": "authored",
+    "assessmentSha256": "ad7e442898bdd534fe5737aa0213bd5a15d511c98bbced99fd48420c878097f9",
+    "selfCheckCount": 20,
+    "theoryCount": 6,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "30dca57acc9469ccd36a06f9364f27d18720297cf4a811f82262ef6640998a37"
+  },
+  "4": {
+    "title": "Питание",
+    "source": "materials/grade8/lesson-04-nutrition.pdf",
+    "pdfSha256": "a512c34f22f4a9df89dfc78eccb95d1f72726e7e184cb72f565f243aface60b4",
+    "assessmentOrigin": "authored",
+    "assessmentSha256": "432a79d5b885feb029ede189e98b4caf85e69e5990ea67969347be6f6675b605",
+    "selfCheckCount": 25,
+    "theoryCount": 7,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "205cf06853a1b6b88e99fe6c7a0a2185e927ad5f7dcd7044eea47a6ed94245c2"
+  },
+  "5": {
+    "title": "Транспорт веществ",
+    "source": "materials/grade8/lesson-05-transport.pdf",
+    "pdfSha256": "fe0f9314da7e969ebf22987238a12eaffb20b57a3b318739031acbc8f54415fe",
+    "assessmentOrigin": "authored",
+    "assessmentSha256": "622f6885e4f78cdf292f2fc85cc299473035f1a3bc322ad7503b5da008e16e99",
+    "selfCheckCount": 55,
+    "theoryCount": 13,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "29959a5637898e998c70af9dbabd28247cf6abf89efd6d80017f2a522bb3a875"
+  },
+  "6": {
+    "title": "Дыхание",
+    "source": "materials/grade8/lesson-06-respiration.pdf",
+    "pdfSha256": "85f33c6adf90926d339a1f0d231eb0b1b0560aa158939848220c4441f4472233",
+    "assessmentOrigin": "authored",
+    "assessmentSha256": "86173bc2a18f00488e691bf3bd50e9191a0cba2d7df36c712337d7b6db21aa2a",
+    "selfCheckCount": 15,
+    "theoryCount": 5,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "e928b03494e4e4d6d10472363751799bfe03dbf6a74d4aaff126f11147403099"
+  },
+  "7": {
+    "title": "Выделение",
+    "source": "materials/grade8/lesson-07-excretion.pdf",
+    "pdfSha256": "a7f67d2f77ef410f070027696ac40feb597a7e7fea2b14fe5c03b059d0c3f559",
+    "assessmentOrigin": "authored",
+    "assessmentSha256": "d90660648f16116c043400acccd1e744a99890320d3fb965af0e6f805364a478",
+    "selfCheckCount": 15,
+    "theoryCount": 5,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "f4729b7d13ed2b250d5a4a7b40ae023a76c9dcba0ed097fb76083436e7ee3b07"
+  },
+  "8": {
+    "title": "Движение",
+    "source": "materials/grade8/lesson-08-movement.pdf",
+    "pdfSha256": "f3bd2441658a711f967a36400ad4fbdaf67496095a2eb4c58449439fa06a989c",
+    "assessmentOrigin": "authored",
+    "assessmentSha256": "94295a429293f08aaa681f5af33c7448fb3405be5dbc3b4938fd1edf87262118",
+    "selfCheckCount": 35,
+    "theoryCount": 9,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "eebdb13c6e3a1843d8ad5686cb7acb745eeac0079cf34ee6e2a83fdc598b0363"
+  },
+  "9": {
+    "title": "Координация и регуляция",
+    "source": "materials/grade8/lesson-09-coordination.pdf",
+    "pdfSha256": "e4f3c3e84ea89a6111f0c8350a8a53fcad8ef1db71452df0f7df30107c599d12",
+    "assessmentOrigin": "authored",
+    "assessmentSha256": "0c5e84d9c0da4d84db93c09fac7a7988fee38950683f0215d63c747e31764d31",
+    "selfCheckCount": 35,
+    "theoryCount": 9,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "6703b1e228cd40b59842600c2561b903ea5f38fabc7f37ec65198be4f5f8a8a5"
+  },
+  "10": {
+    "title": "Размножение",
+    "source": "materials/grade8/lesson-10-reproduction.pdf",
+    "pdfSha256": "b815d7d394c517cc2d294eee44042d32d73aaf126c4e0d22dff1f567dad13205",
+    "assessmentOrigin": "authored",
+    "assessmentSha256": "e6bb9cb6c7bfcaf3c456ea0fc6bc6677ce32824acfb9ee12bef3c6e403f0b1e1",
+    "selfCheckCount": 20,
+    "theoryCount": 6,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "e6147e9cff545ff589d0adbdd72adc8fd35b9a178ad1df8578d58c6b9bafbfeb"
+  },
+  "11": {
+    "title": "Эмбриональное развитие",
+    "source": "materials/grade8/lesson-11-embryonic-development.pdf",
+    "pdfSha256": "60bceaa1e82602b6add6ef0ac078155e8cbcc5b374ad622f258d6eb976ec6c62",
+    "assessmentOrigin": "authored",
+    "assessmentSha256": "a6fb4158a3f20fe1d0f0b18b7440a51c9872da964287a94de57553d4263c9218",
+    "selfCheckCount": 5,
+    "theoryCount": 3,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "b6577abc64b1dd3c75c59e480c78a71ba930f7bac8db5470a3edb975ed84288d"
+  },
+  "12": {
+    "title": "Наследственность и изменчивость",
+    "source": "materials/grade8/lesson-12-heredity-variation.pdf",
+    "pdfSha256": "84b474b0a5c38ba01f6ff839dabd2b200bc4d2f880cf50084bb5929bfb634939",
+    "assessmentOrigin": "authored",
+    "assessmentSha256": "9d2d70d54d639a392b8d27046c3b3aa9826c03bf671039f8b0c6f5d9dacf9b21",
+    "selfCheckCount": 20,
+    "theoryCount": 6,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "308034ee52ba353b68239a995a32e224047d572cf2085f35a4cb84c10c173618"
+  },
+  "13": {
+    "title": "Биосфера",
+    "source": "materials/grade8/lesson-13-biosphere.pdf",
+    "pdfSha256": "c3f361551646f6cca973d6caf758cf2171ac08422c21af0bf40a9d9d441f095b",
+    "assessmentOrigin": "authored",
+    "assessmentSha256": "61991404b524a254fa6c75d7f9b1d3690003e7bf86b8e9e08b8f1aa866fc14bd",
+    "selfCheckCount": 15,
+    "theoryCount": 5,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "34e75d115a75c35ae45b46a4007fb364b1bc0b22d1acfaee0e592b9241fcdf45"
+  },
+  "14": {
+    "title": "Влияние человека на окружающую среду",
+    "source": "materials/grade8/lesson-14-human-impact.pdf",
+    "pdfSha256": "9744903628ba3f328a2b3390a9dd2bbe81338797ddc2d4ac84daac9e3548c305",
+    "assessmentOrigin": "authored",
+    "assessmentSha256": "700c0f1a88b605fd0b526c1556ac81a1925d188f18d89bb3cb3b2ddefa9f5112",
+    "selfCheckCount": 10,
+    "theoryCount": 4,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "4e0649dbb63c4f6f28102eaae71854b79fff7cf63d1579385327497ff84934f5"
+  }
+}

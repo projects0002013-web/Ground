@@ -173,10 +173,73 @@ test("real SDK + Auth/Firestore emulators: concurrency, replay, isolation and pr
   const ledger = await getDoc(
     doc(laptop.db, "users", laptop.uid, "attempts", a.id),
   );
-  assert.equal(ledger.data().result.correct, 12);
+  assert.equal(ledger.data().result.correct, 40);
   const attacker = {
     ...attempt("8:3", "spoof-other-user-attempt-01"),
     uid: bob.uid,
   };
   await assert.rejects(laptop.record(attacker));
+});
+test("rules allow a balance-preserving catalog migration and reject deleting current lessons or forging XP", async () => {
+  const learner = await device("migration", "migration");
+  const own = doc(learner.db, "users", learner.uid);
+  const old = {
+    ...engine.emptyProfile(learner.uid),
+    xp: 90,
+    genes: 15,
+    revision: 7,
+    layout: "phone",
+    courseVersions: { 7: 2 },
+    completed: {
+      "7:1": { percent: 100, at: "2026-10-10" },
+      "8:1": { percent: 100, at: "2026-10-10" },
+      "9:1": { percent: 100, at: "2026-10-10" },
+      "ent:1": { percent: 100, at: "2026-10-10" },
+    },
+    completedLessons: ["7:1", "8:1", "9:1", "ent:1"],
+    lastAttemptId: null,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+  };
+  await rulesEnv.withSecurityRulesDisabled(async (context) =>
+    setDoc(doc(context.firestore(), "users", learner.uid), old),
+  );
+  const next = engine.currentProfile(old);
+  const patch = Object.fromEntries(
+    [
+      "completed",
+      "completedLessons",
+      "completedExams",
+      "completedRoadLessons",
+      "courseVersions",
+    ].map((k) => [k, next[k]]),
+  );
+  patch.revision = 8;
+  patch.updatedAt = serverTimestamp();
+  await assertFails(updateDoc(own, { ...patch, xp: 1000, level: 11 }));
+  await assertFails(
+    updateDoc(own, {
+      ...patch,
+      completed: { "ent:1": next.completed["ent:1"] },
+      completedLessons: ["ent:1"],
+    }),
+  );
+  await assertSucceeds(learner.ensure());
+  const profile = (await getDoc(own)).data();
+  assert.equal(profile.xp, 90);
+  assert.equal(profile.genes, 15);
+  assert.equal(profile.layout, "phone");
+  assert.deepEqual(Object.keys(profile.completed).sort(), ["7:1", "ent:1"]);
+  assert.deepEqual(profile.courseVersions, engine.catalog.versions);
+  await assertFails(
+    updateDoc(own, {
+      completed: {},
+      completedLessons: [],
+      courseVersions: { 7: 2 },
+      revision: 9,
+      updatedAt: serverTimestamp(),
+    }),
+  );
+  await learner.record(attempt("8:1", "new-curriculum-attempt-0001"));
+  assert.equal((await getDoc(own)).data().xp, 120);
 });

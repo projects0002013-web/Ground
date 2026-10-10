@@ -1,5 +1,5 @@
 /* Cache static teaching resources only. Never cache Firebase or account data. */
-const VERSION = "ground-static-v2";
+const VERSION = "ground-static-v3";
 const base = new URL("./", self.location.href);
 const files = [
   "index.html",
@@ -53,7 +53,7 @@ self.addEventListener("fetch", (event) => {
   if (
     !urls.has(url.origin + url.pathname) &&
     path !== "" &&
-    !/^materials\/grade7\/lesson-[a-z0-9-]+\.pdf$/.test(path)
+    !/^materials\/grade(?:7|8|9|10|11)\/[a-z0-9-]+\.pdf$/.test(path)
   )
     return;
   // Normalize only static URLs, so navigation with an OAuth query never stores tokens.

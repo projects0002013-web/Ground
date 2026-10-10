@@ -52,15 +52,15 @@ test("courses have stable IDs, pending slots and valid published questions", () 
       }
     });
   }
-  assert.equal(DB.courses["8"].lessons[0].questions.length, 12);
+  assert.equal(DB.courses["8"].lessons[0].questions.length, 40);
 });
 test("mixed lessons preserve questions and distribute theory between them", () => {
-  const lesson = DB.courses["8"].lessons[0];
+  const lesson = DB.courses["ent"].lessons[1];
   const steps = P.steps(lesson);
   assert.equal(steps[0].type, "theory");
-  assert.equal(steps.filter((s) => s.type === "question").length, 12);
+  assert.equal(steps.filter((s) => s.type === "question").length, 3);
   assert.ok(steps.findIndex((s, i) => s.type === "theory" && i > 1) > 1);
-  assert.equal(P.steps(lesson, true).length, 12);
+  assert.equal(P.steps(lesson, true).length, 3);
 });
 test("70% threshold uses unrounded scores and unanswered questions count", () => {
   assert.equal(P.score([{ selected: 1, correct: 1 }], 2).passed, false);

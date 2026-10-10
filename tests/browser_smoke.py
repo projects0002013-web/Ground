@@ -54,14 +54,15 @@ class GroundSmoke(unittest.TestCase):
             self.click('lesson-next')
         self.fail('Lesson never finished')
     def test_mixed_lesson_resume_rewards_unlock_and_review(self):
-        self.onboard();self.click('start-lesson');self.click('lesson-next')
-        first=self.state()['session']['steps'][1]
+        self.onboard();self.click('start-lesson')
+        while self.state()['session']['steps'][self.state()['session']['step']]['type']=='theory':self.click('lesson-next')
+        session=self.state()['session'];first=session['steps'][session['step']]
         self.page.locator(f'.answer[data-index="{(first["correct"]+1)%len(first["answers"])}"]').click();self.click('lesson-next')
         self.click('exit-lesson');self.page.reload();self.click('resume')
         self.assertTrue(self.state()['session']['checked']);self.finish()
         data=self.state();self.assertEqual(data['xp'],30);self.assertEqual(data['genes'],5)
-        self.assertEqual(data['lastResult']['correct'],11);self.assertEqual(data['lastResult']['total'],12)
-        self.click('review-result');self.assertEqual(self.page.locator('.review-item').count(),12)
+        self.assertEqual(data['lastResult']['correct'],39);self.assertEqual(data['lastResult']['total'],40)
+        self.click('review-result');self.assertEqual(self.page.locator('.review-item').count(),40)
         self.nav('road');expect(self.page.locator('[data-id="2"].road-node')).to_have_class(re.compile('available'))
         self.page.locator('[data-id="1"].road-node').click();self.finish()
         self.assertEqual(self.state()['xp'],30);self.assertEqual(self.state()['lastResult']['rewardXP'],0)
@@ -225,7 +226,7 @@ class GroundSmoke(unittest.TestCase):
         self.nav('road');self.page.reload();self.nav('road')
         self.click('choose-course');self.page.locator('[data-track="school"]').click();self.page.locator('[data-course="7"]').click()
         data=self.state();self.assertEqual(data['xp'],90);self.assertEqual(data['genes'],15);self.assertEqual(data['layout'],'phone')
-        self.assertIn('8:1',data['completed']);self.assertNotIn('7:1',data['completed']);self.assertEqual(data['courseVersions']['7'],2)
+        self.assertNotIn('8:1',data['completed']);self.assertNotIn('7:1',data['completed']);self.assertEqual(data['courseVersions']['7'],2)
 
     def test_manual_layout_preferences(self):
         self.onboard();self.nav('profile')
@@ -266,9 +267,12 @@ class GroundSmoke(unittest.TestCase):
             self.nav('road');self.assertFalse(self.page.evaluate('document.documentElement.scrollWidth>innerWidth'),f'road {width}')
             self.nav('home')
         fresh=self.context.new_page();fresh.add_init_script('localStorage.setItem("ground.v2","invalid-json")');fresh.goto(self.url);self.page.close();self.page=fresh;expect(self.page.locator('.welcome h1')).to_be_visible()
-        self.page.evaluate('localStorage.removeItem("ground.v2");localStorage.setItem("groundAppState",JSON.stringify({grade:"8"}));localStorage.setItem("groundXP","60");localStorage.setItem("groundGenes","10");localStorage.setItem("ground_8_lesson_1_complete","true")')
-        fresh=self.context.new_page();fresh.goto(self.url);self.page.close();self.page=fresh;self.nav('road');expect(self.page.locator('[data-id="1"].road-node')).to_have_class(re.compile('completed'))
-        self.click('start-lesson');self.click('lesson-next');self.page.keyboard.press('1')
+        self.page.close();fresh=self.context.new_page()
+        fresh.add_init_script('localStorage.removeItem("ground.v2");localStorage.setItem("groundAppState",JSON.stringify({grade:"8"}));localStorage.setItem("groundXP","60");localStorage.setItem("groundGenes","10");localStorage.setItem("ground_8_lesson_1_complete","true")')
+        fresh.goto(self.url);self.page=fresh;self.nav('road');expect(self.page.locator('[data-id="1"].road-node')).to_have_class(re.compile('available'));self.assertEqual(self.state()['xp'],60);self.assertEqual(self.state()['genes'],10)
+        self.click('start-lesson')
+        while self.state()['session']['steps'][self.state()['session']['step']]['type']=='theory':self.click('lesson-next')
+        self.page.keyboard.press('1')
         self.assertEqual(self.state()['session']['selected'],0)
 
 if __name__=='__main__': unittest.main(verbosity=2)

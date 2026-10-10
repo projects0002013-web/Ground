@@ -1,0 +1,178 @@
+{
+  "1": {
+    "title": "Клетка и органоиды",
+    "source": "materials/grade11/ent-biology-intensive.pdf",
+    "pdfSha256": "dfea9561e7409167feafb1f2964e019d5cb451ddf2f24e3285a254b469e5f0e7",
+    "assessmentOrigin": "source",
+    "assessmentSha256": "ca45e2dddb712851fc6462f94feae6088b18a6e21284125f87b5b6e9ca9d4c03",
+    "selfCheckCount": 0,
+    "theoryCount": 3,
+    "sourceTasksCount": 0,
+    "sourceTasksSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "2": {
+    "title": "Биохимия",
+    "source": "materials/grade11/ent-biology-intensive.pdf",
+    "pdfSha256": "dfea9561e7409167feafb1f2964e019d5cb451ddf2f24e3285a254b469e5f0e7",
+    "assessmentOrigin": "source",
+    "assessmentSha256": "42071e8e8f834c9312a7512cc4db7398c865207c1aaf022b59afe4d9ed1faa10",
+    "selfCheckCount": 0,
+    "theoryCount": 2,
+    "sourceTasksCount": 0,
+    "sourceTasksSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "3": {
+    "title": "ДНК, РНК и синтез белка",
+    "source": "materials/grade11/ent-biology-intensive.pdf",
+    "pdfSha256": "dfea9561e7409167feafb1f2964e019d5cb451ddf2f24e3285a254b469e5f0e7",
+    "assessmentOrigin": "source",
+    "assessmentSha256": "7330eadfe7f90d506c5d5d6e446169fa3049f18c599f85a9023020c6ea8061c1",
+    "selfCheckCount": 0,
+    "theoryCount": 2,
+    "sourceTasksCount": 0,
+    "sourceTasksSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "4": {
+    "title": "Митоз, мейоз и цикл",
+    "source": "materials/grade11/ent-biology-intensive.pdf",
+    "pdfSha256": "dfea9561e7409167feafb1f2964e019d5cb451ddf2f24e3285a254b469e5f0e7",
+    "assessmentOrigin": "source",
+    "assessmentSha256": "5750fba5bce9bc661e9d3723da5ecba90a0622acec23a007014ee25a54da8a94",
+    "selfCheckCount": 0,
+    "theoryCount": 2,
+    "sourceTasksCount": 0,
+    "sourceTasksSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "5": {
+    "title": "Генетика и задачи",
+    "source": "materials/grade11/ent-biology-intensive.pdf",
+    "pdfSha256": "dfea9561e7409167feafb1f2964e019d5cb451ddf2f24e3285a254b469e5f0e7",
+    "assessmentOrigin": "source",
+    "assessmentSha256": "1327d3815892162f4d75d745355146329aa4d6764149a2a4787217208ffb4d5b",
+    "selfCheckCount": 0,
+    "theoryCount": 2,
+    "sourceTasksCount": 0,
+    "sourceTasksSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "6": {
+    "title": "Эволюция и систематика",
+    "source": "materials/grade11/ent-biology-intensive.pdf",
+    "pdfSha256": "dfea9561e7409167feafb1f2964e019d5cb451ddf2f24e3285a254b469e5f0e7",
+    "assessmentOrigin": "source",
+    "assessmentSha256": "184b52dda6fef9124c3809c1369bad6488881a4f5cb92f2f221e7dd1f5e2db23",
+    "selfCheckCount": 0,
+    "theoryCount": 2,
+    "sourceTasksCount": 0,
+    "sourceTasksSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "7": {
+    "title": "Растения: ткани и транспорт",
+    "source": "materials/grade11/ent-biology-intensive.pdf",
+    "pdfSha256": "dfea9561e7409167feafb1f2964e019d5cb451ddf2f24e3285a254b469e5f0e7",
+    "assessmentOrigin": "source",
+    "assessmentSha256": "402c780cf2226a30994eff2e35d2da23dee257dd152fe36a25fec5fdf8996b64",
+    "selfCheckCount": 0,
+    "theoryCount": 2,
+    "sourceTasksCount": 0,
+    "sourceTasksSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "8": {
+    "title": "Фотосинтез и дыхание",
+    "source": "materials/grade11/ent-biology-intensive.pdf",
+    "pdfSha256": "dfea9561e7409167feafb1f2964e019d5cb451ddf2f24e3285a254b469e5f0e7",
+    "assessmentOrigin": "source",
+    "assessmentSha256": "20514ad63e6d9c5639799fb67be38849d22fd620d7617cadfffcc6a2cf186006",
+    "selfCheckCount": 0,
+    "theoryCount": 2,
+    "sourceTasksCount": 0,
+    "sourceTasksSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "9": {
+    "title": "Человек: кровь и иммунитет",
+    "source": "materials/grade11/ent-biology-intensive.pdf",
+    "pdfSha256": "dfea9561e7409167feafb1f2964e019d5cb451ddf2f24e3285a254b469e5f0e7",
+    "assessmentOrigin": "source",
+    "assessmentSha256": "b9cde3ac8376f9c4ddfcfdd14e952eafd804b9da7f774c60e8cc20d7c63b4d88",
+    "selfCheckCount": 0,
+    "theoryCount": 2,
+    "sourceTasksCount": 0,
+    "sourceTasksSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "10": {
+    "title": "Дыхание, пищеварение, выделение",
+    "source": "materials/grade11/ent-biology-intensive.pdf",
+    "pdfSha256": "dfea9561e7409167feafb1f2964e019d5cb451ddf2f24e3285a254b469e5f0e7",
+    "assessmentOrigin": "source",
+    "assessmentSha256": "9f8b8f29d9783b9fde736e954afb9bee81339ef637be7dd3998500a5bf0d85af",
+    "selfCheckCount": 0,
+    "theoryCount": 2,
+    "sourceTasksCount": 0,
+    "sourceTasksSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "11": {
+    "title": "Нервная и эндокринная регуляция",
+    "source": "materials/grade11/ent-biology-intensive.pdf",
+    "pdfSha256": "dfea9561e7409167feafb1f2964e019d5cb451ddf2f24e3285a254b469e5f0e7",
+    "assessmentOrigin": "source",
+    "assessmentSha256": "091e10dbbd56dd6655ca299bcbd9df4bb611f15ebe620ebc29d4544867021298",
+    "selfCheckCount": 0,
+    "theoryCount": 2,
+    "sourceTasksCount": 0,
+    "sourceTasksSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "12": {
+    "title": "Размножение и развитие",
+    "source": "materials/grade11/ent-biology-intensive.pdf",
+    "pdfSha256": "dfea9561e7409167feafb1f2964e019d5cb451ddf2f24e3285a254b469e5f0e7",
+    "assessmentOrigin": "source",
+    "assessmentSha256": "d364985aa9bf00cb24072c6957aed9821d407654de4f377022230fd640fe089e",
+    "selfCheckCount": 0,
+    "theoryCount": 2,
+    "sourceTasksCount": 0,
+    "sourceTasksSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "13": {
+    "title": "Экология",
+    "source": "materials/grade11/ent-biology-intensive.pdf",
+    "pdfSha256": "dfea9561e7409167feafb1f2964e019d5cb451ddf2f24e3285a254b469e5f0e7",
+    "assessmentOrigin": "source",
+    "assessmentSha256": "e98f3d232b85e18db407d3115ad9f88792338273c030117e7d44436efeed4e55",
+    "selfCheckCount": 0,
+    "theoryCount": 2,
+    "sourceTasksCount": 0,
+    "sourceTasksSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "14": {
+    "title": "Микробиология и биотехнология",
+    "source": "materials/grade11/ent-biology-intensive.pdf",
+    "pdfSha256": "dfea9561e7409167feafb1f2964e019d5cb451ddf2f24e3285a254b469e5f0e7",
+    "assessmentOrigin": "source",
+    "assessmentSha256": "2310d94943c93c586ebbd349131cefdb6e0a382ac4328870f3cad28bb40552e2",
+    "selfCheckCount": 0,
+    "theoryCount": 2,
+    "sourceTasksCount": 0,
+    "sourceTasksSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "15": {
+    "title": "Расчёты и методы биологии",
+    "source": "materials/grade11/ent-biology-intensive.pdf",
+    "pdfSha256": "dfea9561e7409167feafb1f2964e019d5cb451ddf2f24e3285a254b469e5f0e7",
+    "assessmentOrigin": "source",
+    "assessmentSha256": "1af2d8dee6a87c071ff94214a0d82b6cbcd9025d0087576af6fa446bbc51e6a3",
+    "selfCheckCount": 0,
+    "theoryCount": 2,
+    "sourceTasksCount": 0,
+    "sourceTasksSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "16": {
+    "title": "Пробник ЕНТ: 40 вопросов",
+    "source": "materials/grade11/ent-biology-intensive.pdf",
+    "pdfSha256": "dfea9561e7409167feafb1f2964e019d5cb451ddf2f24e3285a254b469e5f0e7",
+    "assessmentOrigin": "source",
+    "assessmentSha256": "368ef3137b3023a972661db6defafaab3b8835e615aa75905be5a5eacb48bf96",
+    "selfCheckCount": 0,
+    "theoryCount": 0,
+    "sourceTasksCount": 0,
+    "sourceTasksSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  }
+}

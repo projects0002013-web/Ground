@@ -1,0 +1,145 @@
+{
+  "1": {
+    "title": "Молекулярная биология и биохимия",
+    "source": "materials/grade10/lesson-01.pdf",
+    "pdfSha256": "f0b2ec6d6633ba043cd61248dcc03262abe330b6d6e48fa39aa5d49f109cddc7",
+    "assessmentOrigin": "supplemental",
+    "assessmentSha256": "09d4c1c4c304023d241c815eab2a1abc59bc2c2daab100904368b82a7948af69",
+    "selfCheckCount": 70,
+    "theoryCount": 17,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "1e5d236ab0012ab20a6d0c61c9fedd56d676919d8e84af800c28582c0e3f9dc4"
+  },
+  "2": {
+    "title": "Клеточная биология",
+    "source": "materials/grade10/lesson-02.pdf",
+    "pdfSha256": "04e51a005e4b918c1e3ba22ecb82831630b849e57fb38f9e894aaa79ba4247ce",
+    "assessmentOrigin": "supplemental",
+    "assessmentSha256": "c68fa197c6588ce2e02ee74a75dae037fd460dcff45307d6062ccda7333e4364",
+    "selfCheckCount": 30,
+    "theoryCount": 9,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "fbd4dfacfd95ba506b14c773073a76175a8102f0252d1f613b637ab9c9b585f9"
+  },
+  "3": {
+    "title": "Питание",
+    "source": "materials/grade10/lesson-03.pdf",
+    "pdfSha256": "1db75e3af8acdd72d8172ce3fe951429c8fca0681a0bd701e5c843c8d92956b8",
+    "assessmentOrigin": "supplemental",
+    "assessmentSha256": "cde75814b77123c2e093ff6d9fd272f5eb69e38132e2baa0bb94074417c67fbb",
+    "selfCheckCount": 10,
+    "theoryCount": 5,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "77f27b4e09dce7bf1c38fd635b8bf2e3efe45ef55e3668e36c4fce0ea519ccc8"
+  },
+  "4": {
+    "title": "Транспорт",
+    "source": "materials/grade10/lesson-04.pdf",
+    "pdfSha256": "45f1fe2538f5495a9d98539c3905b4287daaf862ea1f5d3437196f2087e59f53",
+    "assessmentOrigin": "supplemental",
+    "assessmentSha256": "317b19b46e0515118ceefcf3f2637a124533a2f989f75b834b5e3a2fbab0af20",
+    "selfCheckCount": 15,
+    "theoryCount": 6,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "c0e8d0dc5a7e035add73079ac9662a37a035a69016cf5d39656965510018a941"
+  },
+  "5": {
+    "title": "Дыхание",
+    "source": "materials/grade10/lesson-05.pdf",
+    "pdfSha256": "5ec1de82943a2e72f1c7c5f913bd968e59456be3938c625c82eaff4ff1e306ba",
+    "assessmentOrigin": "supplemental",
+    "assessmentSha256": "7641a7daec90915dbbb9d2a26a2a6c1bdbb2502cccb759089179711fcfa31d70",
+    "selfCheckCount": 40,
+    "theoryCount": 11,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "2141f59ba4e26f62aa714d834540b3e20f1a461a6cfc0f42e1551c01e1998368"
+  },
+  "6": {
+    "title": "Выделение",
+    "source": "materials/grade10/lesson-06.pdf",
+    "pdfSha256": "b451db3daf394e8d8619d0b00508f61391a40fc30a117633645cadeb9f1b421e",
+    "assessmentOrigin": "supplemental",
+    "assessmentSha256": "4c631204495e7d11056d39720265283059b9c57f81f9d57d9c19c5ddb5ac93e6",
+    "selfCheckCount": 20,
+    "theoryCount": 7,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "1f489179eba50df8ed16a1b0848e0b64729bdd51bda168218ae6465f58e4544b"
+  },
+  "7": {
+    "title": "Клеточный цикл",
+    "source": "materials/grade10/lesson-07.pdf",
+    "pdfSha256": "c6a88c0311daad80a116bd98b3b15b21a618f62d1817bd1d0daa5e561bf8acf8",
+    "assessmentOrigin": "supplemental",
+    "assessmentSha256": "2b4486d447a598c8b491ff3b5e8349e97c214ca5807007b2dd1563e3d64f9ffe",
+    "selfCheckCount": 35,
+    "theoryCount": 10,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "9c9de93381e22ad225f6351396925cb9eb785606c56091e730c2ff56dfd16601"
+  },
+  "8": {
+    "title": "Наследственность и изменчивость",
+    "source": "materials/grade10/lesson-08.pdf",
+    "pdfSha256": "b2508f1ebecc8f2656c8fa2a9ce7635b8eb279ab0304e4c2b3351ba41bdbdd3c",
+    "assessmentOrigin": "supplemental",
+    "assessmentSha256": "f0538ae966ea0a48ad5ff11c90dcc95fc8733f388414bd5e16629eaa45a499cf",
+    "selfCheckCount": 40,
+    "theoryCount": 11,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "ec0c6e6564e40df145c609b4462ab5d8064f6c739a7afac4e3a6701ce7df6fa3"
+  },
+  "9": {
+    "title": "Эволюция, селекция и биоразнообразие",
+    "source": "materials/grade10/lesson-09.pdf",
+    "pdfSha256": "939836fff6eb868b7d0cd7bc48ba8d20c9f1906a219f3f5dc2423a0d3fa8f995",
+    "assessmentOrigin": "supplemental",
+    "assessmentSha256": "e3d26222b02f2dd5c52a91a2d681b381b2717d17d106e4912d8c6693af824e4f",
+    "selfCheckCount": 40,
+    "theoryCount": 11,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "0a25653f7dcab470a7a716a97629a1f0a15ced9398056b0ef0e2cb2706aaeaba"
+  },
+  "10": {
+    "title": "Координация и регуляция",
+    "source": "materials/grade10/lesson-10.pdf",
+    "pdfSha256": "59a2585acc466de116c0ef50c9b995f328aaea475a75baa1d8647032c73e7576",
+    "assessmentOrigin": "supplemental",
+    "assessmentSha256": "735dd2ff9832133e782241548258474d943317d35780cda6a0eb9ee8dd932a07",
+    "selfCheckCount": 25,
+    "theoryCount": 8,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "5e75b144d274dd82b30898774b0ab2db263a9f5fa1a5c6ec56ac01c21c2372fa"
+  },
+  "11": {
+    "title": "Движение",
+    "source": "materials/grade10/lesson-11.pdf",
+    "pdfSha256": "3217345ed4d4121eadda0686fa03d55200be5896d14ac3cda6254fdf4ba1dfbe",
+    "assessmentOrigin": "supplemental",
+    "assessmentSha256": "428ffa049c491833832cb1477f9178cd33ca81e7210f8218d65fc96ad78d9788",
+    "selfCheckCount": 20,
+    "theoryCount": 7,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "6448f88531704f821a7b94435f8ba044d35cd991d2d43d45684c1d65027ca5dd"
+  },
+  "12": {
+    "title": "Биомедицина и биоинформатика",
+    "source": "materials/grade10/lesson-12.pdf",
+    "pdfSha256": "a15a7ff7fab1219abf464b95f85da25aa645b2239aae9462ef33da5d489cc6fd",
+    "assessmentOrigin": "supplemental",
+    "assessmentSha256": "8e2eb88fd04159a5661e9c36139d8dc6ab689db0203a64ee9588fec4198f4227",
+    "selfCheckCount": 10,
+    "theoryCount": 5,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "fc639e0a9d1dcf019fb58ef5ad2b3f5351f093b634db255908053c58ce50628d"
+  },
+  "13": {
+    "title": "Биотехнология",
+    "source": "materials/grade10/lesson-13.pdf",
+    "pdfSha256": "bf2a008c5bcc8b237087935ab6219c7d294803760c0fd1d005e4a8453e916de5",
+    "assessmentOrigin": "supplemental",
+    "assessmentSha256": "b775e11c0d2293babbc58256ad980b29a1b43ed2cb898c29bf17df744187f5cb",
+    "selfCheckCount": 35,
+    "theoryCount": 10,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "fefce5458e4c766bfc67515b31d4ef6a8649891fc5d85f09fbe86757c4d3f454"
+  }
+}

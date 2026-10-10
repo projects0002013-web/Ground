@@ -6,6 +6,19 @@ service cloud.firestore {
   match /databases/{database}/documents {
     function owner(uid) { return request.auth != null && request.auth.uid == uid; }
     function metadata(key) { return (/* CATALOG */).get(key, null); }
+    function currentVersions() { return /* VERSIONS */; }
+    function obsoleteKeys(versions) { return /* OBSOLETE_KEYS */; }
+    function migrationUpdate(data) {
+      return resource.data.courseVersions != currentVersions()
+        && data.courseVersions == currentVersions()
+        && data.revision == resource.data.revision + 1
+        && data.diff(resource.data).affectedKeys().hasOnly([
+          'completed','completedLessons','completedExams','completedRoadLessons','courseVersions','revision','updatedAt','displayName','email','photoURL'
+        ])
+        && data.completed.diff(resource.data.completed).addedKeys().size() == 0
+        && data.completed.diff(resource.data.completed).changedKeys().size() == 0
+        && data.completed.diff(resource.data.completed).removedKeys().hasOnly(obsoleteKeys(resource.data.courseVersions));
+    }
     function settingsValid(data) {
       return data.selectedGrade in ['7','8','9','10','11','ent','olympiad']
         && data.layout in ['auto','laptop','phone']
@@ -40,6 +53,7 @@ service cloud.firestore {
     }
     function initialProfile(data,uid) {
       return profileValid(data,uid)
+        && data.courseVersions == currentVersions()
         && data.createdAt == request.time && data.xp == 0 && data.genes == 0
         && data.level == 1 && data.streak == 0 && data.revision == 0
         && data.lastAttemptId == null && data.lastLessonDate == null
@@ -68,6 +82,7 @@ service cloud.firestore {
       let award = result.passed && result.kind != 'practice' && !(result.key in resource.data.completed);
       return id is string && id.matches('^[a-zA-Z0-9_-]{16,100}$') && !exists(path)
         && result.attemptId == id && resultValid(result)
+        && resource.data.courseVersions == currentVersions() && data.courseVersions == currentVersions()
         && data.revision == resource.data.revision + 1
         && data.createdAt == resource.data.createdAt
         && data.diff(resource.data).affectedKeys().hasOnly(['xp','genes','level','streak','lastLessonDate','completed','completedLessons','completedRoadLessons','completedExams','activityHistory','days','courseVersions','revision','lastAttemptId','updatedAt'])
@@ -91,7 +106,7 @@ service cloud.firestore {
       allow update: if owner(uid) && profileValid(request.resource.data,uid)
         && (request.resource.data.diff(resource.data).affectedKeys().hasOnly([
           'displayName','email','photoURL','selectedGrade','layout','nickname','onboarded','bookRead','bookPage','scanPage','updatedAt'
-        ]) || progressUpdate(uid,request.resource.data));
+        ]) || migrationUpdate(request.resource.data) || progressUpdate(uid,request.resource.data));
       match /attempts/{id} {
         allow read: if owner(uid);
         allow create: if owner(uid)

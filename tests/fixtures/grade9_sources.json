@@ -1,0 +1,178 @@
+{
+  "1": {
+    "title": "Клеточная биология",
+    "source": "materials/grade9/lesson-01.pdf",
+    "pdfSha256": "8b6cc87e9626d3a87e81a09cb150dc2cb3d924a5cb62fa1b0094abff2df4e82e",
+    "assessmentOrigin": "supplemental",
+    "assessmentSha256": "fced0a89ec5382be2e8185322531263d2f8d62e523543d365999a58e6f49295c",
+    "selfCheckCount": 10,
+    "theoryCount": 5,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "39812d387d527bdc9d2b3373e76bad3fa8843b806590bf298ddf3a4b4ed7e835"
+  },
+  "2": {
+    "title": "Биосфера",
+    "source": "materials/grade9/lesson-02.pdf",
+    "pdfSha256": "fb8e2d466de5f4e7c634cb454f6896ca0e7743a47d58bef371913a6275780314",
+    "assessmentOrigin": "supplemental",
+    "assessmentSha256": "3545073bffd496f939421c80e90e452c46b6bff6cbe4514993fc2ee240b0171b",
+    "selfCheckCount": 20,
+    "theoryCount": 7,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "c792dc936b85c6f9e817a7af705a7a4ccda38d1b17488f2c04cf5ed54334a47a"
+  },
+  "3": {
+    "title": "Влияние человека на окружающую среду",
+    "source": "materials/grade9/lesson-03.pdf",
+    "pdfSha256": "e2f946245a45ce77c700cf721d32defdc2b9dee13acb3f2d925915cb57a03834",
+    "assessmentOrigin": "supplemental",
+    "assessmentSha256": "75f4c110d1f05d184710eb64c9d6386d4d1734908e27a18bc3bb5ccb249b217b",
+    "selfCheckCount": 15,
+    "theoryCount": 6,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "42b1a9468557e47a7694b6cca76cb8b11256851c77e6bc4b47472ce7f40be095"
+  },
+  "4": {
+    "title": "Пищеварение",
+    "source": "materials/grade9/lesson-04.pdf",
+    "pdfSha256": "85b36492df66c03d6bf2d9f7c588d08e73d852469d2f109a39cb72103a6dc3d5",
+    "assessmentOrigin": "supplemental",
+    "assessmentSha256": "a84b0373617a681f2f499c65384b6fc81ad113c486d441efb8ffb06786a30e25",
+    "selfCheckCount": 15,
+    "theoryCount": 6,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "a842668029d0f3da377d37157b150cd1d2f9a20274e89b2f3c714330208139b8"
+  },
+  "5": {
+    "title": "Транспорт веществ",
+    "source": "materials/grade9/lesson-05.pdf",
+    "pdfSha256": "f99035fdd2a1a924f0be8535e50b7d38e66f9610686ef018ff51843573b57fe8",
+    "assessmentOrigin": "supplemental",
+    "assessmentSha256": "925ad1d3ef8d80f42052fcdb05e9de148fcd609ebfad39b23b5ad44947b3c434",
+    "selfCheckCount": 15,
+    "theoryCount": 6,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "6a142113ad45c879e818e75804be218a49a7d5d9fa47938b8068f564d12802ea"
+  },
+  "6": {
+    "title": "Дыхание",
+    "source": "materials/grade9/lesson-06.pdf",
+    "pdfSha256": "8eb2e1dde7d5bb44265d25b2bf21ae545728efe56ec4113388d248bce3723b0a",
+    "assessmentOrigin": "supplemental",
+    "assessmentSha256": "39edd8629d26515336fe62f910d9419f56ea65b1b2eb1946bb1319499d892a1b",
+    "selfCheckCount": 10,
+    "theoryCount": 5,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "7629ecdf3957903e585799f6c9e258bde0203efbc12d7d27abe8a16128de07ad"
+  },
+  "7": {
+    "title": "Выделение",
+    "source": "materials/grade9/lesson-07.pdf",
+    "pdfSha256": "8dd5539a868a48ff9e12c26884b508ea448ef25e055a31fcba67e718b39ba4e6",
+    "assessmentOrigin": "supplemental",
+    "assessmentSha256": "535504ad0a88871231233b59ccaad3ec635b5f366dcdc583ec98af085c9c9737",
+    "selfCheckCount": 20,
+    "theoryCount": 7,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "e5dd9d63a2822c7032a78f7dcd8e72647cdc3dcd255bb355ed682a6f82b37d3d"
+  },
+  "8": {
+    "title": "Координация и регуляция",
+    "source": "materials/grade9/lesson-08.pdf",
+    "pdfSha256": "90c53103132f66690c15169540224a6491b9a417ed7da98a2771e649c2885f62",
+    "assessmentOrigin": "supplemental",
+    "assessmentSha256": "45a0841dec97f5f884d92676dd0c10111926a02ab1eda9e8238acf248eb35d31",
+    "selfCheckCount": 35,
+    "theoryCount": 10,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "84450713ecc2810e98b57267bcfbcc6b024e97119bab237f6d15c13dcb79c7cd"
+  },
+  "9": {
+    "title": "Движение",
+    "source": "materials/grade9/lesson-09.pdf",
+    "pdfSha256": "5a13ebb23a1b8dc3692e74d10c97104ba74d181266f9162217e3e29a830824cb",
+    "assessmentOrigin": "supplemental",
+    "assessmentSha256": "fb1625736530c80fb8424caef0355cfaf01f9579f26e64e7b0e117995a54d52c",
+    "selfCheckCount": 5,
+    "theoryCount": 4,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "8e9e5d34c289dad3cb4aa3f12f27d60e59e0fd4b1c7024df28e7e41604d2fe27"
+  },
+  "10": {
+    "title": "Молекулярная биология",
+    "source": "materials/grade9/lesson-10.pdf",
+    "pdfSha256": "32cb22ecb00304d6f86ff42ec1d433602a6c168a2807f2bb559d5cec5555463a",
+    "assessmentOrigin": "supplemental",
+    "assessmentSha256": "3a1222fd3641dedb1ec9ef3d1dce3f6ef3c97ddd59237d2806aa71fa125829fe",
+    "selfCheckCount": 5,
+    "theoryCount": 4,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "49bc7bce19d45cbb67c53eb450b20906d7aecafaad2d6e687d82761daa02f2dc"
+  },
+  "11": {
+    "title": "Клеточный цикл",
+    "source": "materials/grade9/lesson-11.pdf",
+    "pdfSha256": "0b518f465edd8a563bf8fec25b36674e05a756a69c9be34afd678ce2d2aca3d8",
+    "assessmentOrigin": "supplemental",
+    "assessmentSha256": "40ef283d676717cb93a996907116e874c3975462795671ac63753dc3e9502964",
+    "selfCheckCount": 15,
+    "theoryCount": 6,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "0b0fddd2158d6832128ec19bd2b35389f5454093681e419cbbb176554413f8b3"
+  },
+  "12": {
+    "title": "Законы наследственности и изменчивости",
+    "source": "materials/grade9/lesson-12.pdf",
+    "pdfSha256": "e2704b2f14f12e8915078d6105a1cb3db207be1d4e46b069a390ddcf38e58736",
+    "assessmentOrigin": "supplemental",
+    "assessmentSha256": "9688df6e4af89ca0d0500212aff1815e53f11ef4af65704d6a3d1b4b6511e191",
+    "selfCheckCount": 35,
+    "theoryCount": 10,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "894c00f0efc46934cb2207576e93e7312bf4873035d9775a89617bfb7b4a6033"
+  },
+  "13": {
+    "title": "Микробиология и биотехнология",
+    "source": "materials/grade9/lesson-13.pdf",
+    "pdfSha256": "dd24bf3dabc2af51c7dfbb02dc4e9845fb1ef4ce87232e2eb7a86711bdf25392",
+    "assessmentOrigin": "supplemental",
+    "assessmentSha256": "c220d003d4dbd819254f064544456a7a8363edd2f0ed663e4ad995b633fa10ce",
+    "selfCheckCount": 5,
+    "theoryCount": 4,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "81f869ae39ccfd9674361e061aac3e3e82d8df4c38b387e32eb951fe43a1a025"
+  },
+  "14": {
+    "title": "Размножение",
+    "source": "materials/grade9/lesson-14.pdf",
+    "pdfSha256": "7111e6412d60b8104c703ac543bc284c2145248fc02f3f678eabfa515fcb1c9c",
+    "assessmentOrigin": "supplemental",
+    "assessmentSha256": "f1d10d48b9b60590506ea6e693ba601f8451649eff9e42df515a0fcbfd9b3af1",
+    "selfCheckCount": 25,
+    "theoryCount": 8,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "81915ea59ab2bb7c9935643533192b6bec5d5b57991a8b665d082b852e33926f"
+  },
+  "15": {
+    "title": "Рост и развитие",
+    "source": "materials/grade9/lesson-15.pdf",
+    "pdfSha256": "bdb3355d4f500b66dc0a33993dd489923b43d2265d3fd35b2879387596cf8dbc",
+    "assessmentOrigin": "supplemental",
+    "assessmentSha256": "13456c5de6dea81421be5aba38a0d654a99ae4cf4efd4d69a34977d8dc271a8d",
+    "selfCheckCount": 10,
+    "theoryCount": 5,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "8619535bb2fd9e2f93851a687c5d995459b7fd8dfe04ee2fa391c52ee260ea3e"
+  },
+  "16": {
+    "title": "Эволюция",
+    "source": "materials/grade9/lesson-16.pdf",
+    "pdfSha256": "f95ed6fd4e8e39ae0f787c47e83b2d8b6249254410ef549c2e075536f6772847",
+    "assessmentOrigin": "supplemental",
+    "assessmentSha256": "6b4c172fc97c5c4841d5c03e8724ca3e3864d7f56ba7230072d66e9fcca65ee5",
+    "selfCheckCount": 20,
+    "theoryCount": 7,
+    "sourceTasksCount": 40,
+    "sourceTasksSha256": "ee03506431265addfe7f22c449a68dedda23a5f3092e13e8c48252cd1528ed68"
+  }
+}

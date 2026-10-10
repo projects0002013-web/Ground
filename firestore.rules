@@ -113,122 +113,474 @@ service cloud.firestore {
   "8:1": {
     "xp": 30,
     "genes": 5,
-    "total": 12,
-    "version": 1,
+    "total": 40,
+    "version": 2,
     "kind": "lesson",
     "previous": null
   },
   "8:2": {
     "xp": 30,
     "genes": 5,
-    "total": 3,
-    "version": 1,
+    "total": 40,
+    "version": 2,
     "kind": "lesson",
     "previous": "8:1"
   },
   "8:3": {
     "xp": 30,
     "genes": 5,
-    "total": 3,
-    "version": 1,
+    "total": 40,
+    "version": 2,
     "kind": "lesson",
     "previous": "8:2"
   },
   "8:4": {
     "xp": 30,
     "genes": 5,
-    "total": 3,
-    "version": 1,
+    "total": 40,
+    "version": 2,
     "kind": "lesson",
     "previous": "8:3"
   },
   "8:5": {
-    "xp": 50,
-    "genes": 10,
-    "total": 21,
-    "version": 1,
-    "kind": "challenge",
+    "xp": 30,
+    "genes": 5,
+    "total": 40,
+    "version": 2,
+    "kind": "lesson",
     "previous": "8:4"
+  },
+  "8:6": {
+    "xp": 30,
+    "genes": 5,
+    "total": 40,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "8:5"
+  },
+  "8:7": {
+    "xp": 30,
+    "genes": 5,
+    "total": 40,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "8:6"
+  },
+  "8:8": {
+    "xp": 30,
+    "genes": 5,
+    "total": 40,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "8:7"
+  },
+  "8:9": {
+    "xp": 30,
+    "genes": 5,
+    "total": 40,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "8:8"
+  },
+  "8:10": {
+    "xp": 30,
+    "genes": 5,
+    "total": 40,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "8:9"
+  },
+  "8:11": {
+    "xp": 30,
+    "genes": 5,
+    "total": 40,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "8:10"
+  },
+  "8:12": {
+    "xp": 30,
+    "genes": 5,
+    "total": 40,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "8:11"
+  },
+  "8:13": {
+    "xp": 30,
+    "genes": 5,
+    "total": 40,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "8:12"
+  },
+  "8:14": {
+    "xp": 30,
+    "genes": 5,
+    "total": 40,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "8:13"
   },
   "9:1": {
     "xp": 30,
     "genes": 5,
-    "total": 3,
-    "version": 1,
+    "total": 12,
+    "version": 2,
     "kind": "lesson",
     "previous": null
   },
   "9:2": {
     "xp": 30,
     "genes": 5,
-    "total": 3,
-    "version": 1,
+    "total": 12,
+    "version": 2,
     "kind": "lesson",
     "previous": "9:1"
   },
   "9:3": {
     "xp": 30,
     "genes": 5,
-    "total": 3,
-    "version": 1,
+    "total": 12,
+    "version": 2,
     "kind": "lesson",
     "previous": "9:2"
   },
   "9:4": {
-    "xp": 50,
-    "genes": 10,
-    "total": 9,
-    "version": 1,
-    "kind": "challenge",
+    "xp": 30,
+    "genes": 5,
+    "total": 12,
+    "version": 2,
+    "kind": "lesson",
     "previous": "9:3"
+  },
+  "9:5": {
+    "xp": 30,
+    "genes": 5,
+    "total": 12,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "9:4"
+  },
+  "9:6": {
+    "xp": 30,
+    "genes": 5,
+    "total": 12,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "9:5"
+  },
+  "9:7": {
+    "xp": 30,
+    "genes": 5,
+    "total": 12,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "9:6"
+  },
+  "9:8": {
+    "xp": 30,
+    "genes": 5,
+    "total": 14,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "9:7"
+  },
+  "9:9": {
+    "xp": 30,
+    "genes": 5,
+    "total": 12,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "9:8"
+  },
+  "9:10": {
+    "xp": 30,
+    "genes": 5,
+    "total": 12,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "9:9"
+  },
+  "9:11": {
+    "xp": 30,
+    "genes": 5,
+    "total": 12,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "9:10"
+  },
+  "9:12": {
+    "xp": 30,
+    "genes": 5,
+    "total": 14,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "9:11"
+  },
+  "9:13": {
+    "xp": 30,
+    "genes": 5,
+    "total": 12,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "9:12"
+  },
+  "9:14": {
+    "xp": 30,
+    "genes": 5,
+    "total": 12,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "9:13"
+  },
+  "9:15": {
+    "xp": 30,
+    "genes": 5,
+    "total": 12,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "9:14"
+  },
+  "9:16": {
+    "xp": 30,
+    "genes": 5,
+    "total": 12,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "9:15"
   },
   "10:1": {
     "xp": 30,
     "genes": 5,
-    "total": 3,
-    "version": 1,
+    "total": 28,
+    "version": 2,
     "kind": "lesson",
     "previous": null
   },
   "10:2": {
     "xp": 30,
     "genes": 5,
-    "total": 3,
-    "version": 1,
+    "total": 12,
+    "version": 2,
     "kind": "lesson",
     "previous": "10:1"
   },
   "10:3": {
-    "xp": 50,
-    "genes": 10,
-    "total": 6,
-    "version": 1,
-    "kind": "challenge",
+    "xp": 30,
+    "genes": 5,
+    "total": 12,
+    "version": 2,
+    "kind": "lesson",
     "previous": "10:2"
+  },
+  "10:4": {
+    "xp": 30,
+    "genes": 5,
+    "total": 12,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "10:3"
+  },
+  "10:5": {
+    "xp": 30,
+    "genes": 5,
+    "total": 16,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "10:4"
+  },
+  "10:6": {
+    "xp": 30,
+    "genes": 5,
+    "total": 12,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "10:5"
+  },
+  "10:7": {
+    "xp": 30,
+    "genes": 5,
+    "total": 14,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "10:6"
+  },
+  "10:8": {
+    "xp": 30,
+    "genes": 5,
+    "total": 16,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "10:7"
+  },
+  "10:9": {
+    "xp": 30,
+    "genes": 5,
+    "total": 16,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "10:8"
+  },
+  "10:10": {
+    "xp": 30,
+    "genes": 5,
+    "total": 12,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "10:9"
+  },
+  "10:11": {
+    "xp": 30,
+    "genes": 5,
+    "total": 12,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "10:10"
+  },
+  "10:12": {
+    "xp": 30,
+    "genes": 5,
+    "total": 12,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "10:11"
+  },
+  "10:13": {
+    "xp": 30,
+    "genes": 5,
+    "total": 14,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "10:12"
   },
   "11:1": {
     "xp": 30,
     "genes": 5,
-    "total": 3,
-    "version": 1,
+    "total": 6,
+    "version": 2,
     "kind": "lesson",
     "previous": null
   },
   "11:2": {
     "xp": 30,
     "genes": 5,
-    "total": 3,
-    "version": 1,
+    "total": 6,
+    "version": 2,
     "kind": "lesson",
     "previous": "11:1"
   },
   "11:3": {
-    "xp": 50,
-    "genes": 10,
+    "xp": 30,
+    "genes": 5,
     "total": 6,
-    "version": 1,
-    "kind": "challenge",
+    "version": 2,
+    "kind": "lesson",
     "previous": "11:2"
+  },
+  "11:4": {
+    "xp": 30,
+    "genes": 5,
+    "total": 6,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "11:3"
+  },
+  "11:5": {
+    "xp": 30,
+    "genes": 5,
+    "total": 6,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "11:4"
+  },
+  "11:6": {
+    "xp": 30,
+    "genes": 5,
+    "total": 6,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "11:5"
+  },
+  "11:7": {
+    "xp": 30,
+    "genes": 5,
+    "total": 6,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "11:6"
+  },
+  "11:8": {
+    "xp": 30,
+    "genes": 5,
+    "total": 6,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "11:7"
+  },
+  "11:9": {
+    "xp": 30,
+    "genes": 5,
+    "total": 6,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "11:8"
+  },
+  "11:10": {
+    "xp": 30,
+    "genes": 5,
+    "total": 6,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "11:9"
+  },
+  "11:11": {
+    "xp": 30,
+    "genes": 5,
+    "total": 6,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "11:10"
+  },
+  "11:12": {
+    "xp": 30,
+    "genes": 5,
+    "total": 6,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "11:11"
+  },
+  "11:13": {
+    "xp": 30,
+    "genes": 5,
+    "total": 6,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "11:12"
+  },
+  "11:14": {
+    "xp": 30,
+    "genes": 5,
+    "total": 6,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "11:13"
+  },
+  "11:15": {
+    "xp": 30,
+    "genes": 5,
+    "total": 6,
+    "version": 2,
+    "kind": "lesson",
+    "previous": "11:14"
+  },
+  "11:16": {
+    "xp": 60,
+    "genes": 10,
+    "total": 40,
+    "version": 2,
+    "kind": "challenge",
+    "previous": "11:15"
   },
   "ent:1": {
     "xp": 30,
@@ -359,6 +711,19 @@ service cloud.firestore {
     "previous": null
   }
 }).get(key, null); }
+    function currentVersions() { return {"7":2,"8":2,"9":2,"10":2,"11":2}; }
+    function obsoleteKeys(versions) { return (versions.get("7", 1) == 2 ? [] : ["7:1","7:2","7:3","7:4","7:5","7:6","7:7","7:8","7:9","7:10","7:11","7:12","7:13"]).concat((versions.get("8", 1) == 2 ? [] : ["8:1","8:2","8:3","8:4","8:5","8:6","8:7","8:8","8:9","8:10","8:11","8:12","8:13","8:14"]).concat((versions.get("9", 1) == 2 ? [] : ["9:1","9:2","9:3","9:4","9:5","9:6","9:7","9:8","9:9","9:10","9:11","9:12","9:13","9:14","9:15","9:16"]).concat((versions.get("10", 1) == 2 ? [] : ["10:1","10:2","10:3","10:4","10:5","10:6","10:7","10:8","10:9","10:10","10:11","10:12","10:13"]).concat((versions.get("11", 1) == 2 ? [] : ["11:1","11:2","11:3","11:4","11:5","11:6","11:7","11:8","11:9","11:10","11:11","11:12","11:13","11:14","11:15","11:16"]))))); }
+    function migrationUpdate(data) {
+      return resource.data.courseVersions != currentVersions()
+        && data.courseVersions == currentVersions()
+        && data.revision == resource.data.revision + 1
+        && data.diff(resource.data).affectedKeys().hasOnly([
+          'completed','completedLessons','completedExams','completedRoadLessons','courseVersions','revision','updatedAt','displayName','email','photoURL'
+        ])
+        && data.completed.diff(resource.data.completed).addedKeys().size() == 0
+        && data.completed.diff(resource.data.completed).changedKeys().size() == 0
+        && data.completed.diff(resource.data.completed).removedKeys().hasOnly(obsoleteKeys(resource.data.courseVersions));
+    }
     function settingsValid(data) {
       return data.selectedGrade in ['7','8','9','10','11','ent','olympiad']
         && data.layout in ['auto','laptop','phone']
@@ -393,6 +758,7 @@ service cloud.firestore {
     }
     function initialProfile(data,uid) {
       return profileValid(data,uid)
+        && data.courseVersions == currentVersions()
         && data.createdAt == request.time && data.xp == 0 && data.genes == 0
         && data.level == 1 && data.streak == 0 && data.revision == 0
         && data.lastAttemptId == null && data.lastLessonDate == null
@@ -421,6 +787,7 @@ service cloud.firestore {
       let award = result.passed && result.kind != 'practice' && !(result.key in resource.data.completed);
       return id is string && id.matches('^[a-zA-Z0-9_-]{16,100}$') && !exists(path)
         && result.attemptId == id && resultValid(result)
+        && resource.data.courseVersions == currentVersions() && data.courseVersions == currentVersions()
         && data.revision == resource.data.revision + 1
         && data.createdAt == resource.data.createdAt
         && data.diff(resource.data).affectedKeys().hasOnly(['xp','genes','level','streak','lastLessonDate','completed','completedLessons','completedRoadLessons','completedExams','activityHistory','days','courseVersions','revision','lastAttemptId','updatedAt'])
@@ -444,7 +811,7 @@ service cloud.firestore {
       allow update: if owner(uid) && profileValid(request.resource.data,uid)
         && (request.resource.data.diff(resource.data).affectedKeys().hasOnly([
           'displayName','email','photoURL','selectedGrade','layout','nickname','onboarded','bookRead','bookPage','scanPage','updatedAt'
-        ]) || progressUpdate(uid,request.resource.data));
+        ]) || migrationUpdate(request.resource.data) || progressUpdate(uid,request.resource.data));
       match /attempts/{id} {
         allow read: if owner(uid);
         allow create: if owner(uid)

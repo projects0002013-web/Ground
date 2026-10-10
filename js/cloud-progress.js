@@ -87,6 +87,9 @@
       if (
         entry.result.passed &&
         entry.result.kind !== "practice" &&
+        (!profile.courseVersions?.[entry.result.courseKey] ||
+          (entry.result.courseVersion || 1) ===
+            profile.courseVersions[entry.result.courseKey]) &&
         !entry.error
       )
         completed[entry.result.key] = {
