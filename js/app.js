@@ -12,6 +12,7 @@
     name: "Биолог",
     course: "8",
     layout: "auto",
+    courseVersions: { 7: DB.courses["7"].progressVersion },
     xp: 0,
     genes: 0,
     completed: {},
@@ -64,12 +65,17 @@
             ),
           ]
         : [];
-      base.completed = validCompleted(value.completed) ? value.completed : {};
+      const completions = compatibleCompleted(
+        value.completed,
+        value.courseVersions,
+      );
+      base.completed = validCompleted(completions) ? completions : {};
       base.history = Array.isArray(value.history)
         ? value.history.filter(validResult).slice(0, 50)
         : [];
       base.lastResult = validResult(value.lastResult) ? value.lastResult : null;
       base.session = validSession(value.session) ? value.session : null;
+      reconcileCourseVersions(base, value.courseVersions);
       return base;
     } catch {
       storageAvailable = false;
@@ -91,7 +97,7 @@
       const value = Number(localStorage.getItem(legacy) || 0);
       if (Number.isFinite(value)) base[key] = Math.max(0, value);
     }
-    for (const grade of ["7", "8", "9", "10", "11"]) {
+    for (const grade of ["8", "9", "10", "11"]) {
       const ids = grade === "8" ? { 1: 1, 2: 4 } : { 1: 1, 2: 2, 3: 3 };
       for (const [oldId, newId] of Object.entries(ids)) {
         if (
@@ -109,6 +115,32 @@
     const last = localStorage.getItem("groundLastStudyDate");
     if (last && /^\d{4}-\d{2}-\d{2}$/.test(last)) base.days.push(last);
     return base;
+  }
+  function compatibleCompleted(completed, savedVersions) {
+    if (!completed || typeof completed !== "object" || Array.isArray(completed))
+      return completed;
+    return Object.fromEntries(
+      Object.entries(completed).filter(([key]) => {
+        const c = DB.courses[key.split(":")[0]];
+        return (
+          !c?.progressVersion ||
+          savedVersions?.[key.split(":")[0]] === c.progressVersion
+        );
+      }),
+    );
+  }
+  function reconcileCourseVersions(profile, savedVersions) {
+    for (const [key, c] of Object.entries(DB.courses)) {
+      if (!c.progressVersion || savedVersions?.[key] === c.progressVersion)
+        continue;
+      for (const lessonKey of Object.keys(profile.completed)) {
+        if (lessonKey.startsWith(`${key}:`))
+          delete profile.completed[lessonKey];
+      }
+      if (profile.session?.courseKey === key) profile.session = null;
+      if (profile.lastResult?.courseKey === key) profile.lastResult = null;
+    }
+    profile.courseVersions = defaults().courseVersions;
   }
   function validAnswer(a) {
     return (
@@ -160,6 +192,7 @@
       activity.key === `${activity.courseKey}:${activity.lessonId}` &&
       DB.courses[activity.courseKey].lessons.some(
         (l) =>
+          !l.pending &&
           l.id === activity.lessonId &&
           Boolean(l.challenge) === (activity.kind === "challenge"),
       )
@@ -195,7 +228,9 @@
         const [course, id] = key.split(":");
         return (
           (key === "book:chemistry" ||
-            DB.courses[course]?.lessons.some((l) => String(l.id) === id)) &&
+            DB.courses[course]?.lessons.some(
+              (l) => !l.pending && String(l.id) === id,
+            )) &&
           v &&
           Number.isFinite(v.percent) &&
           v.percent >= 0 &&
@@ -228,7 +263,10 @@
               x.correct >= 0 &&
               x.correct < x.answers.length &&
               typeof x.explanation === "string" &&
-              validTable(x.table)),
+              validTable(x.table)) &&
+          (x.selfCheck == null ||
+            (Array.isArray(x.selfCheck) &&
+              x.selfCheck.every((q) => typeof q === "string"))),
       ) &&
       Number.isInteger(s.step) &&
       s.step >= 0 &&
@@ -344,10 +382,13 @@
       : "";
   }
   function road(compact = false) {
-    const lessons = compact ? course().lessons.slice(0, 3) : course().lessons;
+    const lessons =
+      compact && !course().totalSlots
+        ? course().lessons.slice(0, 3)
+        : course().lessons;
     return `<div class="road ${compact ? "compact" : ""}">${lessons
       .map((l) => {
-        const done = state.completed[`${state.course}:${l.id}`];
+        const done = !l.pending && state.completed[`${state.course}:${l.id}`];
         const unlocked = P.unlocked(
           course(),
           l.id,
@@ -355,7 +396,7 @@
           state.course,
         );
         const status = done ? "completed" : unlocked ? "available" : "locked";
-        return `<div class="road-item ${status}"><button class="road-node ${status}" data-action="start-lesson" data-id="${l.id}" aria-label="${attr(l.title)} — ${done ? "пройден" : unlocked ? "доступен" : "закрыт"}">${done ? "✓" : unlocked ? l.icon : "🔒"}</button><div class="road-info"><div class="eyebrow">${l.challenge ? "ФИНАЛЬНОЕ ИСПЫТАНИЕ" : `УРОК ${l.id}`}</div><h3>${e(l.title)}</h3><p>${e(l.description)}</p>${done ? `<span class="pill">✓ ${done.percent}% · пройден</span>` : unlocked ? `<span class="pill">+${l.rewardXP} XP · +${l.rewardGenes} 🧬</span>` : ""}</div></div>`;
+        return `<div class="road-item ${status}"><button class="road-node ${status}" data-action="start-lesson" data-id="${l.id}" aria-label="${attr(l.title)} — ${l.pending ? "файл ещё не добавлен" : done ? "пройден" : unlocked ? "доступен" : "закрыт"}">${l.pending ? l.id : done ? "✓" : unlocked ? l.icon : "🔒"}</button><div class="road-info"><div class="eyebrow">${l.challenge ? "ФИНАЛЬНОЕ ИСПЫТАНИЕ" : `УРОК ${l.id}`}</div><h3>${e(l.title)}</h3><p>${e(l.description)}</p>${l.pending ? `<span class="pill pending-pill">Ожидаем файл</span>` : done ? `<span class="pill">✓ ${done.percent}% · пройден</span>` : unlocked ? `<span class="pill">+${l.rewardXP} XP · +${l.rewardGenes} 🧬</span>` : ""}</div></div>`;
       })
       .join("")}</div>`;
   }
@@ -375,7 +416,7 @@
       (l) => state.completed[`${state.course}:${l.id}`],
     );
     return shell(
-      `${heading("Продолжим открытия?", `Привет, ${e(state.name)}. Сегодня отличный день для биологии.`, `<span class="pill">● ${e(courseLabel())}</span>`)}${resumeBanner()}<div class="dashboard-grid"><div class="main-column"><section class="hero"><div class="hero-copy"><span class="hero-tag">${allDone ? "КУРС ПРОЙДЕН · ПОВТОРЕНИЕ" : "ТВОЙ СЛЕДУЮЩИЙ ШАГ"}</span><h2>${e(next.title)}</h2><p>${e(next.description)}. Теория, практика и маленькое открытие в конце.</p>${button(allDone ? "Повторить урок →" : "Начать урок →", "start-lesson", `data-id="${next.id}"`)}</div><span class="hero-decoration" aria-hidden="true">✧</span><img class="mascot-hero" src="images/mascot.png" alt="Чёрный кот-учёный в лабораторном халате"></section>${progressCard()}<section class="section"><div class="panel-header"><h2>Твоя дорожка</h2><button class="text-link" data-action="nav" data-view="road">Все уроки →</button></div>${road(true)}</section></div><aside class="side-column">${dailyCard()}<section class="panel tip"><div class="tip-icon">✧</div><div class="eyebrow">ЗНАЕШЬ ЛИ ТЫ?</div><h3>Мир начинается с клетки</h3><p>Даже огромный синий кит когда-то был одной клеткой. Большие открытия начинаются с малого.</p><button class="text-link" data-action="nav" data-view="library">Узнать больше →</button></section><section class="panel mini-book"><span class="eyebrow">НА ПОЛКЕ</span><h3>Химия жизни</h3><p>Четыре коротких раздела об атомах, связях и воде.</p><button class="text-link" data-action="read-book">Открыть конспект →</button></section></aside></div>`,
+      `${heading("Продолжим открытия?", `Привет, ${e(state.name)}. Сегодня отличный день для биологии.`, `<span class="pill">● ${e(courseLabel())}</span>`)}${resumeBanner()}<div class="dashboard-grid"><div class="main-column"><section class="hero"><div class="hero-copy"><span class="hero-tag">${next.pending ? "ОЖИДАЕМ СЛЕДУЮЩИЙ ФАЙЛ" : allDone ? "КУРС ПРОЙДЕН · ПОВТОРЕНИЕ" : "ТВОЙ СЛЕДУЮЩИЙ ШАГ"}</span><h2>${e(next.title)}</h2><p>${next.pending ? "Урок появится здесь после добавления следующего файла. Пока можно повторить пройденное или потренироваться." : `${e(next.description)}. Теория, практика и маленькое открытие в конце.`}</p>${button(next.pending ? "Файл ещё не добавлен" : allDone ? "Повторить урок →" : "Начать урок →", "start-lesson", `data-id="${next.id}" ${next.pending ? "disabled" : ""}`)}</div><span class="hero-decoration" aria-hidden="true">✧</span><img class="mascot-hero" src="images/mascot.png" alt="Чёрный кот-учёный в лабораторном халате"></section>${progressCard()}<section class="section"><div class="panel-header"><h2>Твоя дорожка</h2><button class="text-link" data-action="nav" data-view="road">Все уроки →</button></div>${road(true)}</section></div><aside class="side-column">${dailyCard()}<section class="panel tip"><div class="tip-icon">✧</div><div class="eyebrow">ЗНАЕШЬ ЛИ ТЫ?</div><h3>Мир начинается с клетки</h3><p>Даже огромный синий кит когда-то был одной клеткой. Большие открытия начинаются с малого.</p><button class="text-link" data-action="nav" data-view="library">Узнать больше →</button></section><section class="panel mini-book"><span class="eyebrow">НА ПОЛКЕ</span><h3>Химия жизни</h3><p>Четыре коротких раздела об атомах, связях и воде.</p><button class="text-link" data-action="read-book">Открыть конспект →</button></section></aside></div>`,
     );
   }
   function roadPage() {
@@ -444,7 +485,7 @@
         tag: "ТВОЙ КУРС",
         cover: "Мир живого",
         icon: "❧",
-        meta: `${course().lessons.length - 1} тем`,
+        meta: `${course().lessons.filter((l) => !l.pending && !l.challenge).length} тем`,
         color: "gold",
       },
       {
@@ -480,6 +521,7 @@
       .lessons.filter(
         (l) =>
           !l.challenge &&
+          !l.pending &&
           (l.title + " " + l.description)
             .toLocaleLowerCase("ru")
             .includes(libraryQuery.toLocaleLowerCase("ru")),
@@ -581,6 +623,8 @@
       courseKey,
       lessonId: lesson.id,
       title: lesson.title,
+      source: lesson.source || null,
+      assessmentLabel: lesson.assessmentLabel || null,
       kind,
       steps: P.steps(
         lesson,
@@ -625,6 +669,10 @@
   function startLesson(id) {
     const l = course().lessons.find((l) => l.id === Number(id));
     if (!l) return;
+    if (l.pending) {
+      toast("Файл этого урока ещё не добавлен.");
+      return;
+    }
     if (!P.unlocked(course(), l.id, state.completed, state.course)) {
       toast("Сначала пройди предыдущий урок — и этот этап откроется.");
       return;
@@ -667,7 +715,7 @@
         }));
     } else
       questions = course()
-        .lessons.filter((l) => !l.challenge)
+        .lessons.filter((l) => !l.challenge && !l.pending)
         .flatMap((l) => l.questions)
         .slice();
     if (!errorsOnly) questions = shuffle(questions).slice(0, 10);
@@ -685,6 +733,26 @@
       persist();
       navigate("lesson");
     });
+  }
+  function sourceLink(path) {
+    if (
+      typeof path !== "string" ||
+      !/^materials\/[a-zA-Z0-9/_-]+\.pdf$/.test(path)
+    )
+      return "";
+    return `<p class="source-link"><a href="${attr(path)}" target="_blank" rel="noopener">Открыть исходный PDF с иллюстрациями →</a></p>`;
+  }
+  function theoryContent(card) {
+    return (
+      card.text
+        .split(/\n\s*\n/)
+        .map((text) => `<p class="theory-text">${e(text)}</p>`)
+        .join("") +
+      (card.selfCheck?.length
+        ? `<section class="self-check"><h2>Проверь себя</h2><p>Ответь устно или письменно. Эти вопросы не входят в оценку итогового теста.</p><ol>${card.selfCheck.map((q) => `<li>${e(q)}</li>`).join("")}</ol></section>`
+        : "") +
+      sourceLink(card.source)
+    );
   }
   function lessonView() {
     const s = state.session;
@@ -704,10 +772,10 @@
     const correct = step.type === "question" && s.selected === step.correct;
     let content;
     if (step.type === "theory")
-      content = `<div class="eyebrow">${e(s.title)} / ТЕОРИЯ</div><h1>${e(step.title)}</h1><p class="theory-text">${e(step.text)}</p><div class="theory-art"><span class="symbol" aria-hidden="true">${e(step.icon || "🔬")}</span><div><strong>Понимание важнее зубрёжки</strong><p>Дальше — вопрос, в котором ты применишь эту идею.</p></div></div>`;
+      content = `<div class="eyebrow">${e(s.title)} / ТЕОРИЯ</div><h1>${e(step.title)}</h1>${theoryContent(step)}<div class="theory-art"><span class="symbol" aria-hidden="true">${e(step.icon || "🔬")}</span><div><strong>Понимание важнее зубрёжки</strong><p>${s.steps[s.step + 1]?.type === "theory" ? "Ответь на вопросы для самопроверки и продолжай изучение главы." : "Дальше — вопросы, в которых ты применишь изученное."}</p></div></div>`;
     else
-      content = `<div class="eyebrow">${s.kind === "challenge" ? "ИТОГОВОЕ ИСПЫТАНИЕ" : s.kind === "book" ? "ПРОВЕРКА КОНСПЕКТА" : "ПРАКТИКА"} / ВОПРОС ${current} ИЗ ${total}</div><h1>${e(step.question)}</h1>${table(step.table)}<div class="answers" role="group" aria-label="Варианты ответа">${step.answers.map((answer, i) => `<button class="answer ${s.checked ? (i === step.correct ? "correct" : i === s.selected ? "wrong" : "") : i === s.selected ? "selected" : ""}" data-action="answer" data-index="${i}" aria-pressed="${s.selected === i}" ${s.checked ? "disabled" : ""}><span class="letter">${String.fromCharCode(65 + i)}</span><span>${e(answer)}</span></button>`).join("")}</div>${s.checked ? `<div class="feedback ${correct ? "" : "wrong"}" role="status"><strong>${correct ? "Верно. Отличное открытие!" : "Разберёмся вместе"}</strong><p>${e(step.explanation)}</p></div>` : ""}`;
-    return `<main id="main" class="lesson-shell"><header class="lesson-top"><button class="close-button" data-action="exit-lesson" aria-label="Выйти из урока">×</button><div class="progress" role="progressbar" aria-label="Прогресс урока" aria-valuenow="${s.step}" aria-valuemin="0" aria-valuemax="${s.steps.length}"><span style="width:${(s.step / s.steps.length) * 100}%"></span></div>${s.deadline ? '<span id="timer" class="timer" role="timer"></span>' : `<span class="metric">🧬 ${state.genes}</span>`}</header><section class="lesson-content">${content}</section></main><footer class="lesson-bottom"><div><small>${step.type === "theory" ? "Прочитай и переходи к практике" : s.checked ? "Каждый ответ — шаг к пониманию" : "Выбери один ответ"}</small>${button(step.type === "theory" ? "К практике →" : s.checked ? (s.step === s.steps.length - 1 ? "Завершить" : "Продолжить →") : "Проверить", "lesson-next", step.type === "question" && s.selected === null ? "disabled" : "")}</div></footer>`;
+      content = `<div class="eyebrow">${s.assessmentLabel ? e(s.assessmentLabel) : s.kind === "challenge" ? "ИТОГОВОЕ ИСПЫТАНИЕ" : s.kind === "book" ? "ПРОВЕРКА КОНСПЕКТА" : "ПРАКТИКА"} / ВОПРОС ${current} ИЗ ${total}</div><h1>${e(step.question)}</h1>${table(step.table)}${sourceLink(s.source)}<div class="answers" role="group" aria-label="Варианты ответа">${step.answers.map((answer, i) => `<button class="answer ${s.checked ? (i === step.correct ? "correct" : i === s.selected ? "wrong" : "") : i === s.selected ? "selected" : ""}" data-action="answer" data-index="${i}" aria-pressed="${s.selected === i}" ${s.checked ? "disabled" : ""}><span class="letter">${String.fromCharCode(65 + i)}</span><span>${e(answer)}</span></button>`).join("")}</div>${s.checked ? `<div class="feedback ${correct ? "" : "wrong"}" role="status"><strong>${correct ? "Верно. Отличное открытие!" : "Разберёмся вместе"}</strong><p>${e(step.explanation)}</p></div>` : ""}`;
+    return `<main id="main" class="lesson-shell"><header class="lesson-top"><button class="close-button" data-action="exit-lesson" aria-label="Выйти из урока">×</button><div class="progress" role="progressbar" aria-label="Прогресс урока" aria-valuenow="${s.step}" aria-valuemin="0" aria-valuemax="${s.steps.length}"><span style="width:${(s.step / s.steps.length) * 100}%"></span></div>${s.deadline ? '<span id="timer" class="timer" role="timer"></span>' : `<span class="metric">🧬 ${state.genes}</span>`}</header><section class="lesson-content">${content}</section></main><footer class="lesson-bottom"><div><small>${step.type === "theory" ? "Прочитай и переходи к практике" : s.checked ? "Каждый ответ — шаг к пониманию" : "Выбери один ответ"}</small>${button(step.type === "theory" ? (s.steps[s.step + 1]?.type === "theory" ? "Следующий раздел →" : s.assessmentLabel ? "К итоговому тесту →" : "К практике →") : s.checked ? (s.step === s.steps.length - 1 ? "Завершить" : "Продолжить →") : "Проверить", "lesson-next", step.type === "question" && s.selected === null ? "disabled" : "")}</div></footer>`;
   }
   function chooseAnswer(index) {
     const s = state.session;
@@ -888,7 +956,9 @@
       !data.days.every(
         (d) => typeof d === "string" && /^\d{4}-\d{2}-\d{2}$/.test(d),
       ) ||
-      !validCompleted(data.completed) ||
+      !validCompleted(
+        compatibleCompleted(data.completed, data.courseVersions),
+      ) ||
       !Array.isArray(data.history) ||
       !data.history.every(validResult) ||
       !Array.isArray(data.bookRead) ||
@@ -910,6 +980,8 @@
     safe.bookRead = [...new Set(safe.bookRead)];
     safe.scanPage = safe.scanPage === 48 ? 48 : 47;
     safe.onboarded = Boolean(safe.onboarded);
+    safe.completed = compatibleCompleted(safe.completed, data.courseVersions);
+    reconcileCourseVersions(safe, data.courseVersions);
     return safe;
   }
   const smallScreen = window.matchMedia("(max-width: 680px)");
@@ -1033,7 +1105,7 @@
         );
         if (!l) return;
         openDialog(
-          `<div class="eyebrow">КОНСПЕКТ / ${e(courseLabel())}</div><h2>${e(l.title)}</h2>${l.theory.map((t) => `<h3>${e(t.title)}</h3><p>${e(t.text)}</p>`).join("")}<div class="dialog-actions"><button class="button secondary" data-action="close-dialog">Закрыть</button><button class="button" data-action="note-start" data-id="${l.id}">К уроку →</button></div>`,
+          `<div class="eyebrow">КОНСПЕКТ / ${e(courseLabel())}</div><h2>${e(l.title)}</h2>${l.theory.map((t) => `<h3>${e(t.title)}</h3>${theoryContent(t)}`).join("")}<div class="dialog-actions"><button class="button secondary" data-action="close-dialog">Закрыть</button><button class="button" data-action="note-start" data-id="${l.id}">К уроку →</button></div>`,
         );
         break;
       }

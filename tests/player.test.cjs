@@ -32,11 +32,16 @@ function session(overrides = {}) {
     ...overrides,
   };
 }
-test("all courses have sequential IDs, valid questions and a final challenge", () => {
+test("courses have stable IDs, pending slots and valid published questions", () => {
   for (const c of Object.values(DB.courses)) {
-    assert.equal(c.lessons.at(-1).challenge, true);
+    if (!c.totalSlots) assert.equal(c.lessons.at(-1).challenge, true);
     c.lessons.forEach((l, i) => {
       assert.equal(l.id, i + 1);
+      if (l.pending) {
+        assert.equal(l.questions.length, 0);
+        assert.equal(P.unlocked(c, l.id, {}, "7"), false);
+        return;
+      }
       assert.ok(l.questions.length);
       if (!l.challenge) assert.ok(l.theory.length);
       for (const q of l.questions) {
@@ -149,4 +154,49 @@ test("history is bounded and best completion score never decreases", () => {
   assert.equal(s.history.length, 50);
   assert.equal(s.completed["8:1"].percent, 100);
   assert.equal(s.xp, 30);
+});
+
+test("grade 7 has 13 circles and preserves the uploaded ecosystem exam", () => {
+  const course = DB.courses["7"];
+  assert.equal(course.lessons.length, 13);
+  assert.equal(course.lessons.filter((l) => l.challenge).length, 0);
+  const lesson = course.lessons[0];
+  assert.equal(lesson.title, "Экосистемы");
+  assert.equal(lesson.questions.length, 40);
+  assert.equal(
+    lesson.theory.reduce((n, t) => n + (t.selfCheck?.length || 0), 0),
+    25,
+  );
+  const steps = P.steps(lesson);
+  assert.equal(
+    steps.slice(0, 7).every((s) => s.type === "theory"),
+    true,
+  );
+  assert.equal(
+    steps.slice(7).every((s) => s.type === "question"),
+    true,
+  );
+  assert.equal(
+    P.score(
+      Array.from({ length: 28 }, () => ({ selected: 0, correct: 0 })),
+      40,
+    ).passed,
+    true,
+  );
+  assert.equal(
+    P.score(
+      Array.from({ length: 27 }, () => ({ selected: 0, correct: 0 })),
+      40,
+    ).passed,
+    false,
+  );
+  assert.equal(P.unlocked(course, 2, { "7:1": { percent: 100 } }, "7"), false);
+  const key = [
+    0, 1, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 3, 2, 3, 0, 2, 0, 0, 0, 0, 0, 0, 0, 1,
+    1, 0, 0, 2, 0, 0, 1, 0, 1, 0, 1, 2, 1, 1, 1,
+  ];
+  assert.deepEqual(
+    lesson.questions.map((q) => q.correct),
+    key,
+  );
 });

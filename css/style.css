@@ -2268,3 +2268,42 @@ dialog .layout-option {
   flex: 1;
   min-width: 0;
 }
+
+.theory-text + .theory-text {
+  margin-top: 20px;
+}
+.self-check {
+  margin-top: 28px;
+  padding: 24px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: 18px;
+}
+.self-check h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+.self-check p {
+  font-size: 13px;
+}
+.self-check ol {
+  padding-left: 22px;
+  margin-bottom: 0;
+}
+.self-check li {
+  margin-top: 10px;
+  color: #cad8c6;
+}
+.source-link {
+  margin-top: 20px;
+  font-size: 13px;
+}
+.pending-pill {
+  color: var(--muted);
+  background: transparent;
+  border-color: var(--line);
+}
+
+.lesson-bottom .button {
+  white-space: nowrap;
+}

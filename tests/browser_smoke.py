@@ -33,7 +33,7 @@ class GroundSmoke(unittest.TestCase):
         self.page.goto(self.url)
     def tearDown(self):
         errors=self.errors[:];self.context.close();self.assertEqual(errors,[])
-    def click(self,action):self.page.locator(f'[data-action="{action}"]').first.click()
+    def click(self,action):self.page.locator(f'[data-action="{action}"]:visible').first.click()
     def nav(self,view):self.page.locator(f'.sidebar nav [data-view="{view}"]').click()
     def onboard(self,key='8'):
         self.click('choose-course')
@@ -115,6 +115,47 @@ class GroundSmoke(unittest.TestCase):
         self.page.locator('#confirm-import').click();self.assertEqual(self.state()['name'],'Исследователь')
         self.click('edit-profile');self.click('reset-confirm');self.click('reset')
         self.assertEqual(self.state()['xp'],0);expect(self.page.locator('.welcome h1')).to_be_visible()
+    def test_uploaded_grade7_lesson_and_thirteen_circles(self):
+        self.onboard('7');self.assertEqual(self.page.locator('.road-node').count(),13)
+        self.nav('road');self.assertEqual(self.page.locator('.road-node').count(),13)
+        self.assertEqual(self.page.locator('.road-node.locked').count(),12)
+        self.page.locator('.road-node[data-id="2"]').click();expect(self.page.locator('#toast')).to_contain_text('ещё не добавлен')
+        self.page.locator('.road-node[data-id="1"]').click()
+        link=self.page.locator('.source-link a').first
+        response=self.context.request.get(self.url+link.get_attribute('href'))
+        self.assertEqual(response.status,200);self.assertTrue(response.body().startswith(b'%PDF'))
+        def attempt(wrong_count):
+            index=0;prompts=0
+            for _ in range(120):
+                if not self.page.locator('.lesson-shell').count():break
+                session=self.state()['session'];step=session['steps'][session['step']]
+                if step['type']=='theory':
+                    prompts+=self.page.locator('.self-check li').count();self.click('lesson-next');continue
+                correct=step['correct'];answer=(correct+1)%len(step['answers']) if index<wrong_count else correct
+                self.page.locator(f'.answer[data-index="{answer}"]').click();self.click('lesson-next');self.click('lesson-next');index+=1
+            self.assertEqual(index,40);self.assertEqual(prompts,25)
+        attempt(13);self.assertEqual(self.state()['lastResult']['correct'],27)
+        self.assertFalse(self.state()['lastResult']['passed']);self.assertEqual(self.state()['xp'],0)
+        self.click('result-next');attempt(12)
+        self.assertEqual(self.state()['lastResult']['correct'],28);self.assertTrue(self.state()['lastResult']['passed'])
+        self.assertEqual(self.state()['xp'],30);self.assertIn('7:1',self.state()['completed'])
+        self.click('result-next');self.assertEqual(self.page.locator('.road-node').count(),13)
+        expect(self.page.locator('.road-node[data-id="2"]')).to_have_class(re.compile('locked'))
+        self.nav('home');expect(self.page.locator('.hero [data-action="start-lesson"]')).to_be_disabled()
+        self.nav('library');self.assertEqual(self.page.locator('.lesson-row').count(),1)
+        self.page.reload();self.assertEqual(self.state()['completed']['7:1']['percent'],70)
+
+    def test_replaced_course_keeps_other_progress_and_preferences(self):
+        self.onboard('8');self.click('start-lesson');self.finish()
+        original=self.state();original.pop('courseVersions');original['completed']['7:1']={'percent':100,'at':'2026-10-10'};original['completed']['7:2']={'percent':100,'at':'2026-10-10'}
+        original['layout']='phone';original['xp']=90;original['genes']=15
+        fresh=self.context.new_page();fresh.set_default_timeout(5000);fresh.add_init_script('localStorage.setItem("ground.v2",'+json.dumps(json.dumps(original))+')');fresh.goto(self.url)
+        self.page.close();self.page=fresh
+        self.nav('road');self.page.reload();self.nav('road')
+        self.click('choose-course');self.page.locator('[data-track="school"]').click();self.page.locator('[data-course="7"]').click()
+        data=self.state();self.assertEqual(data['xp'],90);self.assertEqual(data['genes'],15);self.assertEqual(data['layout'],'phone')
+        self.assertIn('8:1',data['completed']);self.assertNotIn('7:1',data['completed']);self.assertEqual(data['courseVersions']['7'],2)
+
     def test_manual_layout_preferences(self):
         self.onboard();self.nav('profile')
         def choose(mode):

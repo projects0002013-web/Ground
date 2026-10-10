@@ -9,6 +9,20 @@
       const steps = [];
       const theory = practice ? [] : lesson.theory || [];
       const questions = lesson.questions || [];
+      if (lesson.theoryFirst && !practice) {
+        return [
+          ...theory.map((card) => ({
+            ...card,
+            type: "theory",
+            icon: lesson.icon,
+          })),
+          ...questions.map((question, index) => ({
+            ...question,
+            type: "question",
+            index,
+          })),
+        ];
+      }
       questions.forEach((question, index) => {
         theory.forEach((card, cardIndex) => {
           if (
@@ -34,6 +48,7 @@
       const index = course.lessons.findIndex((l) => l.id === lessonId);
       return (
         index >= 0 &&
+        !course.lessons[index].pending &&
         (index === 0 ||
           Boolean(completed[`${courseKey}:${course.lessons[index - 1].id}`]))
       );
