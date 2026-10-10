@@ -4,10 +4,10 @@
   "version": "1.0.0",
   "scripts": {
     "build:firebase": "node scripts/build-firebase.mjs",
-    "build:catalog": "node scripts/build-catalog.cjs",
     "test": "node --test tests/*.test.cjs",
-    "test:firebase": "npm run build:catalog && firebase emulators:exec --project demo-ground --only auth,firestore,functions 'node --test tests/firebase/*.test.cjs'",
-    "test:browser": "python3 tests/browser_smoke.py"
+    "test:firebase": "npm run build:rules && firebase emulators:exec --project demo-ground --only auth,firestore 'node --test tests/firebase/*.test.cjs'",
+    "test:browser": "python3 tests/browser_smoke.py",
+    "build:rules": "node scripts/build-rules.cjs"
   },
   "devDependencies": {
     "firebase": "12.4.0",

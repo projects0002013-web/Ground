@@ -1,7 +1,7 @@
 const test = require("node:test"),
   assert = require("node:assert/strict");
 const C = require("../js/cloud-progress.js");
-const S = require("../functions/progress.cjs");
+const S = require("../js/progress-engine.js");
 global.window = {};
 require("../js/database.js");
 const DB = window.GroundDB;
@@ -57,7 +57,7 @@ test("shuffled browser answers map to canonical server choices without trusting 
     0,
   );
 });
-test("server rejects forged rewards, answers, duplicate questions and out-of-order lessons", () => {
+test("browser scoring rejects forged rewards, answers, duplicate questions and out-of-order lessons", () => {
   assert.throws(() => S.evaluate({ ...input(), rewardXP: 9999 }), /формат/);
   assert.throws(
     () => S.evaluate({ ...input(), answers: [{ index: 0, selected: 999 }] }),
@@ -155,7 +155,7 @@ test("pending offline completion opens the road locally, keeping authoritative c
     {},
   );
 });
-test("server days use Kazakhstan timezone and preserve cumulative currency across course versions", () => {
+test("study days use Kazakhstan timezone and preserve cumulative currency across course versions", () => {
   assert.equal(S.dayKey(new Date("2026-10-10T20:00:00Z")), "2026-10-11");
   assert.equal(S.streak(["2026-10-09", "2026-10-10"], now), 2);
   const legacy = {

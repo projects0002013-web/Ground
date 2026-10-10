@@ -22,12 +22,9 @@ const {
   setDoc,
   serverTimestamp,
 } = require("firebase/firestore");
-const {
-  getFunctions,
-  connectFunctionsEmulator,
-  httpsCallable,
-} = require("firebase/functions");
-const engine = require("../../functions/progress.cjs");
+const sdk = require("firebase/firestore");
+const storage = require("../../js/firestore-progress.js");
+const engine = require("../../js/progress-engine.js");
 const PROJECT = "demo-ground";
 let rulesEnv,
   apps = [];
@@ -53,15 +50,16 @@ async function device(name, subject = "alice") {
   await signInWithCredential(auth, GoogleAuthProvider.credential(token));
   const db = getFirestore(app);
   connectFirestoreEmulator(db, "127.0.0.1", 8080);
-  const functions = getFunctions(app, "europe-west1");
-  connectFunctionsEmulator(functions, "127.0.0.1", 5001);
+  const adapter = storage.create(sdk, db);
   return {
     app,
     auth,
     db,
     uid: auth.currentUser.uid,
-    ensure: httpsCallable(functions, "ensureProfile"),
-    record: httpsCallable(functions, "recordAttempt"),
+    ensure: () => adapter.ensureProfile(auth.currentUser),
+    record: async (input) => ({
+      data: await adapter.recordAttempt(auth.currentUser.uid, input),
+    }),
   };
 }
 function attempt(key, id) {
@@ -88,7 +86,7 @@ after(async () => {
   await Promise.all(apps.map(deleteApp));
   await rulesEnv.cleanup();
 });
-test("real SDK + Auth/Firestore/Functions emulators: concurrency, replay, isolation and protected rewards", async () => {
+test("real SDK + Auth/Firestore emulators: concurrency, replay, isolation and protected rewards", async () => {
   const laptop = await device("laptop"),
     phone = await device("phone"),
     bob = await device("bob", "bob");

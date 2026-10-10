@@ -21,11 +21,7 @@ export {
   limit,
   onSnapshot,
   updateDoc,
+  runTransaction,
   serverTimestamp,
   connectFirestoreEmulator,
 } from "firebase/firestore";
-export {
-  getFunctions,
-  httpsCallable,
-  connectFunctionsEmulator,
-} from "firebase/functions";

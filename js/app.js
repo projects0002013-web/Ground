@@ -1197,7 +1197,7 @@
           break;
         }
         openDialog(
-          `<h2>Перенести гостевые попытки?</h2><p>Сохраним историю ответов в этом аккаунте и заново проверим результаты. Прежний гостевой профиль останется на устройстве. Баллы без истории ответов не переносятся.</p><div class="dialog-actions"><button class="button secondary" data-action="close-dialog">Отмена</button><button class="button" id="confirm-guest-import">Перенести</button></div>`,
+          `<h2>Перенести гостевые попытки?</h2><p>Сохраним историю ответов в этом аккаунте и заново проверим результаты в приложении. Прежний гостевой профиль останется на устройстве. Баллы без истории ответов не переносятся.</p><div class="dialog-actions"><button class="button secondary" data-action="close-dialog">Отмена</button><button class="button" id="confirm-guest-import">Перенести</button></div>`,
         );
         document.getElementById("confirm-guest-import").addEventListener(
           "click",
@@ -1417,7 +1417,7 @@
       if (file.size > 2 * 1024 * 1024) throw new Error("size");
       const imported = validateImport(JSON.parse(await file.text()));
       openDialog(
-        `<h2>Восстановить прогресс?</h2><p>${account.user ? `Ответы из копии «${e(imported.name)}» будут отправлены на серверную проверку. Облачные XP и гены сохранятся; непроверяемые старые награды не переносятся.` : `Копия профиля «${e(imported.name)}» заменит текущий прогресс: ${imported.xp} XP, ${Object.keys(imported.completed).length} пройденных занятий.`}</p><div class="dialog-actions"><button class="button secondary" data-action="close-dialog">Отмена</button><button class="button" id="confirm-import">Восстановить</button></div>`,
+        `<h2>Восстановить прогресс?</h2><p>${account.user ? `Ответы из копии «${e(imported.name)}» будут отправлены на проверку ответов. Облачные XP и гены сохранятся; непроверяемые старые награды не переносятся.` : `Копия профиля «${e(imported.name)}» заменит текущий прогресс: ${imported.xp} XP, ${Object.keys(imported.completed).length} пройденных занятий.`}</p><div class="dialog-actions"><button class="button secondary" data-action="close-dialog">Отмена</button><button class="button" id="confirm-import">Восстановить</button></div>`,
       );
       document.getElementById("confirm-import").addEventListener(
         "click",

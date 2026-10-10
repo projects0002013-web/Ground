@@ -1,11 +1,10 @@
-/* Per-account cache and durable outbox; Firestore is authoritative for rewards. */
+/* Per-account cache and durable outbox for the free Firestore plan. */
 (() => {
   "use strict";
   const P = window.GroundCloudProgress,
     DB = window.GroundDB;
   const listeners = new Set();
   let sharedDb,
-    sharedFunctions,
     connecting = false;
   let account = { user: null, phase: "loading", error: "", busy: false },
     generation = 0,
@@ -77,7 +76,11 @@
     if (profile && (value.revision || 0) < (profile.revision || 0)) return;
     if (profile && (value.revision || 0) > (profile.revision || 0)) {
       queue.forEach((entry) => {
-        if (entry.code === "functions/failed-precondition") {
+        if (
+          ["failed-precondition", "functions/failed-precondition"].includes(
+            entry.code,
+          )
+        ) {
           entry.error = "";
           entry.code = "";
         }
@@ -125,20 +128,18 @@
         sharedDb = sdk.initializeFirestore(app, {
           localCache: sdk.memoryLocalCache(),
         });
-        sharedFunctions = sdk.getFunctions(
-          app,
-          window.GroundFirebaseConfig.functionsRegion || "europe-west1",
-        );
+
         if (window.GroundFirebaseConfig.emulators) {
           sdk.connectFirestoreEmulator(sharedDb, "127.0.0.1", 8080);
-          sdk.connectFunctionsEmulator(sharedFunctions, "127.0.0.1", 5001);
         }
       }
       db = sharedDb;
-      const functions = sharedFunctions;
-      ensure = sdk.httpsCallable(functions, "ensureProfile");
-      record = sdk.httpsCallable(functions, "recordAttempt");
-      await ensure({});
+      const storage = window.GroundFirestoreProgress.create(sdk, db);
+      ensure = () => storage.ensureProfile(user);
+      record = async (input) => ({
+        data: await storage.recordAttempt(user.uid, input),
+      });
+      await ensure();
       if (token !== generation) return;
       stops.push(
         sdk.onSnapshot(
@@ -331,10 +332,10 @@
           if (token !== generation) return;
           if (
             [
-              "functions/invalid-argument",
-              "functions/failed-precondition",
-              "functions/already-exists",
-            ].includes(error.code)
+              "invalid-argument",
+              "failed-precondition",
+              "already-exists",
+            ].includes(error.code?.replace(/^functions\//, ""))
           ) {
             entry.error = error.message || "Попытку нужно повторить.";
             entry.code = error.code;

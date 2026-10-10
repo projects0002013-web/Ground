@@ -1,4 +1,4 @@
-/* Shared client mapping. Rewards are computed only by the callable backend. */
+/* Shared client answer mapping and per-account cache reconciliation. */
 (function (root) {
   "use strict";
   const accountKey = (uid) => `ground.v2.user.${uid}`;
@@ -82,7 +82,7 @@
   function merge(profile, local, queue, history) {
     const completed = { ...(profile.completed || {}) };
     // Pending successful attempts may unlock the next lesson locally while offline.
-    // No currency is awarded until the server confirms the attempt.
+    // No currency is awarded until Firestore confirms the transaction.
     for (const entry of queue)
       if (
         entry.result.passed &&

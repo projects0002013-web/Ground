@@ -24,7 +24,7 @@ class GroundOfflineBrowser(unittest.TestCase):
                 page.wait_for_function('()=>!!navigator.serviceWorker.controller')
                 status=page.evaluate("async()=>{const r=await fetch('materials/grade7/lesson-01-ecosystems.pdf');await r.arrayBuffer();return r.status;}")
                 self.assertEqual(status,200)
-                page.wait_for_function("async()=>{const c=await caches.open('ground-static-v1');return !!(await c.match(new URL('materials/grade7/lesson-01-ecosystems.pdf',location.href)));}")
+                page.wait_for_function("async()=>{const c=await caches.open('ground-static-v2');return !!(await c.match(new URL('materials/grade7/lesson-01-ecosystems.pdf',location.href)));}")
                 context.set_offline(True)
                 page.reload()
                 page.wait_for_selector('[data-action="choose-course"]')

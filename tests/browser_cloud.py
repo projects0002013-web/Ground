@@ -1,10 +1,9 @@
-"""Browser integration with a test SDK adapter and the actual server scoring engine.
+"""Browser integration with a test SDK adapter and the actual browser scoring engine.
 Google OAuth and Firestore Rules additionally require the real emulator / deployment checks.
 """
 import json
 import os
 import shutil
-import subprocess
 import threading
 import unittest
 from functools import partial
@@ -14,7 +13,6 @@ from playwright.sync_api import sync_playwright, expect
 from browser_smoke import QuietHandler, GroundSmoke
 
 ROOT = Path(__file__).resolve().parents[1]
-ENGINE = """const fs=require('node:fs'),s=require('./functions/progress.cjs');const x=JSON.parse(fs.readFileSync(0,'utf8'));try{console.log(JSON.stringify(x.action==='ensureProfile'?s.emptyProfile(x.uid,{name:x.uid,email:x.uid+'@example.test'}):s.apply(x.profile,s.evaluate(x.data))))}catch(e){console.log(JSON.stringify({error:e.message,code:'functions/'+e.code}))}"""
 profiles = {}
 attempts = {}
 lock = threading.Lock()
@@ -28,29 +26,43 @@ class CloudHandler(QuietHandler):
         uid, action, data = request['uid'], request['action'], request['data']
         with lock:
             if not uid:
-                result = {'error': 'unauthenticated', 'code': 'functions/unauthenticated'}
-            elif action == 'ensureProfile':
-                if uid not in profiles:
-                    profiles[uid] = self.engine(request)
-                    attempts[uid] = {}
-                result = {'ok': True}
+                result = {'error': 'unauthenticated', 'code': 'unauthenticated'}
             elif action == 'read':
-                if uid not in profiles or not data['path'].startswith('users/' + uid):
+                path = data['path'].split('/')
+                if len(path) < 2 or path[1] != uid:
                     result = {'error': 'permission-denied', 'code': 'permission-denied'}
+                elif len(path) == 2:
+                    result = profiles.get(uid)
+                elif len(path) == 3:
+                    result = list(attempts.get(uid, {}).values())[::-1][:50]
                 else:
-                    result = list(attempts[uid].values())[::-1][:50] if data['path'].endswith('/attempts') else profiles[uid]
+                    result = attempts.get(uid, {}).get(path[3])
             elif action == 'preferences':
                 profiles[uid].update({key: value for key, value in data.items() if key in ['selectedGrade', 'layout', 'nickname', 'onboarded', 'bookRead', 'bookPage', 'scanPage']})
                 result = {}
-            elif action == 'recordAttempt':
-                if data['id'] in attempts[uid]:
-                    result = {'result': attempts[uid][data['id']], 'progress': profiles[uid]}
+            elif action == 'commit':
+                conflict = False
+                for path, value in data['reads'].items():
+                    parts = path.split('/')
+                    old = profiles.get(uid) if len(parts) == 2 else attempts.get(uid, {}).get(parts[3])
+                    if parts[1] != uid or old != value:
+                        conflict = True
+                if conflict:
+                    result = {'error': 'retry transaction', 'code': 'aborted'}
                 else:
-                    result = self.engine({**request, 'profile': profiles[uid]})
-                    if 'error' not in result:
-                        profiles[uid] = result.pop('profile')
-                        attempts[uid][data['id']] = result['result']
-                        result['progress'] = profiles[uid]
+                    for write in data['writes']:
+                        parts = write['path'].split('/')
+                        if parts[1] != uid:
+                            raise ValueError('Cross-account write')
+                        if len(parts) == 2:
+                            if write['type'] == 'update':
+                                profiles[uid].update(write['data'])
+                            else:
+                                profiles[uid] = write['data']
+                            attempts.setdefault(uid, {})
+                        else:
+                            attempts.setdefault(uid, {})[parts[3]] = write['data']
+                    result = {}
             else:
                 result = {'error': 'unknown'}
             payload = json.dumps(result).encode()
@@ -59,10 +71,6 @@ class CloudHandler(QuietHandler):
         self.send_header('Content-Length', str(len(payload)))
         self.end_headers()
         self.wfile.write(payload)
-
-    def engine(self, request):
-        process = subprocess.run(['node', '-e', ENGINE], cwd=ROOT, input=json.dumps(request), text=True, capture_output=True, check=True)
-        return json.loads(process.stdout)
 
 class GroundCloudBrowser(unittest.TestCase):
     click = GroundSmoke.click

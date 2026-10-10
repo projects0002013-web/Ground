@@ -9,7 +9,6 @@ window.GroundFirebaseConfig = {
     messagingSenderId: "645518309147",
     appId: "1:645518309147:web:18202298c0f79f784e45be",
   },
-  functionsRegion: "europe-west1",
   // Only for local testing with the Firebase Emulator Suite.
   emulators: false,
 };

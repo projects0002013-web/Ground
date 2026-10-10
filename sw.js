@@ -1,5 +1,5 @@
 /* Cache static teaching resources only. Never cache Firebase or account data. */
-const VERSION = "ground-static-v1";
+const VERSION = "ground-static-v2";
 const base = new URL("./", self.location.href);
 const files = [
   "index.html",
@@ -9,6 +9,9 @@ const files = [
   "js/app.js",
   "js/firebase-config.js",
   "js/cloud-progress.js",
+  "js/cloud-catalog.js",
+  "js/progress-engine.js",
+  "js/firestore-progress.js",
   "js/auth.js",
   "js/cloud-database.js",
   "js/firebase-sdk.js",
