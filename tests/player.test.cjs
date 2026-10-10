@@ -240,12 +240,93 @@ test("classification fills circle 2 without resetting ecosystem progress", () =>
       { "7:1": { percent: 100 }, "7:2": { percent: 100 } },
       "7",
     ),
-    false,
+    true,
   );
   assert.equal(
     course.lessons
       .slice(2)
-      .every((l) => l.pending && !l.theory.length && !l.questions.length),
+      .every((l) => !l.pending && l.theory.length && l.questions.length === 40),
     true,
   );
+});
+
+test("all thirteen PDF lessons preserve exams, ungraded prompts and sequential rewards", () => {
+  const fs = require("node:fs");
+  const path = require("node:path");
+  const { createHash } = require("node:crypto");
+  const sources = require("./fixtures/grade7_sources.json");
+  const hash = (value) => createHash("sha256").update(value).digest("hex");
+  const course = DB.courses["7"];
+  const profile = state();
+  assert.equal(course.totalSlots, 13);
+  assert.equal(course.progressVersion, 2);
+  assert.equal(
+    course.lessons.filter((l) => l.pending || l.challenge).length,
+    0,
+  );
+  assert.equal(
+    course.lessons.reduce((n, l) => n + l.questions.length, 0),
+    520,
+  );
+  assert.equal(
+    course.lessons.reduce(
+      (n, l) =>
+        n + l.theory.reduce((m, t) => m + (t.selfCheck?.length || 0), 0),
+      0,
+    ),
+    300,
+  );
+  for (const lesson of course.lessons) {
+    const key = `7:${lesson.id}`;
+    assert.equal(P.unlocked(course, lesson.id, profile.completed, "7"), true);
+    if (lesson.id < 13)
+      assert.equal(
+        P.unlocked(course, lesson.id + 1, profile.completed, "7"),
+        false,
+      );
+    const expected = sources[lesson.id];
+    if (expected) {
+      assert.equal(lesson.title, expected.title);
+      assert.equal(lesson.source, expected.source);
+      const pdf = fs.readFileSync(path.join(__dirname, "..", lesson.source));
+      assert.equal(pdf.subarray(0, 4).toString(), "%PDF");
+      assert.equal(hash(pdf), expected.pdfSha256);
+      const assessment = lesson.questions.map(
+        ({ question, answers, correct }) => ({ question, answers, correct }),
+      );
+      assert.equal(hash(JSON.stringify(assessment)), expected.assessmentSha256);
+      assert.equal(lesson.theory.length, expected.theoryCount);
+      assert.equal(
+        lesson.theory.reduce((n, t) => n + (t.selfCheck?.length || 0), 0),
+        expected.selfCheckCount,
+      );
+      assert.equal(
+        lesson.theory.every(
+          (t) => t.source === lesson.source && t.text.length > 0,
+        ),
+        true,
+      );
+    }
+    const steps = P.steps(lesson);
+    assert.equal(
+      steps.slice(0, lesson.theory.length).every((s) => s.type === "theory"),
+      true,
+    );
+    assert.equal(
+      steps.slice(lesson.theory.length).every((s) => s.type === "question"),
+      true,
+    );
+    const attempt = session({
+      key,
+      courseKey: "7",
+      lessonId: lesson.id,
+      steps,
+      answers: Array.from({ length: 28 }, () => ({ selected: 0, correct: 0 })),
+    });
+    assert.equal(P.complete(profile, attempt, now).passed, true);
+    assert.equal(P.complete(profile, attempt, now).rewardXP, 0);
+  }
+  assert.equal(profile.xp, 390);
+  assert.equal(profile.genes, 65);
+  assert.equal(Object.keys(profile.completed).length, 13);
 });

@@ -120,7 +120,7 @@ class GroundSmoke(unittest.TestCase):
         self.nav('road');self.assertEqual(self.page.locator('.road-node').count(),13)
         self.assertEqual(self.page.locator('.road-node.locked').count(),12)
         self.page.locator('.road-node[data-id="2"]').click();expect(self.page.locator('#toast')).to_contain_text('Сначала пройди предыдущий')
-        self.page.locator('.road-node[data-id="3"]').click();expect(self.page.locator('#toast')).to_contain_text('ещё не добавлен')
+        self.page.locator('.road-node[data-id="3"]').click();expect(self.page.locator('#toast')).to_contain_text('Сначала пройди предыдущий')
         self.page.locator('.road-node[data-id="1"]').click()
         link=self.page.locator('.source-link a').first
         response=self.context.request.get(self.url+link.get_attribute('href'))
@@ -143,7 +143,7 @@ class GroundSmoke(unittest.TestCase):
         self.click('result-next');self.assertEqual(self.page.locator('.road-node').count(),13)
         expect(self.page.locator('.road-node[data-id="2"]')).to_have_class(re.compile('available'))
         self.nav('home');expect(self.page.locator('.hero [data-action="start-lesson"]')).to_be_enabled()
-        self.nav('library');self.assertEqual(self.page.locator('.lesson-row').count(),2)
+        self.nav('library');self.assertEqual(self.page.locator('.lesson-row').count(),13)
         self.page.reload();self.assertEqual(self.state()['completed']['7:1']['percent'],70)
 
     def test_classification_pdf_resume_and_existing_progress(self):
@@ -169,8 +169,52 @@ class GroundSmoke(unittest.TestCase):
         self.assertEqual(data['xp'],60);self.assertEqual(data['genes'],10);self.assertEqual(data['layout'],'phone')
         self.assertEqual(data['completed']['7:1']['percent'],70);self.assertIn('7:2',data['completed'])
         self.click('result-next');self.assertEqual(self.page.locator('.road-node').count(),13)
-        expect(self.page.locator('.road-node[data-id="3"]')).to_have_class(re.compile('locked'))
+        expect(self.page.locator('.road-node[data-id="3"]')).to_have_class(re.compile('available'))
         self.page.reload();self.assertEqual(self.state()['completed']['7:2']['percent'],100)
+
+    def test_uploaded_lessons_three_through_thirteen(self):
+        self.onboard('7')
+        data=self.state();data['completed']={f'7:{i}':{'percent':70,'at':'2026-10-10'} for i in [1,2]}
+        data['xp']=60;data['genes']=10;data['layout']='phone'
+        fresh=self.context.new_page();fresh.set_default_timeout(5000)
+        fresh.add_init_script('if (!sessionStorage.getItem("seeded-full-course")) { localStorage.setItem("ground.v2",'+json.dumps(json.dumps(data))+'); sessionStorage.setItem("seeded-full-course","1"); }')
+        self.page.close();self.page=fresh;self.page.on('pageerror',lambda error:self.errors.append(str(error)))
+        self.page.goto(self.url)
+        sources=json.loads((ROOT/'tests/fixtures/grade7_sources.json').read_text())
+        for number in range(3,14):
+            with self.subTest(lesson=number):
+                self.nav('road');self.assertEqual(self.page.locator('.road-node').count(),13)
+                expect(self.page.locator(f'.road-node[data-id="{number}"]')).to_have_class(re.compile('available'))
+                if number<13:
+                    self.page.locator(f'.road-node[data-id="{number+1}"]').click()
+                    expect(self.page.locator('#toast')).to_contain_text('Сначала пройди предыдущий')
+                self.page.locator(f'.road-node[data-id="{number}"]').click()
+                source=sources[str(number)];session=self.state()['session']
+                self.assertEqual(session['lessonId'],number);self.assertEqual(session['title'],source['title'])
+                self.assertIsNone(session['deadline']);self.assertEqual(sum(s['type']=='question' for s in session['steps']),40)
+                link=self.page.locator('.source-link a').first
+                self.assertEqual(link.get_attribute('href'),source['source'])
+                response=self.context.request.get(self.url+source['source'])
+                self.assertEqual(response.status,200);self.assertEqual(response.body(),(ROOT/source['source']).read_bytes())
+                prompts=0
+                for _ in range(source['theoryCount']):
+                    prompts+=self.page.locator('.self-check li').count();self.click('lesson-next')
+                self.assertEqual(prompts,source['selfCheckCount'])
+                if number in [3,10,13]:
+                    self.click('exit-lesson');self.page.reload();self.click('resume')
+                    self.assertEqual(self.state()['session']['lessonId'],number)
+                self.finish();data=self.state()
+                self.assertEqual(data['lastResult']['total'],40);self.assertEqual(data['lastResult']['correct'],40)
+                self.assertEqual(data['xp'],number*30);self.assertEqual(data['genes'],number*5)
+                self.assertEqual(data['completed']['7:1']['percent'],70);self.assertEqual(data['completed']['7:2']['percent'],70)
+                self.assertEqual(data['layout'],'phone');self.assertEqual(data['courseVersions']['7'],2)
+                self.page.reload();self.assertIn(f'7:{number}',self.state()['completed'])
+        self.nav('road');self.assertEqual(self.page.locator('.road-node.completed').count(),13)
+        self.assertEqual(self.page.locator('.road-node.locked').count(),0)
+        self.nav('home');expect(self.page.locator('.hero')).to_contain_text('КУРС ПРОЙДЕН')
+        self.nav('library');self.assertEqual(self.page.locator('.lesson-row').count(),13)
+        self.nav('road');self.page.locator('.road-node[data-id="13"]').click();self.finish()
+        self.assertEqual(self.state()['xp'],390);self.assertEqual(self.state()['lastResult']['rewardXP'],0)
 
     def test_replaced_course_keeps_other_progress_and_preferences(self):
         self.onboard('8');self.click('start-lesson');self.finish()

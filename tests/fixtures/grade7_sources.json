@@ -1,0 +1,90 @@
+{
+  "3": {
+    "title": "Клеточная биология",
+    "source": "materials/grade7/lesson-03-cell-biology.pdf",
+    "pdfSha256": "b0f6ea86468aa936b06183ee3aaf4c378acf2a2e25b2c1fb6ce8621e968a4b1c",
+    "assessmentSha256": "3eb7d3e0923efee491b0fecb6d1594df168c5f9f8cc4cb150129f113e8c11ab5",
+    "selfCheckCount": 20,
+    "theoryCount": 4
+  },
+  "4": {
+    "title": "Вода и органические соединения",
+    "source": "materials/grade7/lesson-04-water-organic-compounds.pdf",
+    "pdfSha256": "48545ccfa60ce629580bd2723edc6793a7ef16021d050b688f1e4ab96397c964",
+    "assessmentSha256": "d6bccd409c79a651452b61a412302b34b8dc3b54381b4632f9e3f924335d57c4",
+    "selfCheckCount": 20,
+    "theoryCount": 5
+  },
+  "5": {
+    "title": "Транспорт веществ",
+    "source": "materials/grade7/lesson-05-transport.pdf",
+    "pdfSha256": "5681a03022d0e59788075a1d56ce3b28e23f2de1e0083e336343fa95a9551a97",
+    "assessmentSha256": "ec0f2d01ae65f763a64929f71c8702296ad96460e7f9a99576532427c19a8b66",
+    "selfCheckCount": 25,
+    "theoryCount": 6
+  },
+  "6": {
+    "title": "Питание",
+    "source": "materials/grade7/lesson-06-nutrition.pdf",
+    "pdfSha256": "70b1c1eceee9915165d7b8bd192a1d5e5c005bf576a35bb36091c47d98fd519f",
+    "assessmentSha256": "28994b40f952b7eb8fac4d905db19ba8867c92f45b1b80ff10de283d94192fc5",
+    "selfCheckCount": 10,
+    "theoryCount": 3
+  },
+  "7": {
+    "title": "Дыхание",
+    "source": "materials/grade7/lesson-07-respiration.pdf",
+    "pdfSha256": "b11b5c019151c26fd61eb173b5c750270fa92f3450eaf3442e6506a67063cedf",
+    "assessmentSha256": "84f5b7f0f1daf3baf9a92180c926f7d4077d4848bd4dccfe4646ad1e499151b0",
+    "selfCheckCount": 25,
+    "theoryCount": 5
+  },
+  "8": {
+    "title": "Выделение",
+    "source": "materials/grade7/lesson-08-excretion.pdf",
+    "pdfSha256": "b21dcaf4b1283085938150b1343c4d30b1be5b96429506184cd437946176de12",
+    "assessmentSha256": "d35c33222ddfdb438c1ac790fdbc6b3775d5057683ebcd29983c49bc30bfedfe",
+    "selfCheckCount": 15,
+    "theoryCount": 4
+  },
+  "9": {
+    "title": "Движение",
+    "source": "materials/grade7/lesson-09-movement.pdf",
+    "pdfSha256": "1e956362d092f003bf38521e2c07a8f8cdcc96c451feb1f70f4e138cd01f2776",
+    "assessmentSha256": "a4762c5a7c15da66134134dbb27bbc9f5eb83354f69cc6b803ae79e7c3105645",
+    "selfCheckCount": 15,
+    "theoryCount": 4
+  },
+  "10": {
+    "title": "Координация и регуляция",
+    "source": "materials/grade7/lesson-10-coordination-regulation.pdf",
+    "pdfSha256": "c384a46c72d634596c99e34ac88142308f8025ad80c63e46173e5f79a40aca61",
+    "assessmentSha256": "c09dceb344648af17e1cf11649ab7576e86d35b000d25d3dc193bffdceb1c530",
+    "selfCheckCount": 55,
+    "theoryCount": 11
+  },
+  "11": {
+    "title": "Наследственность и изменчивость",
+    "source": "materials/grade7/lesson-11-heredity-variation.pdf",
+    "pdfSha256": "9c4f0e4760e526bcc2de568cb5605ca28caa2a69f2fc147a41df34c445844436",
+    "assessmentSha256": "7423c155d33a18a2db3e07ab9fd8ed3fbb047f3234327ccb902a6d63dd8966bc",
+    "selfCheckCount": 15,
+    "theoryCount": 4
+  },
+  "12": {
+    "title": "Размножение, рост и развитие",
+    "source": "materials/grade7/lesson-12-reproduction-growth-development.pdf",
+    "pdfSha256": "d7d1b62ea048039cffae59bff13817f8fd9c0c4e15195c02591020eb8eded27a",
+    "assessmentSha256": "7978586363111bdbf0b8ebb6548eb586bccb58e7ec8c5825e39564a6a1be65d8",
+    "selfCheckCount": 35,
+    "theoryCount": 7
+  },
+  "13": {
+    "title": "Микробиология и биотехнология",
+    "source": "materials/grade7/lesson-13-microbiology-biotechnology.pdf",
+    "pdfSha256": "eb144e38e728cbd882e03446ea01802306e2a2d2f3690c3ae83073d10ea5b081",
+    "assessmentSha256": "47e9cd35bc9efbcbfa9e8c6a0b2a0fbbaf937fb8f15a7714b70966343b6fe103",
+    "selfCheckCount": 20,
+    "theoryCount": 5
+  }
+}
