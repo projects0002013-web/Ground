@@ -190,7 +190,7 @@ test("grade 7 has 13 circles and preserves the uploaded ecosystem exam", () => {
     ).passed,
     false,
   );
-  assert.equal(P.unlocked(course, 2, { "7:1": { percent: 100 } }, "7"), false);
+  assert.equal(P.unlocked(course, 2, { "7:1": { percent: 100 } }, "7"), true);
   const key = [
     0, 1, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 3, 2, 3, 0, 2, 0, 0, 0, 0, 0, 0, 0, 1,
     1, 0, 0, 2, 0, 0, 1, 0, 1, 0, 1, 2, 1, 1, 1,
@@ -198,5 +198,54 @@ test("grade 7 has 13 circles and preserves the uploaded ecosystem exam", () => {
   assert.deepEqual(
     lesson.questions.map((q) => q.correct),
     key,
+  );
+});
+
+test("classification fills circle 2 without resetting ecosystem progress", () => {
+  const course = DB.courses["7"];
+  assert.equal(course.progressVersion, 2);
+  const lesson = course.lessons[1];
+  assert.equal(lesson.title, "Классификация живых организмов");
+  assert.equal(lesson.source, "materials/grade7/lesson-02-classification.pdf");
+  assert.equal(lesson.questions.length, 40);
+  assert.equal(
+    lesson.theory.reduce((n, t) => n + (t.selfCheck?.length || 0), 0),
+    20,
+  );
+  assert.equal(
+    P.steps(lesson)
+      .slice(0, 6)
+      .every((s) => s.type === "theory"),
+    true,
+  );
+  assert.equal(
+    P.steps(lesson)
+      .slice(6)
+      .every((s) => s.type === "question"),
+    true,
+  );
+  assert.deepEqual(
+    lesson.questions.map((q) => q.correct),
+    [
+      1, 0, 1, 2, 1, 1, 1, 0, 0, 1, 3, 1, 0, 2, 0, 1, 2, 0, 1, 1, 1, 2, 1, 0, 2,
+      0, 1, 2, 0, 0, 1, 2, 0, 1, 1, 0, 0, 2, 1, 1,
+    ],
+  );
+  assert.equal(P.unlocked(course, 2, {}, "7"), false);
+  assert.equal(P.unlocked(course, 2, { "7:1": { percent: 70 } }, "7"), true);
+  assert.equal(
+    P.unlocked(
+      course,
+      3,
+      { "7:1": { percent: 100 }, "7:2": { percent: 100 } },
+      "7",
+    ),
+    false,
+  );
+  assert.equal(
+    course.lessons
+      .slice(2)
+      .every((l) => l.pending && !l.theory.length && !l.questions.length),
+    true,
   );
 });

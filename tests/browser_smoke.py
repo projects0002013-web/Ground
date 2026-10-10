@@ -119,7 +119,8 @@ class GroundSmoke(unittest.TestCase):
         self.onboard('7');self.assertEqual(self.page.locator('.road-node').count(),13)
         self.nav('road');self.assertEqual(self.page.locator('.road-node').count(),13)
         self.assertEqual(self.page.locator('.road-node.locked').count(),12)
-        self.page.locator('.road-node[data-id="2"]').click();expect(self.page.locator('#toast')).to_contain_text('ещё не добавлен')
+        self.page.locator('.road-node[data-id="2"]').click();expect(self.page.locator('#toast')).to_contain_text('Сначала пройди предыдущий')
+        self.page.locator('.road-node[data-id="3"]').click();expect(self.page.locator('#toast')).to_contain_text('ещё не добавлен')
         self.page.locator('.road-node[data-id="1"]').click()
         link=self.page.locator('.source-link a').first
         response=self.context.request.get(self.url+link.get_attribute('href'))
@@ -140,10 +141,36 @@ class GroundSmoke(unittest.TestCase):
         self.assertEqual(self.state()['lastResult']['correct'],28);self.assertTrue(self.state()['lastResult']['passed'])
         self.assertEqual(self.state()['xp'],30);self.assertIn('7:1',self.state()['completed'])
         self.click('result-next');self.assertEqual(self.page.locator('.road-node').count(),13)
-        expect(self.page.locator('.road-node[data-id="2"]')).to_have_class(re.compile('locked'))
-        self.nav('home');expect(self.page.locator('.hero [data-action="start-lesson"]')).to_be_disabled()
-        self.nav('library');self.assertEqual(self.page.locator('.lesson-row').count(),1)
+        expect(self.page.locator('.road-node[data-id="2"]')).to_have_class(re.compile('available'))
+        self.nav('home');expect(self.page.locator('.hero [data-action="start-lesson"]')).to_be_enabled()
+        self.nav('library');self.assertEqual(self.page.locator('.lesson-row').count(),2)
         self.page.reload();self.assertEqual(self.state()['completed']['7:1']['percent'],70)
+
+    def test_classification_pdf_resume_and_existing_progress(self):
+        self.onboard('7')
+        # Existing ecosystem completion must survive publishing lesson 2.
+        data=self.state();data['completed']['7:1']={'percent':70,'at':'2026-10-10'};data['xp']=30;data['genes']=5;data['layout']='phone'
+        fresh=self.context.new_page();fresh.set_default_timeout(5000)
+        fresh.add_init_script('if (!sessionStorage.getItem("seeded-classification")) { localStorage.setItem("ground.v2",'+json.dumps(json.dumps(data))+'); sessionStorage.setItem("seeded-classification","1"); }')
+        self.page.close();self.page=fresh;self.page.on('pageerror',lambda error:self.errors.append(str(error)))
+        self.page.goto(self.url);self.click('start-lesson')
+        self.assertEqual(self.state()['session']['lessonId'],2)
+        link=self.page.locator('.source-link a').first
+        self.assertIn('lesson-02-classification.pdf',link.get_attribute('href'))
+        response=self.context.request.get(self.url+link.get_attribute('href'))
+        self.assertEqual(response.status,200);self.assertTrue(response.body().startswith(b'%PDF'))
+        prompts=0
+        for _ in range(6):
+            prompts+=self.page.locator('.self-check li').count();self.click('lesson-next')
+        self.assertEqual(prompts,20)
+        self.assertEqual(self.state()['session']['steps'][6]['type'],'question')
+        self.click('exit-lesson');self.page.reload();self.click('resume');self.finish()
+        data=self.state();self.assertEqual(data['lastResult']['total'],40);self.assertEqual(data['lastResult']['correct'],40)
+        self.assertEqual(data['xp'],60);self.assertEqual(data['genes'],10);self.assertEqual(data['layout'],'phone')
+        self.assertEqual(data['completed']['7:1']['percent'],70);self.assertIn('7:2',data['completed'])
+        self.click('result-next');self.assertEqual(self.page.locator('.road-node').count(),13)
+        expect(self.page.locator('.road-node[data-id="3"]')).to_have_class(re.compile('locked'))
+        self.page.reload();self.assertEqual(self.state()['completed']['7:2']['percent'],100)
 
     def test_replaced_course_keeps_other_progress_and_preferences(self):
         self.onboard('8');self.click('start-lesson');self.finish()
