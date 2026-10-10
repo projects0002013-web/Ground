@@ -115,6 +115,37 @@ class GroundSmoke(unittest.TestCase):
         self.page.locator('#confirm-import').click();self.assertEqual(self.state()['name'],'Исследователь')
         self.click('edit-profile');self.click('reset-confirm');self.click('reset')
         self.assertEqual(self.state()['xp'],0);expect(self.page.locator('.welcome h1')).to_be_visible()
+    def test_manual_layout_preferences(self):
+        self.onboard();self.nav('profile')
+        def choose(mode):
+            self.click('edit-profile')
+            self.page.locator(f'input[name="layout"][value="{mode}"]').check()
+            self.page.locator('#profile-form [type="submit"]').click()
+            self.assertEqual(self.state()['layout'],mode)
+        self.page.set_viewport_size({'width':1440,'height':900})
+        choose('phone')
+        self.assertEqual(self.page.locator('html').get_attribute('data-compact'),'true')
+        bounds=self.page.locator('.sidebar').bounding_box()
+        self.assertEqual(bounds['width'],480);self.assertEqual(bounds['height'],75)
+        self.assertEqual(self.page.locator('#app').bounding_box()['width'],480)
+        self.page.reload();self.assertEqual(self.page.locator('html').get_attribute('data-layout'),'phone')
+        for view in ['home','road','library','profile']:
+            self.nav(view)
+            self.assertFalse(self.page.evaluate('document.documentElement.scrollWidth>innerWidth'))
+            self.assertLessEqual(self.page.locator('#main').bounding_box()['width'],480)
+        self.nav('profile');choose('laptop')
+        self.assertEqual(self.page.locator('html').get_attribute('data-compact'),'false')
+        self.assertEqual(self.page.locator('.sidebar').bounding_box()['x'],0)
+        self.assertEqual(self.page.locator('.sidebar').bounding_box()['height'],900)
+        self.page.set_viewport_size({'width':390,'height':844})
+        for view in ['home','road','library','profile']:
+            self.nav(view);self.assertFalse(self.page.evaluate('document.documentElement.scrollWidth>innerWidth'),view)
+        choose('auto')
+        self.assertEqual(self.page.locator('html').get_attribute('data-compact'),'true')
+        self.page.set_viewport_size({'width':1440,'height':900})
+        expect(self.page.locator('html')).to_have_attribute('data-compact','false')
+        self.assertEqual(self.state()['xp'],0)
+
     def test_layout_keyboard_corrupt_storage_and_legacy_migration(self):
         self.onboard()
         for width in [360,390,768,1440]:

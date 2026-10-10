@@ -11,6 +11,7 @@
     onboarded: false,
     name: "Биолог",
     course: "8",
+    layout: "auto",
     xp: 0,
     genes: 0,
     completed: {},
@@ -32,6 +33,7 @@
         "onboarded",
         "name",
         "course",
+        "layout",
         "xp",
         "genes",
         "bookPage",
@@ -39,6 +41,9 @@
       ]) {
         if (typeof value[key] === typeof base[key]) base[key] = value[key];
       }
+      base.layout = ["auto", "laptop", "phone"].includes(base.layout)
+        ? base.layout
+        : "auto";
       base.name = base.name.slice(0, 40) || "Биолог";
       base.course = DB.courses[base.course] ? base.course : "8";
       base.xp = Number.isFinite(base.xp) ? Math.max(0, base.xp) : 0;
@@ -842,7 +847,18 @@
   }
   function editProfile() {
     openDialog(
-      `<h2>Твой профиль</h2><p>Имя и резервная копия прогресса. Данные хранятся только на твоём устройстве.</p><form id="profile-form"><label for="profile-name">Как к тебе обращаться?</label><input id="profile-name" class="input" maxlength="40" required value="${attr(state.name)}"><div class="dialog-actions"><button class="button secondary" type="button" data-action="close-dialog">Отмена</button><button class="button" type="submit">Сохранить</button></div></form><div class="section"><button class="text-link" data-action="export">Экспорт прогресса ↓</button> <span class="muted"> · </span> <button class="text-link" data-action="import">Импорт ↑</button><input type="file" id="import-file" accept="application/json,.json" hidden></div><div class="section"><button class="button danger small" data-action="reset-confirm">Сбросить прогресс</button></div>`,
+      `<h2>Твой профиль</h2><p>Имя и резервная копия прогресса. Данные хранятся только на твоём устройстве.</p><form id="profile-form"><label for="profile-name">Как к тебе обращаться?</label><input id="profile-name" class="input" maxlength="40" required value="${attr(state.name)}"><fieldset class="layout-settings"><legend>Вид интерфейса</legend><div class="layout-options">${[
+        ["auto", "Авто", "По размеру экрана"],
+        ["laptop", "Ноутбук", "Меню слева"],
+        ["phone", "Телефон", "Меню снизу"],
+      ]
+        .map(
+          ([value, title, note]) =>
+            `<label class="layout-option"><input type="radio" name="layout" value="${value}" ${state.layout === value ? "checked" : ""}><span><strong>${title}</strong><small>${note}</small></span></label>`,
+        )
+        .join(
+          "",
+        )}</div><p>Выбери удобный вид. Настройка сохранится на этом устройстве.</p></fieldset><div class="dialog-actions"><button class="button secondary" type="button" data-action="close-dialog">Отмена</button><button class="button" type="submit">Сохранить</button></div></form><div class="section"><button class="text-link" data-action="export">Экспорт прогресса ↓</button> <span class="muted"> · </span> <button class="text-link" data-action="import">Импорт ↑</button><input type="file" id="import-file" accept="application/json,.json" hidden></div><div class="section"><button class="button danger small" data-action="reset-confirm">Сбросить прогресс</button></div>`,
     );
   }
   function exportProgress() {
@@ -880,6 +896,8 @@
       !Number.isInteger(data.bookPage) ||
       data.bookPage < 0 ||
       data.bookPage > 3 ||
+      (data.layout !== undefined &&
+        !["auto", "laptop", "phone"].includes(data.layout)) ||
       (data.session && !validSession(data.session)) ||
       (data.lastResult && !validResult(data.lastResult))
     )
@@ -894,7 +912,17 @@
     safe.onboarded = Boolean(safe.onboarded);
     return safe;
   }
+  const smallScreen = window.matchMedia("(max-width: 680px)");
+  function applyLayout() {
+    document.documentElement.dataset.layout = state.layout;
+    document.documentElement.dataset.compact = String(
+      state.layout === "phone" ||
+        (state.layout === "auto" && smallScreen.matches),
+    );
+  }
+  smallScreen.addEventListener("change", applyLayout);
   function render() {
+    applyLayout();
     const screens = {
       welcome,
       tracks,
@@ -1094,6 +1122,9 @@
       return;
     }
     state.name = name.slice(0, 40);
+    state.layout = document.querySelector(
+      '#profile-form input[name="layout"]:checked',
+    ).value;
     persist();
     closeDialog();
     render();
