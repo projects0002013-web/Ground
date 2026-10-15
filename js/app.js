@@ -27,6 +27,7 @@
     ),
     xp: 0,
     genes: 0,
+    achievements: [],
     completed: {},
     days: [],
     history: [],
@@ -88,6 +89,13 @@
         : [];
       base.lastResult = validResult(value.lastResult) ? value.lastResult : null;
       base.session = validSession(value.session) ? value.session : null;
+      base.achievements = window.GroundProgressEngine.achievementIDs({
+        ...base,
+        achievements: Array.isArray(value.achievements)
+          ? value.achievements
+          : [],
+        activityHistory: base.history,
+      });
       reconcileCourseVersions(base, value.courseVersions);
       return base;
     } catch {
@@ -172,10 +180,10 @@
           Math.floor(Number(localStorage.getItem("groundStreak") || 1)) || 1,
         ),
       );
-      const day = new Date(`${last}T12:00:00`);
+      const day = new Date(`${last}T12:00:00Z`);
       for (let i = 0; i < count; i++) {
         base.days.push(P.dayKey(day));
-        day.setDate(day.getDate() - 1);
+        day.setUTCDate(day.getUTCDate() - 1);
       }
     }
     return base;
@@ -478,6 +486,34 @@
     }
     if (dataChanged) persist(false);
     if (view !== "lesson") render();
+    maybeOfferGuestImport();
+  }
+  const guestImportOffered = new Set();
+  const guestImportKey = (uid) => `ground.guest-import.${uid}`;
+  function rememberGuestImportChoice() {
+    if (!account.user) return;
+    try {
+      localStorage.setItem(guestImportKey(account.user.uid), "reviewed");
+    } catch {}
+  }
+  function maybeOfferGuestImport() {
+    if (
+      !account.user ||
+      !account.profile ||
+      account.phase !== "synced" ||
+      dialog.open ||
+      view === "lesson"
+    )
+      return;
+    const uid = account.user.uid;
+    if (guestImportOffered.has(uid)) return;
+    try {
+      if (localStorage.getItem(guestImportKey(uid))) return;
+      const guest = JSON.parse(localStorage.getItem("ground.v2") || "null");
+      if (!guest?.history?.length) return;
+      guestImportOffered.add(uid);
+      handleAction({ dataset: { action: "import-guest" } });
+    } catch {}
   }
   function accountCard() {
     const labels = {
@@ -491,12 +527,12 @@
     };
     const status = account.error || labels[account.phase] || labels.loading;
     if (!account.user)
-      return `<section class="panel account-card"><div><h3>Твои знания с тобой</h3><p>Войди через Google, чтобы продолжить на другом устройстве.</p><p class="account-status" role="status">${e(status)}</p></div><button class="button secondary" data-action="google-login" ${account.busy || ["loading", "unconfigured"].includes(account.phase) ? "disabled" : ""}>${account.busy ? "Открываем Google…" : "Войти через Google"}</button></section>`;
+      return `<section class="panel account-card"><div><h3>Твои знания с тобой</h3><p>Войди через Google, чтобы продолжить на другом устройстве.</p><p class="account-status" role="status">${e(status)}</p>${account.notice ? `<p class="account-status">${e(account.notice)}</p>` : ""}</div><button class="button secondary" data-action="google-login" ${account.busy || ["loading", "unconfigured"].includes(account.phase) ? "disabled" : ""}>${account.busy ? "Открываем Google…" : "Войти через Google"}</button></section>`;
     const user = account.user;
     const photo = /^https:\/\//.test(user.photoURL)
       ? `<img class="account-avatar" src="${attr(user.photoURL)}" referrerpolicy="no-referrer" alt="Аватар Google">`
       : '<img class="account-avatar" src="images/mascot-head.png" alt="Аватар">';
-    return `<section class="panel account-card"><div class="account-identity">${photo}<div><h3>${e(user.displayName)}</h3><p class="account-email">${e(user.email)}</p><p class="account-status" role="status">${e(status)}${account.pending ? ` · ожидает: ${account.pending}` : ""}</p></div></div><div class="account-actions">${account.phase === "error" || account.pending ? '<button class="text-link" data-action="cloud-retry">Повторить синхронизацию</button>' : ""}<button class="text-link" data-action="import-guest" ${!account.profile ? "disabled" : ""}>Перенести гостевые попытки</button><button class="button secondary small" data-action="google-logout" ${account.busy ? "disabled" : ""}>Выйти из аккаунта</button></div></section>`;
+    return `<section class="panel account-card"><div class="account-identity">${photo}<div><h3>${e(user.displayName)}</h3><p class="account-email">${e(user.email)}</p><p class="account-status" role="status">${e(status)}${account.pending ? ` · ожидает: ${account.pending}` : ""}</p>${account.notice ? `<p class="account-status">${e(account.notice)}</p>` : ""}</div></div><div class="account-actions">${account.phase === "error" || account.pending ? '<button class="text-link" data-action="cloud-retry">Повторить синхронизацию</button>' : ""}<button class="text-link" data-action="import-guest" ${!account.profile ? "disabled" : ""}>Перенести гостевые попытки</button><button class="button secondary small" data-action="google-logout" ${account.busy ? "disabled" : ""}>Выйти из аккаунта</button></div></section>`;
   }
   function brand() {
     return '<span class="brand-symbol" aria-hidden="true">❧</span><span>GROUND<small>ИЗУЧАЙ ЖИВОЕ</small></span>';
@@ -552,11 +588,13 @@
     const today = P.dayKey();
     const dailyCount = state.history.filter((h) => h.day === today).length;
     const days = Array.from({ length: 7 }, (_, i) => {
-      const d = new Date();
-      d.setDate(d.getDate() - d.getDay() + (d.getDay() === 0 ? -6 : 1) + i);
+      const d = new Date(today + "T12:00:00Z");
+      d.setUTCDate(
+        d.getUTCDate() - d.getUTCDay() + (d.getUTCDay() === 0 ? -6 : 1) + i,
+      );
       return d;
     });
-    return `<section class="panel daily ${dailyCount ? "complete" : ""}"><div class="flex-between"><h3>Твой ритм</h3><span aria-hidden="true">🔥</span></div><div class="large-number">${P.streak(state.days)} <span style="font-size:16px;letter-spacing:0">${P.streak(state.days) === 1 ? "день" : "дней"}</span></div><p>Каждый день — немного ближе к цели.</p><div class="week">${days.map((d, i) => `<div class="day ${state.days.includes(P.dayKey(d)) ? "done" : ""} ${P.dayKey(d) === today ? "today" : ""}"><span>${state.days.includes(P.dayKey(d)) ? "✓" : d.getDate()}</span>${["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"][i]}</div>`).join("")}</div><div class="flex-between"><small>Цель на сегодня</small><small class="metric">${Math.min(1, dailyCount)} / 1 урок</small></div><div class="progress"><span style="width:${dailyCount ? 100 : 0}%"></span></div><p class="goal-count">${dailyCount ? "Отлично! Сегодня ты уже позанимался." : "Начни урок — поддержи свою серию."}</p></section>`;
+    return `<section class="panel daily ${dailyCount ? "complete" : ""}"><div class="flex-between"><h3>Твой ритм</h3><span aria-hidden="true">🔥</span></div><div class="large-number">${P.streak(state.days)} <span style="font-size:16px;letter-spacing:0">${P.streak(state.days) === 1 ? "день" : "дней"}</span></div><p>Каждый день — немного ближе к цели.</p><div class="week">${days.map((d, i) => `<div class="day ${state.days.includes(P.dayKey(d)) ? "done" : ""} ${P.dayKey(d) === today ? "today" : ""}"><span>${state.days.includes(P.dayKey(d)) ? "✓" : d.getUTCDate()}</span>${["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"][i]}</div>`).join("")}</div><div class="flex-between"><small>Цель на сегодня</small><small class="metric">${Math.min(1, dailyCount)} / 1 урок</small></div><div class="progress"><span style="width:${dailyCount ? 100 : 0}%"></span></div><p class="goal-count">${dailyCount ? "Отлично! Сегодня ты уже позанимался." : "Начни урок — поддержи свою серию."}</p></section>`;
   }
   function home() {
     const next = nextLesson();
@@ -743,19 +781,34 @@
   function profile() {
     const completed = Object.keys(state.completed).length;
     const streak = P.streak(state.days);
+    const earned = window.GroundProgressEngine.achievementIDs({
+      ...state,
+      activityHistory: state.history,
+    });
     const achievements = [
-      ["🌱", "Первое открытие", "Пройди один урок", completed >= 1],
-      ["🧬", "Исследователь", "Пройди пять уроков", completed >= 5],
-      ["🔥", "В своём ритме", "Занимайся три дня подряд", streak >= 3],
+      [
+        "🌱",
+        "Первое открытие",
+        "Пройди один урок",
+        earned.includes("first-lesson"),
+      ],
+      [
+        "🧬",
+        "Исследователь",
+        "Пройди пять уроков",
+        earned.includes("five-lessons"),
+      ],
+      [
+        "🔥",
+        "В своём ритме",
+        "Занимайся три дня подряд",
+        earned.includes("three-day-streak"),
+      ],
       [
         "🏆",
         "Проверка пройдена",
         "Пройди итоговое испытание",
-        Object.keys(state.completed).some((k) => {
-          const [c, id] = k.split(":");
-          return DB.courses[c]?.lessons.find((l) => l.id === Number(id))
-            ?.challenge;
-        }),
+        earned.includes("challenge-passed"),
       ],
     ];
     return shell(
@@ -1155,6 +1208,11 @@
       data.bookPage > 3 ||
       (data.layout !== undefined &&
         !["auto", "laptop", "phone"].includes(data.layout)) ||
+      (data.achievements !== undefined &&
+        (!Array.isArray(data.achievements) ||
+          window.GroundProgressEngine.achievementIDs({
+            achievements: data.achievements,
+          }).length !== data.achievements.length)) ||
       (data.session && !validSession(data.session)) ||
       (data.lastResult && !validResult(data.lastResult))
     )
@@ -1164,6 +1222,10 @@
     for (const key of allowed)
       if (Object.hasOwn(data, key)) safe[key] = data[key];
     safe.history = safe.history.slice(0, 50);
+    safe.achievements = window.GroundProgressEngine.achievementIDs({
+      ...safe,
+      activityHistory: safe.history,
+    });
     safe.bookRead = [...new Set(safe.bookRead)];
     safe.scanPage = safe.scanPage === 48 ? 48 : 47;
     safe.onboarded = Boolean(safe.onboarded);
@@ -1217,6 +1279,10 @@
       case "cloud-retry":
         window.GroundCloud.retry();
         break;
+      case "guest-import-later":
+        rememberGuestImportChoice();
+        closeDialog();
+        break;
       case "import-guest": {
         let guest;
         try {
@@ -1231,7 +1297,7 @@
           break;
         }
         openDialog(
-          `<h2>Перенести гостевые попытки?</h2><p>Сохраним историю ответов в этом аккаунте и заново проверим результаты в приложении. Прежний гостевой профиль останется на устройстве. Баллы без истории ответов не переносятся.</p><div class="dialog-actions"><button class="button secondary" data-action="close-dialog">Отмена</button><button class="button" id="confirm-guest-import">Перенести</button></div>`,
+          `<h2>Перенести гостевые попытки?</h2><p>Перенесём совместимые попытки и прочитанные разделы книги в аккаунт ${e(account.user?.email || account.user?.displayName || "Google")}. Сохраним даты занятий и заново проверим результаты в приложении. Прежний гостевой профиль останется на устройстве. Баллы без истории ответов не переносятся.</p><div class="dialog-actions"><button class="button secondary" data-action="guest-import-later">Позже</button><button class="button" id="confirm-guest-import">Перенести</button></div>`,
         );
         document.getElementById("confirm-guest-import").addEventListener(
           "click",
@@ -1240,6 +1306,7 @@
               const imported = window.GroundCloud.importGuest(
                 validateImport(guest),
               );
+              rememberGuestImportChoice();
               closeDialog();
               toast(
                 `В очереди: ${imported.imported}. Не подходят текущим материалам: ${imported.skipped}.`,

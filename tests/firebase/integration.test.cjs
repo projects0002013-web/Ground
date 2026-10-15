@@ -243,3 +243,44 @@ test("rules allow a balance-preserving catalog migration and reject deleting cur
   await learner.record(attempt("8:1", "new-curriculum-attempt-0001"));
   assert.equal((await getDoc(own)).data().xp, 120);
 });
+test("legacy metadata upgrades preserve balances and dates; unknown achievements and forged activity writes are denied", async () => {
+  const learner = await device("metadata-upgrade", "metadata-upgrade");
+  const own = doc(learner.db, "users", learner.uid);
+  const old = {
+    ...engine.emptyProfile(learner.uid),
+    xp: 150,
+    genes: 25,
+    level: 2,
+    days: ["2026-10-01", "2026-10-02", "2026-10-03"],
+    lastAttemptId: null,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+  };
+  delete old.achievements;
+  await rulesEnv.withSecurityRulesDisabled((context) =>
+    setDoc(doc(context.firestore(), "users", learner.uid), old),
+  );
+  const previous = (await getDoc(own)).data();
+  await learner.ensure();
+  const next = (await getDoc(own)).data();
+  assert.equal(next.xp, 150);
+  assert.equal(next.genes, 25);
+  assert.deepEqual(next.days, old.days);
+  assert.ok(next.achievements.includes("three-day-streak"));
+  assert.ok(next.lastActiveAt.isEqual(previous.updatedAt));
+  await assertFails(
+    updateDoc(own, {
+      achievements: ["unknown-badge"],
+      updatedAt: serverTimestamp(),
+    }),
+  );
+  await assertFails(
+    updateDoc(own, { achievements: [], updatedAt: serverTimestamp() }),
+  );
+  await assertFails(
+    updateDoc(own, {
+      lastActiveAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    }),
+  );
+});

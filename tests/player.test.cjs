@@ -330,3 +330,26 @@ test("all thirteen PDF lessons preserve exams, ungraded prompts and sequential r
   assert.equal(profile.genes, 65);
   assert.equal(Object.keys(profile.completed).length, 13);
 });
+test("guest and cloud streaks use one study day across device timezones and midnight", () => {
+  const { execFileSync } = require("node:child_process");
+  const code = `const P=require('./js/player.js'),S=require('./js/progress-engine.js');const now=new Date('2026-10-10T20:00:00Z');const days=['2026-10-09','2026-10-10'];process.stdout.write(JSON.stringify([P.dayKey(now),S.dayKey(now),P.streak(days,now),S.streak(days,now)]));`;
+  for (const TZ of [
+    "UTC",
+    "Europe/Moscow",
+    "Pacific/Honolulu",
+    "Pacific/Kiritimati",
+  ]) {
+    const values = JSON.parse(
+      execFileSync(process.execPath, ["-e", code], {
+        cwd: require("node:path").join(__dirname, ".."),
+        env: { ...process.env, TZ },
+        encoding: "utf8",
+      }),
+    );
+    assert.deepEqual(values, ["2026-10-11", "2026-10-11", 2, 2], TZ);
+  }
+  assert.equal(
+    P.streak(["2026-12-30", "2026-12-31"], new Date("2026-12-31T20:00:00Z")),
+    2,
+  );
+});

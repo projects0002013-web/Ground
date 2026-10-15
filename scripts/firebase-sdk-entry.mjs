@@ -4,6 +4,8 @@ export {
   GoogleAuthProvider,
   setPersistence,
   browserLocalPersistence,
+  browserSessionPersistence,
+  inMemoryPersistence,
   onAuthStateChanged,
   signInWithPopup,
   signInWithRedirect,

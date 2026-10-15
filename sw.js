@@ -1,5 +1,5 @@
 /* Cache static teaching resources only. Never cache Firebase or account data. */
-const VERSION = "ground-static-v3";
+const VERSION = "ground-static-v4";
 const base = new URL("./", self.location.href);
 const files = [
   "index.html",

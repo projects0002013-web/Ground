@@ -205,6 +205,14 @@
             typeof entry.result.completedAt === "string" &&
             typeof entry.result.key === "string",
         );
+        // Upgrade outbox entries saved before original completion dates were sent.
+        queue = queue.map((entry) => ({
+          ...entry,
+          input: {
+            ...entry.input,
+            completedAt: entry.input.completedAt || entry.result.completedAt,
+          },
+        }));
         pendingPrefs = read(prefsKey(value.user.uid), {});
         if (
           !pendingPrefs ||
@@ -232,7 +240,8 @@
       account = {
         ...account,
         busy: value.busy,
-        ...(value.error ? { error: value.error } : {}),
+        notice: value.notice || "",
+        ...(value.error || !account.user ? { error: value.error || "" } : {}),
         ...(account.user ? {} : { phase: value.phase }),
       };
       emit();
@@ -309,6 +318,7 @@
     flushing = true;
     try {
       await flushPreferences();
+      if (prefsWriting || Object.keys(pendingPrefs).length) return;
       for (const entry of queue.slice()) {
         if (token !== generation || !navigator.onLine) return;
         try {
@@ -361,6 +371,17 @@
   }
   function importGuest(guest) {
     if (!account.user || !ready) throw new Error("Дождись загрузки аккаунта.");
+    const bookRead = [
+      ...new Set([
+        ...(profile.bookRead || []),
+        ...(pendingPrefs.bookRead || []),
+        ...(guest.bookRead || []),
+      ]),
+    ];
+    if (JSON.stringify(bookRead) !== JSON.stringify(profile.bookRead)) {
+      pendingPrefs.bookRead = bookRead;
+      savePrefs();
+    }
     let imported = 0,
       skipped = 0;
     const records = guest.history
@@ -377,6 +398,8 @@
         skipped++;
       }
     }
+    phase();
+    flushPreferences();
     return { imported, skipped };
   }
   function legacyId(value) {

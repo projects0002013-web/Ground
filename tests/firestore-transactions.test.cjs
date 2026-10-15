@@ -166,3 +166,40 @@ test("catalog migration preserves balances and current courses, resets obsolete 
   assert.equal(b.documents.get("users/alice").xp, 120);
   assert.equal(b.documents.get("users/alice").genes, 20);
 });
+test("existing profiles gain achievements and activity metadata once without resetting history or balances", async () => {
+  const b = backend();
+  await b.ensureProfile(user("alice"));
+  const old = b.documents.get("users/alice");
+  delete old.achievements;
+  delete old.lastActiveAt;
+  old.xp = 150;
+  old.genes = 25;
+  old.level = 2;
+  old.days = ["2026-10-01", "2026-10-02", "2026-10-03"];
+  old.completed = {
+    "8:1": { percent: 100 },
+    "8:2": { percent: 100 },
+    "8:3": { percent: 100 },
+    "8:4": { percent: 100 },
+    "8:5": { percent: 100 },
+  };
+  old.activityHistory = [{ kind: "challenge", passed: true }];
+  const history = structuredClone(old.activityHistory),
+    revision = old.revision;
+  await b.ensureProfile(user("alice"));
+  const next = b.documents.get("users/alice");
+  assert.deepEqual(next.achievements, [
+    "first-lesson",
+    "five-lessons",
+    "three-day-streak",
+    "challenge-passed",
+  ]);
+  assert.equal(next.xp, 150);
+  assert.equal(next.genes, 25);
+  assert.equal(next.revision, revision);
+  assert.deepEqual(next.activityHistory, history);
+  assert.ok(next.lastActiveAt);
+  const writes = b.writes();
+  await b.ensureProfile(user("alice"));
+  assert.equal(b.writes(), writes);
+});

@@ -16,24 +16,39 @@
   const fail = (code, message) => {
     throw new ProgressError(code, message);
   };
-  const dayKey = (now) =>
-    new Intl.DateTimeFormat("en-CA", {
-      timeZone: "Asia/Qyzylorda",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    }).format(now);
-  function streak(days, now) {
-    const set = new Set(days);
-    let cursor = new Date(dayKey(now) + "T12:00:00Z"),
-      count = 0;
-    const key = () => cursor.toISOString().slice(0, 10);
-    if (!set.has(key())) cursor.setUTCDate(cursor.getUTCDate() - 1);
-    while (set.has(key())) {
-      count++;
-      cursor.setUTCDate(cursor.getUTCDate() - 1);
+  const player =
+    typeof module !== "undefined" ? require("./player.js") : root.GroundPlayer;
+  const dayKey = (now) => player.dayKey(now);
+  const streak = (days, now) => player.streak(days, now);
+  const achievementNames = [
+    "first-lesson",
+    "five-lessons",
+    "three-day-streak",
+    "challenge-passed",
+  ];
+  function achievementIDs(profile) {
+    const earned = new Set(
+      (Array.isArray(profile.achievements) ? profile.achievements : []).filter(
+        (id) => achievementNames.includes(id),
+      ),
+    );
+    const keys = Object.keys(profile.completed || {});
+    if (keys.length >= 1) earned.add("first-lesson");
+    if (keys.length >= 5) earned.add("five-lessons");
+    let run = 0,
+      previous = null;
+    for (const day of [...new Set(profile.days || [])].sort()) {
+      const value = Date.parse(day + "T12:00:00Z");
+      run = value - previous === 86400000 ? run + 1 : 1;
+      if (run >= 3) earned.add("three-day-streak");
+      previous = value;
     }
-    return count;
+    if (
+      keys.some((key) => catalog.activities[key]?.kind === "challenge") ||
+      profile.activityHistory?.some((h) => h?.kind === "challenge" && h.passed)
+    )
+      earned.add("challenge-passed");
+    return achievementNames.filter((id) => earned.has(id));
   }
   function emptyProfile(uid, identity = {}) {
     return {
@@ -41,6 +56,7 @@
       displayName: String(identity.name || "Биолог").slice(0, 200),
       email: String(identity.email || "").slice(0, 320),
       photoURL: String(identity.picture || "").slice(0, 2048),
+      achievements: [],
       nickname: "",
       selectedGrade: "8",
       layout: "auto",
@@ -96,7 +112,10 @@
     if (
       !input ||
       Object.keys(input).some(
-        (k) => !["id", "key", "version", "answers", "mode"].includes(k),
+        (k) =>
+          !["id", "key", "version", "answers", "mode", "completedAt"].includes(
+            k,
+          ),
       )
     )
       fail("invalid-argument", "Неверный формат попытки.");
@@ -105,6 +124,15 @@
       !/^[a-zA-Z0-9_-]{16,100}$/.test(input.id)
     )
       fail("invalid-argument", "Неверный номер попытки.");
+    const completed =
+      input.completedAt == null ? now : new Date(input.completedAt);
+    if (
+      (input.completedAt != null && typeof input.completedAt !== "string") ||
+      !Number.isFinite(completed.getTime()) ||
+      completed.getTime() < Date.UTC(2000, 0, 1) ||
+      completed.getTime() > now.getTime() + 300000
+    )
+      fail("invalid-argument", "Неверная дата попытки.");
     const practice = /^(7|8|9|10|11|ent|olympiad):practice$/.test(
       input.key || "",
     );
@@ -190,8 +218,8 @@
         percent: total ? Math.round((correct / total) * 100) : 0,
         passed: total > 0 && correct / total >= 0.7,
         answers,
-        completedAt: now.toISOString(),
-        day: dayKey(now),
+        completedAt: completed.toISOString(),
+        day: dayKey(completed),
         rewardXP: 0,
         rewardGenes: 0,
         durationSeconds: 0,
@@ -249,12 +277,14 @@
       0,
       50,
     );
+    next.achievements = achievementIDs(next);
     next.revision = (next.revision || 0) + 1;
     return { profile: next, result };
   }
   const api = {
     catalog,
     ProgressError,
+    achievementIDs,
     emptyProfile,
     currentProfile,
     evaluate,

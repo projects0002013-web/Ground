@@ -183,3 +183,47 @@ test("obsolete offline attempts cannot unlock replacement course content", () =>
   assert.equal(merged.xp, 0);
   assert.equal(merged.history.length, 1);
 });
+test("offline and guest attempts preserve original study days and earned achievements", () => {
+  const profile = S.emptyProfile("alice");
+  let current = profile;
+  for (const [index, day] of [
+    "2026-10-01",
+    "2026-10-02",
+    "2026-10-03",
+  ].entries()) {
+    const data = {
+      ...input("8:1", `original-day-attempt-${index}-0001`),
+      completedAt: day + "T10:00:00Z",
+    };
+    const evaluated = S.evaluate(data, new Date("2026-10-04T10:00:00Z"));
+    assert.equal(evaluated.result.day, day);
+    current = S.apply(
+      current,
+      evaluated,
+      new Date("2026-10-04T10:00:00Z"),
+    ).profile;
+  }
+  assert.equal(current.xp, 30);
+  assert.equal(current.genes, 5);
+  assert.equal(current.streak, 3);
+  assert.deepEqual(current.days, ["2026-10-01", "2026-10-02", "2026-10-03"]);
+  assert.ok(current.achievements.includes("three-day-streak"));
+  assert.ok(
+    S.achievementIDs({ ...current, days: [] }).includes("three-day-streak"),
+  );
+  const r = result();
+  r.completedAt = "2026-10-01T10:00:00Z";
+  assert.equal(
+    C.submission(DB, r, "import-history-date-0001").completedAt,
+    r.completedAt,
+  );
+  for (const value of [
+    "not-a-date",
+    "1999-12-31T23:59:59Z",
+    "2026-11-01T00:00:00Z",
+    123,
+  ])
+    assert.throws(() => S.evaluate({ ...input(), completedAt: value }, now), {
+      code: "invalid-argument",
+    });
+});

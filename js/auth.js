@@ -7,7 +7,7 @@
     started = false,
     busy = false;
   const listeners = new Set();
-  let state = { user: null, phase: "loading", error: "" };
+  let state = { user: null, phase: "loading", error: "", notice: "" };
   const emit = () => listeners.forEach((fn) => fn({ ...state, busy }));
   const config = () => window.GroundFirebaseConfig;
   const configured = () =>
@@ -18,13 +18,16 @@
     );
   const errors = {
     "auth/popup-blocked":
-      "Браузер заблокировал окно входа. Попробуем войти через переход.",
+      "Разреши всплывающее окно для Ground и нажми «Войти через Google» ещё раз. На телефоне открой сайт в обычном браузере, например Chrome или Safari.",
     "auth/popup-closed-by-user": "Вход отменён. Можно попробовать снова.",
     "auth/cancelled-popup-request": "Другая попытка входа уже открыта.",
     "auth/unauthorized-domain": "Вход на этом адресе пока не подключён.",
     "auth/network-request-failed":
       "Нет связи. Проверь интернет и попробуй снова.",
     "auth/operation-not-allowed": "Вход через Google пока не включён.",
+    "auth/operation-not-supported-in-this-environment":
+      "Открой Ground в обычном браузере и разреши всплывающее окно входа.",
+    "auth/invalid-api-key": "Конфигурация входа недоступна. Попробуй позже.",
     "auth/web-storage-unsupported":
       "Браузер не разрешает сохранять вход. Проверь настройки хранения данных.",
   };
@@ -65,7 +68,32 @@
           disableWarnings: true,
         });
       }
-      await sdk.setPersistence(auth, sdk.browserLocalPersistence);
+      let persistent = false;
+      for (const storage of [
+        sdk.browserLocalPersistence,
+        sdk.browserSessionPersistence,
+        sdk.inMemoryPersistence,
+      ]) {
+        try {
+          await sdk.setPersistence(auth, storage);
+          persistent = true;
+          if (storage !== sdk.browserLocalPersistence)
+            state.notice =
+              storage === sdk.browserSessionPersistence
+                ? "Вход сохранится только в этой вкладке: браузер ограничивает хранение данных."
+                : "Браузер ограничивает хранение входа. После обновления страницы может понадобиться войти снова.";
+          break;
+        } catch (error) {
+          if (
+            ![
+              "auth/web-storage-unsupported",
+              "auth/unsupported-persistence-type",
+            ].includes(error.code)
+          )
+            throw error;
+        }
+      }
+      if (!persistent) throw { code: "auth/web-storage-unsupported" };
       sdk.onAuthStateChanged(
         auth,
         (user) => {
@@ -73,6 +101,7 @@
             user: userInfo(user),
             phase: user ? "authenticated" : "guest",
             error: "",
+            notice: state.notice || "",
           };
           emit();
         },
@@ -82,18 +111,31 @@
         },
       );
       try {
-        await sdk.getRedirectResult(auth);
+        // Cross-origin redirect cannot be made reliable on static GitHub Pages.
+        if (
+          location.hostname === config().firebase.authDomain ||
+          config().emulators
+        )
+          await sdk.getRedirectResult(auth);
       } catch (error) {
         state = { ...state, error: errorText(error) };
         emit();
       }
     } catch (error) {
+      sdk = undefined;
+      auth = undefined;
       state = { user: null, phase: "error", error: errorText(error) };
       emit();
     }
   }
   async function signIn() {
-    if (busy || !sdk || !auth) return;
+    if (busy) return;
+    if (!sdk || !auth) {
+      state.error =
+        "Не удалось загрузить вход. Проверь соединение и обнови страницу.";
+      emit();
+      return;
+    }
     busy = true;
     state.error = "";
     emit();
@@ -108,6 +150,13 @@
           "auth/operation-not-supported-in-this-environment",
         ].includes(error.code)
       ) {
+        if (
+          location.hostname !== config().firebase.authDomain &&
+          !config().emulators
+        ) {
+          state.error = errorText(error);
+          return;
+        }
         try {
           await sdk.signInWithRedirect(auth, provider);
         } catch (redirectError) {

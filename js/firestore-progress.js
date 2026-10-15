@@ -20,6 +20,7 @@
             ...engine.emptyProfile(user.uid),
             ...identity,
             lastAttemptId: null,
+            lastActiveAt: sdk.serverTimestamp(),
             createdAt: sdk.serverTimestamp(),
             updatedAt: sdk.serverTimestamp(),
           });
@@ -46,6 +47,11 @@
               patch[key] = next[key];
             patch.revision = (old.revision || 0) + 1;
           }
+          if (!Array.isArray(old.achievements))
+            patch.achievements = engine.achievementIDs(old);
+          if (!old.lastActiveAt)
+            patch.lastActiveAt =
+              old.updatedAt || old.createdAt || sdk.serverTimestamp();
           if (Object.keys(patch).length)
             transaction.update(ref, {
               ...patch,
@@ -82,7 +88,11 @@
           evaluation,
         );
         profile.lastAttemptId = input.id;
-        transaction.set(ref, { ...profile, updatedAt: sdk.serverTimestamp() });
+        transaction.set(ref, {
+          ...profile,
+          lastActiveAt: sdk.serverTimestamp(),
+          updatedAt: sdk.serverTimestamp(),
+        });
         transaction.set(attempt, {
           key: result.key,
           result,

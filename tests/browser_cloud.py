@@ -167,10 +167,14 @@ class GroundCloudBrowser(unittest.TestCase):
         self.assertEqual(self.state()['xp'], 17)
         self.assertIsNone(self.page.evaluate('()=>localStorage.getItem("ground.v2.user.alice")'))
 
-    def test_redirect_fallback_offline_outbox_and_settings_sync(self):
+    def test_popup_retry_offline_outbox_and_settings_sync(self):
         self.page.evaluate('()=>window.testPopupBlocked=true')
+        expect(self.page.locator('[data-action="google-login"]').first).to_be_enabled()
+        self.click('google-login')
+        expect(self.page.locator('.account-status').first).to_contain_text('Разреши всплывающее окно')
+        self.assertFalse(self.page.evaluate('()=>!!window.testRedirectUsed'))
+        self.page.evaluate('()=>window.testPopupBlocked=false')
         self.login()
-        self.assertTrue(self.page.evaluate('()=>window.testRedirectUsed'))
         self.context.set_offline(True)
         self.click('start-lesson')
         self.finish()
@@ -178,8 +182,13 @@ class GroundCloudBrowser(unittest.TestCase):
         self.assertIn('8:1', self.state()['completed'])
         self.assertEqual(self.page.evaluate('()=>window.GroundCloud.current().pending'), 1)
         self.assertEqual(len(self.page.evaluate('()=>JSON.parse(localStorage.getItem("ground.cloud.queue.alice"))')), 1)
-        self.context.set_offline(False)
+        self.page.evaluate("""()=>{const key='ground.cloud.queue.alice';const q=JSON.parse(localStorage.getItem(key));delete q[0].input.completedAt;q[0].result.completedAt='2026-10-01T10:00:00Z';localStorage.setItem(key,JSON.stringify(q));}""")
+        self.page.close();self.context.set_offline(False)
+        self.page=self.context.new_page();self.page.set_default_timeout(8000)
+        self.page.on('pageerror',lambda error:self.errors.append(str(error)))
+        self.page.goto(self.url);self.page.wait_for_function('()=>window.GroundCloud.current().phase==="synced"')
         self.wait_xp(30)
+        self.assertEqual(profiles['alice']['days'],['2026-10-01'])
         self.page.wait_for_function('()=>window.GroundCloud.current().pending===0')
         self.page.reload()
         self.page.wait_for_function('()=>window.GroundCloud.current().phase==="synced"')
@@ -196,6 +205,54 @@ class GroundCloudBrowser(unittest.TestCase):
         self.login()
         self.assertEqual(self.state()['name'], 'Исследователь')
         self.assertEqual(self.state()['layout'], 'phone')
+
+    def test_first_login_guest_confirmation_preserves_days_and_book_progress(self):
+        self.onboard();self.click('start-lesson');self.finish()
+        self.page.evaluate("""()=>{const p=JSON.parse(localStorage.getItem('ground.v2'));p.history[0].completedAt='2026-10-01T10:00:00Z';p.history[0].day='2026-10-01';p.bookRead=[0,1,2,3];localStorage.setItem('test.guest.to.import',JSON.stringify(p));}""")
+        # Close the old document before seeding so its pagehide cannot overwrite the fixture.
+        guest=self.page.evaluate("()=>localStorage.getItem('test.guest.to.import')")
+        self.page.close();self.context,self.page=self.device()
+        self.page.close();self.page=self.context.new_page();self.page.set_default_timeout(8000)
+        self.page.on('pageerror',lambda error:self.errors.append(str(error)))
+        self.page.add_init_script('if(!sessionStorage.getItem("seed.import")){localStorage.setItem("ground.v2",'+json.dumps(guest)+');sessionStorage.setItem("seed.import","1");}')
+        self.page.goto(self.url);self.nav('profile');self.login()
+        expect(self.page.locator('#confirm-guest-import')).to_be_visible()
+        self.assertEqual(self.state()['xp'],0)
+        self.assertEqual(profiles['alice']['completed'],{})
+        self.page.locator('#confirm-guest-import').click();self.wait_xp(30)
+        self.page.wait_for_function('()=>window.GroundCloud.current().pending===0')
+        self.assertEqual(profiles['alice']['days'],['2026-10-01'])
+        self.assertEqual(profiles['alice']['bookRead'],[0,1,2,3])
+        self.assertIn('first-lesson',profiles['alice']['achievements'])
+        self.assertIn('lastActiveAt',profiles['alice'])
+        self.assertEqual(self.page.evaluate("()=>JSON.parse(localStorage.getItem('ground.v2')).xp"),30)
+        self.page.reload();self.page.wait_for_function('()=>window.GroundCloud.current().phase==="synced"')
+        expect(self.page.locator('#confirm-guest-import')).to_have_count(0)
+        self.nav('profile');self.click('import-guest');self.page.locator('#confirm-guest-import').click()
+        self.page.wait_for_function('()=>window.GroundCloud.current().pending===0');self.assertEqual(profiles['alice']['xp'],30)
+        self.click('google-logout');self.page.wait_for_function('()=>!window.GroundCloud.current().user')
+        self.nav('profile');self.login('bob')
+        expect(self.page.locator('#confirm-guest-import')).to_be_visible()
+        self.click('guest-import-later');self.assertEqual(profiles['bob']['xp'],0)
+        self.page.reload();self.page.wait_for_function('()=>window.GroundCloud.current().phase==="synced"')
+        expect(self.page.locator('#confirm-guest-import')).to_have_count(0)
+        self.assertEqual(self.state()['xp'],0)
+
+    def test_same_origin_redirect_and_limited_auth_storage(self):
+        config='window.GroundFirebaseConfig={firebase:{apiKey:"demo-only",authDomain:"127.0.0.1",projectId:"demo-ground",appId:"demo-only"},emulators:false};'
+        self.context.route('**/js/firebase-config.js',lambda route:route.fulfill(body=config,content_type='text/javascript'))
+        self.context.add_init_script('window.testPersistenceBlocked=["local","session"];')
+        self.page.reload();self.page.wait_for_function('()=>window.GroundCloud.current().phase==="guest"')
+        self.assertEqual(self.page.evaluate('()=>window.testPersistenceModes'),['local','session','memory'])
+        self.page.evaluate('()=>window.testPopupBlocked=true');self.login()
+        self.assertTrue(self.page.evaluate('()=>window.testRedirectUsed'))
+        self.nav('profile')
+        expect(self.page.locator('.account-card')).to_contain_text('После обновления страницы')
+
+    def test_unconfigured_firebase_keeps_guest_lessons_available(self):
+        self.context.route('**/js/firebase-config.js',lambda route:route.fulfill(body='window.GroundFirebaseConfig={firebase:null};',content_type='text/javascript'))
+        self.page.reload();expect(self.page.locator('[data-action="google-login"]').first).to_be_disabled()
+        self.onboard();self.click('start-lesson');self.finish();self.assertEqual(self.state()['xp'],30)
 
 del GroundSmoke  # Prevent unittest from also collecting the imported long regression suite.
 

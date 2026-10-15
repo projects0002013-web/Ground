@@ -3,7 +3,12 @@
   "use strict";
   const Player = {
     dayKey(date = new Date()) {
-      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+      return new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Qyzylorda",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      }).format(date);
     },
     steps(lesson, practice = false) {
       const steps = [];
@@ -55,12 +60,13 @@
     },
     streak(days, now = new Date()) {
       const set = new Set(days);
-      const cursor = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      if (!set.has(Player.dayKey(cursor))) cursor.setDate(cursor.getDate() - 1);
+      const cursor = new Date(Player.dayKey(now) + "T12:00:00Z");
+      if (!set.has(Player.dayKey(cursor)))
+        cursor.setUTCDate(cursor.getUTCDate() - 1);
       let count = 0;
       while (set.has(Player.dayKey(cursor))) {
         count++;
-        cursor.setDate(cursor.getDate() - 1);
+        cursor.setUTCDate(cursor.getUTCDate() - 1);
       }
       return count;
     },

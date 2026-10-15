@@ -21,8 +21,16 @@ async function rpc(action, data = {}) {
 }
 export const initializeApp = () => ({}),
   getAuth = () => ({}),
-  setPersistence = async () => {},
-  browserLocalPersistence = {};
+  browserLocalPersistence = { kind: "local" },
+  browserSessionPersistence = { kind: "session" },
+  inMemoryPersistence = { kind: "memory" };
+export async function setPersistence(_auth, storage) {
+  (window.testPersistenceModes ||= []).push(storage.kind);
+  if (window.testPersistenceBlocked?.includes(storage.kind))
+    throw Object.assign(Error("storage blocked"), {
+      code: "auth/web-storage-unsupported",
+    });
+}
 export function onAuthStateChanged(_auth, fn) {
   listeners.push(fn);
   queueMicrotask(() => fn(user));

@@ -73,6 +73,7 @@
       id,
       key: result.key,
       version: practice ? 1 : source.version,
+      completedAt: result.completedAt,
       answers,
       ...(practice
         ? { mode: result.title === "Работа над ошибками" ? "errors" : "course" }
@@ -132,6 +133,7 @@
       ...local,
       xp: profile.xp,
       genes: profile.genes,
+      achievements: profile.achievements || [],
       completed,
       courseVersions: profile.courseVersions,
       days: [...new Set([...(profile.days || []), ...pendingDays])].sort(),

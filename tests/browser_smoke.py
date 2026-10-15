@@ -111,6 +111,11 @@ class GroundSmoke(unittest.TestCase):
         self.page.locator('#import-file').set_input_files({'name':'bad.json','mimeType':'application/json','buffer':json.dumps(bad).encode()})
         expect(self.page.locator('#toast')).to_contain_text('Файл не подходит')
         self.assertEqual(self.state()['xp'],30)
+        for value in ['wrong-type',['unknown-badge'],['first-lesson','first-lesson']]:
+            invalid=dict(backup);invalid['achievements']=value
+            self.page.locator('#import-file').set_input_files({'name':'bad-achievements.json','mimeType':'application/json','buffer':json.dumps(invalid).encode()})
+            expect(self.page.locator('#toast')).to_contain_text('Файл не подходит')
+            self.assertEqual(self.state()['xp'],30)
         backup['name']='Исследователь'
         self.page.locator('#import-file').set_input_files({'name':'good.json','mimeType':'application/json','buffer':json.dumps(backup).encode()})
         self.page.locator('#confirm-import').click();self.assertEqual(self.state()['name'],'Исследователь')
