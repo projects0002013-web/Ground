@@ -2362,3 +2362,37 @@ dialog .layout-option {
 .source-work li {
   overflow-wrap: anywhere;
 }
+
+
+/* Allow the dashboard heading badge to wrap at 360px instead of
+   extending beyond the mobile viewport. */
+:root[data-compact="true"] .page-heading {
+  flex-wrap: wrap;
+}
+:root[data-compact="true"] .page-heading > * {
+  min-width: 0;
+}
+
+/* Keep fixed controls clear of the home indicator and gesture navigation. */
+:root[data-compact="true"] .sidebar {
+  height: calc(75px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+:root[data-compact="true"] .shell {
+  padding-bottom: calc(75px + env(safe-area-inset-bottom, 0px));
+}
+:root[data-compact="true"] .toast {
+  bottom: calc(90px + env(safe-area-inset-bottom, 0px));
+}
+.lesson-bottom {
+  padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+}
+:root[data-compact="true"] .lesson-bottom {
+  padding-bottom: calc(15px + env(safe-area-inset-bottom, 0px));
+}
+.lesson-shell {
+  padding-bottom: calc(140px + env(safe-area-inset-bottom, 0px));
+}
+:root[data-compact="true"] .lesson-shell {
+  padding-bottom: calc(130px + env(safe-area-inset-bottom, 0px));
+}
