@@ -296,7 +296,7 @@
           "unavailable",
           "deadline-exceeded",
           "aborted",
-        ].includes(error?.code?.replace(/^functions\\//, ""));
+        ].includes(error?.code?.replace(/^functions\//, ""));
         if (retryable && !queue.length) {
           clearTimeout(retryTimer);
           retryTimer = setTimeout(() => {
