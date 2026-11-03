@@ -167,6 +167,47 @@ class GroundCloudBrowser(unittest.TestCase):
         self.assertEqual(self.state()['xp'], 17)
         self.assertIsNone(self.page.evaluate('()=>localStorage.getItem("ground.v2.user.alice")'))
 
+    def test_offline_attempt_stays_with_original_account_after_switch(self):
+        # Alice completes a lesson offline, then the next browser session
+        # starts as Bob on the same device. Bob must not inherit the result.
+        self.login('alice')
+        self.context.set_offline(True)
+        self.click('start-lesson')
+        self.finish()
+        self.assertEqual(self.state()['xp'], 0)
+        self.assertEqual(self.page.evaluate('()=>window.GroundCloud.current().pending'), 1)
+        self.assertIn('8:1', self.state()['completed'])
+
+        self.page.evaluate("""()=>{
+          localStorage.setItem('test.auth', JSON.stringify({
+            uid:'bob',displayName:'bob',email:'bob@example.test',photoURL:''
+          }));
+        }""")
+        self.page.close()
+        self.context.set_offline(False)
+        self.page = self.context.new_page()
+        self.page.set_default_timeout(8000)
+        self.page.on('pageerror', lambda error: self.errors.append(str(error)))
+        self.page.goto(self.url)
+        self.page.wait_for_function('()=>window.GroundCloud.current().phase==="synced"')
+        self.assertEqual(self.page.evaluate('()=>window.GroundCloud.current().user.uid'), 'bob')
+        self.assertEqual(self.state()['xp'], 0)
+        self.assertEqual(self.state()['completed'], {})
+        self.assertEqual(self.page.evaluate('()=>window.GroundCloud.current().pending'), 0)
+        self.assertEqual(profiles['bob']['xp'], 0)
+        self.assertEqual(len(self.page.evaluate(
+            '()=>JSON.parse(localStorage.getItem("ground.cloud.queue.alice"))')), 1)
+
+        self.nav('profile')
+        self.click('google-logout')
+        self.page.wait_for_function('()=>!window.GroundCloud.current().user')
+        self.login('alice')
+        self.wait_xp(30)
+        self.page.wait_for_function('()=>window.GroundCloud.current().pending===0')
+        self.assertEqual(profiles['alice']['xp'], 30)
+        self.assertEqual(profiles['bob']['xp'], 0)
+        self.assertIn('8:1', self.state()['completed'])
+
     def test_popup_retry_offline_outbox_and_settings_sync(self):
         self.page.evaluate('()=>window.testPopupBlocked=true')
         expect(self.page.locator('[data-action="google-login"]').first).to_be_enabled()
