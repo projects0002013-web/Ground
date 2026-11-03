@@ -288,7 +288,28 @@
       account.error = "";
       phase();
     } catch (error) {
-      if (token === generation) fail(error);
+      if (token === generation) {
+        fail(error);
+        // Pending preference updates need a retry even if there are no
+        // lesson attempts in the outbox to trigger the usual queue retry.
+        const retryable = [
+          "unavailable",
+          "deadline-exceeded",
+          "aborted",
+        ].includes(error?.code?.replace(/^functions\\//, ""));
+        if (retryable && !queue.length) {
+          clearTimeout(retryTimer);
+          retryTimer = setTimeout(() => {
+            if (
+              token !== generation ||
+              account.user?.uid !== uid ||
+              !navigator.onLine
+            ) return;
+            account.error = "";
+            flushPreferences();
+          }, 15000);
+        }
+      }
     } finally {
       if (token === generation) {
         prefsWriting = false;
