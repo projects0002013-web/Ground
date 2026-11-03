@@ -2364,6 +2364,15 @@ dialog .layout-option {
 }
 
 
+/* Allow the dashboard heading badge to wrap at 360px instead of
+   extending beyond the mobile viewport. */
+:root[data-compact="true"] .page-heading {
+  flex-wrap: wrap;
+}
+:root[data-compact="true"] .page-heading > * {
+  min-width: 0;
+}
+
 /* Keep fixed controls clear of the home indicator and gesture navigation. */
 :root[data-compact="true"] .sidebar {
   height: calc(75px + env(safe-area-inset-bottom, 0px));
