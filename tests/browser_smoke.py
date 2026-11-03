@@ -268,7 +268,15 @@ class GroundSmoke(unittest.TestCase):
         self.onboard()
         for width in [360,390,768,1440]:
             self.page.set_viewport_size({'width':width,'height':900})
-            self.assertFalse(self.page.evaluate('document.documentElement.scrollWidth>innerWidth'),str(width))
+            overflow = self.page.evaluate("""() => {
+                const limit = document.documentElement.clientWidth;
+                return [...document.querySelectorAll('body *')]
+                  .map(el => ({name: el.tagName.toLowerCase(), cls: String(el.className || '').slice(0, 80), right: Math.round(el.getBoundingClientRect().right)}))
+                  .filter(x => x.right > limit + 1)
+                  .sort((a, b) => b.right - a.right)
+                  .slice(0, 8);
+            }""")
+            self.assertFalse(self.page.evaluate('document.documentElement.scrollWidth>innerWidth'), f'{width}: {overflow}')
             self.nav('road');self.assertFalse(self.page.evaluate('document.documentElement.scrollWidth>innerWidth'),f'road {width}')
             self.nav('home')
         fresh=self.context.new_page();fresh.add_init_script('localStorage.setItem("ground.v2","invalid-json")');fresh.goto(self.url);self.page.close();self.page=fresh;expect(self.page.locator('.welcome h1')).to_be_visible()
