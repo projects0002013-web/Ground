@@ -5,7 +5,7 @@ require("../js/database.js");
 const { courses } = window.GroundDB;
 const findings = [];
 const stats = [];
-function clean(value) { return String(value ?? "").replace(/\\s+/g, " ").trim(); }
+function clean(value) { return String(value ?? "").replace(/\s+/g, " ").trim(); }
 for (const [courseKey, course] of Object.entries(courses)) {
   const seenQuestions = new Map();
   let questions = 0;
