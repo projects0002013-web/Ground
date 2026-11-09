@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#102921">
+<meta name="description" content="GROUND: тренировочные расчётные задачи по олимпиадной биологии с подробными решениями.">
+<title>GROUND — Олимпиадные задачи</title>
+<link rel="icon" href="images/mascot-head.png">
+<link rel="stylesheet" href="css/style.css">
+<style>
+:root {color-scheme:light}
+body {margin:0;background:#f3f7f3;color:#183c30;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+.q-wrap {max-width:850px;margin:auto;padding:clamp(16px,4vw,36px) 16px 64px}
+.q-top {display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.q-top a {color:#17643d;font-weight:700;text-decoration:none}
+.q-top a:hover {text-decoration:underline}
+.q-eyebrow {font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:#61786c;font-weight:800}
+.q-intro h1 {font-size:clamp(28px,5vw,43px);line-height:1.1;margin:16px 0}
+.q-intro p {line-height:1.7;max-width:68ch}
+.q-panel {background:#fff;border:1px solid #d8e6db;border-radius:22px;box-shadow:0 9px 30px #183c300d;padding:clamp(18px,4vw,30px);margin-top:22px}
+.q-toolbar {display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.q-toolbar label {font-weight:700}
+.q-toolbar select {background:white;border:1px solid #9cb9a8;border-radius:10px;padding:10px 14px;font:inherit;max-width:100%}
+.q-stat {font-weight:700;color:#426d56;font-variant-numeric:tabular-nums}
+.q-bar {height:9px;background:#e4eee7;border-radius:999px;overflow:hidden;margin:20px 0}
+.q-bar span {display:block;height:100%;background:#348c5c;transition:width .2s}
+.q-meta {display:flex;gap:8px;flex-wrap:wrap}
+.q-pill {font-size:12px;font-weight:800;background:#e8f4e9;color:#226343;padding:6px 10px;border-radius:999px}
+.q-question {font-size:clamp(20px,3.5vw,26px);line-height:1.45;margin:24px 0}
+.q-options {display:grid;gap:11px}
+.q-answer {width:100%;text-align:left;background:#fff;border:2px solid #d0e1d4;color:#244738;padding:15px 17px;border-radius:13px;font:inherit;cursor:pointer;line-height:1.5}
+.q-answer:hover:not(:disabled) {border-color:#348c5c;background:#f4faf5}
+.q-answer:focus-visible,.q-btn:focus-visible,.q-toolbar select:focus-visible {outline:3px solid #e0a229;outline-offset:3px}
+.q-answer:disabled {cursor:default;opacity:1}
+.q-answer.correct {border-color:#288453;background:#e8f8ec}
+.q-answer.incorrect {border-color:#ba6758;background:#fff1ed}
+.q-solution {margin-top:22px;background:#f4f8f3;border:1px solid #cfdfd3;padding:20px;border-radius:15px;line-height:1.6}
+.q-solution h3 {margin:0 0 12px;font-size:19px}
+.q-solution ol {padding-left:23px}
+.q-solution li {margin:8px 0}
+.q-controls {margin-top:24px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
+.q-btn {border:0;background:#236a45;color:white;border-radius:12px;padding:13px 19px;font:inherit;font-weight:750;cursor:pointer}
+.q-btn:disabled {opacity:.45;cursor:not-allowed}
+.q-btn.secondary {background:#e7f1e9;color:#1a5134}
+.q-summary {text-align:center}
+.q-summary strong {font-size:36px;color:#226343}
+.q-muted {color:#5b7567}
+[hidden] {display:none!important}
+@media(max-width:500px){.q-panel{border-radius:16px}.q-toolbar{align-items:flex-start}.q-toolbar label,.q-toolbar select{width:100%}}
+</style>
+</head>
+<body>
+<main class="q-wrap">
+  <header class="q-top"><a href="./#practice" aria-label="Вернуться в GROUND">❧ GROUND · Вернуться</a><span class="q-eyebrow">Олимпиада / расчётные задачи</span></header>
+  <section class="q-intro">
+    <h1>Биология — шаг за шагом</h1>
+    <p>12 авторских задач по генетике, биостатистике, физиологии растений и биохимии. Выбери ответ, изучи формулу и каждое действие решения. Это тренировка без таймера: XP и гены не начисляются, твой основной прогресс не меняется.</p>
+  </section>
+  <div id="load" class="q-panel" role="status">Загружаем банк задач…</div>
+  <section id="trainer" hidden>
+    <div class="q-panel">
+      <div class="q-toolbar"><label for="topic">Тематика <select id="topic"><option value="all">Все темы</option></select></label><span id="count" class="q-stat" aria-live="polite"></span></div>
+      <div class="q-bar" role="progressbar" aria-label="Прогресс тренировки" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="progress" style="width:0"></span></div>
+      <div id="exercise">
+        <div class="q-meta"><span id="difficulty" class="q-pill"></span><span id="category" class="q-pill"></span></div>
+        <h2 id="question" class="q-question"></h2>
+        <div id="options" class="q-options"></div>
+        <section id="solution" class="q-solution" hidden aria-live="polite">
+          <h3 id="feedback"></h3><p><strong>Формула:</strong> <span id="formula"></span></p>
+          <ol id="steps"></ol><p id="explanation"></p>
+        </section>
+      </div>
+      <div id="summary" class="q-summary" hidden><h2>Тренировка завершена</h2><p>Верно решено</p><strong id="score"></strong><p class="q-muted">Ошибки — это темы для повторения. Можно повторить тренировку.</p></div>
+      <div class="q-controls"><button class="q-btn secondary" id="restart" type="button">Начать заново</button><button class="q-btn" id="next" type="button" disabled>Следующая задача →</button></div>
+    </div>
+  </section>
+</main>
+<script src="js/olympiad-trainer.js" defer></script>
+</body>
+</html>
