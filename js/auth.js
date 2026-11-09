@@ -19,21 +19,27 @@
   const errors = {
     "auth/popup-blocked":
       "Разреши всплывающее окно для Ground и нажми «Войти через Google» ещё раз. На телефоне открой сайт в обычном браузере, например Chrome или Safari.",
-    "auth/popup-closed-by-user": "Вход отменён. Можно попробовать снова.",
+    "auth/popup-closed-by-user":
+      "Окно Google закрылось до завершения входа. Попробуй снова; если это повторяется, проверь разрешённые домены Firebase и настройки блокировки всплывающих окон.",
     "auth/cancelled-popup-request": "Другая попытка входа уже открыта.",
-    "auth/unauthorized-domain": "Вход на этом адресе пока не подключён.",
+    "auth/unauthorized-domain":
+      "Домен сайта не разрешён в Firebase Authentication. В Firebase Console → Authentication → Settings → Authorized domains добавь projects0002013-web.github.io и попробуй снова.",
     "auth/network-request-failed":
       "Нет связи. Проверь интернет и попробуй снова.",
-    "auth/operation-not-allowed": "Вход через Google пока не включён.",
+    "auth/operation-not-allowed":
+      "Google-вход выключен в Firebase. В Authentication → Sign-in method включи провайдер Google.",
     "auth/operation-not-supported-in-this-environment":
       "Открой Ground в обычном браузере и разреши всплывающее окно входа.",
-    "auth/invalid-api-key": "Конфигурация входа недоступна. Попробуй позже.",
+    "auth/invalid-api-key": "Ключ Firebase настроен неверно. Проверь конфигурацию проекта Ground.",
+    "auth/internal-error": "Firebase не завершил вход. Проверь интернет и настройки Google Authentication, затем повтори попытку.",
+    "auth/invalid-credential": "Не удалось подтвердить Google-вход. Закрой окно входа и попробуй снова.",
     "auth/web-storage-unsupported":
       "Браузер не разрешает сохранять вход. Проверь настройки хранения данных.",
   };
   function errorText(error) {
     return (
-      errors[error?.code] || "Не удалось войти. Попробуй снова чуть позже."
+      errors[error?.code] ||
+      `Не удалось войти${error?.code ? ` (${String(error.code).slice(0, 80)})` : ""}. Попробуй ещё раз или сообщи этот код разработчику.`
     );
   }
   function userInfo(user) {
