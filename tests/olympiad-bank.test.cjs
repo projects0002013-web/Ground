@@ -62,3 +62,22 @@ test("numerical answer keys agree with the calculations", () => {
     assert.ok(byId[id].answers[byId[id].correct], id);
   }
 });
+
+test("keyed answer text matches the reviewed numerical results", () => {
+  const expectedOptions = {
+    "olq-001": "42%",
+    "olq-002": "0,50",
+    "olq-003": "0,80",
+    "olq-004": "9 cM",
+    "olq-005": "0,48",
+    "olq-006": "2",
+    "olq-007": "−0,499 МПа",
+    "olq-008": "Из −0,25 к −0,80 МПа",
+    "olq-009": "+59 мВ",
+    "olq-010": "Vmax неизменна, Km увеличивается",
+    "olq-011": "1024",
+    "olq-012": "1/4",
+  };
+  for (const q of bank.questions)
+    assert.equal(q.answers[q.correct], expectedOptions[q.id], q.id);
+});
