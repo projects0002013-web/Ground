@@ -92,6 +92,9 @@ test("transient Firestore preference failures retry without pending lesson attem
   assert.equal(window.GroundCloud.current().phase, "error");
   assert.equal(window.GroundCloud.current().pending, 1);
   assert.equal(window.GroundCloud.current().queue.length, 0);
+  const subscription = [];
+  window.GroundCloud.subscribe((snapshot) => subscription.push(snapshot));
+  assert.equal(subscription.at(-1).pending, 1, "A newly subscribed view must show pending preferences");
 
   await runTimer(15000);
   assert.equal(updates, 2);
