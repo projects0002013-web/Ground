@@ -5,7 +5,17 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     function owner(uid) { return request.auth != null && request.auth.uid == uid; }
-    function metadata(key) { return /* CATALOG */; }
+    function metadata(key) {
+      let info = /* CATALOG */;
+      return info == null ? null : {
+        'xp': info.xp,
+        'genes': info.genes,
+        'total': info.total,
+        'version': info.version,
+        'kind': info.kind,
+        'previous': (/* PREVIOUS */).get(key, null)
+      };
+    }
     function currentVersions() { return /* VERSIONS */; }
     function obsoleteKeys(versions) { return /* OBSOLETE_KEYS */; }
     function migrationUpdate(data) {
