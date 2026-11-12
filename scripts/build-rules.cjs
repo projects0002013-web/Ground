@@ -23,11 +23,23 @@ for (const course of ["7", "8", "9", "10", "11", "ent", "olympiad"])
     kind: "practice",
     previous: null,
   };
+// Only evaluate the requested course's catalog entries in Firestore Rules.
+// The unpartitioned 78-activity map exceeds the emulator's 1000-expression budget
+// for transactions that update a user profile and an attempt together.
+const catalogGroups = {};
+for (const [key, value] of Object.entries(metadata)) {
+  const prefix = key.split(":")[0];
+  (catalogGroups[prefix] ??= {})[key] = value;
+}
+const catalogExpression = Object.entries(catalogGroups)
+  .map(([prefix, entries]) =>
+    "key.matches('^" + prefix + ":') ? (" + JSON.stringify(entries, null, 2) + ").get(key, null) : "
+  ).join("") + "null";
 const template = fs.readFileSync("scripts/firestore.rules.template", "utf8");
 fs.writeFileSync(
   "firestore.rules",
   template
-    .replace("/* CATALOG */", JSON.stringify(metadata, null, 2))
+    .replace("/* CATALOG */", catalogExpression)
     .replace("/* VERSIONS */", JSON.stringify(catalog.versions))
     .replace(
       "/* OBSOLETE_KEYS */",
