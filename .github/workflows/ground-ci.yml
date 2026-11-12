@@ -58,3 +58,5 @@ jobs:
           python -m playwright install --with-deps chromium
       - name: Run lesson and mobile scenarios
         run: python -u tests/browser_smoke.py -v
+      - name: Run offline lessons and olympiad scenarios
+        run: python -u tests/browser_offline.py -v
