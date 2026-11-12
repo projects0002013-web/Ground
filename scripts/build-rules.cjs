@@ -36,9 +36,7 @@ const catalogExpression = Object.entries(catalogGroups)
     "key.matches('^" + prefix + ":') ? (" + JSON.stringify(entries, null, 2) + ").get(key, null) : "
   ).join("") + "null";
 const template = fs.readFileSync("scripts/firestore.rules.template", "utf8");
-fs.writeFileSync(
-  "firestore.rules",
-  template
+const generated = template
     .replace("/* CATALOG */", catalogExpression)
     .replace("/* VERSIONS */", JSON.stringify(catalog.versions))
     .replace(
@@ -50,5 +48,10 @@ fs.writeFileSync(
         )
         .join(".concat(") +
         ")".repeat(Object.keys(catalog.versions).length - 1),
-    ),
-);
+    );
+if (process.argv.includes("--check")) {
+  if (fs.readFileSync("firestore.rules", "utf8") !== generated) {
+    console.error("firestore.rules is out of date; run npm run build:rules.");
+    process.exitCode = 1;
+  }
+} else fs.writeFileSync("firestore.rules", generated);
