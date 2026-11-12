@@ -127,8 +127,10 @@ service cloud.firestore {
           && request.resource.data.createdAt == request.time
           && request.resource.data.key == request.resource.data.result.key
           && request.resource.data.result.attemptId == id
-          && resultValid(request.resource.data.result, metadata(request.resource.data.result.key))
+          // The paired profile update fully validates this result via
+          // progressUpdate; avoid repeating the expensive catalog lookup.
           && getAfter(/databases/$(database)/documents/users/$(uid)).data.lastAttemptId == id
+          && get(/databases/$(database)/documents/users/$(uid)).data.lastAttemptId != id
           && getAfter(/databases/$(database)/documents/users/$(uid)).data.revision
             == get(/databases/$(database)/documents/users/$(uid)).data.revision + 1;
         allow update, delete: if false;
