@@ -23,15 +23,24 @@ for (const course of ["7", "8", "9", "10", "11", "ent", "olympiad"])
     kind: "practice",
     previous: null,
   };
-// Evaluate only the matched activity. A large map literal expands into many
-// Firestore Rules evaluations even when only one key is needed, exhausting
-// the 1000-expression budget on two-document lesson transactions.
-const catalogExpression = Object.entries(metadata)
-  .map(([key, info]) => "key == " + JSON.stringify(key) + " ? " + JSON.stringify(info) + " : ")
-  .join("") + "null";
+// Group activities by their exact reward and validation metadata to avoid
+// evaluating one large per-lesson map on every Firestore transaction.
+const variants = new Map();
+const previousEntries = {};
+for (const [key, info] of Object.entries(metadata)) {
+  const variant = JSON.stringify({ xp: info.xp, genes: info.genes, total: info.total, version: info.version, kind: info.kind });
+  if (!variants.has(variant)) variants.set(variant, []);
+  variants.get(variant).push(key);
+  if (info.previous != null) previousEntries[key] = info.previous;
+}
+const catalogExpression = [...variants].map(([value, keys]) =>
+  "key in " + JSON.stringify(keys) + " ? " + value + " : "
+).join("") + "null";
+const previousExpression = JSON.stringify(previousEntries);
 const template = fs.readFileSync("scripts/firestore.rules.template", "utf8");
 const generated = template
     .replace("/* CATALOG */", catalogExpression)
+    .replace("/* PREVIOUS */", previousExpression)
     .replace("/* VERSIONS */", JSON.stringify(catalog.versions))
     .replace(
       "/* OBSOLETE_KEYS */",
