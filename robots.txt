@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /Ground/
+Sitemap: https://projects0002013-web.github.io/Ground/sitemap.xml
