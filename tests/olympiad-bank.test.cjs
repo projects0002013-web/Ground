@@ -81,3 +81,17 @@ test("keyed answer text matches the reviewed numerical results", () => {
   for (const q of bank.questions)
     assert.equal(q.answers[q.correct], expectedOptions[q.id], q.id);
 });
+
+test("standalone trainer is reachable from the practice screen and has its required controls", () => {
+  const fs = require("node:fs");
+  const html = fs.readFileSync(path.join(__dirname, "../olympiad-quantitative.html"), "utf8");
+  const app = fs.readFileSync(path.join(__dirname, "../js/app.js"), "utf8");
+  const trainer = fs.readFileSync(path.join(__dirname, "../js/olympiad-trainer.js"), "utf8");
+  assert.match(app, /href="olympiad-quantitative\.html"/);
+  assert.match(html, /src="js\/olympiad-trainer\.js"/);
+  for (const id of ["load", "trainer", "topic", "count", "progress", "exercise", "summary", "question", "options", "solution", "formula", "steps", "explanation", "next", "restart"]) {
+    assert.match(html, new RegExp('id="' + id + '"'), id);
+  }
+  assert.match(trainer, /materials\/olympiad\/quantitative-bank\.v1\.json/);
+  assert.match(html, /XP и гены не начисляются/);
+});
