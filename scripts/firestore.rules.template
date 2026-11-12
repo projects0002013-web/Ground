@@ -5,17 +5,7 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     function owner(uid) { return request.auth != null && request.auth.uid == uid; }
-    function metadata(key) {
-      let info = /* CATALOG */;
-      return info == null ? null : {
-        'xp': info.xp,
-        'genes': info.genes,
-        'total': info.total,
-        'version': info.version,
-        'kind': info.kind,
-        'previous': (/* PREVIOUS */).get(key, null)
-      };
-    }
+    function metadata(key) { return (/* CATALOG */).get(key, null); }
     function currentVersions() { return /* VERSIONS */; }
     function obsoleteKeys(versions) { return /* OBSOLETE_KEYS */; }
     function migrationUpdate(data) {
@@ -81,7 +71,8 @@ service cloud.firestore {
         && data.completed.size() == 0 && data.days.size() == 0
         && data.completedExams.size() == 0 && data.activityHistory.size() == 0;
     }
-    function resultValid(result, info) {
+    function resultValid(result) {
+      let info = metadata(result.key);
       return info != null
         && result.attemptId is string && result.attemptId.matches('^[a-zA-Z0-9_-]{16,100}$')
         && result.kind == info.kind && result.courseVersion == info.version
@@ -101,7 +92,7 @@ service cloud.firestore {
       let info = metadata(result.key);
       let award = result.passed && result.kind != 'practice' && !(result.key in resource.data.completed);
       return id is string && id.matches('^[a-zA-Z0-9_-]{16,100}$') && !exists(path)
-        && result.attemptId == id && resultValid(result, info)
+        && result.attemptId == id && resultValid(result)
         && resource.data.courseVersions == currentVersions() && data.courseVersions == currentVersions()
         && data.revision == resource.data.revision + 1
         && data.createdAt == resource.data.createdAt
@@ -137,10 +128,8 @@ service cloud.firestore {
           && request.resource.data.createdAt == request.time
           && request.resource.data.key == request.resource.data.result.key
           && request.resource.data.result.attemptId == id
-          // The paired profile update fully validates this result via
-          // progressUpdate; avoid repeating the expensive catalog lookup.
+          && resultValid(request.resource.data.result)
           && getAfter(/databases/$(database)/documents/users/$(uid)).data.lastAttemptId == id
-          && get(/databases/$(database)/documents/users/$(uid)).data.lastAttemptId != id
           && getAfter(/databases/$(database)/documents/users/$(uid)).data.revision
             == get(/databases/$(database)/documents/users/$(uid)).data.revision + 1;
         allow update, delete: if false;
