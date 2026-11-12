@@ -12,7 +12,7 @@ test("public homepage advertises the real canonical GitHub Pages URL", () => {
   assert.match(html, /<meta property="og:title"/);
   assert.match(html, /<meta property="og:description"/);
   assert.ok(html.includes('content="' + url + '"'));
-  assert.match(html, /<meta name="description"/);
+  assert.match(html, /<meta\s+name="description"/);
 });
 
 test("search metadata points only to public published routes", () => {
