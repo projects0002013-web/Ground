@@ -445,8 +445,8 @@
         profile,
         history,
         queue,
-        pendingPrefs,
-        pending: queue.length,
+        pendingPrefs: { ...pendingPrefs },
+        pending: queue.length + Object.keys(pendingPrefs).length,
       });
       return () => listeners.delete(fn);
     },
