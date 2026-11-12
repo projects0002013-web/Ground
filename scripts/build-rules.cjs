@@ -34,7 +34,7 @@ for (const [key, info] of Object.entries(metadata)) {
   if (info.previous != null) previousEntries[key] = info.previous;
 }
 const catalogExpression = [...variants].map(([value, keys]) =>
-  "key in " + JSON.stringify(keys) + " ? " + value + " : "
+  "key.matches(" + JSON.stringify("^(" + keys.join("|") + ")$") + ") ? " + value + " : "
 ).join("") + "null";
 const previousExpression = JSON.stringify(previousEntries);
 const template = fs.readFileSync("scripts/firestore.rules.template", "utf8");
