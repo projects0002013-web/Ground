@@ -80,5 +80,8 @@ jobs:
         run: npm ci --ignore-scripts
       - name: Test real Firebase emulators and Firestore rules
         run: npm run test:firebase
+      - name: Show Firestore emulator diagnostics
+        if: failure()
+        run: if [ -f firestore-debug.log ]; then tail -n 300 firestore-debug.log; else echo 'No Firestore emulator debug log found'; fi
       - name: Verify generated Firestore rules are committed
         run: git diff --exit-code -- firestore.rules
