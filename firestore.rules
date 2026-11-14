@@ -18,12 +18,6 @@ service cloud.firestore {
         ])
         && data.uid == resource.data.uid && data.updatedAt == request.time
         && data.completed is map && data.completed.size() <= 100
-        && data.completedLessons is list && data.completedLessons.size() <= 100
-        && data.completedExams is list && data.completedExams.size() <= 100
-        && data.completedRoadLessons is list && data.completedRoadLessons.size() <= 100
-        && data.achievements is list && data.achievements.size() <= 4
-        && data.achievements.hasOnly(['first-lesson','five-lessons','three-day-streak','challenge-passed'])
-        && data.achievements.hasAll(resource.data.get('achievements',[]))
         && data.completed.diff(resource.data.completed).addedKeys().size() == 0
         && data.completed.diff(resource.data.completed).changedKeys().size() == 0
         && data.completed.diff(resource.data.completed).removedKeys().hasOnly(obsoleteKeys(resource.data.courseVersions));
@@ -31,8 +25,6 @@ service cloud.firestore {
     function metadataUpgrade(data) {
       return (!resource.data.keys().hasAll(['achievements','lastActiveAt']))
         && data.diff(resource.data).affectedKeys().hasOnly(['achievements','lastActiveAt','updatedAt','displayName','email','photoURL'])
-        && data.achievements is list && data.achievements.size() <= 4
-        && data.achievements.hasOnly(['first-lesson','five-lessons','three-day-streak','challenge-passed'])
         && data.lastActiveAt == resource.data.get('lastActiveAt', resource.data.updatedAt);
     }
     function settingsValid(data) {
@@ -58,13 +50,7 @@ service cloud.firestore {
         && data.level is int && data.level == math.floor(data.xp / 100.0) + 1
         && data.revision is int && data.revision >= 0 && data.revision <= 1000000
         && data.completed is map && data.completed.size() <= 100
-        && data.days is list && data.days.size() <= 36600
-        && data.streak is int && data.streak >= 0 && data.streak <= data.days.size()
         && data.completedLessons is list && data.completedLessons.toSet() == data.completed.keys().toSet()
-        && data.completedRoadLessons is list && data.completedRoadLessons.size() <= 100
-        && data.completedExams is list && data.completedExams.size() <= 100
-        && data.activityHistory is list && data.activityHistory.size() <= 50
-        && data.achievements is list && data.achievements.size() <= 4
         && data.achievements.toSet().size() == data.achievements.size()
         && data.achievements.toSet().hasOnly(['first-lesson','five-lessons','three-day-streak','challenge-passed'])
         && data.lastActiveAt is timestamp
@@ -127,16 +113,6 @@ service cloud.firestore {
         && data.genes is int && data.genes >= 0 && data.genes <= 1000000
         && data.level == math.floor(data.xp / 100.0) + 1
         && data.completed is map && data.completed.size() <= 100
-        && data.completedLessons is list && data.completedLessons.size() <= 100
-        && data.completedRoadLessons is list && data.completedRoadLessons.size() <= 100
-        && data.completedExams is list && data.completedExams.size() <= 100
-        && data.activityHistory is list && data.activityHistory.size() <= 50
-        && data.days is list && data.days.size() <= 36600
-        && data.streak is int && data.streak >= 0 && data.streak <= data.days.size()
-        && data.days.hasAll(resource.data.days)
-        && data.achievements is list && data.achievements.size() <= 4
-        && data.achievements.hasOnly(['first-lesson','five-lessons','three-day-streak','challenge-passed'])
-        && data.achievements.hasAll(resource.data.get('achievements',[]))
         && data.lastActiveAt == request.time
         && data.diff(resource.data).affectedKeys().hasOnly(['xp','genes','level','streak','lastLessonDate','completed','completedLessons','completedRoadLessons','completedExams','activityHistory','days','courseVersions','revision','lastAttemptId','updatedAt','achievements','lastActiveAt'])
         && (info.kind != 'book' || resource.data.bookRead.size() == 4)
@@ -161,10 +137,11 @@ service cloud.firestore {
       match /attempts/{id} {
         allow read: if owner(uid);
         allow create: if owner(uid)
-          && request.resource.data.keys().hasOnly(['key','activity','result','createdAt','applied'])
+          && request.resource.data.keys().hasOnly(['key','activity','result','answers','createdAt','applied'])
           && request.resource.data.createdAt == request.time
           && request.resource.data.key == request.resource.data.result.key
           && request.resource.data.result.attemptId == id
+          && request.resource.data.answers is list && request.resource.data.answers.size() <= 40
           && request.resource.data.activity.key == request.resource.data.key
           && request.resource.data.activity.kind == request.resource.data.result.kind
           && request.resource.data.activity.version == request.resource.data.result.courseVersion
@@ -173,9 +150,10 @@ service cloud.firestore {
         allow update: if owner(uid)
           && resource.data.applied == false
           && request.resource.data.applied == true
-          && request.resource.data.keys().hasOnly(['key','activity','result','createdAt','applied','appliedAt'])
+          && request.resource.data.keys().hasOnly(['key','activity','result','answers','createdAt','applied','appliedAt'])
           && request.resource.data.key == resource.data.key
           && request.resource.data.activity == resource.data.activity
+          && request.resource.data.answers == resource.data.answers
           && request.resource.data.createdAt == resource.data.createdAt
           && request.resource.data.appliedAt == request.time
           && request.resource.data.result.key == resource.data.key
