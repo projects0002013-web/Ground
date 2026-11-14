@@ -39,7 +39,7 @@ service cloud.firestore {
     }
     function profileValid(data, uid) {
       return data.keys().hasAll(['uid','createdAt','updatedAt','xp','genes','level','streak','revision','completed','days'])
-        && data.keys().hasOnly(['uid','displayName','email','photoURL','nickname','selectedGrade','layout','onboarded','bookRead','bookPage','scanPage','xp','genes','level','streak','lastLessonDate','completed','completedLessons','completedRoadLessons','completedExams','activityHistory','days','courseVersions','revision','lastAttemptId','createdAt','updatedAt','achievements','lastActiveAt'])
+        && data.keys().hasOnly(['uid','displayName','email','photoURL','nickname','selectedGrade','layout','onboarded','bookRead','bookPage','scanPage','xp','genes','level','streak','lastLessonDate','completed','completedLessons','completedRoadLessons','completedExams','activityHistory','days','courseVersions','revision','lastAttemptId','lastAttemptResult','createdAt','updatedAt','achievements','lastActiveAt'])
         && data.uid == uid
         && data.displayName is string && data.displayName.size() <= 200
         && data.email is string && data.email.size() <= 320
@@ -63,7 +63,7 @@ service cloud.firestore {
         && data.lastActiveAt == request.time && data.achievements.size() == 0
         && data.createdAt == request.time && data.xp == 0 && data.genes == 0
         && data.level == 1 && data.streak == 0 && data.revision == 0
-        && data.lastAttemptId == null && data.lastLessonDate == null
+        && data.lastAttemptId == null && data.lastAttemptResult == null && data.lastLessonDate == null
         && data.completed.size() == 0 && data.days.size() == 0
         && data.completedExams.size() == 0 && data.activityHistory.size() == 0;
     }
@@ -93,14 +93,11 @@ service cloud.firestore {
     }
     function progressUpdate(uid,data) {
       let id = data.lastAttemptId;
-      let path = /databases/$(database)/documents/users/$(uid)/attempts/$(id);
-      let attempt = get(path).data;
-      let result = attempt.result;
+      let result = data.lastAttemptResult;
       let info = metadata(result.key);
       let previous = prerequisite(result.key);
       let award = result.passed && result.kind != 'practice' && !(result.key in resource.data.completed);
-      return id is string && id.matches('^[a-zA-Z0-9_-]{16,100}$') && exists(path)
-        && attempt.applied == false && attempt.key == result.key
+      return id is string && id.matches('^[a-zA-Z0-9_-]{16,100}$')
         && data.lastAttemptId != resource.data.get('lastAttemptId', null)
         && data.uid == uid && data.updatedAt == request.time
         && result.attemptId == id && resultValid(result, info)
@@ -113,7 +110,7 @@ service cloud.firestore {
         && data.level == math.floor(data.xp / 100.0) + 1
         && data.completed is map && data.completed.size() <= 100
         && data.lastActiveAt == request.time
-        && data.diff(resource.data).affectedKeys().hasOnly(['xp','genes','level','streak','lastLessonDate','completed','completedLessons','completedRoadLessons','completedExams','activityHistory','days','courseVersions','revision','lastAttemptId','updatedAt','achievements','lastActiveAt'])
+        && data.diff(resource.data).affectedKeys().hasOnly(['xp','genes','level','streak','lastLessonDate','completed','completedLessons','completedRoadLessons','completedExams','activityHistory','days','courseVersions','revision','lastAttemptId','lastAttemptResult','updatedAt','achievements','lastActiveAt'])
         && (info.kind != 'book' || resource.data.bookRead.size() == 4)
         && data.xp == resource.data.xp + (award ? info.xp : 0)
         && data.genes == resource.data.genes + (award ? info.genes : 0)
