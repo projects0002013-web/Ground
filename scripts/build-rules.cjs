@@ -43,18 +43,22 @@ for (const [key, info] of Object.entries(metadata)) {
   if (info.previous != null) previous[key] = info.previous;
 }
 function numericPattern(values) {
-  const sorted = [...new Set(values)].sort((a, b) => a - b);
+  const buckets = new Map();
+  for (const value of [...new Set(values)].sort((a, b) => a - b)) {
+    const tens = Math.floor(value / 10), ones = value % 10;
+    if (!buckets.has(tens)) buckets.set(tens, []);
+    buckets.get(tens).push(ones);
+  }
   const parts = [];
-  for (let i = 0; i < sorted.length;) {
-    let end = i;
-    while (end + 1 < sorted.length && sorted[end + 1] === sorted[end] + 1) end++;
-    const first = sorted[i], last = sorted[end];
-    if (first === 1 && last === 9) parts.push("[1-9]");
-    else if (Math.floor(first / 10) === Math.floor(last / 10) && last - first >= 2)
-      parts.push(String(Math.floor(first / 10)) + "[" + (first % 10) + "-" + (last % 10) + "]");
-    else if (last - first >= 2) parts.push("[" + first + "-" + last + "]");
-    else for (let n = first; n <= last; n++) parts.push(String(n));
-    i = end + 1;
+  for (const [tens, ones] of buckets) {
+    const first = ones[0], last = ones[ones.length - 1];
+    const contiguous = ones.every((value, index) => index === 0 || value === ones[index - 1] + 1);
+    if (contiguous && ones.length >= 2) {
+      if (tens === 0) parts.push("[" + first + "-" + last + "]");
+      else parts.push(String(tens) + "[" + first + "-" + last + "]");
+    } else {
+      for (const one of ones) parts.push(String(tens * 10 + one));
+    }
   }
   return parts.length === 1 ? parts[0] : "(?:" + parts.join("|") + ")";
 }
