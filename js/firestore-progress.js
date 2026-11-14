@@ -20,6 +20,7 @@
             ...engine.emptyProfile(user.uid),
             ...identity,
             lastAttemptId: null,
+            lastAttemptResult: null,
             lastActiveAt: sdk.serverTimestamp(),
             createdAt: sdk.serverTimestamp(),
             updatedAt: sdk.serverTimestamp(),
@@ -64,7 +65,34 @@
       const evaluation = engine.evaluate(input),
         ref = sdk.doc(db, "users", uid),
         attempt = sdk.doc(db, "users", uid, "attempts", input.id);
-      return sdk.runTransaction(db, async (transaction) => {
+      // Create the immutable pending ledger entry separately. Keeping this
+      // write out of the progress transaction avoids combining two expensive
+      // Firestore Rules evaluations in one request.
+      const pendingAnswers = JSON.parse(JSON.stringify(evaluation.result.answers));
+      const pendingResult = JSON.parse(JSON.stringify(evaluation.result));
+      delete pendingResult.answers;
+      const pendingActivity = {
+        key: evaluation.activity.key,
+        kind: evaluation.activity.kind,
+        courseKey: evaluation.activity.courseKey,
+        previous: evaluation.activity.previous || null,
+        rewardXP: evaluation.activity.rewardXP,
+        rewardGenes: evaluation.activity.rewardGenes,
+        version: evaluation.activity.version,
+      };
+      await sdk.runTransaction(db, async (transaction) => {
+        const snapshot = await transaction.get(attempt);
+        if (!snapshot.exists())
+          transaction.set(attempt, {
+            key: input.key,
+            activity: pendingActivity,
+            result: pendingResult,
+            answers: pendingAnswers,
+            createdAt: sdk.serverTimestamp(),
+            applied: false,
+          });
+      });
+      const committed = await sdk.runTransaction(db, async (transaction) => {
         const profileSnapshot = await transaction.get(ref),
           attemptSnapshot = await transaction.get(attempt);
         if (!profileSnapshot.exists())
@@ -72,39 +100,58 @@
             "failed-precondition",
             "Профиль ещё загружается.",
           );
-        if (attemptSnapshot.exists()) {
-          if (attemptSnapshot.data().key !== input.key)
-            throw new engine.ProgressError(
-              "already-exists",
-              "Номер попытки уже использован.",
-            );
-          return {
-            result: attemptSnapshot.data().result,
-            progress: profileSnapshot.data(),
-          };
-        }
+        if (!attemptSnapshot.exists())
+          throw new engine.ProgressError(
+            "failed-precondition",
+            "Попытка не сохранена. Повтори отправку.",
+          );
+        const saved = attemptSnapshot.data(),
+          current = profileSnapshot.data();
+        if (saved.key !== input.key || saved.result?.attemptId !== input.id)
+          throw new engine.ProgressError(
+            "already-exists",
+            "Номер попытки уже использован.",
+          );
+        if (saved.applied === true)
+          return { result: { ...saved.result, answers: saved.answers || saved.result.answers || [] }, progress: current };
+        if (current.lastAttemptId === input.id && current.lastAttemptResult)
+          return { result: { ...current.lastAttemptResult, answers: saved.answers || [] }, progress: current };
         const { profile, result } = engine.apply(
-          profileSnapshot.data(),
-          evaluation,
+          current,
+          { activity: saved.activity, result: { ...saved.result, answers: saved.answers || [] } },
         );
         profile.lastAttemptId = input.id;
-        transaction.set(ref, {
+        const ledgerResult = JSON.parse(JSON.stringify(result));
+        const ledgerAnswers = ledgerResult.answers;
+        delete ledgerResult.answers;
+        profile.lastAttemptResult = ledgerResult;
+        console.log("GROUND_PROGRESS_DEBUG", JSON.stringify({ id: input.id, lastAttemptId: profile.lastAttemptId, lastAttemptResult: profile.lastAttemptResult, xp: profile.xp, genes: profile.genes, revision: profile.revision, courseVersions: profile.courseVersions, completed: profile.completed }));
+        transaction.update(ref, {
           ...profile,
           lastActiveAt: sdk.serverTimestamp(),
           updatedAt: sdk.serverTimestamp(),
         });
-        // The question catalog can originate from a different JS realm (e.g.
-        // imported content or emulator tests). Firebase SDK rejects arrays
-        // with a foreign Array prototype. Results contain JSON values only;
-        // normalize the ledger payload, not Firestore Timestamp sentinels.
-        const ledgerResult = JSON.parse(JSON.stringify(result));
-        transaction.set(attempt, {
-          key: result.key,
-          result: ledgerResult,
-          createdAt: sdk.serverTimestamp(),
-        });
-        return { result, progress: profile };
+        return { result, progress: profile, ledgerResult, ledgerAnswers };
       });
+      // The profile transaction is the source of truth for XP and genes.
+      // This separate ledger write only finalizes history.
+      if (committed.ledgerResult) {
+        try {
+          await sdk.runTransaction(db, async (transaction) => {
+            const snapshot = await transaction.get(attempt);
+            if (snapshot.exists() && snapshot.data().applied === false)
+              transaction.update(attempt, {
+                result: committed.ledgerResult,
+                answers: committed.ledgerAnswers,
+                applied: true,
+                appliedAt: sdk.serverTimestamp(),
+              });
+          });
+        } catch {
+          // A saved profile remains valid even if history finalization retries later.
+        }
+      }
+      return { result: committed.result, progress: committed.progress };
     }
     return { ensureProfile, recordAttempt };
   }

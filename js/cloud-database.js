@@ -166,7 +166,15 @@
           (snapshot) => {
             if (token !== generation) return;
             history = snapshot.docs
-              .map((doc) => doc.data().result)
+              .map((doc) => {
+                const data = doc.data();
+                return data.result
+                  ? {
+                      ...data.result,
+                      answers: data.answers || data.result.answers || [],
+                    }
+                  : null;
+              })
               .filter(Boolean);
             phase();
           },

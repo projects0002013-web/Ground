@@ -174,6 +174,7 @@ test("real SDK + Auth/Firestore emulators: concurrency, replay, isolation and pr
     doc(laptop.db, "users", laptop.uid, "attempts", a.id),
   );
   assert.equal(ledger.data().result.correct, 40);
+  assert.equal(ledger.data().applied, true);
   const attacker = {
     ...attempt("8:3", "spoof-other-user-attempt-01"),
     uid: bob.uid,
