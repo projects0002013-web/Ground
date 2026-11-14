@@ -94,27 +94,20 @@ service cloud.firestore {
       let previous = prerequisite(result.key);
       let award = result.passed && result.kind != 'practice' && !(result.key in resource.data.completed);
       return id is string && id.matches('^[a-zA-Z0-9_-]{16,100}$')
-        && data.lastAttemptId != resource.data.get('lastAttemptId', null)
+        && id != resource.data.lastAttemptId
         && data.uid == uid && data.updatedAt == request.time
         && result.attemptId == id && resultValid(result, info)
-        && resource.data.courseVersions == currentVersions() && data.courseVersions == currentVersions()
+        && data.courseVersions == currentVersions()
         && (previous == null || previous in resource.data.completed)
-        && data.createdAt == resource.data.createdAt
-        && data.revision is int && data.revision == resource.data.revision + 1
-        && data.xp is int && data.xp >= 0 && data.xp <= 1000000
-        && data.genes is int && data.genes >= 0 && data.genes <= 1000000
-        && data.level == math.floor(data.xp / 100.0) + 1
-        && data.completed is map && data.completed.size() <= 100
-        && data.lastActiveAt == request.time
-        && data.diff(resource.data).affectedKeys().hasOnly(['xp','genes','level','streak','lastLessonDate','completed','completedLessons','completedRoadLessons','completedExams','activityHistory','days','courseVersions','revision','lastAttemptId','lastAttemptResult','updatedAt','achievements','lastActiveAt'])
-        && (info.kind != 'book' || resource.data.bookRead.size() == 4)
+        && data.revision == resource.data.revision + 1
         && data.xp == resource.data.xp + (award ? info.xp : 0)
         && data.genes == resource.data.genes + (award ? info.genes : 0)
         && data.completed.diff(resource.data.completed).affectedKeys().hasOnly([result.key])
         && (result.passed && result.kind != 'practice'
           ? result.key in data.completed && data.completed[result.key].percent >= result.percent
             && data.completed[result.key].percent <= 100
-          : data.completed == resource.data.completed);
+          : data.completed == resource.data.completed)
+        && data.diff(resource.data).affectedKeys().hasOnly(['xp','genes','level','streak','lastLessonDate','completed','completedLessons','completedRoadLessons','completedExams','activityHistory','days','courseVersions','revision','lastAttemptId','lastAttemptResult','updatedAt','achievements','lastActiveAt']);
     }
     match /users/{uid} {
       allow read: if owner(uid);
