@@ -93,9 +93,14 @@
           lastActiveAt: sdk.serverTimestamp(),
           updatedAt: sdk.serverTimestamp(),
         });
+        // The question catalog can originate from a different JS realm (e.g.
+        // imported content or emulator tests). Firebase SDK rejects arrays
+        // with a foreign Array prototype. Results contain JSON values only;
+        // normalize the ledger payload, not Firestore Timestamp sentinels.
+        const ledgerResult = JSON.parse(JSON.stringify(result));
         transaction.set(attempt, {
           key: result.key,
-          result,
+          result: ledgerResult,
           createdAt: sdk.serverTimestamp(),
         });
         return { result, progress: profile };

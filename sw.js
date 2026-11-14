@@ -1,5 +1,5 @@
 /* Cache static teaching resources only. Never cache Firebase or account data. */
-const VERSION = "ground-static-v4";
+const VERSION = "ground-static-v5";
 const base = new URL("./", self.location.href);
 const files = [
   "index.html",
@@ -15,6 +15,9 @@ const files = [
   "js/auth.js",
   "js/cloud-database.js",
   "js/firebase-sdk.js",
+  "olympiad-quantitative.html",
+  "js/olympiad-trainer.js",
+  "materials/olympiad/quantitative-bank.v1.json",
   "images/mascot.png",
   "images/mascot-head.png",
   "images/campbell/chapter2/page-47.webp",
