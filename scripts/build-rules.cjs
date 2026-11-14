@@ -66,7 +66,7 @@ function keyPattern(keys) {
     const lesson = key.slice(separator + 1);
     if (!byCourse.has(course)) byCourse.set(course, { numeric: [], literal: [] });
     const group = byCourse.get(course);
-    if (/^\\d+$/.test(lesson)) group.numeric.push(Number(lesson));
+    if (/^\d+$/.test(lesson)) group.numeric.push(Number(lesson));
     else group.literal.push(lesson);
   }
   const courses = [];
