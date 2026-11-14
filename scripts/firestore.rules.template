@@ -68,7 +68,8 @@ service cloud.firestore {
         && data.completedExams.size() == 0 && data.activityHistory.size() == 0;
     }
     function resultValid(result, info) {
-      return info != null
+      return info != null && result is map
+        && result.keys().hasAll(['key','attemptId','kind','courseVersion','total','correct','percent','passed'])
         && result.attemptId is string && result.attemptId.matches('^[a-zA-Z0-9_-]{16,100}$')
         && result.kind == info.kind && result.courseVersion == info.version
         && result.total is int && result.total >= 0 && result.total <= info.total
@@ -89,23 +90,24 @@ service cloud.firestore {
     function prerequisite(key) { return (/* PREVIOUS */).get(key, null); }
     function progressUpdate(uid,data) {
       let id = data.lastAttemptId;
-      let result = data.lastAttemptResult;
-      let info = metadata(result.key);
-      let previous = prerequisite(result.key);
-      let award = result.passed && result.kind != 'practice' && !(result.key in resource.data.completed);
-      return id is string && id.matches('^[a-zA-Z0-9_-]{16,100}$')
+      let result = data.get('lastAttemptResult', {});
+      let key = result is map ? result.get('key', '') : '';
+      let info = metadata(key);
+      let previous = prerequisite(key);
+      let award = result is map && result.get('passed', false) && result.get('kind', '') != 'practice' && !(key in resource.data.completed);
+      return result is map && id is string && id.matches('^[a-zA-Z0-9_-]{16,100}$')
         && id != resource.data.lastAttemptId
         && data.uid == uid && data.updatedAt == request.time
-        && result.attemptId == id && resultValid(result, info)
+        && result.get('attemptId', '') == id && resultValid(result, info)
         && data.courseVersions == currentVersions()
         && (previous == null || previous in resource.data.completed)
         && data.revision == resource.data.revision + 1
         && data.xp == resource.data.xp + (award ? info.xp : 0)
         && data.genes == resource.data.genes + (award ? info.genes : 0)
-        && data.completed.diff(resource.data.completed).affectedKeys().hasOnly([result.key])
-        && (result.passed && result.kind != 'practice'
-          ? result.key in data.completed && data.completed[result.key].percent >= result.percent
-            && data.completed[result.key].percent <= 100
+        && data.completed.diff(resource.data.completed).affectedKeys().hasOnly([key])
+        && (result.get('passed', false) && result.get('kind', '') != 'practice'
+          ? key in data.completed && data.completed[key].percent >= result.percent
+            && data.completed[key].percent <= 100
           : data.completed == resource.data.completed)
         && data.diff(resource.data).affectedKeys().hasOnly(['xp','genes','level','streak','lastLessonDate','completed','completedLessons','completedRoadLessons','completedExams','activityHistory','days','courseVersions','revision','lastAttemptId','lastAttemptResult','updatedAt','achievements','lastActiveAt']);
     }
