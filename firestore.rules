@@ -138,10 +138,7 @@ service cloud.firestore {
           && request.resource.data.keys().hasOnly(['key','activity','result','answers','createdAt','applied','appliedAt'])
           && request.resource.data.key == resource.data.key
           && request.resource.data.createdAt == resource.data.createdAt
-          && request.resource.data.appliedAt == request.time
-          && request.resource.data.result.key == resource.data.key
-          && request.resource.data.result.attemptId == id
-          && request.resource.data.result.passed is bool;
+          && request.resource.data.appliedAt == request.time;
         allow delete: if false;
       }
     }
