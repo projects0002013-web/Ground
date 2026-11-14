@@ -125,7 +125,7 @@
         const ledgerAnswers = ledgerResult.answers;
         delete ledgerResult.answers;
         profile.lastAttemptResult = ledgerResult;
-        console.log("GROUND_PROGRESS_DEBUG", JSON.stringify({ id, lastAttemptId: profile.lastAttemptId, lastAttemptResult: profile.lastAttemptResult, xp: profile.xp, genes: profile.genes, revision: profile.revision, courseVersions: profile.courseVersions, completed: profile.completed }));
+        console.log("GROUND_PROGRESS_DEBUG", JSON.stringify({ id: input.id, lastAttemptId: profile.lastAttemptId, lastAttemptResult: profile.lastAttemptResult, xp: profile.xp, genes: profile.genes, revision: profile.revision, courseVersions: profile.courseVersions, completed: profile.completed }));
         transaction.update(ref, {
           ...profile,
           lastActiveAt: sdk.serverTimestamp(),
