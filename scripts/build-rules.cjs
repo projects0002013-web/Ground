@@ -63,7 +63,7 @@ function numericPattern(values) {
       for (const one of ones) parts.push(String(tens * 10 + one));
     }
   }
-  return parts.length === 1 ? parts[0] : "(?:" + parts.join("|") + ")";
+  return parts.length === 1 ? parts[0] : "(" + parts.join("|") + ")";
 }
 function keyPattern(keys) {
   const byCourse = new Map();
@@ -81,9 +81,9 @@ function keyPattern(keys) {
     const lessons = [];
     if (group.numeric.length) lessons.push(numericPattern(group.numeric));
     lessons.push(...group.literal);
-    courses.push(course + ":" + (lessons.length === 1 ? lessons[0] : "(?:" + lessons.join("|") + ")"));
+    courses.push(course + ":" + (lessons.length === 1 ? lessons[0] : "(" + lessons.join("|") + ")"));
   }
-  return "^(?:" + courses.join("|") + ")$";
+  return "^(" + courses.join("|") + ")$";
 }
 const catalogExpression = [...groups]
   .map(([info, keys]) =>
