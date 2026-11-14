@@ -73,12 +73,7 @@ function keyPattern(keys) {
   for (const [course, group] of byCourse) {
     const lessons = [];
     if (group.numeric.length) lessons.push(numericPattern(group.numeric));
-    lessons.push(...group.literal.map((value) => value.replace(/[.*+?^${}()|[\\]\\\\]/g, "\\\\const catalogExpression = [...groups]
-  .map(([info, keys]) => {
-    const pattern = "^(?:" + keys.join("|") + ")$";
-    return "key.matches(" + JSON.stringify(pattern) + ") ? " + info + " : ";
-  })
-  .join("") + "null";")));
+    lessons.push(...group.literal);
     courses.push(course + ":" + (lessons.length === 1 ? lessons[0] : "(?:" + lessons.join("|") + ")"));
   }
   return "^(?:" + courses.join("|") + ")$";
