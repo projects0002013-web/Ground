@@ -23,11 +23,38 @@ for (const course of ["7", "8", "9", "10", "11", "ent", "olympiad"])
     kind: "practice",
     previous: null,
   };
+// Firestore Rules have a 1000-expression evaluation budget. A literal
+// object with every activity and all metadata fields exceeds it when the
+// profile and attempt documents are committed atomically. Group activities
+// that share reward/validation metadata and match compact key patterns.
+const groups = new Map();
+const previous = {};
+for (const [key, info] of Object.entries(metadata)) {
+  const compact = {
+    xp: info.xp,
+    genes: info.genes,
+    total: info.total,
+    version: info.version,
+    kind: info.kind,
+  };
+  const signature = JSON.stringify(compact);
+  if (!groups.has(signature)) groups.set(signature, []);
+  groups.get(signature).push(key);
+  if (info.previous != null) previous[key] = info.previous;
+}
+const catalogExpression = [...groups]
+  .map(([info, keys]) => {
+    const pattern = "^(?:" + keys.join("|") + ")$";
+    return "key.matches(" + JSON.stringify(pattern) + ") ? " + info + " : ";
+  })
+  .join("") + "null";
+const previousExpression = JSON.stringify(previous);
 const template = fs.readFileSync("scripts/firestore.rules.template", "utf8");
 fs.writeFileSync(
   "firestore.rules",
   template
-    .replace("/* CATALOG */", JSON.stringify(metadata, null, 2))
+    .replace("/* CATALOG */", catalogExpression)
+    .replace("/* PREVIOUS */", previousExpression)
     .replace("/* VERSIONS */", JSON.stringify(catalog.versions))
     .replace(
       "/* OBSOLETE_KEYS */",
