@@ -144,8 +144,6 @@ service cloud.firestore {
           && request.resource.data.applied == true
           && request.resource.data.keys().hasOnly(['key','activity','result','answers','createdAt','applied','appliedAt'])
           && request.resource.data.key == resource.data.key
-          && request.resource.data.activity == resource.data.activity
-          && request.resource.data.answers == resource.data.answers
           && request.resource.data.createdAt == resource.data.createdAt
           && request.resource.data.appliedAt == request.time
           && request.resource.data.result.key == resource.data.key
