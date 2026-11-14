@@ -16,6 +16,14 @@ service cloud.firestore {
         && data.diff(resource.data).affectedKeys().hasOnly([
           'completed','completedLessons','completedExams','completedRoadLessons','courseVersions','revision','updatedAt','displayName','email','photoURL','achievements','lastActiveAt'
         ])
+        && data.uid == resource.data.uid && data.updatedAt == request.time
+        && data.completed is map && data.completed.size() <= 100
+        && data.completedLessons is list && data.completedLessons.toSet() == data.completed.keys().toSet()
+        && data.completedExams is list && data.completedExams.size() <= 100
+        && data.completedRoadLessons is list && data.completedRoadLessons.size() <= 100
+        && data.achievements is list && data.achievements.size() <= 4
+        && data.achievements.toSet().hasOnly(['first-lesson','five-lessons','three-day-streak','challenge-passed'])
+        && data.achievements.toSet().hasAll(resource.data.get('achievements',[]).toSet())
         && data.completed.diff(resource.data.completed).addedKeys().size() == 0
         && data.completed.diff(resource.data.completed).changedKeys().size() == 0
         && data.completed.diff(resource.data.completed).removedKeys().hasOnly(obsoleteKeys(resource.data.courseVersions));
@@ -23,6 +31,8 @@ service cloud.firestore {
     function metadataUpgrade(data) {
       return (!resource.data.keys().hasAll(['achievements','lastActiveAt']))
         && data.diff(resource.data).affectedKeys().hasOnly(['achievements','lastActiveAt','updatedAt','displayName','email','photoURL'])
+        && data.achievements is list && data.achievements.size() <= 4
+        && data.achievements.toSet().hasOnly(['first-lesson','five-lessons','three-day-streak','challenge-passed'])
         && data.lastActiveAt == resource.data.get('lastActiveAt', resource.data.updatedAt);
     }
     function settingsValid(data) {
