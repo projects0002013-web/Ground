@@ -82,16 +82,94 @@ service cloud.firestore {
     }
     function resultValid(result, info) {
       return info != null
-        && result.attemptId is string && result.attemptId.matches('^[a-zA-Z0-9_-]{16,100}$')
+        && result.attemptId is string && result.attemptId.matches('^[a-zA-Z0-9_-]{16,100}
+    function settingsUpdate(data) {
+      return data.diff(resource.data).affectedKeys().hasOnly([
+        'displayName','email','photoURL','selectedGrade','layout','nickname','onboarded','bookRead','bookPage','scanPage','updatedAt'
+      ])
+        && data.displayName is string && data.displayName.size() <= 200
+        && data.email is string && data.email.size() <= 320
+        && data.photoURL is string && data.photoURL.size() <= 2048
+        && settingsValid(data);
+    }
+    function prerequisite(key) {
+      return (key.matches('^(7|8|9|10|11):([2-9]|1[0-6])$') || key.matches('^(ent|olympiad):[2-4]$'))
+        ? key.split(':')[0] + ':' + string(int(key.split(':')[1]) - 1)
+        : null;
+    }
+    function progressUpdate(uid,data) {
+      let id = data.lastAttemptId;
+      let path = /databases/$(database)/documents/users/$(uid)/attempts/$(id);
+      let result = getAfter(path).data.result;
+      let info = metadata(result.key);
+      let previous = prerequisite(result.key);
+      let award = result.passed && result.kind != 'practice' && !(result.key in resource.data.completed);
+      return id is string && id.matches('^[a-zA-Z0-9_-]{16,100}$') && !exists(path)
+        && data.uid == uid && data.updatedAt == request.time
+        && result.attemptId == id && resultValid(result, info)
+        && resource.data.courseVersions == currentVersions() && data.courseVersions == currentVersions()
+        && (previous == null || previous in resource.data.completed)
+        && data.createdAt == resource.data.createdAt
+        && data.revision is int && data.revision == resource.data.revision + 1
+        && data.xp is int && data.xp >= 0 && data.xp <= 1000000
+        && data.genes is int && data.genes >= 0 && data.genes <= 1000000
+        && data.level == math.floor(data.xp / 100.0) + 1
+        && data.completed is map && data.completed.size() <= 100
+        && data.completedLessons is list
+        && data.completedLessons.size() <= 100
+        && data.completedRoadLessons is list && data.completedRoadLessons.size() <= 100
+        && data.completedExams is list && data.completedExams.size() <= 100
+        && data.activityHistory is list && data.activityHistory.size() <= 50
+        && data.days is list && data.days.size() <= 36600
+        && data.streak is int && data.streak >= 0 && data.streak <= data.days.size()
+        && data.days.hasAll(resource.data.days)
+        && data.achievements is list && data.achievements.size() <= 4
+        && data.achievements.toSet().size() == data.achievements.size()
+        && data.achievements.toSet().hasOnly(['first-lesson','five-lessons','three-day-streak','challenge-passed'])
+        && data.achievements.hasAll(resource.data.get('achievements',[]))
+        && data.lastActiveAt == request.time
+        && data.diff(resource.data).affectedKeys().hasOnly(['xp','genes','level','streak','lastLessonDate','completed','completedLessons','completedRoadLessons','completedExams','activityHistory','days','courseVersions','revision','lastAttemptId','updatedAt','achievements','lastActiveAt'])
+        && (info.kind != 'book' || resource.data.bookRead.size() == 4)
+        && result.rewardXP == (award ? info.xp : 0)
+        && result.rewardGenes == (award ? info.genes : 0)
+        && data.xp == resource.data.xp + result.rewardXP
+        && data.genes == resource.data.genes + result.rewardGenes
+        && data.completed.diff(resource.data.completed).affectedKeys().hasOnly([result.key])
+        && (result.passed && result.kind != 'practice'
+          ? result.key in data.completed && data.completed[result.key].percent >= result.percent
+            && data.completed[result.key].percent <= 100
+          : data.completed == resource.data.completed);
+    }
+    match /users/{uid} {
+      allow read: if owner(uid);
+      allow create: if owner(uid) && initialProfile(request.resource.data,uid);
+      allow delete: if false;
+      allow update: if owner(uid)
+        && request.resource.data.uid == uid
+        && request.resource.data.updatedAt == request.time
+        && (settingsUpdate(request.resource.data) || metadataUpgrade(request.resource.data) || migrationUpdate(request.resource.data) || progressUpdate(uid,request.resource.data));
+      match /attempts/{id} {
+        allow read: if owner(uid);
+        allow create: if owner(uid)
+          && request.resource.data.keys().hasOnly(['key','result','createdAt'])
+          && request.resource.data.createdAt == request.time
+          && request.resource.data.key == request.resource.data.result.key
+          && request.resource.data.result.attemptId == id
+          // The paired profile update validates the full result and revision.
+          && getAfter(/databases/$(database)/documents/users/$(uid)).data.lastAttemptId == id;
+        allow update, delete: if false;
+      }
+    }
+    match /{document=**} { allow read, write: if false; }
+  }
+}
+)
         && result.kind == info.kind && result.courseVersion == info.version
-        && result.answers is list && result.answers.size() <= info.total
-        && result.total is int && result.total >= 0 && result.total <= 40
-        && result.total == (info.kind == 'practice' ? result.answers.size() : info.total)
-        && result.correct is int && result.correct >= 0 && result.correct <= result.answers.size()
+        && result.total is int && result.total >= 0 && result.total <= info.total
+        && (info.kind == 'practice' || result.total == info.total)
+        && result.correct is int && result.correct >= 0 && result.correct <= result.total
         && result.percent == (result.total == 0 ? 0 : math.round(result.correct * 100.0 / result.total))
-        && result.passed == (result.total > 0 && result.correct >= result.total * 0.7)
-        && result.completedAt is string && result.completedAt.size() <= 40
-        && result.day is string && result.day.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$');
+        && result.passed == (result.total > 0 && result.correct >= result.total * 0.7);
     }
     function settingsUpdate(data) {
       return data.diff(resource.data).affectedKeys().hasOnly([
