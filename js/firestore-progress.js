@@ -64,6 +64,22 @@
       const evaluation = engine.evaluate(input),
         ref = sdk.doc(db, "users", uid),
         attempt = sdk.doc(db, "users", uid, "attempts", input.id);
+      // Create the immutable pending ledger entry separately. Keeping this
+      // write out of the progress transaction avoids combining two expensive
+      // Firestore Rules evaluations in one request.
+      const pendingResult = JSON.parse(JSON.stringify(evaluation));
+      try {
+        await sdk.setDoc(attempt, {
+          key: input.key,
+          result: pendingResult,
+          createdAt: sdk.serverTimestamp(),
+          applied: false,
+        });
+      } catch (error) {
+        // An existing attempt is an idempotent retry, not a new submission.
+        const existing = await sdk.getDoc(attempt);
+        if (!existing.exists()) throw error;
+      }
       return sdk.runTransaction(db, async (transaction) => {
         const profileSnapshot = await transaction.get(ref),
           attemptSnapshot = await transaction.get(attempt);
@@ -72,36 +88,35 @@
             "failed-precondition",
             "Профиль ещё загружается.",
           );
-        if (attemptSnapshot.exists()) {
-          if (attemptSnapshot.data().key !== input.key)
-            throw new engine.ProgressError(
-              "already-exists",
-              "Номер попытки уже использован.",
-            );
-          return {
-            result: attemptSnapshot.data().result,
-            progress: profileSnapshot.data(),
-          };
-        }
+        if (!attemptSnapshot.exists())
+          throw new engine.ProgressError(
+            "failed-precondition",
+            "Попытка не сохранена. Повтори отправку.",
+          );
+        const saved = attemptSnapshot.data();
+        if (saved.key !== input.key || saved.result?.attemptId !== input.id)
+          throw new engine.ProgressError(
+            "already-exists",
+            "Номер попытки уже использован.",
+          );
+        // Older ledger records predate the applied flag and are already final.
+        if (saved.applied !== false)
+          return { result: saved.result, progress: profileSnapshot.data() };
         const { profile, result } = engine.apply(
           profileSnapshot.data(),
-          evaluation,
+          saved.result,
         );
         profile.lastAttemptId = input.id;
-        transaction.set(ref, {
+        const ledgerResult = JSON.parse(JSON.stringify(result));
+        transaction.update(ref, {
           ...profile,
           lastActiveAt: sdk.serverTimestamp(),
           updatedAt: sdk.serverTimestamp(),
         });
-        // The question catalog can originate from a different JS realm (e.g.
-        // imported content or emulator tests). Firebase SDK rejects arrays
-        // with a foreign Array prototype. Results contain JSON values only;
-        // normalize the ledger payload, not Firestore Timestamp sentinels.
-        const ledgerResult = JSON.parse(JSON.stringify(result));
-        transaction.set(attempt, {
-          key: result.key,
+        transaction.update(attempt, {
           result: ledgerResult,
-          createdAt: sdk.serverTimestamp(),
+          applied: true,
+          appliedAt: sdk.serverTimestamp(),
         });
         return { result, progress: profile };
       });
