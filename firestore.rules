@@ -68,7 +68,8 @@ service cloud.firestore {
         && data.completedExams.size() == 0 && data.activityHistory.size() == 0;
     }
     function resultValid(result, info) {
-      return info != null
+      return info != null && result is map
+        && result.keys().hasAll(['key','attemptId','kind','courseVersion','total','correct','percent','passed'])
         && result.attemptId is string && result.attemptId.matches('^[a-zA-Z0-9_-]{16,100}$')
         && result.kind == info.kind && result.courseVersion == info.version
         && result.total is int && result.total >= 0 && result.total <= info.total
@@ -89,23 +90,24 @@ service cloud.firestore {
     function prerequisite(key) { return ({"7:2":"7:1","7:3":"7:2","7:4":"7:3","7:5":"7:4","7:6":"7:5","7:7":"7:6","7:8":"7:7","7:9":"7:8","7:10":"7:9","7:11":"7:10","7:12":"7:11","7:13":"7:12","8:2":"8:1","8:3":"8:2","8:4":"8:3","8:5":"8:4","8:6":"8:5","8:7":"8:6","8:8":"8:7","8:9":"8:8","8:10":"8:9","8:11":"8:10","8:12":"8:11","8:13":"8:12","8:14":"8:13","9:2":"9:1","9:3":"9:2","9:4":"9:3","9:5":"9:4","9:6":"9:5","9:7":"9:6","9:8":"9:7","9:9":"9:8","9:10":"9:9","9:11":"9:10","9:12":"9:11","9:13":"9:12","9:14":"9:13","9:15":"9:14","9:16":"9:15","10:2":"10:1","10:3":"10:2","10:4":"10:3","10:5":"10:4","10:6":"10:5","10:7":"10:6","10:8":"10:7","10:9":"10:8","10:10":"10:9","10:11":"10:10","10:12":"10:11","10:13":"10:12","11:2":"11:1","11:3":"11:2","11:4":"11:3","11:5":"11:4","11:6":"11:5","11:7":"11:6","11:8":"11:7","11:9":"11:8","11:10":"11:9","11:11":"11:10","11:12":"11:11","11:13":"11:12","11:14":"11:13","11:15":"11:14","11:16":"11:15","ent:2":"ent:1","ent:3":"ent:2","ent:4":"ent:3","olympiad:2":"olympiad:1","olympiad:3":"olympiad:2","olympiad:4":"olympiad:3"}).get(key, null); }
     function progressUpdate(uid,data) {
       let id = data.lastAttemptId;
-      let result = data.lastAttemptResult;
-      let info = metadata(result.key);
-      let previous = prerequisite(result.key);
-      let award = result.passed && result.kind != 'practice' && !(result.key in resource.data.completed);
-      return id is string && id.matches('^[a-zA-Z0-9_-]{16,100}$')
+      let result = data.get('lastAttemptResult', {});
+      let key = result is map ? result.get('key', '') : '';
+      let info = metadata(key);
+      let previous = prerequisite(key);
+      let award = result is map && result.get('passed', false) && result.get('kind', '') != 'practice' && !(key in resource.data.completed);
+      return result is map && id is string && id.matches('^[a-zA-Z0-9_-]{16,100}$')
         && id != resource.data.lastAttemptId
         && data.uid == uid && data.updatedAt == request.time
-        && result.attemptId == id && resultValid(result, info)
+        && result.get('attemptId', '') == id && resultValid(result, info)
         && data.courseVersions == currentVersions()
         && (previous == null || previous in resource.data.completed)
         && data.revision == resource.data.revision + 1
         && data.xp == resource.data.xp + (award ? info.xp : 0)
         && data.genes == resource.data.genes + (award ? info.genes : 0)
-        && data.completed.diff(resource.data.completed).affectedKeys().hasOnly([result.key])
-        && (result.passed && result.kind != 'practice'
-          ? result.key in data.completed && data.completed[result.key].percent >= result.percent
-            && data.completed[result.key].percent <= 100
+        && data.completed.diff(resource.data.completed).affectedKeys().hasOnly([key])
+        && (result.get('passed', false) && result.get('kind', '') != 'practice'
+          ? key in data.completed && data.completed[key].percent >= result.percent
+            && data.completed[key].percent <= 100
           : data.completed == resource.data.completed)
         && data.diff(resource.data).affectedKeys().hasOnly(['xp','genes','level','streak','lastLessonDate','completed','completedLessons','completedRoadLessons','completedExams','activityHistory','days','courseVersions','revision','lastAttemptId','lastAttemptResult','updatedAt','achievements','lastActiveAt']);
     }
