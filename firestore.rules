@@ -95,14 +95,13 @@ service cloud.firestore {
       let id = data.lastAttemptId;
       let path = /databases/$(database)/documents/users/$(uid)/attempts/$(id);
       let attempt = get(path).data;
-      let attemptAfter = getAfter(path).data;
-      let result = attemptAfter.result;
+      let result = attempt.result;
       let info = metadata(result.key);
       let previous = prerequisite(result.key);
       let award = result.passed && result.kind != 'practice' && !(result.key in resource.data.completed);
       return id is string && id.matches('^[a-zA-Z0-9_-]{16,100}$') && exists(path)
-        && attempt.applied == false && attemptAfter.applied == true
-        && attempt.key == result.key && attemptAfter.key == result.key
+        && attempt.applied == false && attempt.key == result.key
+        && data.lastAttemptId != resource.data.get('lastAttemptId', null)
         && data.uid == uid && data.updatedAt == request.time
         && result.attemptId == id && resultValid(result, info)
         && resource.data.courseVersions == currentVersions() && data.courseVersions == currentVersions()
@@ -116,10 +115,8 @@ service cloud.firestore {
         && data.lastActiveAt == request.time
         && data.diff(resource.data).affectedKeys().hasOnly(['xp','genes','level','streak','lastLessonDate','completed','completedLessons','completedRoadLessons','completedExams','activityHistory','days','courseVersions','revision','lastAttemptId','updatedAt','achievements','lastActiveAt'])
         && (info.kind != 'book' || resource.data.bookRead.size() == 4)
-        && result.rewardXP == (award ? info.xp : 0)
-        && result.rewardGenes == (award ? info.genes : 0)
-        && data.xp == resource.data.xp + result.rewardXP
-        && data.genes == resource.data.genes + result.rewardGenes
+        && data.xp == resource.data.xp + (award ? info.xp : 0)
+        && data.genes == resource.data.genes + (award ? info.genes : 0)
         && data.completed.diff(resource.data.completed).affectedKeys().hasOnly([result.key])
         && (result.passed && result.kind != 'practice'
           ? result.key in data.completed && data.completed[result.key].percent >= result.percent
@@ -147,13 +144,11 @@ service cloud.firestore {
           && request.resource.data.applied == true
           && request.resource.data.keys().hasOnly(['key','activity','result','answers','createdAt','applied','appliedAt'])
           && request.resource.data.key == resource.data.key
-          && request.resource.data.activity == resource.data.activity
-          && request.resource.data.answers == resource.data.answers
           && request.resource.data.createdAt == resource.data.createdAt
           && request.resource.data.appliedAt == request.time
           && request.resource.data.result.key == resource.data.key
           && request.resource.data.result.attemptId == id
-          && getAfter(/databases/$(database)/documents/users/$(uid)).data.lastAttemptId == id;
+          && request.resource.data.result.passed is bool;
         allow delete: if false;
       }
     }
