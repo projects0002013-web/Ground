@@ -28,6 +28,11 @@ for (const course of ["7", "8", "9", "10", "11", "ent", "olympiad"])
 // profile and attempt documents are committed atomically. Group activities
 // that share reward/validation metadata and match compact key patterns.
 const groups = new Map();
+const previous = Object.fromEntries(
+  Object.entries(metadata)
+    .filter(([, info]) => info.previous != null)
+    .map(([key, info]) => [key, info.previous]),
+);
 for (const [key, info] of Object.entries(metadata)) {
   const compact = {
     xp: info.xp,
@@ -90,6 +95,7 @@ fs.writeFileSync(
   "firestore.rules",
   template
     .replace("/* CATALOG */", catalogExpression)
+    .replace("/* PREVIOUS */", JSON.stringify(previous))
     .replace("/* VERSIONS */", JSON.stringify(catalog.versions))
     .replace(
       "/* OBSOLETE_KEYS */",
