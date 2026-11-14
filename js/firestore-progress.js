@@ -67,7 +67,9 @@
       // Create the immutable pending ledger entry separately. Keeping this
       // write out of the progress transaction avoids combining two expensive
       // Firestore Rules evaluations in one request.
+      const pendingAnswers = JSON.parse(JSON.stringify(evaluation.result.answers));
       const pendingResult = JSON.parse(JSON.stringify(evaluation.result));
+      delete pendingResult.answers;
       const pendingActivity = {
         key: evaluation.activity.key,
         kind: evaluation.activity.kind,
@@ -84,6 +86,7 @@
             key: input.key,
             activity: pendingActivity,
             result: pendingResult,
+            answers: pendingAnswers,
             createdAt: sdk.serverTimestamp(),
             applied: false,
           });
@@ -109,13 +112,18 @@
           );
         // Older ledger records predate the applied flag and are already final.
         if (saved.applied !== false)
-          return { result: saved.result, progress: profileSnapshot.data() };
+          return {
+            result: { ...saved.result, answers: saved.answers || saved.result.answers || [] },
+            progress: profileSnapshot.data(),
+          };
         const { profile, result } = engine.apply(
           profileSnapshot.data(),
-          { activity: saved.activity, result: saved.result },
+          { activity: saved.activity, result: { ...saved.result, answers: saved.answers || [] } },
         );
         profile.lastAttemptId = input.id;
         const ledgerResult = JSON.parse(JSON.stringify(result));
+        const ledgerAnswers = ledgerResult.answers;
+        delete ledgerResult.answers;
         transaction.update(ref, {
           ...profile,
           lastActiveAt: sdk.serverTimestamp(),
@@ -123,6 +131,7 @@
         });
         transaction.update(attempt, {
           result: ledgerResult,
+          answers: ledgerAnswers,
           applied: true,
           appliedAt: sdk.serverTimestamp(),
         });
