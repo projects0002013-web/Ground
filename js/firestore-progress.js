@@ -85,10 +85,9 @@
           createdAt: sdk.serverTimestamp(),
           applied: false,
         });
-      } catch (error) {
-        // An existing attempt is an idempotent retry, not a new submission.
-        const existing = await sdk.getDoc(attempt);
-        if (!existing.exists()) throw error;
+      } catch {
+        // The transaction below distinguishes an existing idempotent attempt
+        // from a failed create by reading the ledger entry.
       }
       return sdk.runTransaction(db, async (transaction) => {
         const profileSnapshot = await transaction.get(ref),
