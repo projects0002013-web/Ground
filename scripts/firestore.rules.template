@@ -130,8 +130,7 @@ service cloud.firestore {
           && request.resource.data.key == request.resource.data.result.key
           && request.resource.data.result.attemptId == id
           // The paired profile update validates the full result in progressUpdate.
-          && getAfter(/databases/$(database)/documents/users/$(uid)).data.lastAttemptId == id
-          ;
+          && getAfter(/databases/$(database)/documents/users/$(uid)).data.lastAttemptId == id;
         allow update, delete: if false;
       }
     }
