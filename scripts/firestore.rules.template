@@ -187,6 +187,7 @@ service cloud.firestore {
 }
 ) && exists(path)
         && attempt.applied == false && attemptAfter.applied == true
+        && attempt.key == result.key && attemptAfter.key == result.key
         && data.uid == uid && data.updatedAt == request.time
         && result.attemptId == id && resultValid(result, info)
         && resource.data.courseVersions == currentVersions() && data.courseVersions == currentVersions()
