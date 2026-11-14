@@ -20,6 +20,7 @@
             ...engine.emptyProfile(user.uid),
             ...identity,
             lastAttemptId: null,
+            lastAttemptResult: null,
             lastActiveAt: sdk.serverTimestamp(),
             createdAt: sdk.serverTimestamp(),
             updatedAt: sdk.serverTimestamp(),
@@ -124,6 +125,7 @@
         const ledgerResult = JSON.parse(JSON.stringify(result));
         const ledgerAnswers = ledgerResult.answers;
         delete ledgerResult.answers;
+        profile.lastAttemptResult = ledgerResult;
         transaction.update(ref, {
           ...profile,
           lastActiveAt: sdk.serverTimestamp(),
