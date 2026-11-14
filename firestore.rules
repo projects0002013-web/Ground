@@ -141,12 +141,7 @@ service cloud.firestore {
           && request.resource.data.createdAt == request.time
           && request.resource.data.key == request.resource.data.result.key
           && request.resource.data.result.attemptId == id
-          && request.resource.data.answers is list && request.resource.data.answers.size() <= 40
-          && request.resource.data.activity.key == request.resource.data.key
-          && request.resource.data.activity.kind == request.resource.data.result.kind
-          && request.resource.data.activity.version == request.resource.data.result.courseVersion
-          && request.resource.data.applied == false
-          && resultValid(request.resource.data.result, metadata(request.resource.data.key));
+          && request.resource.data.applied == false;
         allow update: if owner(uid)
           && resource.data.applied == false
           && request.resource.data.applied == true
