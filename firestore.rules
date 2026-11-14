@@ -108,11 +108,13 @@ service cloud.firestore {
     function progressUpdate(uid,data) {
       let id = data.lastAttemptId;
       let path = /databases/$(database)/documents/users/$(uid)/attempts/$(id);
-      let result = getAfter(path).data.result;
+      let attempt = get(path).data;
+      let attemptAfter = getAfter(path).data;
+      let result = attemptAfter.result;
       let info = metadata(result.key);
       let previous = prerequisite(result.key);
       let award = result.passed && result.kind != 'practice' && !(result.key in resource.data.completed);
-      return id is string && id.matches('^[a-zA-Z0-9_-]{16,100}$') && !exists(path)
+      return id is string && id.matches('^[a-zA-Z0-9_-]{16,100}
         && data.uid == uid && data.updatedAt == request.time
         && result.attemptId == id && resultValid(result, info)
         && resource.data.courseVersions == currentVersions() && data.courseVersions == currentVersions()
@@ -157,13 +159,96 @@ service cloud.firestore {
       match /attempts/{id} {
         allow read: if owner(uid);
         allow create: if owner(uid)
-          && request.resource.data.keys().hasOnly(['key','result','createdAt'])
+          && request.resource.data.keys().hasOnly(['key','activity','result','createdAt','applied'])
           && request.resource.data.createdAt == request.time
           && request.resource.data.key == request.resource.data.result.key
           && request.resource.data.result.attemptId == id
-          // The paired profile update validates the full result and revision.
+          && request.resource.data.activity.key == request.resource.data.key
+          && request.resource.data.activity.kind == request.resource.data.result.kind
+          && request.resource.data.activity.version == request.resource.data.result.courseVersion
+          && request.resource.data.applied == false
+          && resultValid(request.resource.data.result, metadata(request.resource.data.key));
+        allow update: if owner(uid)
+          && resource.data.applied == false
+          && request.resource.data.applied == true
+          && request.resource.data.keys().hasOnly(['key','activity','result','createdAt','applied','appliedAt'])
+          && request.resource.data.key == resource.data.key
+          && request.resource.data.activity == resource.data.activity
+          && request.resource.data.createdAt == resource.data.createdAt
+          && request.resource.data.appliedAt == request.time
+          && request.resource.data.result.key == resource.data.key
+          && request.resource.data.result.attemptId == id
           && getAfter(/databases/$(database)/documents/users/$(uid)).data.lastAttemptId == id;
-        allow update, delete: if false;
+        allow delete: if false;
+      }
+    }
+    match /{document=**} { allow read, write: if false; }
+  }
+}
+) && exists(path)
+        && attempt.applied == false && attemptAfter.applied == true
+        && attempt.key == result.key && attemptAfter.key == result.key
+        && data.uid == uid && data.updatedAt == request.time
+        && result.attemptId == id && resultValid(result, info)
+        && resource.data.courseVersions == currentVersions() && data.courseVersions == currentVersions()
+        && (previous == null || previous in resource.data.completed)
+        && data.createdAt == resource.data.createdAt
+        && data.revision is int && data.revision == resource.data.revision + 1
+        && data.xp is int && data.xp >= 0 && data.xp <= 1000000
+        && data.genes is int && data.genes >= 0 && data.genes <= 1000000
+        && data.level == math.floor(data.xp / 100.0) + 1
+        && data.completed is map && data.completed.size() <= 100
+        && data.completedLessons is list && data.completedLessons.size() <= 100
+        && data.completedRoadLessons is list && data.completedRoadLessons.size() <= 100
+        && data.completedExams is list && data.completedExams.size() <= 100
+        && data.activityHistory is list && data.activityHistory.size() <= 50
+        && data.days is list && data.days.size() <= 36600
+        && data.streak is int && data.streak >= 0 && data.streak <= data.days.size()
+        && data.days.hasAll(resource.data.days)
+        && data.achievements is list && data.achievements.size() <= 4
+        && data.achievements.hasOnly(['first-lesson','five-lessons','three-day-streak','challenge-passed'])
+        && data.achievements.hasAll(resource.data.get('achievements',[]))
+        && data.lastActiveAt == request.time
+        && data.diff(resource.data).affectedKeys().hasOnly(['xp','genes','level','streak','lastLessonDate','completed','completedLessons','completedRoadLessons','completedExams','activityHistory','days','courseVersions','revision','lastAttemptId','updatedAt','achievements','lastActiveAt'])
+        && (info.kind != 'book' || resource.data.bookRead.size() == 4)
+        && result.rewardXP == (award ? info.xp : 0)
+        && result.rewardGenes == (award ? info.genes : 0)
+        && data.xp == resource.data.xp + result.rewardXP
+        && data.genes == resource.data.genes + result.rewardGenes
+        && data.completed.diff(resource.data.completed).affectedKeys().hasOnly([result.key])
+        && (result.passed && result.kind != 'practice'
+          ? result.key in data.completed && data.completed[result.key].percent >= result.percent
+            && data.completed[result.key].percent <= 100
+          : data.completed == resource.data.completed);
+    }
+    match /users/{uid} {
+      allow read: if owner(uid);
+      allow create: if owner(uid) && initialProfile(request.resource.data,uid);
+      allow delete: if false;
+      allow update: if owner(uid)
+        && request.resource.data.uid == uid
+        && request.resource.data.updatedAt == request.time
+        && (settingsUpdate(request.resource.data) || metadataUpgrade(request.resource.data) || migrationUpdate(request.resource.data) || progressUpdate(uid,request.resource.data));
+      match /attempts/{id} {
+        allow read: if owner(uid);
+        allow create: if owner(uid)
+          && request.resource.data.keys().hasOnly(['key','result','createdAt','applied'])
+          && request.resource.data.createdAt == request.time
+          && request.resource.data.key == request.resource.data.result.key
+          && request.resource.data.result.attemptId == id
+          && request.resource.data.applied == false
+          && resultValid(request.resource.data.result, metadata(request.resource.data.key));
+        allow update: if owner(uid)
+          && resource.data.applied == false
+          && request.resource.data.applied == true
+          && request.resource.data.keys().hasOnly(['key','result','createdAt','applied','appliedAt'])
+          && request.resource.data.key == resource.data.key
+          && request.resource.data.createdAt == resource.data.createdAt
+          && request.resource.data.appliedAt == request.time
+          && request.resource.data.result.key == resource.data.key
+          && request.resource.data.result.attemptId == id
+          && getAfter(/databases/$(database)/documents/users/$(uid)).data.lastAttemptId == id;
+        allow delete: if false;
       }
     }
     match /{document=**} { allow read, write: if false; }
