@@ -67,10 +67,20 @@
       // Create the immutable pending ledger entry separately. Keeping this
       // write out of the progress transaction avoids combining two expensive
       // Firestore Rules evaluations in one request.
-      const pendingResult = JSON.parse(JSON.stringify(evaluation));
+      const pendingResult = JSON.parse(JSON.stringify(evaluation.result));
+      const pendingActivity = {
+        key: evaluation.activity.key,
+        kind: evaluation.activity.kind,
+        courseKey: evaluation.activity.courseKey,
+        previous: evaluation.activity.previous || null,
+        rewardXP: evaluation.activity.rewardXP,
+        rewardGenes: evaluation.activity.rewardGenes,
+        version: evaluation.activity.version,
+      };
       try {
         await sdk.setDoc(attempt, {
           key: input.key,
+          activity: pendingActivity,
           result: pendingResult,
           createdAt: sdk.serverTimestamp(),
           applied: false,
@@ -104,7 +114,7 @@
           return { result: saved.result, progress: profileSnapshot.data() };
         const { profile, result } = engine.apply(
           profileSnapshot.data(),
-          saved.result,
+          { activity: saved.activity, result: saved.result },
         );
         profile.lastAttemptId = input.id;
         const ledgerResult = JSON.parse(JSON.stringify(result));
