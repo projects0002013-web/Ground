@@ -86,11 +86,7 @@ service cloud.firestore {
         && data.photoURL is string && data.photoURL.size() <= 2048
         && settingsValid(data);
     }
-    function prerequisite(key) {
-      return (key.matches('^(7|8|9|10|11):([2-9]|1[0-6])$') || key.matches('^(ent|olympiad):[2-4]$'))
-        ? key.split(':')[0] + ':' + string(int(key.split(':')[1]) - 1)
-        : null;
-    }
+    function prerequisite(key) { return (/* PREVIOUS */).get(key, null); }
     function progressUpdate(uid,data) {
       let id = data.lastAttemptId;
       let result = data.lastAttemptResult;
