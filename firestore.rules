@@ -90,6 +90,7 @@ service cloud.firestore {
       let path = /databases/$(database)/documents/users/$(uid)/attempts/$(id);
       let result = getAfter(path).data.result;
       let info = metadata(result.key);
+      let previous = previousKey(result.key);
       let award = result.passed && result.kind != 'practice' && !(result.key in resource.data.completed);
       return id is string && id.matches('^[a-zA-Z0-9_-]{16,100}$') && !exists(path)
         && result.attemptId == id && resultValid(result, info)
@@ -97,7 +98,7 @@ service cloud.firestore {
         && data.revision == resource.data.revision + 1
         && data.createdAt == resource.data.createdAt
         && data.diff(resource.data).affectedKeys().hasOnly(['xp','genes','level','streak','lastLessonDate','completed','completedLessons','completedRoadLessons','completedExams','activityHistory','days','courseVersions','revision','lastAttemptId','updatedAt','achievements','lastActiveAt'])
-        && (previousKey(result.key) == null || previousKey(result.key) in resource.data.completed)
+        && (previous == null || previous in resource.data.completed)
         && (info.kind != 'book' || resource.data.bookRead.size() == 4)
         && result.rewardXP == (award ? info.xp : 0)
         && result.rewardGenes == (award ? info.genes : 0)
