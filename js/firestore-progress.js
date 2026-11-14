@@ -92,7 +92,7 @@
             applied: false,
           });
       });
-      return sdk.runTransaction(db, async (transaction) => {
+      const committed = await sdk.runTransaction(db, async (transaction) => {
         const profileSnapshot = await transaction.get(ref),
           attemptSnapshot = await transaction.get(attempt);
         if (!profileSnapshot.exists())
@@ -105,20 +105,19 @@
             "failed-precondition",
             "Попытка не сохранена. Повтори отправку.",
           );
-        const saved = attemptSnapshot.data();
+        const saved = attemptSnapshot.data(),
+          current = profileSnapshot.data();
         if (saved.key !== input.key || saved.result?.attemptId !== input.id)
           throw new engine.ProgressError(
             "already-exists",
             "Номер попытки уже использован.",
           );
-        // Older ledger records predate the applied flag and are already final.
-        if (saved.applied !== false)
-          return {
-            result: { ...saved.result, answers: saved.answers || saved.result.answers || [] },
-            progress: profileSnapshot.data(),
-          };
+        if (saved.applied === true)
+          return { result: { ...saved.result, answers: saved.answers || saved.result.answers || [] }, progress: current };
+        if (current.lastAttemptId === input.id && current.lastAttemptResult)
+          return { result: { ...current.lastAttemptResult, answers: saved.answers || [] }, progress: current };
         const { profile, result } = engine.apply(
-          profileSnapshot.data(),
+          current,
           { activity: saved.activity, result: { ...saved.result, answers: saved.answers || [] } },
         );
         profile.lastAttemptId = input.id;
@@ -131,14 +130,27 @@
           lastActiveAt: sdk.serverTimestamp(),
           updatedAt: sdk.serverTimestamp(),
         });
-        transaction.update(attempt, {
-          result: ledgerResult,
-          answers: ledgerAnswers,
-          applied: true,
-          appliedAt: sdk.serverTimestamp(),
-        });
-        return { result, progress: profile };
+        return { result, progress: profile, ledgerResult, ledgerAnswers };
       });
+      // The profile transaction is the source of truth for XP and genes.
+      // This separate ledger write only finalizes history.
+      if (committed.ledgerResult) {
+        try {
+          await sdk.runTransaction(db, async (transaction) => {
+            const snapshot = await transaction.get(attempt);
+            if (snapshot.exists() && snapshot.data().applied === false)
+              transaction.update(attempt, {
+                result: committed.ledgerResult,
+                answers: committed.ledgerAnswers,
+                applied: true,
+                appliedAt: sdk.serverTimestamp(),
+              });
+          });
+        } catch {
+          // A saved profile remains valid even if history finalization retries later.
+        }
+      }
+      return { result: committed.result, progress: committed.progress };
     }
     return { ensureProfile, recordAttempt };
   }
