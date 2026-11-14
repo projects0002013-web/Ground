@@ -77,18 +77,17 @@
         rewardGenes: evaluation.activity.rewardGenes,
         version: evaluation.activity.version,
       };
-      try {
-        await sdk.setDoc(attempt, {
-          key: input.key,
-          activity: pendingActivity,
-          result: pendingResult,
-          createdAt: sdk.serverTimestamp(),
-          applied: false,
-        });
-      } catch {
-        // The transaction below distinguishes an existing idempotent attempt
-        // from a failed create by reading the ledger entry.
-      }
+      await sdk.runTransaction(db, async (transaction) => {
+        const snapshot = await transaction.get(attempt);
+        if (!snapshot.exists())
+          transaction.set(attempt, {
+            key: input.key,
+            activity: pendingActivity,
+            result: pendingResult,
+            createdAt: sdk.serverTimestamp(),
+            applied: false,
+          });
+      });
       return sdk.runTransaction(db, async (transaction) => {
         const profileSnapshot = await transaction.get(ref),
           attemptSnapshot = await transaction.get(attempt);
