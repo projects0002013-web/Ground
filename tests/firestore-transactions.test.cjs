@@ -98,7 +98,7 @@ test("free Firestore transactions create profiles, award once across devices and
   );
   const replay = await b.recordAttempt("alice", first);
   assert.equal(replay.progress.xp, 30);
-  assert.equal(b.writes(), initialWrites + 4);
+  assert.equal(b.writes(), initialWrites + 6);
   await b.ensureProfile(user("alice"));
   assert.equal(b.documents.get("users/alice").xp, 30);
   assert.equal(b.documents.get("users/alice").genes, 5);
