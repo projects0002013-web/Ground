@@ -23,11 +23,31 @@ for (const course of ["7", "8", "9", "10", "11", "ent", "olympiad"])
     kind: "practice",
     previous: null,
   };
+function compactMetadata(metadata) {
+  const groups = new Map();
+  const courses = new Map();
+  for (const [key, value] of Object.entries(metadata)) {
+    const { previous, ...info } = value;
+    const signature = JSON.stringify(info);
+    if (!groups.has(signature)) groups.set(signature, []);
+    groups.get(signature).push(key);
+    const course = key.split(":")[0];
+    if (!courses.has(course)) courses.set(course, {});
+    courses.get(course)[key] = previous;
+  }
+  const previous = [...courses].map(([course, entries]) =>
+    `key.matches(${JSON.stringify("^" + course + ":.*$")}) ? ${JSON.stringify(entries)}.get(key, null) : `
+  ).join("") + "null";
+  const info = [...groups].map(([signature, keys]) =>
+    `key.matches(${JSON.stringify("^(" + keys.join("|") + ")$")}) ? ${signature.slice(0, -1)},"previous":previous} : `
+  ).join("") + "null";
+  return `let previous = ${previous}; return ${info};`;
+}
 const template = fs.readFileSync("scripts/firestore.rules.template", "utf8");
 fs.writeFileSync(
   "firestore.rules",
   template
-    .replace("/* CATALOG */", JSON.stringify(metadata, null, 2))
+    .replace("/* CATALOG */", compactMetadata(metadata))
     .replace("/* VERSIONS */", JSON.stringify(catalog.versions))
     .replace(
       "/* OBSOLETE_KEYS */",
