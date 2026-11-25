@@ -41,12 +41,24 @@
       return steps;
     },
     score(answers, total) {
-      const correct = answers.filter((a) => a.selected === a.correct).length;
+      // A missing answer must never equal a missing answer key.
+      // Ignore surplus entries so a damaged session cannot exceed 100%.
+      const safeTotal = Number.isInteger(total) && total > 0 ? total : 0;
+      const entries = Array.isArray(answers) ? answers.slice(0, safeTotal) : [];
+      const correct = entries.filter(
+        (answer) =>
+          answer &&
+          Number.isInteger(answer.selected) &&
+          answer.selected >= 0 &&
+          Number.isInteger(answer.correct) &&
+          answer.correct >= 0 &&
+          answer.selected === answer.correct,
+      ).length;
       return {
         correct,
-        total,
-        percent: total ? Math.round((correct / total) * 100) : 0,
-        passed: total > 0 && correct / total >= 0.7,
+        total: safeTotal,
+        percent: safeTotal ? Math.round((correct / safeTotal) * 100) : 0,
+        passed: safeTotal > 0 && correct / safeTotal >= 0.7,
       };
     },
     unlocked(course, lessonId, completed, courseKey) {
